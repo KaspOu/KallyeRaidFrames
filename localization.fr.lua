@@ -56,7 +56,7 @@ KALLYE_DOOMGUARD = "Garde funeste";
 
 -- Classes
 KALLYE_CLASSES = { ["DRUID"] = "Druide", ["HUNTER"] = "Chasseur", ["MAGE"] = "Mage", ["PALADIN"] = "Paladin", ["PRIEST"] = "Pr\195\170tre", ["ROGUE"] = "Voleur"
-                      , ["SHAMAN"] = "Chaman", ["WARLOCK"] = "D\195\169moniste", ["WARRIOR"] = "Guerrier", ["DEATHKNIGHT"] = "Chevalier de la mort", ["MONK"] = "Moine", ["DEMONHUNTER"] = "Chasseur de démons", ["HPET"] = "Chasseur Pet", ["WPET"] = "D\195\169moniste Pet"};
+                , ["SHAMAN"] = "Chaman", ["WARLOCK"] = "D\195\169moniste", ["WARRIOR"] = "Guerrier", ["DEATHKNIGHT"] = "Chevalier de la mort", ["MONK"] = "Moine", ["DEMONHUNTER"] = "Chasseur de démons", ["HPET"] = "Chasseur Pet", ["WPET"] = "D\195\169moniste Pet"};
 
 -- Bindings
 BINDING_NAME_KALLYE_BIND_OPTIONS = "Menu d\'Options";

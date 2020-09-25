@@ -40,7 +40,7 @@ KALLYE_OPTION_SHOWMSGNORMAL = "Display all messages (verbose)";
 KALLYE_OPTION_SHOWMSGERR = "Display errors messages";
 KALLYE_OPTION_SHOWMSGWARNING = "Display warning messages";
 
-  
+
 --[[
 -- Debuff types
 KALLYE_DISEASE = "Disease";
@@ -62,7 +62,7 @@ KALLYE_DOOMGUARD = "Doomguard";
 
 -- Classes
 KALLYE_CLASSES = { ["DRUID"] = "Druid", ["HUNTER"] = "Hunter", ["MAGE"] = "Mage", ["PALADIN"] = "Paladin", ["PRIEST"] = "Priest", ["ROGUE"] = "Rogue"
-                      , ["SHAMAN"] = "Shaman", ["WARLOCK"] = "Warlock", ["WARRIOR"] = "Warrior", ["DEATHKNIGHT"] = "Death Knight", ["MONK"] = "Monk", ["DEMONHUNTER"] = "Demon Hunter", ["HPET"] = "Hunter Pet", ["WPET"] = "Warlock Pet"};
+                , ["SHAMAN"] = "Shaman", ["WARLOCK"] = "Warlock", ["WARRIOR"] = "Warrior", ["DEATHKNIGHT"] = "Death Knight", ["MONK"] = "Monk", ["DEMONHUNTER"] = "Demon Hunter", ["HPET"] = "Hunter Pet", ["WPET"] = "Warlock Pet"};
 
 -- Bindings
 BINDING_NAME_KALLYE_BIND_OPTIONS = "Options frame";

@@ -1,17 +1,28 @@
+# Kallye Raid Frames (RaidSpotlight)
+
 Some selfmade modifications to Blizzards default raidframes according to my own preferences
 
-# Changes to Blizzards CompactRaidFrames:
-- Removes servernames from the unitframe ( Illidan (*) )
-- Change player name color according to class
-- Fades out names in combat
-- Hides Damage dealer role icons
-- Shows Healing/Tank role icons and repositions it slightly
+1. Changes to Blizzard CompactRaidFrames
+    - Highlight unit background depending on health:
+       - default from black, to yellow, then red
+       - options to change colors and %
+    - Optionnal revert HP bars (less life = bigger red bar !) (sRaidFrames)
+    - Roles icons
+        - Shows Healing/Tank role icons
+        - Hides DPS role icons
+    - Buffs/Debuffs
+        - Larger Debuffs
+        - Lighter buffs
+        - Max buffs showed
 
-- Larger Debuffs
-- Lighter buffs
+2. Changes to both CompactRaidFrames and Nameplates
+    - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
+    - Change player name color according to class
+    - Fades out names in combat
 
-- Change raid frame background depending on health: yellow to red under 50%
+3. Possibility to display Party CompactRaidFrames while solo
 
 
-# Example
+
+## Example
 ![]( https://user-images.githubusercontent.com/732505/44743527-11ff5d80-ab03-11e8-84d2-32767a58a7c5.png )
