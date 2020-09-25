@@ -1,0 +1,214 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+  <Script file="KallyeRaidFrames.globals.lua"/>
+  <Script file="localization.en.lua"/>
+  <Script file="localization.fr.lua"/>
+  <Script file="KallyeRaidFrames.lua"/>
+  
+  <Font name="PawnFontBlue" inherits="GameFontNormal" virtual="true">
+		<Color r ="0.56" g="0.76" b="0.90" />
+	</Font>
+	<Font name="PawnFontBlueSmall" inherits="GameFontNormalSmall" virtual="true">
+		<Color r ="0.56" g="0.76" b="0.90" />
+	</Font>
+	<Font name="PawnFontSilverTiny" inherits="GameFontNormalSmall" virtual="true">
+		<Color r ="0.75" g="0.75" b="0.75" />
+		<FontHeight><AbsValue val="8" /></FontHeight>
+	</Font>
+	<Font name="PawnFontSilver" inherits="GameFontNormal" virtual="true">
+		<Color r ="0.75" g="0.75" b="0.75" />
+	</Font>
+	<Font name="PawnFontSilverLarge" inherits="GameFontNormalLarge" virtual="true">
+		<Color r ="0.75" g="0.75" b="0.75" />
+	</Font>
+  <Frame name="KallyeRaidFramesFrame">
+    <Scripts>
+      <OnLoad>
+        KALLYE_OnLoad(self);
+      </OnLoad>
+      <OnUpdate>
+        KALLYE_OnUpdate(self, elapsed);
+      </OnUpdate>      
+    </Scripts>
+  </Frame>
+	<Frame name="KallyeRaidFramesOptionsFrame" parent="InterfaceOptionsFramePanelContainer">
+		<Layers>
+			<Layer level="ARTWORK">
+
+				<FontString name="$parentHeaderLabel" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KALLYE_OPTIONS_TITLE">
+					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
+					<Size><AbsDimension x="550" y="350" /></Size>
+				</FontString>
+				<!-- Remove Scroll from here -->
+			</Layer>
+			</Layers>
+		<Frames>
+		  <ScrollFrame name="MyModScrollBar" inherits="UIPanelScrollFrameTemplate">
+		   <Anchors>
+			  <Anchor point="TOPLEFT">
+				<Offset>
+				  <AbsDimension x="0" y="-28"/>
+				</Offset>
+			  </Anchor>
+			  <Anchor point="BOTTOMRIGHT">
+				<Offset>
+				  <AbsDimension x="-30" y="8"/>
+				</Offset>
+			  </Anchor>
+		   </Anchors>
+		   <ScrollChild>
+		   
+		   <Frame name="test"><Size x="550" y="1450"/>
+		    <Layers>
+			<Layer level="ARTWORK">
+				<!-- END Remove Scroll from here -->
+				<FontString name="$parentSubtitleLabel" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE" text="KALLYE_SUBTITLE">
+					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
+				</FontString>
+				<FontString name="$parentTooltipLabel" inherits="GameFontHighlight" justifyH="LEFT" justifyV="MIDDLE" text="KALLYE_DESC">
+					<Anchors><Anchor point="TOPLEFT" relativeTo="$parentSubtitleLabel" relativePoint="BOTTOMLEFT">
+						<Offset><AbsDimension x="0" y="-15" /></Offset>
+					</Anchor></Anchors>
+				</FontString>
+			</Layer>
+			</Layers>
+		   <Frames>
+			<CheckButton name="$parentServerSideFilteringg" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-100" /></Offset></Anchor></Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText(KALLYE_OPTION_HIGHLIGHTLOWHP);
+						self.tooltipText = KALLYE_OPTION_HIGHLIGHTLOWHP;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			
+			<CheckButton name="$parentServerSideFiltering" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="$parentServerSideFilteringg" relativePoint="BOTTOMLEFT">
+					<Offset><AbsDimension x="0" y="-20" /></Offset>
+				</Anchor></Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText(KALLYE_OPTION_HIGHLIGHTLOWHP);
+						self.tooltipText = KALLYE_OPTION_HIGHLIGHTLOWHP;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentShowMemberInfo" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentServerSideFiltering" relativePoint="BOTTOMLEFT"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText("Show each member's class and role in group tooltip");
+						self.tooltipText = "Show each member's class and role in group tooltip.";
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentAutoRefresh" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentShowMemberInfo" relativePoint="BOTTOMLEFT"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText("Auto refresh search list");
+						self.tooltipText = "Automatically refresh search list every 30 sec.";
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<Slider name="$parentAutoRefreshInterval" hidden="false" inherits="VideoOptionsSliderTemplate" minValue="0" maxValue="3" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentShowMemberInfo" relativePoint="BOTTOMLEFT">
+						<Offset x="0" y="-25"/>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						local name = self:GetName();
+						self.type = CONTROLTYPE_SLIDER;
+						self.tooltip = "Set auto refresh interval (sec)";
+						self.name = "Auto refresh interval";
+						self.SetDisplayValue = self.SetValue;
+						self.SetValue = function (self, value)
+							self:SetDisplayValue(value);
+							LFRAdvancedOptions.AutoRefreshInterval = value;
+						end
+						self.GetCurrentValue = function (self) 
+								return LFRAdvancedOptions.AutoRefreshInterval;
+						end
+						_G[name.."Text"]:SetFontObject("OptionsFontSmall");
+						_G[name.."Text"]:SetText("Auto refresh interval");
+						_G[name.."High"]:Hide();
+
+						self.Label = _G[name.."Low"];
+						self.Label:ClearAllPoints();
+						self.Label:SetPoint("LEFT", self, "RIGHT", 3, 2);
+					</OnLoad>
+					<OnValueChanged>
+						self.Label:SetFormattedText("%d sec", value);
+						self:SetValue(value);
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<CheckButton name="$parentHideLegionNormals" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentAutoRefreshInterval" relativePoint="BOTTOMLEFT"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText("Hide Legion Normal mode dungeons");
+						self.tooltipText = "Hide Legion Normal mode dungeons in dropdown menu.";
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentHideLegionHeroics" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentHideLegionNormals" relativePoint="BOTTOMLEFT"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText("Hide Legion Heroic mode dungeons");
+						self.tooltipText = "Hide Legion Heroic mode dungeons in dropdown menu.";
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentHideBFANormals" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentHideLegionHeroics" relativePoint="BOTTOMLEFT"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText("Hide BFA Normal mode dungeons");
+						self.tooltipText = "Hide BFA Normal mode dungeons in dropdown menu.";
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentHideBFAHeroics" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentHideBFANormals" relativePoint="BOTTOMLEFT"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText("Hide BFA Heroic mode dungeons");
+						self.tooltipText = "Hide BFA Heroic mode dungeons in dropdown menu.";
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+
+		    <!-- Remove Scroll from here -->
+			</Frames></Frame>
+		   </ScrollChild>
+		 </ScrollFrame>
+		    <!-- END Remove Scroll from here -->
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.name = KALLYE_TITLE;
+				-- self.okay = SaveRSOptions;
+				-- self.refresh = RefreshRSOptions;
+				InterfaceOptions_AddCategory(self);
+			</OnLoad>
+		</Scripts>
+		
+	</Frame>
+</Ui>
