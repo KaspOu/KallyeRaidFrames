@@ -2,6 +2,7 @@
 ? Code inspired from :
 ?   LucyRaidFrames
 ?   LFRAdvanced !!
+?	RaidFameMore
 ? 	AzeriteTooltip (Ace)
 ?	GarrisonCommander-Broker (Ace)
 
@@ -17,142 +18,146 @@
 
 local isInit = false;
 local isPlayer = false;
+-- local FOLDER_NAME, private = ...
 
-if KallyeRaidFramesOptions == nil then
-	KallyeRaidFramesOptions = {
-		BuffsScale = 0.75,
-		DebuffsScale = 1.25,
-		MaxBuffs = 3,
-		HideDamageIcons = true,
-		MoveRoleIcons = true,
-		HideRealm = true,
-		FriendsClassColor = true,
-		Nameplates_FriendsAlphaInCombat = 0.8,
-		Nameplates_FriendsAlphaNotInCombat = 0.8,
 
-		ShowMsgNormal = true,
-		ShowMsgErr = true,
-		ShowMsgWarning = true,
+KRF_DefaultOptions = {
+	Version = KRF_VERSION,
+	BuffsScale = 0.75,
+	DebuffsScale = 1.25,
+	MaxBuffs = 3,
+	HideDamageIcons = true,
+	MoveRoleIcons = true,
+	HideRealm = true,
+	FriendsClassColor = true,
+	Nameplates_FriendsAlphaInCombat = 1, -- Experimental !!
+	Nameplates_FriendsAlphaNotInCombat = 1, -- Experimental !!
 
-		UpdateHealthColor = true,
-		BGColorOk =			{ r= .1, g= .1, b= .1, a = .3 },
-		BGColorWarning = { r = 1, g= 1, b= 0, a = .4 },
-		BGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
+	ShowMsgNormal = true,
+	ShowMsgErr = true,
+	ShowMsgWarning = true,
 
-		LimitOk = .70,
-		LimitWarning = .50,
-		LimitLow = .20,
+	UpdateHealthColor = true,
+	AlphaNotInRange = .3,
+	BGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
+	BGColorWarn = 		{ r = 1, g= 1, b= 0, a = .4 },
+	BGColorOK =			{ r= .1, g= .1, b= .1, a = .3 },
 
-		-- Revert the bar (sRaidFrames like)
-		RevertBar = true,
-		RevertBGColorOk =			{ r= 0, g= 1, b= 0, a = 1 },
-		RevertBGColorWarning = { r = 1, g= 1, b= 0, a = .8 },
-		RevertBGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
+	LimitLow = .20,
+	LimitWarn = .50,
+	LimitOk = .70,
 
-		DebugRandomHealth = false,		 -- Show random healths (debug)
-		SoloRaidFrame = true,		 -- Show random healths (debug)
-	}
-end
+	-- Revert the bar (sRaidFrames like)
+	RevertBar = false,
+	RevertBGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
+	RevertBGColorWarn = { r = 1, g= 1, b= 0, a = .8 },
+	RevertBGColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
 
-function KALLYE_OnLoad(self)
-	-- self:RegisterEvent("ADDON_LOADED");
-	-- self:RegisterEvent("PLAYER_ENTERING_WORLD");
-	-- self:RegisterEvent("PLAYER_REGEN_ENABLED");
-	-- self:RegisterEvent("PLAYER_REGEN_DISABLED");
+	DebugRandomHealth = false,		 -- Show random healths (debug)
+	SoloRaidFrame = true,		 -- Show random healths (debug)
+};
+KRF_SetDefaultOptions(KRF_DefaultOptions);
 
-	-- self:RegisterEvent("UNIT_ENTERED_VEHICLE");
-	-- self:RegisterEvent("UNIT_EXITED_VEHICLE");
 
-	SlashCmdList["KALLYE"] = SLASH_KALLYE_command;
-	SLASH_KALLYE1 = "/kallye";
-	SLASH_KALLYE2 = "/krs";
-	SLASH_KALLYE3 = "/rs";
+function KRF_OnLoad(self)
+
+	SlashCmdList["KRF"] = SLASH_KRF_command;
+	SLASH_KRF1 = "/krf";
+	SLASH_KRF2 = "/kallye";
+	SLASH_KRF3 = "/kallyeraidframes";
+
+	SlashCmdList["KallyeReloadUI"] = function(msg) ReloadUI(); end;
+	SLASH_KallyeReloadUI1 = "/r";
 
 	if (isInit or InCombatLockdown()) then return; end
-	KALLYE_AddMsg(KALLYE_MSG_LOADED);
 
 	isInit = true;
 	self:SetScript("OnEvent",
 		function(self, event, ...)
-			KALLYE_OnEvent(self, event, ...);
+			KRF_OnEvent(self, event, ...);
 		end
 	);
-end -- END KALLYE_OnLoad
+	self:RegisterEvent("ADDON_LOADED");
+	self:RegisterEvent("PLAYER_ENTERING_WORLD");
+end -- END KRF_OnLoad
 
-function KALLYE_OnUpdate(self, elapsed)
-end -- END KALLYE_OnUpdate
-
--- KALLYE_OnEvent
-function KALLYE_OnEvent(self, event, ...)
+-- KRF_OnEvent
+function KRF_OnEvent(self, event, ...)
 	local arg1 = select(1, ...);
 	if ((event == "UNIT_NAME_UPDATE" and arg1 == "player") or event == "PLAYER_ENTERING_WORLD") then
 		isPlayer = true;
-		--self:UnRegisterEvent("PLAYER_ENTERING_WORLD");
-	elseif(event == "ADDON_LOADED" and arg1 == KALLYE_TITLE) then
+		-- self:UnRegisterEvent("PLAYER_ENTERING_WORLD");
+	elseif(event == "ADDON_LOADED" and arg1 == KRF_ADDON_NAME) then
 		isLoaded = true;
 		self:UnregisterEvent("ADDON_LOADED");
-	end
-end -- END KALLYE_OnEvent
+		KRF_SetDefaultOptions(KRF_DefaultOptions);
 
-function SLASH_KALLYE_command(msgIn)
-	if (not isInit) then
-		KALLYE_AddMsgWarn(KALLYE_INIT_FAILED, true);
+		-- ! Hooks
+		_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_ManageBuffs);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_UpdateName);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_UpdateRoleIcon);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_UpdateHealth);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_UpdateInRange);
+
+
+		-- ! SoloRaid Frames: need to reload
+		if (KallyeRaidFramesOptions.SoloRaidFrame) then
+			_G.CompactRaidFrameManager:Show()
+			_G.CompactRaidFrameManager.Hide = function() end
+			_G.CompactRaidFrameContainer:Show()
+			_G.CompactRaidFrameContainer.Hide = function() end
+
+			_G.GetDisplayedAllyFrames = SoloRaid_GetDisplayedAllyFrames;
+			_G.CompactRaidFrameContainer_OnEvent = SoloRaid_CompactRaidFrameContainer_OnEvent;
+		end
+
+		-- ! Addon Loaded ^^
+		KRF_AddMsg(KRF_MSG_LOADED);
+	end
+end -- END KRF_OnEvent
+
+function SLASH_KRF_command(msgIn)
+	if (not isLoaded) then
+		KRF_AddMsgWarn(KRF_INIT_FAILED, true);
 		return;
 	end
-	InterfaceOptionsFrame_OpenToCategory(KALLYE_TITLE);
-	InterfaceOptionsFrame_OpenToCategory(KALLYE_TITLE);
+	InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
+	InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
 end
 
 
 function OptionsWReloadValues()
-	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)..tostring(KallyeRaidFramesOptions.UpdateHealthColor)..tostring(KallyeRaidFramesOptions.RevertBar);
+	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)
+		..tostring(KallyeRaidFramesOptions.UpdateHealthColor)
+		..tostring(KallyeRaidFramesOptions.RevertBar);
 end
-function SaveRSOptions()
+
+function SaveKRFOptions()
 	local PreviousOptionsWReload = OptionsWReloadValues();
 
-	KallyeRaidFramesOptions.UpdateHealthColor = KRFOptionsFrameUpdateHealthColor:GetChecked();
-	-- --KallyeRaidFramesOptions.ServerSideFiltering = KallyeRaidFramesOptionsFrameServerSideFiltering:GetChecked();
-	-- KallyeRaidFramesOptions.ShowMemberInfo = KallyeRaidFramesOptionsFrameShowMemberInfo:GetChecked();
-	-- --KallyeRaidFramesOptions.AutoRefresh = KallyeRaidFramesOptionsFrameAutoRefresh:GetChecked();
-	-- --KallyeRaidFramesOptions.AutoRefreshInterval = KallyeRaidFramesOptionsFrameAutoRefreshInterval:GetCurrentValue();
-	-- KallyeRaidFramesOptions.HideLegionNormals = KallyeRaidFramesOptionsFrameHideLegionNormals:GetChecked();
-	-- KallyeRaidFramesOptions.HideLegionHeroics = KallyeRaidFramesOptionsFrameHideLegionHeroics:GetChecked();
-	-- KallyeRaidFramesOptions.HideBFANormals = KallyeRaidFramesOptionsFrameHideBFANormals:GetChecked();
-	-- KallyeRaidFramesOptions.HideBFAHeroics = KallyeRaidFramesOptionsFrameHideBFAHeroics:GetChecked();
+	KallyeRaidFramesOptions.UpdateHealthColor = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked();
+	KallyeRaidFramesOptions.RevertBar = _G[KRF_OPTIONS.."RevertBar"]:GetChecked();
+	KallyeRaidFramesOptions.FriendsClassColor = _G[KRF_OPTIONS.."FriendsClassColor"]:GetChecked();
+	KallyeRaidFramesOptions.BGColorLow = _G[KRF_OPTIONS.."BGColorLow"].GetColor();
+	KallyeRaidFramesOptions.BGColorWarn = _G[KRF_OPTIONS.."BGColorWarn"].GetColor();
+	KallyeRaidFramesOptions.BGColorOK = _G[KRF_OPTIONS.."BGColorOK"].GetColor();
+	KallyeRaidFramesOptions.RevertBGColorLow = _G[KRF_OPTIONS.."RevertBGColorLow"].GetColor();
+	KallyeRaidFramesOptions.RevertBGColorWarn = _G[KRF_OPTIONS.."RevertBGColorWarn"].GetColor();
+	KallyeRaidFramesOptions.RevertBGColorOK = _G[KRF_OPTIONS.."RevertBGColorOK"].GetColor();
 
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
-		KALLYE_AddMsgWarn(KALLYE_OPTION_RELOAD_REQUIRED, true)
+		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true)
 	end
 end
 
-function RefreshRSOptions()
-	KRFOptionsFrameUpdateHealthColor:SetChecked(KallyeRaidFramesOptions.UpdateHealthColor);
-	--KallyeRaidFramesOptionsFrameServerSideFiltering:SetChecked(KallyeRaidFramesOptions.ServerSideFiltering);
-	-- KallyeRaidFramesOptionsFrameShowMemberInfo:SetChecked(KallyeRaidFramesOptions.ShowMemberInfo);
-	-- --KallyeRaidFramesOptionsFrameAutoRefresh:SetChecked(KallyeRaidFramesOptions.AutoRefresh);
-	-- --KallyeRaidFramesOptionsFrameAutoRefreshInterval:SetValue(KallyeRaidFramesOptions.AutoRefreshInterval);
-	-- KallyeRaidFramesOptionsFrameHideLegionNormals:SetChecked(KallyeRaidFramesOptions.HideLegionNormals);
-	-- KallyeRaidFramesOptionsFrameHideLegionHeroics:SetChecked(KallyeRaidFramesOptions.HideLegionHeroics);
-	-- KallyeRaidFramesOptionsFrameHideBFANormals:SetChecked(KallyeRaidFramesOptions.HideBFANormals);
-	-- KallyeRaidFramesOptionsFrameHideBFAHeroics:SetChecked(KallyeRaidFramesOptions.HideBFAHeroics);
-end
-
---[[
-! Hooks
-]]
-hooksecurefunc("CompactUnitFrame_SetMaxBuffs", Kallye_ManageBuffs);
-hooksecurefunc("CompactUnitFrame_UpdateName", Kallye_UpdateName);
-hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", Kallye_UpdateRoleIcon);
-hooksecurefunc("CompactUnitFrame_UpdateHealth", Kallye_UpdateHealth)
-
-
--- ## SoloRaid Frames: need to reload
-if (KallyeRaidFramesOptions.SoloRaidFrame) then
-	CompactRaidFrameManager:Show()
-	CompactRaidFrameManager.Hide = function() end
-	CompactRaidFrameContainer:Show()
-	CompactRaidFrameContainer.Hide = function() end
-
-	GetDisplayedAllyFrames = SoloRaid_GetDisplayedAllyFrames;
-	CompactRaidFrameContainer_OnEvent = SoloRaid_CompactRaidFrameContainer_OnEvent;
+function RefreshKRFOptions()
+	_G[KRF_OPTIONS.."UpdateHealthColor"]:SetChecked(KallyeRaidFramesOptions.UpdateHealthColor);
+	_G[KRF_OPTIONS.."RevertBar"]:SetChecked(KallyeRaidFramesOptions.RevertBar);
+	_G[KRF_OPTIONS.."FriendsClassColor"]:SetChecked(KallyeRaidFramesOptions.FriendsClassColor);
+	_G[KRF_OPTIONS.."BGColorLow"].SetColor(KallyeRaidFramesOptions.BGColorLow);
+	_G[KRF_OPTIONS.."BGColorWarn"].SetColor(KallyeRaidFramesOptions.BGColorWarn);
+	_G[KRF_OPTIONS.."BGColorOK"].SetColor(KallyeRaidFramesOptions.BGColorOK);
+	_G[KRF_OPTIONS.."RevertBGColorLow"].SetColor(KallyeRaidFramesOptions.RevertBGColorLow);
+	_G[KRF_OPTIONS.."RevertBGColorWarn"].SetColor(KallyeRaidFramesOptions.RevertBGColorWarn);
+	_G[KRF_OPTIONS.."RevertBGColorOK"].SetColor(KallyeRaidFramesOptions.RevertBGColorOK);
 end

@@ -21,22 +21,21 @@
 	</Font>
 	<Font name="PawnFontSilverLarge" inherits="GameFontNormalLarge" virtual="true">
 		<Color r ="0.75" g="0.75" b="0.75" />
-	</Font> -->
+	</Font>
+	https://openclassrooms.com/forum/sujet/code-lua-pour-wow-99378
+	-->
 	<Frame name="KallyeRaidFramesEvents">
 		<Scripts>
 			<OnLoad>
-				KALLYE_OnLoad(self);
+				KRF_OnLoad(self);
 			</OnLoad>
-			<OnUpdate>
-				KALLYE_OnUpdate(self, elapsed);
-			</OnUpdate>
 		</Scripts>
 	</Frame>
 	<Frame name="KRFOptionsContainer" parent="InterfaceOptionsFramePanelContainer">
 		<Layers>
 			<Layer level="ARTWORK">
 
-				<FontString name="$parentHeaderLabel" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KALLYE_OPTIONS_TITLE">
+				<FontString name="$parentHeaderLabel" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_TITLE">
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 					<Size><AbsDimension x="550" y="350" /></Size>
 				</FontString>
@@ -59,10 +58,10 @@
 						<Layers>
 							<Layer level="ARTWORK">
 								<!-- END Remove Scroll from here (1/2)  ######## -->
-								<FontString name="$parentSubtitleLabel" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE" text="KALLYE_SUBTITLE">
+								<FontString name="$parentSubtitleLabel" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE" text="KRF_SUBTITLE">
 									<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 								</FontString>
-								<FontString name="$parentTooltipLabel" inherits="GameFontHighlight" justifyH="LEFT" justifyV="MIDDLE" text="KALLYE_DESC">
+								<FontString name="$parentTooltipLabel" inherits="GameFontHighlight" justifyH="LEFT" justifyV="MIDDLE" text="KRF_DESC">
 									<Anchors><Anchor point="TOPLEFT" relativeTo="$parentSubtitleLabel" relativePoint="BOTTOMLEFT">
 										<Offset><AbsDimension x="0" y="-15" /></Offset>
 									</Anchor></Anchors>
@@ -70,44 +69,111 @@
 							</Layer>
 						</Layers>
 						<Frames>
-							<CheckButton name="$parentUpdateHealthColor" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parentUpdateHealthColor" inherits="InterfaceOptionsCheckButtonTemplate">
 								<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-100" /></Offset></Anchor></Anchors>
 								<Scripts>
 									<OnLoad>
-										self.Text:SetText(KALLYE_OPTION_HIGHLIGHTLOWHP);
-										self.tooltipText = KALLYE_OPTION_HIGHLIGHTLOWHP;
+										self.Text:SetText(KRF_OPTION_HIGHLIGHTLOWHP);
+										self.tooltipText = KRF_OPTION_HIGHLIGHTLOWHP;
 									</OnLoad>
 									<OnUpdate>
-										KRFOptionsEnable(KRFOptionsFrameServerSideFiltering, self:GetChecked())
+										ManageHealthOptionsEnabled()
 									</OnUpdate>
 								</Scripts>
 							</CheckButton>
-
-							<CheckButton name="$parentServerSideFiltering" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
-								<Anchors><Anchor point="TOPLEFT" relativeTo="$parentUpdateHealthColor" relativePoint="BOTTOMLEFT">
-									<Offset><AbsDimension x="0" y="-20" /></Offset>
-								</Anchor></Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KALLYE_OPTION_HIGHLIGHTLOWHP);
-										self.tooltipText = KALLYE_OPTION_HIGHLIGHTLOWHP;
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
-							<CheckButton name="$parentShowMemberInfo" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parentRevertBar" inherits="InterfaceOptionsCheckButtonTemplate">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parentServerSideFiltering" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeTo="$parentUpdateHealthColor" relativePoint="BOTTOMLEFT">
+										<Offset x="15" y="0"/>
+									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										self.Text:SetText("Show each member's class and role in group tooltip");
-										self.tooltipText = "Show each member's class and role in group tooltip.";
+										self.Text:SetText(KRF_OPTION_REVERTBAR);
+										self.tooltipText = KRF_OPTION_REVERTBAR;
 									</OnLoad>
+									<OnUpdate>
+										ManageHealthOptionsEnabled()
+									</OnUpdate>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parentAutoRefresh" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
+							<Button name="$parentBGColorLow" inherits="InterfaceOptionsCheckButtonTemplate">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parentShowMemberInfo" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeTo="$parentRevertBar" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										KRF_ColorButtonWidget(self);
+										self.Text:SetText("Back - Low health");
+										self.tooltipText = "Back - Low health";
+									</OnLoad>
+								</Scripts>
+							</Button>
+							<Button name="$parentBGColorWarn" inherits="InterfaceOptionsCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parentBGColorLow" relativePoint="TOPLEFT">
+										<Offset x="150" y="0"/>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										KRF_ColorButtonWidget(self)
+									</OnLoad>
+								</Scripts>
+							</Button>
+							<Button name="$parentBGColorOK" inherits="InterfaceOptionsCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parentBGColorLow" relativePoint="TOPLEFT">
+										<Offset x="300" y="0"/>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										KRF_ColorButtonWidget(self)
+									</OnLoad>
+								</Scripts>
+							</Button>
+							<Button name="$parentRevertBGColorLow" inherits="InterfaceOptionsCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parentBGColorLow" relativePoint="TOPLEFT"/>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										KRF_ColorButtonWidget(self)
+										self.Text:SetText("HP - Low health");
+										self.tooltipText = "HP - Low health";
+									</OnLoad>
+								</Scripts>
+							</Button>
+							<Button name="$parentRevertBGColorWarn" inherits="InterfaceOptionsCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parentRevertBGColorLow" relativePoint="TOPLEFT">
+										<Offset x="150" y="0"/>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										KRF_ColorButtonWidget(self)
+									</OnLoad>
+								</Scripts>
+							</Button>
+							<Button name="$parentRevertBGColorOK" inherits="InterfaceOptionsCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parentRevertBGColorLow" relativePoint="TOPLEFT">
+										<Offset x="300" y="0"/>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										KRF_ColorButtonWidget(self)
+									</OnLoad>
+								</Scripts>
+							</Button>
+							<CheckButton name="$parentAutoRefresh" inherits="InterfaceOptionsCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parentBGColorLow" relativePoint="BOTTOMLEFT">
+										<Offset x="-15" y="-10"/>
+									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
@@ -115,13 +181,13 @@
 										self.tooltipText = "Automatically refresh search list every 30 sec.";
 									</OnLoad>
 									<OnUpdate>
-										KRFOptionsEnable(KRFOptionsFrameAutoRefreshInterval, self:GetChecked())
+										KRF_OptionsEnable(KRFOptionsFrameAutoRefreshInterval, self:GetChecked())
 									</OnUpdate>
 								</Scripts>
 							</CheckButton>
-							<Slider name="$parentAutoRefreshInterval" hidden="false" inherits="VideoOptionsSliderTemplate" minValue="0" maxValue="3" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
+							<Slider name="$parentAutoRefreshInterval" inherits="VideoOptionsSliderTemplate" minValue="0" maxValue="3" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parentShowMemberInfo" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeTo="$parentAutoRefresh" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-25"/>
 									</Anchor>
 								</Anchors>
@@ -153,50 +219,33 @@
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-							<CheckButton name="$parentHideLegionNormals" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parentFriendsClassColor" inherits="InterfaceOptionsCheckButtonTemplate">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parentAutoRefreshInterval" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										self.Text:SetText("Hide Legion Normal mode dungeons");
-										self.tooltipText = "Hide Legion Normal mode dungeons in dropdown menu.";
+										self.Text:SetText(KRF_OPTION_FRIENDSCLASSCOLOR);
+										self.tooltipText = KRF_OPTION_FRIENDSCLASSCOLOR;
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parentHideLegionHeroics" inherits="InterfaceOptionsCheckButtonTemplate">
+							<Button name="$parentResetOptions" inherits="OptionsButtonTemplate">
+								<Size x="200" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parentHideLegionNormals" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeTo="$parentFriendsClassColor" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										self.Text:SetText("Hide Legion Heroic mode dungeons");
-										self.tooltipText = "Hide Legion Heroic mode dungeons in dropdown menu.";
+										self.Text:SetText(KRF_OPTION_RESET_OPTIONS);
+										self.tooltipText = KRF_OPTION_RESET_OPTIONS;
 									</OnLoad>
+									<OnClick>
+										KRF_SetDefaultOptions(KRF_DefaultOptions, true);
+										ReloadUI();
+									</OnClick>
 								</Scripts>
-							</CheckButton>
-							<CheckButton name="$parentHideBFANormals" inherits="InterfaceOptionsCheckButtonTemplate">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parentHideLegionHeroics" relativePoint="BOTTOMLEFT"/>
-								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText("Hide BFA Normal mode dungeons");
-										self.tooltipText = "Hide BFA Normal mode dungeons in dropdown menu.";
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
-							<CheckButton name="$parentHideBFAHeroics" inherits="InterfaceOptionsCheckButtonTemplate">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parentHideBFANormals" relativePoint="BOTTOMLEFT"/>
-								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText("Hide BFA Heroic mode dungeons");
-										self.tooltipText = "Hide BFA Heroic mode dungeons in dropdown menu.";
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
+							</Button>
 							<!-- Remove Scroll from here (2/2) ########  -->
 						</Frames>
 					</Frame>
@@ -206,10 +255,37 @@
 		</Frames>
 		<Scripts>
 			<OnLoad>
-				self.name = KALLYE_TITLE;
-				self.okay = SaveRSOptions;
-				self.refresh = RefreshRSOptions;
+				RefreshKRFOptions();
+				self.name = KRF_TITLE;
+				self.okay = SaveKRFOptions;
+				self.refresh = RefreshKRFOptions;
 				InterfaceOptions_AddCategory(self);
+
+				ManageHealthOptionsEnabled = function()
+					local HealthOption, RevertBarOption = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked(), _G[KRF_OPTIONS.."RevertBar"]:GetChecked()
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBar"], HealthOption)
+					if not RevertBarOption then
+						_G[KRF_OPTIONS.."BGColorLow"]:Show();
+						_G[KRF_OPTIONS.."BGColorWarn"]:Show();
+						_G[KRF_OPTIONS.."BGColorOK"]:Show();
+						_G[KRF_OPTIONS.."RevertBGColorLow"]:Hide();
+						_G[KRF_OPTIONS.."RevertBGColorWarn"]:Hide();
+						_G[KRF_OPTIONS.."RevertBGColorOK"]:Hide();
+					else
+						_G[KRF_OPTIONS.."BGColorLow"]:Hide();
+						_G[KRF_OPTIONS.."BGColorWarn"]:Hide();
+						_G[KRF_OPTIONS.."BGColorOK"]:Hide();
+						_G[KRF_OPTIONS.."RevertBGColorLow"]:Show();
+						_G[KRF_OPTIONS.."RevertBGColorWarn"]:Show();
+						_G[KRF_OPTIONS.."RevertBGColorOK"]:Show();
+					end
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorLow"], HealthOption and not RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorWarn"], HealthOption and not RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorOK"], HealthOption and not RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBGColorLow"], HealthOption and RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBGColorWarn"], HealthOption and RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBGColorOK"], HealthOption and RevertBarOption);
+				end
 			</OnLoad>
 		</Scripts>
 

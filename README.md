@@ -1,4 +1,4 @@
-# Kallye Raid Frames (RaidSpotlight)
+# Kallye Raid Frames
 
 Some selfmade modifications to Blizzards default raidframes according to my own preferences
 
@@ -7,6 +7,7 @@ Some selfmade modifications to Blizzards default raidframes according to my own 
        - default from black, to yellow, then red
        - options to change colors and %
     - Optionnal revert HP bars (less life = bigger red bar !) (sRaidFrames)
+    - Transparency of units out of heal range
     - Roles icons
         - Shows Healing/Tank role icons
         - Hides DPS role icons
