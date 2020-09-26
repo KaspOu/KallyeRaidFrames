@@ -39,6 +39,7 @@ KALLYE_OPTION_SOLORAID = "Always display raid frames (even without party) *";
 KALLYE_OPTION_SHOWMSGNORMAL = "Display all messages (verbose)";
 KALLYE_OPTION_SHOWMSGERR = "Display errors messages";
 KALLYE_OPTION_SHOWMSGWARNING = "Display warning messages";
+KALLYE_OPTION_RELOAD_REQUIRED = "Some options need a reload (write: /reload )";
 
 
 --[[

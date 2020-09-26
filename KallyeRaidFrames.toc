@@ -1,11 +1,12 @@
 ## Interface: 80300
 ## Title: RaidSpotlights
+## Title-frFR: RaidSpotlights
 ## Notes: Highlight Raid Frames on low health
 ## Notes-frFR: Met en surbrillance les barres de raids lorsque la vie chute
 ## Version: 0.1.0
 ## Author: Kallye of Elune
-## SavedVariables: globalSettings
-## SavedVariablesPerCharacter: characterSettings
+## SavedVariables: KallyeRaidFramesOptions
+## - SavedVariablesPerCharacter: characterSettings
 
 ## X-License: MIT
 ## X-Category: Unit Frames

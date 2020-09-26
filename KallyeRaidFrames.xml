@@ -70,18 +70,21 @@
 							</Layer>
 						</Layers>
 						<Frames>
-							<CheckButton name="$parentServerSideFilteringg" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parentUpdateHealthColor" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
 								<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-100" /></Offset></Anchor></Anchors>
 								<Scripts>
 									<OnLoad>
 										self.Text:SetText(KALLYE_OPTION_HIGHLIGHTLOWHP);
 										self.tooltipText = KALLYE_OPTION_HIGHLIGHTLOWHP;
 									</OnLoad>
+									<OnUpdate>
+										KRFOptionsEnable(KRFOptionsFrameServerSideFiltering, self:GetChecked())
+									</OnUpdate>
 								</Scripts>
 							</CheckButton>
 
 							<CheckButton name="$parentServerSideFiltering" hidden="false" inherits="InterfaceOptionsCheckButtonTemplate">
-								<Anchors><Anchor point="TOPLEFT" relativeTo="$parentServerSideFilteringg" relativePoint="BOTTOMLEFT">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="$parentUpdateHealthColor" relativePoint="BOTTOMLEFT">
 									<Offset><AbsDimension x="0" y="-20" /></Offset>
 								</Anchor></Anchors>
 								<Scripts>
@@ -111,6 +114,9 @@
 										self.Text:SetText("Auto refresh search list");
 										self.tooltipText = "Automatically refresh search list every 30 sec.";
 									</OnLoad>
+									<OnUpdate>
+										KRFOptionsEnable(KRFOptionsFrameAutoRefreshInterval, self:GetChecked())
+									</OnUpdate>
 								</Scripts>
 							</CheckButton>
 							<Slider name="$parentAutoRefreshInterval" hidden="false" inherits="VideoOptionsSliderTemplate" minValue="0" maxValue="3" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
@@ -131,7 +137,7 @@
 										LFRAdvancedOptions.AutoRefreshInterval = value;
 										end
 										self.GetCurrentValue = function (self)
-										return LFRAdvancedOptions.AutoRefreshInterval;
+											return LFRAdvancedOptions.AutoRefreshInterval;
 										end
 										_G[name.."Text"]:SetFontObject("OptionsFontSmall");
 										_G[name.."Text"]:SetText("Auto refresh interval");
@@ -201,8 +207,8 @@
 		<Scripts>
 			<OnLoad>
 				self.name = KALLYE_TITLE;
-				-- self.okay = SaveRSOptions;
-				-- self.refresh = RefreshRSOptions;
+				self.okay = SaveRSOptions;
+				self.refresh = RefreshRSOptions;
 				InterfaceOptions_AddCategory(self);
 			</OnLoad>
 		</Scripts>

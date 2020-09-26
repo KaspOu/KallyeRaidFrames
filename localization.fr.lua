@@ -32,6 +32,7 @@ KALLYE_OPTION_SOLORAID = "Toujours afficher les barres de raid (m\195\170me seul
 KALLYE_OPTION_SHOWMSGNORMAL = "Afficher tous les messages";
 KALLYE_OPTION_SHOWMSGERR = "Afficher les messages d\'erreur";
 KALLYE_OPTION_SHOWMSGWARNING = "Afficher les messages d\'alerte";
+KALLYE_OPTION_RELOAD_REQUIRED = "Certaines options requi\195\168rent un rechargement (\195\169crivez : /reload )";
 
 
 -- https://wowwiki.fandom.com/wiki/Localizing_an_addon
