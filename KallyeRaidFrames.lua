@@ -12,7 +12,7 @@
 ? Depuis http://www.wowinterface.com/forums/showthread.php?t=56237
 ? Réf Blizzard http://wowwiki.wikia.com/wiki/Widget_API
 
-? Debug frames: use /fstack
+? /fstack /dump
 
 ]]
 
@@ -34,7 +34,7 @@ KRF_DefaultOptions = {
 	Nameplates_FriendsAlphaNotInCombat = 1, -- Experimental !!
 
 	ShowMsgNormal = true,
-	ShowMsgErr = true,
+	ShowMsgError = true,
 	ShowMsgWarning = true,
 
 	UpdateHealthColor = true,
@@ -53,8 +53,7 @@ KRF_DefaultOptions = {
 	RevertBGColorWarn = { r = 1, g= 1, b= 0, a = .8 },
 	RevertBGColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
 
-	DebugRandomHealth = false,		 -- Show random healths (debug)
-	SoloRaidFrame = true,		 -- Show random healths (debug)
+	SoloRaidFrame = true,		 -- Show solo raid (debug)
 };
 KRF_SetDefaultOptions(KRF_DefaultOptions);
 
@@ -129,21 +128,34 @@ end
 function OptionsWReloadValues()
 	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)
 		..tostring(KallyeRaidFramesOptions.UpdateHealthColor)
-		..tostring(KallyeRaidFramesOptions.RevertBar);
+		-- ..tostring(KallyeRaidFramesOptions.RevertBar);
 end
 
 function SaveKRFOptions()
 	local PreviousOptionsWReload = OptionsWReloadValues();
+	-- Auto detect options controls
+	foreach(KRF_DefaultOptions,
+		function (k, v)
+			if (_G[KRF_OPTIONS..k] ~= nil) then
+				local control = _G[KRF_OPTIONS..k];
+				local previousValue = KallyeRaidFramesOptions[k] or v;
 
-	KallyeRaidFramesOptions.UpdateHealthColor = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked();
-	KallyeRaidFramesOptions.RevertBar = _G[KRF_OPTIONS.."RevertBar"]:GetChecked();
-	KallyeRaidFramesOptions.FriendsClassColor = _G[KRF_OPTIONS.."FriendsClassColor"]:GetChecked();
-	KallyeRaidFramesOptions.BGColorLow = _G[KRF_OPTIONS.."BGColorLow"].GetColor();
-	KallyeRaidFramesOptions.BGColorWarn = _G[KRF_OPTIONS.."BGColorWarn"].GetColor();
-	KallyeRaidFramesOptions.BGColorOK = _G[KRF_OPTIONS.."BGColorOK"].GetColor();
-	KallyeRaidFramesOptions.RevertBGColorLow = _G[KRF_OPTIONS.."RevertBGColorLow"].GetColor();
-	KallyeRaidFramesOptions.RevertBGColorWarn = _G[KRF_OPTIONS.."RevertBGColorWarn"].GetColor();
-	KallyeRaidFramesOptions.RevertBGColorOK = _G[KRF_OPTIONS.."RevertBGColorOK"].GetColor();
+				if control.type == "color" then
+					value = control.GetColor();
+				elseif control.type == CONTROLTYPE_SLIDER then
+					value = control:GetValue();
+				elseif type(previousValue) == "boolean" then
+					value = control:GetChecked();
+				end
+				if value == nil then
+					KRF_AddMsgErr(format("Incorrect field value, loading default value for %s...", k));
+					value = v;
+				end;
+				KallyeRaidFramesOptions[k] = value;
+			end
+		end
+	);
+	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
 		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true)
@@ -151,13 +163,25 @@ function SaveKRFOptions()
 end
 
 function RefreshKRFOptions()
-	_G[KRF_OPTIONS.."UpdateHealthColor"]:SetChecked(KallyeRaidFramesOptions.UpdateHealthColor);
-	_G[KRF_OPTIONS.."RevertBar"]:SetChecked(KallyeRaidFramesOptions.RevertBar);
-	_G[KRF_OPTIONS.."FriendsClassColor"]:SetChecked(KallyeRaidFramesOptions.FriendsClassColor);
-	_G[KRF_OPTIONS.."BGColorLow"].SetColor(KallyeRaidFramesOptions.BGColorLow);
-	_G[KRF_OPTIONS.."BGColorWarn"].SetColor(KallyeRaidFramesOptions.BGColorWarn);
-	_G[KRF_OPTIONS.."BGColorOK"].SetColor(KallyeRaidFramesOptions.BGColorOK);
-	_G[KRF_OPTIONS.."RevertBGColorLow"].SetColor(KallyeRaidFramesOptions.RevertBGColorLow);
-	_G[KRF_OPTIONS.."RevertBGColorWarn"].SetColor(KallyeRaidFramesOptions.RevertBGColorWarn);
-	_G[KRF_OPTIONS.."RevertBGColorOK"].SetColor(KallyeRaidFramesOptions.RevertBGColorOK);
+	-- Auto detect options controls
+	foreach(KRF_DefaultOptions,
+		function (k, v)
+			if (_G[KRF_OPTIONS..k] ~= nil) then
+				local control = _G[KRF_OPTIONS..k];
+				local value = KallyeRaidFramesOptions[k];
+				if value == nil then
+					value = v;
+					KRF_AddMsgErr(format("Option not found (%s) loading default value...", k));
+				end;
+
+				if control.type == "color" then
+					control.SetColor(value);
+				elseif control.type == CONTROLTYPE_SLIDER then
+					control:SetValue(value);
+				elseif type(value) == "boolean" then
+					control:SetChecked(value);
+				end
+			end
+		end
+	);
 end

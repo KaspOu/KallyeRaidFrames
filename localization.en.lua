@@ -22,26 +22,41 @@ KRF_MSG_SDB            = "Kallye options frame";
 
 KRF_INIT_FAILED = format("%s not initialized correctly!", KRF_VERS_TITLE);
 
+KRF_OPTION_RAID_HEADER = "Party / Raid";
+KRF_OPTION_HIGHLIGHTLOWHP = "Highlight players HP loss";
+KRF_OPTION_REVERTBAR = "Revert HP bars (less life = bigger bar !) *";
+KRF_OPTION_HEALTH_LOW = "Near dead!";
+KRF_OPTION_HEALTH_LOW_TOOLTIP = "Low health color applied BELOW this limit\ni.e.: Red below 30%";
+KRF_OPTION_HEALTH_WARN = "Warning";
+KRF_OPTION_HEALTH_WARN_TOOLTIP = "Warn health color applied AT this limit exactly\ni.e.: Yellow at 50%";
+KRF_OPTION_HEALTH_OK = "Health ok";
+KRF_OPTION_HEALTH_OK_TOOLTIP = "OK health color applied AFTER this limit\ni.e.: Green after 60%";
+KRF_OPTION_HIDEDAMAGEICONS = "Hide dps icon";
+KRF_OPTION_MOVEROLEICONS = "Replace icons on top left";
+KRF_OPTION_SOLORAID = "Always display raid frames (even without party) *";
+KRF_OPTION_DEBUG_ON = "! Test raidframes !";
+KRF_OPTION_DEBUG_ON_MESSAGE = "Test activated, reclick to stop it!";
+KRF_OPTION_DEBUG_OFF = "! STOP Test !";
+KRF_OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
-KRF_OPTION_HIGHLIGHTLOWHP = "Raidframe: Highlight players HP loss";
-KRF_OPTION_HIDEDAMAGEICONS = "Raidframe: Hide dps icon";
-KRF_OPTION_MOVEROLEICONS = "Raidframe: Replace tank/heal icons";
+KRF_OPTION_BUFFS_HEADER = "Buffs / Debuffs";
 KRF_OPTION_BUFFSSCALE = "Buffs relative size";
 KRF_OPTION_DEBUFFSSCALE = "Debuffs relative size";
-KRF_OPTION_MAXBUFFS = "Max buffs / debuffs to display";
+KRF_OPTION_MAXBUFFS = "Max buffs";
+KRF_OPTION_MAXBUFFS_TOOLTIP = "Max buffs / debuffs to display";
+KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
+
 KRF_OPTION_HIDEREALM = "Hide other players realm";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Friendly players names colored by class";
 KRF_OPTION_NAMEPLATES_FRIENDSALPHAINCOMBAT = "Nameplates: Friendly players name transparency in combat";
 KRF_OPTION_NAMEPLATES_FRIENDSALPHANOTINCOMBAT = "Nameplates: Friendly players name transparency out of combat";
-KRF_OPTION_REVERTBAR = "Revert HP bars (less life = bigger bar !) *";
-KRF_OPTION_DEBUGRANDOMHEALTH = "Debug mode (random HP displayed)";
-KRF_OPTION_SOLORAID = "Always display raid frames (even without party) *";
+
+KRF_OPTION_RESET_OPTIONS = "Reset options";
+KRF_OPTION_RELOAD_REQUIRED = "Some options need a reload (write: /reload )";
+
 KRF_OPTION_SHOWMSGNORMAL = "Display all messages (verbose)";
 KRF_OPTION_SHOWMSGERR = "Display errors messages";
 KRF_OPTION_SHOWMSGWARNING = "Display warning messages";
-KRF_OPTION_RELOAD_REQUIRED = "Some options need a reload (write: /reload )";
-
-KRF_OPTION_RESET_OPTIONS = "Reset options";
 
 
 --[[

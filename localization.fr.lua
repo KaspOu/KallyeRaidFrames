@@ -16,25 +16,43 @@ KRF_MSG_SDB            = "Kallye menu d\'Options";
 KRF_INIT_FAILED = format("%s pas charg\195\169 correctement !", KRF_VERS_TITLE);
 
 
+KRF_OPTION_RAID_HEADER = "Groupe / Raid";
 KRF_OPTION_HIGHLIGHTLOWHP = "Mettre en \195\169vidence la perte de PV des joueurs";
 KRF_OPTION_REVERTBAR = "Barres de vies invers\195\169es (moins on a de vie, plus la barre grandit !) *";
-KRF_OPTION_HIDEDAMAGEICONS = "Raidframe : Masquer l\'ic\195\180ne des dps";
-KRF_OPTION_MOVEROLEICONS = "Raidframe : Ajuster la position l\'ic\195\180ne des tanks/heals";
-KRF_OPTION_BUFFSSCALE = "Taille relative des d\195\169buffs";
-KRF_OPTION_DEBUFFSSCALE = "Taille relative des buffs";
-KRF_OPTION_MAXBUFFS = "Nombre maximum de buffs / d\195\169buffs \195\160 afficher";
+KRF_OPTION_HEALTH_LOW = "Presque mort !";
+KRF_OPTION_HEALTH_LOW_TOOLTIP = "La couleur sera appliqu\195\169e SOUS cette limite\nex : Rouge sous 30%";
+KRF_OPTION_HEALTH_WARN = "Attention";
+KRF_OPTION_HEALTH_WARN_TOOLTIP = "La couleur sera appliqu\195\169e \195\191 cette limite\nex : Jaune \195\160 50%";
+KRF_OPTION_HEALTH_OK = "Vie ok";
+KRF_OPTION_HEALTH_OK_TOOLTIP = "La couleur sera appliqu\195\169e AU-DESSUS DE cette limite\nex : Vert apr\195\170s 60%";
+KRF_OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne des dps";
+KRF_OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut à gauche";
+KRF_OPTION_SOLORAID = "Toujours afficher les barres de raid (m\195\170me seul) *";
+KRF_OPTION_DEBUG_ON = "! Tester les frames !";
+KRF_OPTION_DEBUG_ON_MESSAGE = "Test activ\195\168, recliquez pour stopper !";
+KRF_OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
+KRF_OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\168, vous pouvez reprendre une activit\195\168 normale";
+
+KRF_OPTION_BUFFS_HEADER = "Buffs / Debuffs";
+KRF_OPTION_BUFFSSCALE = "Taille des buffs";
+KRF_OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs";
+KRF_OPTION_MAXBUFFS = "Afficher maximum";
+KRF_OPTION_MAXBUFFS_TOOLTIP = "Afficher maximum de buffs / d\195\169buffs \195\160 afficher";
+KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
+
 KRF_OPTION_HIDEREALM = "Masquer le royaume des autres joueurs";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
 KRF_OPTION_NAMEPLATES_FRIENDSALPHAINCOMBAT = "Nameplates : Transparence des noms amis en combat";
 KRF_OPTION_NAMEPLATES_FRIENDSALPHANOTINCOMBAT = "Nameplates : Transparence des noms amis hors combat";
-KRF_OPTION_DEBUGRANDOMHEALTH = "Mode debug (affichage al\195\169atoire des PV)";
-KRF_OPTION_SOLORAID = "Toujours afficher les barres de raid (m\195\170me seul) *";
+
+KRF_OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
+KRF_OPTION_RELOAD_REQUIRED = "Certaines options requi\195\168rent un rechargement (\195\169crivez : /reload )";
+
 KRF_OPTION_SHOWMSGNORMAL = "Afficher tous les messages";
 KRF_OPTION_SHOWMSGERR = "Afficher les messages d\'erreur";
 KRF_OPTION_SHOWMSGWARNING = "Afficher les messages d\'alerte";
-KRF_OPTION_RELOAD_REQUIRED = "Certaines options requi\195\168rent un rechargement (\195\169crivez : /reload )";
-KRF_OPTION_RESET_OPTIONS = "Reset options";
 
+-- https://code.google.com/archive/p/mangadmin/wikis/SpecialCharacters.wiki
 -- https://wowwiki.fandom.com/wiki/Localizing_an_addon
 
 -- Debuff types, in english in game!

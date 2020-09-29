@@ -27,12 +27,12 @@ end
 --[[
 ! Managing Health & Alpha
 ]]
-function KRF_UpdateHealth(frame)
+function KRF_UpdateHealth(frame, health)
 	if KallyeRaidFramesOptions.UpdateHealthColor then
 		if not KallyeRaidFramesOptions.RevertBar then
-			UpdateHealth_Regular(frame)
+			UpdateHealth_Regular(frame, health)
 		else
-			UpdateHealth_Reverted(frame)
+			UpdateHealth_Reverted(frame, health)
 		end
 	end
 	-- KRF_UpdateInRange(frame)
@@ -57,14 +57,11 @@ end
 --[[
 ! Managing Health color: background
 ]]
-function UpdateHealth_Regular(frame)
+function UpdateHealth_Regular(frame, health)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame.displayedUnit) and FrameIsCompact(frame) then
-		local healthPercentage = ceil((UnitHealth(frame.displayedUnit) / UnitHealthMax(frame.displayedUnit) * 100))
-
-		if KallyeRaidFramesOptions.DebugRandomHealth then
-			healthPercentage = math.random(10,90)
-			frame.healthBar:SetValue(ceil(UnitHealthMax(frame.displayedUnit) * healthPercentage / 100));
-		end
+		health = health or UnitHealth(frame.displayedUnit)
+		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
+		local healthPercentage = ceil((health / unitHealthMax * 100))
 
 		-- texture:SetVertexColor(r, g, b, a)
 		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
@@ -114,76 +111,73 @@ end
 ! Managing Health color: reverted bar
 TODO : réduire la barre en hauteur, mettre un contour comme sRaidFrames
 ]]
-function UpdateHealth_Reverted(frame)
+function UpdateHealth_Reverted(frame, health)
 	-- if frame.optionTable.colorNameBySelection and not frame:IsForbidden() then
 	-- frame.optionTable.useClassColors
 	-- frame.myHealPredictionBar
 	-- frame.otherHealPredictionBar
 	if not frame:IsForbidden() and UnitInPartyOrRaid(frame.displayedUnit) and FrameIsCompact(frame) then
-	local healthPercentage = ceil((UnitHealth(frame.displayedUnit) / UnitHealthMax(frame.displayedUnit) * 100))
-	local healthLost = UnitHealthMax(frame.displayedUnit) - UnitHealth(frame.displayedUnit);
-	if KallyeRaidFramesOptions.DebugRandomHealth then
-		healthPercentage = math.random(10,90)
-		healthLost = ceil(UnitHealthMax(frame.displayedUnit) * (100-healthPercentage) / 100)
-	end
+		health = health or UnitHealth(frame.displayedUnit)
+		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
+		local healthPercentage = ceil((health / unitHealthMax * 100))
+		local healthLost = unitHealthMax - health;
 
-	frame.name:SetAlpha(1);
-	-- #### Modifs ####
-	-- frame.healthBar:SetHeight(10)
-	--frame:SetHeight(30)
-	--frame.healthBar:SetAttribute("style-height", 1)
-	--frame.healthBar:SetHeight(1)
-	--frame.healthBar:ClearAllPoints()
-	--frame.healthBar:SetPoint("LEFT", frame.background, "RIGHT") --, 50, 50)
-	-- #### Fin Modifs ####
+		frame.name:SetAlpha(1);
+		-- #### Modifs ####
+		-- frame.healthBar:SetHeight(10)
+		--frame:SetHeight(30)
+		--frame.healthBar:SetAttribute("style-height", 1)
+		--frame.healthBar:SetHeight(1)
+		--frame.healthBar:ClearAllPoints()
+		--frame.healthBar:SetPoint("LEFT", frame.background, "RIGHT") --, 50, 50)
+		-- #### Fin Modifs ####
 
-	--frame.healthBar:SetStatusBarTexture("Interface\\Tooltips\\UI-Tooltip-Background")
-	-- "Interface\\TargetingFrame\\UI-StatusBar"
-	local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
+		--frame.healthBar:SetStatusBarTexture("Interface\\Tooltips\\UI-Tooltip-Background")
+		-- "Interface\\TargetingFrame\\UI-StatusBar"
+		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
 
-	if c and frame and frame.background and frame.optionTable.useClassColors then
-		--frame.background:SetColorTexture(c.r, c.g, c.b, .3)
-		frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8))
-		-- frame.name:SetTextColor(c.r, c.g, c.b);
-		frame.name:SetShadowColor(c.r, c.g, c.b, .3)
-	end
-
-	if healthPercentage > 0 then
-		frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true))
-		if frame.wasDead then
-			KRF_UpdateNameColor(frame); -- reset color according options
-			frame.wasDead = false;
+		if c and frame and frame.background and frame.optionTable.useClassColors then
+			--frame.background:SetColorTexture(c.r, c.g, c.b, .3)
+			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8))
+			-- frame.name:SetTextColor(c.r, c.g, c.b);
+			frame.name:SetShadowColor(c.r, c.g, c.b, .3)
 		end
-	else
-		-- Unit is dead
-		-- if c and frame.optionTable.useClassColors then
-		-- 	frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .8, .3))
-		-- else
-		-- 	frame.healthBar:SetStatusBarColor(0, 0, 0, 0.1)
-		-- end
-		frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, .8, .3));
-		frame.name:SetTextColor(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b)
-		frame.name:SetAlpha(KallyeRaidFramesOptions.RevertBGColorLow.a);
-		frame.wasDead = true;
-	end
-	--frame.healthBar.border:SetVertexColor(1, 0, 0, 1);
-	--frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true))
 
-	if ( frame.optionTable.smoothHealthUpdates ) then
-		if ( frame.newUnit ) then
-			frame.healthBar:ResetSmoothedValue(healthLost);
-			frame.newUnit = false;
+		if healthPercentage > 0 then
+			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
+			if frame.wasDead then
+				KRF_UpdateNameColor(frame); -- reset color according options
+				frame.wasDead = false;
+			end
 		else
-			frame.healthBar:SetSmoothedValue(healthLost);
+			-- Unit is dead
+			-- if c and frame.optionTable.useClassColors then
+			-- 	frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .8, .3))
+			-- else
+			-- 	frame.healthBar:SetStatusBarColor(0, 0, 0, 0.1)
+			-- end
+			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, .8, .3));
+			frame.name:SetTextColor(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, KallyeRaidFramesOptions.RevertBGColorLow.a);
+			frame.wasDead = true;
 		end
-	else
-		--PixelUtil.SetStatusBarValue(frame.healthBar, healthLost);
-		frame.healthBar:SetValue(healthLost);
-	end
-	--frame.healthBar:SetBackdropColor(1, 0, 0)
-	--frame.background:SetBackdropColor(0, 1, 0)
-	-- local playerName = GetUnitName(frame.unit, true);
-	-- frame.name:SetText(playerName.." "..healthPercentage);
+		--frame.healthBar.border:SetVertexColor(1, 0, 0, 1);
+		--frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true))
+
+		if ( frame.optionTable.smoothHealthUpdates ) then
+			if ( frame.newUnit ) then
+				frame.healthBar:ResetSmoothedValue(healthLost);
+				frame.newUnit = false;
+			else
+				frame.healthBar:SetSmoothedValue(healthLost);
+			end
+		else
+			--PixelUtil.SetStatusBarValue(frame.healthBar, healthLost);
+			frame.healthBar:SetValue(healthLost);
+		end
+		--frame.healthBar:SetBackdropColor(1, 0, 0)
+		--frame.background:SetBackdropColor(0, 1, 0)
+		-- local playerName = GetUnitName(frame.unit, true);
+		-- frame.name:SetText(playerName.." "..healthPercentage);
 	end
 end
 
@@ -243,7 +237,7 @@ function KRF_UpdateName(frame)
 	if not frame:IsForbidden() then
 		-- https://eu.forums.blizzard.com/en/wow/t/improving-default-blizzardui/2890
 
-		local UnitIsPlayerControlled = UnitPlayerControlled(frame.displayedUnit)
+		local UnitIsPlayerControlled = UnitIsPlayer(frame.displayedUnit)
 		if UnitIsPlayerControlled then
 			local name = frame.name;
 
@@ -265,7 +259,7 @@ end
 
 function KRF_UpdateNameColor(frame)
 	if not frame:IsForbidden() then
-		local UnitIsPlayerControlled = UnitPlayerControlled(frame.displayedUnit)
+		local UnitIsPlayerControlled = UnitIsPlayer(frame.displayedUnit)
 		if UnitIsPlayerControlled then
 			local name = frame.name;
 			if KallyeRaidFramesOptions.FriendsClassColor then
@@ -275,21 +269,28 @@ function KRF_UpdateNameColor(frame)
 					-- name:SetTextColor(darken(c.r, c.g, c.b, .8, 1))
 					name:SetShadowColor(c.r, c.g, c.b, 0.2)
 				end
+			else
+				if name._InitialColor == nil then
+					local r, g, b, a = name:GetTextColor();
+					name._InitialColor = { r=r, g=g, b=b, a=a };
+				else
+					name:SetTextColor(name._InitialColor.r, name._InitialColor.g, name._InitialColor.b, name._InitialColor.a)
+				end
 			end
 
 			if FrameIsCompact(frame) then
 				name:SetPoint("TOPLEFT", 5, -5);
-			else
-				-- -- Experimental
-				-- if ( KallyeRaidFramesOptions.Nameplates_FriendsAlphaNotInCombat ~= 1 or KallyeRaidFramesOptions.Nameplates_FriendsAlphaInCombat ~= 1 ) and UnitIsFriend(frame.displayedUnit, "player") then
-				-- 	if InCombatLockdown() then
-				-- 		name:SetAlpha(KallyeRaidFramesOptions.Nameplates_FriendsAlphaInCombat);
-				-- 		-- name:Hide(1);
-				-- 	else
-				-- 		name:SetAlpha(KallyeRaidFramesOptions.Nameplates_FriendsAlphaNotInCombat);
-				-- 		-- name:Show();
-				-- 	end
-				-- end
+			-- else
+			-- 	-- Experimental
+			-- 	if ( KallyeRaidFramesOptions.Nameplates_FriendsAlphaNotInCombat ~= 1 or KallyeRaidFramesOptions.Nameplates_FriendsAlphaInCombat ~= 1 ) and UnitIsFriend(frame.displayedUnit, "player") then
+			-- 		if InCombatLockdown() then
+			-- 			name:SetAlpha(KallyeRaidFramesOptions.Nameplates_FriendsAlphaInCombat);
+			-- 			-- name:Hide(1);
+			-- 		else
+			-- 			name:SetAlpha(KallyeRaidFramesOptions.Nameplates_FriendsAlphaNotInCombat);
+			-- 			-- name:Show();
+			-- 		end
+			-- 	end
 			end
 		end
 	end
@@ -407,81 +408,59 @@ function KRF_OptionsEnable(FrameObject, isEnabled)
 	end
 end
 
-
-
-function KRF_ColorButtonWidget(self)
-	self._RGBA = { r=1, g=1, b=1, a=1}
-	self.SetColor = function(RGBA)
-			self._RGBA = RGBA or self._RGBA;
-			self._colorSwatch:SetVertexColor(self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a)
+function KRF_ApplyFuncToRaidFrames(func, ...)
+	for member = 1, 40 do
+		local frame = _G["CompactRaidFrame"..member];
+		if frame and frame:IsVisible() then
+			func(frame, ...);
 		end
-	self.GetColor = function() return self._RGBA; end
-	self:SetScript("OnClick", function(self, ...) KRF_ShowColorPicker(KRF_ColorPickedCallback, self); end)
-
-	self:EnableMouse(true)
-
-	local transparent = self:CreateTexture(nil, "BACKGROUND")
-	self:SetNormalTexture(transparent)
-
-	local colorSwatch = self:CreateTexture(nil, "OVERLAY")
-	colorSwatch:SetWidth(20)
-	colorSwatch:SetHeight(20)
-	colorSwatch:SetTexture(130939) -- Interface\\ChatFrame\\ChatFrameColorSwatch
-	colorSwatch:SetPoint("LEFT", 4, 0)
-	self._colorSwatch = colorSwatch
-
-	local texture = self:CreateTexture(nil, "BACKGROUND")
-	colorSwatch.background = texture
-	texture:SetWidth(16)
-	texture:SetHeight(16)
-	texture:SetColorTexture(1, 1, 1)
-	texture:SetPoint("CENTER", colorSwatch)
-	texture:Show()
-
-	local checkers = self:CreateTexture(nil, "BACKGROUND")
-	colorSwatch.checkers = checkers
-	checkers:SetWidth(14)
-	checkers:SetHeight(14)
-	checkers:SetTexture(188523) -- Tileset\\Generic\\Checkers
-	checkers:SetTexCoord(.25, 0, 0.5, .25)
-	checkers:SetDesaturated(true)
-	checkers:SetVertexColor(1, 1, 1, 0.75)
-	checkers:SetPoint("CENTER", colorSwatch)
-	checkers:Show()
-
-	local text = self:CreateFontString(nil,"OVERLAY","GameFontHighlight")
-	text:SetHeight(24)
-	text:SetJustifyH("LEFT")
-	text:SetTextColor(1, 1, 1)
-	text:SetPoint("LEFT", colorSwatch, "RIGHT", 2, 0)
-	text:SetPoint("RIGHT")
-
-	text:SetText("Select Color")
-	text:Show();
-end
-
-function KRF_ShowColorPicker(changedCallback, self)
-	ColorPickerFrame.Self = self;
-	local r,g,b,o = self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a ~= nil and 1-self._RGBA.a or nil;
-	ColorPickerFrame:SetColorRGB(r,g,b);
-	ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (o ~= nil), o;
-	ColorPickerFrame.previousValues = {r,g,b,o};
-	ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc =
-		changedCallback, changedCallback, changedCallback;
-	ColorPickerFrame:Hide(); -- Need to run the OnShow handler.
-	ColorPickerFrame:Show();
-end
-function KRF_ColorPickedCallback(restore)
-	local newR, newG, newB, newO;
-	if restore then
-		-- The user bailed, we extract the old color from the table created by ShowColorPicker.
-		newR, newG, newB, newO = unpack(restore);
-	else
-		-- Something changed
-		newO, newR, newG, newB = OpacitySliderFrame:GetValue(), ColorPickerFrame:GetColorRGB();
 	end
-	-- Update our internal storage.
-	r, g, b, a = newR, newG, newB, 1-newO;
-	-- And update any UI elements that use this color...
-	ColorPickerFrame.Self.SetColor({ r = r , g = g, b = b, a = a });
+	for member = 1, 5 do
+		local frame = _G["CompactPartyFrameMember"..member];
+		if frame and frame:IsVisible() then
+			func(frame, ...);
+		end
+	end
+	for raid = 1, 8 do
+		if _G["CompactRaidGroup"..raid] ~= nil and _G["CompactRaidGroup"..raid]:IsVisible() then
+			for member = 1, 5 do
+				local frame = _G["CompactRaidGroup"..raid.."Member"..member];
+				if frame == nil or not frame:IsVisible() then
+					break;
+				end
+				func(frame, ...);
+			end
+		end
+	end
+end
+
+function KRF_RaidFrames_ResetHealth(frame, testMode)
+	local health = UnitHealth(frame.displayedUnit);
+	if testMode then
+		if frame._testHealthPercentage == nil then
+			frame._testHealthPercentage = fastrandom(0,100)
+		end
+
+		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
+		frame._testHealthPercentage = (frame._testHealthPercentage == 0) and 100 or math.max(0, frame._testHealthPercentage - 5);
+		health = ceil(health * frame._testHealthPercentage / 100);
+		frame.statusText:SetText(format("%d%%", frame._testHealthPercentage));
+	end
+	frame.healthBar:SetValue(health);
+	KRF_UpdateHealth(frame, health);
+end
+
+function KRF_DebugFrames(toggle)
+	if toggle == true then
+		_G.KRF_DebugFramesTimer = not _G.KRF_DebugFramesTimer;
+		KRF_AddMsgWarn(_G.KRF_DebugFramesTimer and KRF_OPTION_DEBUG_ON_MESSAGE or KRF_OPTION_DEBUG_OFF_MESSAGE);
+	end
+	if _G.KRF_DebugFramesTimer then
+		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true)
+	else
+		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false)
+	end
+	if _G.KRF_DebugFramesTimer then
+		C_Timer.After(.5, KRF_DebugFrames)
+	end
 end
