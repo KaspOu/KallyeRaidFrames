@@ -1,8 +1,9 @@
 
-KALLYE_VERSION       = GetAddOnMetadata("KallyeRaidFrames", "Version");
-KALLYE_VERSIONNR     = tonumber(gsub(KALLYE_VERSION, "%D", ""), 10);
-_,KALLYE_TITLE, KALLYE_NOTES = GetAddOnInfo("KallyeRaidFrames");
+KRF_VERSION       = GetAddOnMetadata("KallyeRaidFrames", "Version");
+KRF_VERSIONNR     = tonumber(gsub(KRF_VERSION, "%D", ""), 10);
+KRF_ADDON_NAME,KRF_TITLE, KRF_NOTES = GetAddOnInfo("KallyeRaidFrames");
 
+KRF_OPTIONS = "KRFOptionsFrame_" -- options frame prefix
 
 
 -- Returns a chat color code string
