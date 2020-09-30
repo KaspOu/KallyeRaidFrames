@@ -1,5 +1,3 @@
-
-
 function KRF_SetDefaultOptions(DefaultOptions, reset)
 	if reset or KallyeRaidFramesOptions == nil then
 		KallyeRaidFramesOptions = CopyTable(DefaultOptions)
@@ -35,7 +33,6 @@ function KRF_UpdateHealth(frame, health)
 			UpdateHealth_Reverted(frame, health)
 		end
 	end
-	-- KRF_UpdateInRange(frame)
 end
 
 --[[
@@ -43,14 +40,13 @@ end
 ]]
 function KRF_UpdateInRange(frame)
 	if FrameIsCompact(frame) then
-		local inRange, checkedRange = UnitInRange(frame.displayedUnit)
-		-- IsSpellInRange("Heal",frame.unit)
-		if KallyeRaidFramesOptions.AlphaNotInRange < 1 and checkedRange and not inRange then
-			frame.name:SetAlpha(KallyeRaidFramesOptions.AlphaNotInRange);
-			-- frame.background:SetAlpha(KallyeRaidFramesOptions.AlphaNotInRange);
+		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit)
+		if KallyeRaidFramesOptions.AlphaNotInRange < 1 and hasCheckedRange and not isInRange then
+			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInRange);
+		elseif not InCombatLockdown() and not _G.KRF_IsDebugFramesTimerActive and KallyeRaidFramesOptions.AlphaNotInCombat < 1 then
+			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInCombat);
 		else
 			frame.name:SetAlpha(1);
-			-- frame.background:SetAlpha(1)
 		end
 	end
 end
@@ -63,22 +59,10 @@ function UpdateHealth_Regular(frame, health)
 		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 		local healthPercentage = ceil((health / unitHealthMax * 100))
 
-		-- texture:SetVertexColor(r, g, b, a)
 		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
 		if c and frame.optionTable.useClassColors then
-			--frame.healthBar:SetStatusBarColor(c.r, c.g, c.b, 0.9)
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .2, .95))
-		else
-			--frame.healthBar:SetStatusBarColor(0, 0, 0)
 		end
-		-- ? frame.healthBar:SetAlpha(1);
-		-- frame.name:SetAlpha(1);
-		-- frame.name:SetTextColor(1, 1, 1);
-		-- frame.healthBar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
-		-- "Interface\\TargetingFrame\\UI-StatusBar"
-		-- if healthPercentage > KallyeRaidFramesOptions.LimitOk and healthPercentage > KallyeRaidFramesOptions.LimitWarn then
-		-- 	frame.background:SetColorTexture(.1, .1, .1, .5)
-		-- else
 		if healthPercentage > 0 then
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false))
 			if frame.wasDead then
@@ -86,24 +70,11 @@ function UpdateHealth_Regular(frame, health)
 				frame.wasDead = false;
 			end
 		else
-			-- frame.name:SetTextColor(1, 0, 0)
-			-- local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
-			-- if c and frame.optionTable.useClassColors then
-			-- 	--frame.healthBar:SetStatusBarColor(c.r, c.g, c.b, 0.5)
-			-- 	frame.background:SetColorTexture(c.r, c.g, c.b, 0.2)
-			-- else
-			-- 	--frame.healthBar:SetStatusBarColor(0, 0, 0)
-			-- 	frame.background:SetColorTexture(.2, .2, .1)
-			-- end
+			-- Unit is dead
 			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .8, .3));
 			frame.name:SetTextColor(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b)
-			-- frame.name:SetAlpha(KallyeRaidFramesOptions.BGColorLow.a);
 			frame.wasDead = true;
 		end
-		-- frame.background:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
-
-		-- local playerName = GetUnitName(frame.unit, true);
-		-- frame.name:SetText(playerName.." "..healthPercentage);
 	end
 end
 
@@ -112,7 +83,7 @@ end
 TODO : réduire la barre en hauteur, mettre un contour comme sRaidFrames
 ]]
 function UpdateHealth_Reverted(frame, health)
-	-- if frame.optionTable.colorNameBySelection and not frame:IsForbidden() then
+	-- frame.optionTable.colorNameBySelection
 	-- frame.optionTable.useClassColors
 	-- frame.myHealPredictionBar
 	-- frame.otherHealPredictionBar
@@ -123,23 +94,10 @@ function UpdateHealth_Reverted(frame, health)
 		local healthLost = unitHealthMax - health;
 
 		frame.name:SetAlpha(1);
-		-- #### Modifs ####
-		-- frame.healthBar:SetHeight(10)
-		--frame:SetHeight(30)
-		--frame.healthBar:SetAttribute("style-height", 1)
-		--frame.healthBar:SetHeight(1)
-		--frame.healthBar:ClearAllPoints()
-		--frame.healthBar:SetPoint("LEFT", frame.background, "RIGHT") --, 50, 50)
-		-- #### Fin Modifs ####
-
-		--frame.healthBar:SetStatusBarTexture("Interface\\Tooltips\\UI-Tooltip-Background")
-		-- "Interface\\TargetingFrame\\UI-StatusBar"
 		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
 
 		if c and frame and frame.background and frame.optionTable.useClassColors then
-			--frame.background:SetColorTexture(c.r, c.g, c.b, .3)
 			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8))
-			-- frame.name:SetTextColor(c.r, c.g, c.b);
 			frame.name:SetShadowColor(c.r, c.g, c.b, .3)
 		end
 
@@ -151,17 +109,10 @@ function UpdateHealth_Reverted(frame, health)
 			end
 		else
 			-- Unit is dead
-			-- if c and frame.optionTable.useClassColors then
-			-- 	frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .8, .3))
-			-- else
-			-- 	frame.healthBar:SetStatusBarColor(0, 0, 0, 0.1)
-			-- end
 			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, .8, .3));
 			frame.name:SetTextColor(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, KallyeRaidFramesOptions.RevertBGColorLow.a);
 			frame.wasDead = true;
 		end
-		--frame.healthBar.border:SetVertexColor(1, 0, 0, 1);
-		--frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true))
 
 		if ( frame.optionTable.smoothHealthUpdates ) then
 			if ( frame.newUnit ) then
@@ -171,13 +122,8 @@ function UpdateHealth_Reverted(frame, health)
 				frame.healthBar:SetSmoothedValue(healthLost);
 			end
 		else
-			--PixelUtil.SetStatusBarValue(frame.healthBar, healthLost);
 			frame.healthBar:SetValue(healthLost);
 		end
-		--frame.healthBar:SetBackdropColor(1, 0, 0)
-		--frame.background:SetBackdropColor(0, 1, 0)
-		-- local playerName = GetUnitName(frame.unit, true);
-		-- frame.name:SetText(playerName.." "..healthPercentage);
 	end
 end
 
@@ -246,7 +192,7 @@ function KRF_UpdateName(frame)
 				local playerName = GetUnitName(frame.displayedUnit, false);
 				if playerName ~= playerNameServer then
 					if strsub(playerName, -3) == "(*)" then
-						-- ? playerName can already contains (*) if name has accents
+						-- ? playerName can already contains (*) if name has unicode chars
 						name:SetText(playerName);
 					else
 						name:SetText(playerName.." (*)");
@@ -259,14 +205,14 @@ end
 
 function KRF_UpdateNameColor(frame)
 	if not frame:IsForbidden() then
-		local UnitIsPlayerControlled = UnitIsPlayer(frame.displayedUnit)
-		if UnitIsPlayerControlled then
+		local isUnitPlayer = UnitIsPlayer(frame.displayedUnit)
+		if isUnitPlayer then
 			local name = frame.name;
-			if KallyeRaidFramesOptions.FriendsClassColor then
+			local isInParty = UnitInPartyOrRaid(frame.displayedUnit);
+			if (not isInParty and KallyeRaidFramesOptions.FriendsClassColor_Nameplates) or (isInParty and KallyeRaidFramesOptions.FriendsClassColor) then
 				local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
 				if c then
 					name:SetTextColor(c.r, c.g, c.b)
-					-- name:SetTextColor(darken(c.r, c.g, c.b, .8, 1))
 					name:SetShadowColor(c.r, c.g, c.b, 0.2)
 				end
 			else
@@ -278,19 +224,8 @@ function KRF_UpdateNameColor(frame)
 				end
 			end
 
-			if FrameIsCompact(frame) then
+			if FrameIsCompact(frame) and KallyeRaidFramesOptions.MoveRoleIcons then
 				name:SetPoint("TOPLEFT", 5, -5);
-			-- else
-			-- 	-- Experimental
-			-- 	if ( KallyeRaidFramesOptions.Nameplates_FriendsAlphaNotInCombat ~= 1 or KallyeRaidFramesOptions.Nameplates_FriendsAlphaInCombat ~= 1 ) and UnitIsFriend(frame.displayedUnit, "player") then
-			-- 		if InCombatLockdown() then
-			-- 			name:SetAlpha(KallyeRaidFramesOptions.Nameplates_FriendsAlphaInCombat);
-			-- 			-- name:Hide(1);
-			-- 		else
-			-- 			name:SetAlpha(KallyeRaidFramesOptions.Nameplates_FriendsAlphaNotInCombat);
-			-- 			-- name:Show();
-			-- 		end
-			-- 	end
 			end
 		end
 	end
@@ -452,15 +387,24 @@ end
 
 function KRF_DebugFrames(toggle)
 	if toggle == true then
-		_G.KRF_DebugFramesTimer = not _G.KRF_DebugFramesTimer;
-		KRF_AddMsgWarn(_G.KRF_DebugFramesTimer and KRF_OPTION_DEBUG_ON_MESSAGE or KRF_OPTION_DEBUG_OFF_MESSAGE);
+		_G.KRF_IsDebugFramesTimerActive = not _G.KRF_IsDebugFramesTimerActive;
+		KRF_AddMsgWarn(_G.KRF_IsDebugFramesTimerActive and KRF_OPTION_DEBUG_ON_MESSAGE or KRF_OPTION_DEBUG_OFF_MESSAGE);
 	end
-	if _G.KRF_DebugFramesTimer then
+	if _G.KRF_IsDebugFramesTimerActive then
 		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true)
 	else
 		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false)
 	end
-	if _G.KRF_DebugFramesTimer then
+	if _G.KRF_IsDebugFramesTimerActive then
 		C_Timer.After(.5, KRF_DebugFrames)
 	end
 end
+
+--[[
+? Help : https://github.com/fgprodigal/BlizzardInterfaceCode_zhTW/blob/master/Interface/FrameXML/CompactUnitFrame.lua
+? https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.lua
+? Depuis http://www.wowinterface.com/forums/showthread.php?t=56237
+? Réf Blizzard http://wowwiki.wikia.com/wiki/Widget_API
+
+? /fstack /dump
+]]

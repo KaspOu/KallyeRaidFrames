@@ -90,7 +90,7 @@
 				local name = self:GetName();
 				local text = self:GetAttribute("text");
 				text = _G[text] or text;
-				local tooltip = self:GetAttribute("tooltip") or text;
+				local tooltip = self:GetAttribute("tooltip") or " ";
 				tooltip = _G[tooltip] or tooltip;
 
 				self._Value = 0;
@@ -111,7 +111,7 @@
 
 				self.Label = _G[name.."Low"];
 				self.Label:ClearAllPoints();
-				self.Label:SetPoint("LEFT", self, "RIGHT", 3, 2);
+				self.Label:SetPoint("LEFT", self, "RIGHT", 3.5, 1);
 			</OnLoad>
 			<OnValueChanged>
 				local format = self:GetAttribute("format") or "%d";
@@ -133,6 +133,7 @@
 				local transparent = self:CreateTexture(nil, "BACKGROUND")
 				self:SetNormalTexture(transparent);
 				self:SetHighlightTexture(transparent);
+				self:SetPushedTexture(transparent);
 
 				local text = self:GetAttribute("text");
 				text = _G[text] or text;
@@ -157,6 +158,38 @@
 				right:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
 				right:SetTexCoord(0.81, 0.94, 0.5, 1);
 			</OnLoad>
+			<OnClick>
+				self:SetChecked(false);
+			</OnClick>
 		</Scripts>
 	</CheckButton>
+	<!-- <Font name="PawnFontBlue" inherits="GameFontNormal" virtual="true">
+		<Color r ="0.56" g="0.76" b="0.90" />
+	</Font>
+	<Font name="PawnFontBlueSmall" inherits="GameFontNormalSmall" virtual="true">
+		<Color r ="0.56" g="0.76" b="0.90" />
+	</Font>
+	<Font name="PawnFontSilverTiny" inherits="GameFontNormalSmall" virtual="true">
+		<Color r ="0.75" g="0.75" b="0.75" />
+		<FontHeight><AbsValue val="8" /></FontHeight>
+	</Font>
+	<Font name="PawnFontSilver" inherits="GameFontNormal" virtual="true">
+		<Color r ="0.75" g="0.75" b="0.75" />
+	</Font>
+	<Font name="PawnFontSilverLarge" inherits="GameFontNormalLarge" virtual="true">
+		<Color r ="0.75" g="0.75" b="0.75" />
+	</Font>
+	https://openclassrooms.com/forum/sujet/code-lua-pour-wow-99378
+	-->
+
+<!--
+CharacterFrameTabButtonTemplate
+UIPanelButtonTemplate
+OptionsButtonTemplate
+UIDropDownMenuButtonTemplate
+SecureUnitButtonTemplate
+SecureActionButtonTemplate
+OptionsListButtonTemplate
+OptionsFrameTabButtonTemplate
+ActionButtonTemplate -->
 </Ui>

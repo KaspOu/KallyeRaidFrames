@@ -1,19 +1,5 @@
 --[[
-? Code inspired from :
-?   LucyRaidFrames
-?   LFRAdvanced !!
-?	RaidFameMore
-? 	AzeriteTooltip (Ace)
-?	GarrisonCommander-Broker (Ace)
-
-
-? Help : https://github.com/fgprodigal/BlizzardInterfaceCode_zhTW/blob/master/Interface/FrameXML/CompactUnitFrame.lua
-? https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.lua
-? Depuis http://www.wowinterface.com/forums/showthread.php?t=56237
-? Réf Blizzard http://wowwiki.wikia.com/wiki/Widget_API
-
-? /fstack /dump
-
+	Hello to Kallye Raid Frames
 ]]
 
 local isInit = false;
@@ -23,37 +9,35 @@ local isPlayer = false;
 
 KRF_DefaultOptions = {
 	Version = KRF_VERSION,
-	BuffsScale = 0.75,
-	DebuffsScale = 1.25,
-	MaxBuffs = 3,
-	HideDamageIcons = true,
-	MoveRoleIcons = true,
-	HideRealm = true,
-	FriendsClassColor = true,
-	Nameplates_FriendsAlphaInCombat = 1, -- Experimental !!
-	Nameplates_FriendsAlphaNotInCombat = 1, -- Experimental !!
-
-	ShowMsgNormal = true,
-	ShowMsgError = true,
-	ShowMsgWarning = true,
 
 	UpdateHealthColor = true,
-	AlphaNotInRange = .3,
 	BGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
 	BGColorWarn = 		{ r = 1, g= 1, b= 0, a = .4 },
 	BGColorOK =			{ r= .1, g= .1, b= .1, a = .3 },
-
+	RevertBar = false, -- Revert the bar (sRaidFrames like)
+	RevertBGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
+	RevertBGColorWarn = { r = 1, g= 1, b= 0, a = .8 },
+	RevertBGColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
 	LimitLow = .20,
 	LimitWarn = .50,
 	LimitOk = .70,
 
-	-- Revert the bar (sRaidFrames like)
-	RevertBar = false,
-	RevertBGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
-	RevertBGColorWarn = { r = 1, g= 1, b= 0, a = .8 },
-	RevertBGColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
+	MoveRoleIcons = true,
+	HideDamageIcons = true,
+	HideRealm = true,
+	FriendsClassColor = false,
+	AlphaNotInRange = .3,
+	AlphaNotInCombat = .5,
+	SoloRaidFrame = false,		 -- Show solo raid (debug)
 
-	SoloRaidFrame = true,		 -- Show solo raid (debug)
+	BuffsScale = 0.75,
+	DebuffsScale = 1.25,
+	MaxBuffs = 3,
+	FriendsClassColor_Nameplates = true,
+
+	ShowMsgNormal = true,
+	ShowMsgWarning = true,
+	ShowMsgError = true,
 };
 KRF_SetDefaultOptions(KRF_DefaultOptions);
 
@@ -64,9 +48,6 @@ function KRF_OnLoad(self)
 	SLASH_KRF1 = "/krf";
 	SLASH_KRF2 = "/kallye";
 	SLASH_KRF3 = "/kallyeraidframes";
-
-	SlashCmdList["KallyeReloadUI"] = function(msg) ReloadUI(); end;
-	SLASH_KallyeReloadUI1 = "/r";
 
 	if (isInit or InCombatLockdown()) then return; end
 
@@ -99,7 +80,7 @@ function KRF_OnEvent(self, event, ...)
 		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_UpdateInRange);
 
 
-		-- ! SoloRaid Frames: need to reload
+		-- ! SoloRaid Frames (require reload)
 		if (KallyeRaidFramesOptions.SoloRaidFrame) then
 			_G.CompactRaidFrameManager:Show()
 			_G.CompactRaidFrameManager.Hide = function() end
@@ -111,7 +92,10 @@ function KRF_OnEvent(self, event, ...)
 		end
 
 		-- ! Addon Loaded ^^
-		KRF_AddMsg(KRF_MSG_LOADED);
+		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
+			KallyeRaidFramesOptions.Version = KRF_DefaultOptions.Version;
+			KRF_AddMsg(KRF_WHATSNEW);
+		end
 	end
 end -- END KRF_OnEvent
 
@@ -133,7 +117,7 @@ end
 
 function SaveKRFOptions()
 	local PreviousOptionsWReload = OptionsWReloadValues();
-	-- Auto detect options controls
+	-- Auto detect options controls and save them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
 			if (_G[KRF_OPTIONS..k] ~= nil) then
@@ -155,6 +139,14 @@ function SaveKRFOptions()
 			end
 		end
 	);
+	-- Secure limits rules
+	if KallyeRaidFramesOptions.LimitWarn < KallyeRaidFramesOptions.LimitLow then
+		KallyeRaidFramesOptions.LimitWarn = KallyeRaidFramesOptions.LimitLow
+	end
+	if KallyeRaidFramesOptions.LimitOk < KallyeRaidFramesOptions.LimitWarn then
+		KallyeRaidFramesOptions.LimitOk = KallyeRaidFramesOptions.LimitWarn
+	end
+	-- Reset party health as possible
 	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
@@ -163,7 +155,7 @@ function SaveKRFOptions()
 end
 
 function RefreshKRFOptions()
-	-- Auto detect options controls
+	-- Auto detect options controls and load them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
 			if (_G[KRF_OPTIONS..k] ~= nil) then

@@ -6,8 +6,8 @@ Some selfmade modifications to Blizzards default raidframes according to my own 
     - Highlight unit background depending on health:
        - default from black, to yellow, then red
        - options to change colors and %
-    - Optionnal revert HP bars (less life = bigger red bar !) (sRaidFrames)
-    - Transparency of units out of heal range
+    - Optionnal: invert HP bars (less life = bigger red bar !) (sRaidFrames)
+    - Transparency of units out of range
     - Roles icons
         - Shows Healing/Tank role icons
         - Hides DPS role icons
@@ -19,9 +19,8 @@ Some selfmade modifications to Blizzards default raidframes according to my own 
 2. Changes to both CompactRaidFrames and Nameplates
     - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
     - Change player name color according to class
-    - Fades out names in combat
 
-3. Possibility to display Party CompactRaidFrames while solo
+3. Option to display Raid frames while solo
 
 
 
