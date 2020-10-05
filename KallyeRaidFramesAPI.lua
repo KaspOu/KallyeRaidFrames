@@ -39,12 +39,12 @@ end
 ! Managing Alpha depending on range
 ]]
 function KRF_UpdateInRange(frame)
-	if FrameIsCompact(frame) then
+	if not frame:IsForbidden() and FrameIsCompact(frame) then
 		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit)
-		if KallyeRaidFramesOptions.AlphaNotInRange < 1 and hasCheckedRange and not isInRange then
-			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInRange);
-		elseif not InCombatLockdown() and not _G.KRF_IsDebugFramesTimerActive and KallyeRaidFramesOptions.AlphaNotInCombat < 1 then
-			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInCombat);
+		if KallyeRaidFramesOptions.AlphaNotInRange < 100 and hasCheckedRange and not isInRange then
+			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInRange/100);
+		elseif not InCombatLockdown() and not _G.KRF_IsDebugFramesTimerActive and KallyeRaidFramesOptions.AlphaNotInCombat < 100 then
+			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInCombat/100);
 		else
 			frame.name:SetAlpha(1);
 		end
@@ -72,7 +72,7 @@ function UpdateHealth_Regular(frame, health)
 		else
 			-- Unit is dead
 			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .8, .3));
-			frame.name:SetTextColor(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b)
+			KRF_UpdateNameColor(frame, KallyeRaidFramesOptions.BGColorLow);
 			frame.wasDead = true;
 		end
 	end
@@ -110,7 +110,8 @@ function UpdateHealth_Reverted(frame, health)
 		else
 			-- Unit is dead
 			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, .8, .3));
-			frame.name:SetTextColor(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, KallyeRaidFramesOptions.RevertBGColorLow.a);
+			KRF_UpdateNameColor(frame, KallyeRaidFramesOptions.RevertBGColorLow);
+			frame.name:SetAlpha(KallyeRaidFramesOptions.RevertBGColorLow.a);
 			frame.wasDead = true;
 		end
 
@@ -143,6 +144,7 @@ function KRF_UpdateRoleIcon(frame)
 		if KallyeRaidFramesOptions.MoveRoleIcons then
 			icon:ClearAllPoints();
 			icon:SetPoint("TOPLEFT", -offset, offset);
+			frame.name:SetPoint("TOPLEFT", 5, -5);
 		end
 
 		local role = UnitGroupRolesAssigned(frame.unit);
@@ -173,18 +175,19 @@ end
 
 
 --[[
-! Manage names (partyframes & nameplates)
+! Manage player names (partyframes & nameplates)
 - Hide realm
 - Change name color, according to class
 - PartyFrames: reposition name
 ]]
 function KRF_UpdateName(frame)
-	KRF_UpdateNameColor(frame);
 	if not frame:IsForbidden() then
 		-- https://eu.forums.blizzard.com/en/wow/t/improving-default-blizzardui/2890
 
 		local UnitIsPlayerControlled = UnitIsPlayer(frame.displayedUnit)
 		if UnitIsPlayerControlled then
+			KRF_UpdateNameColor(frame);
+
 			local name = frame.name;
 
 			if KallyeRaidFramesOptions.HideRealm then
@@ -203,29 +206,47 @@ function KRF_UpdateName(frame)
 	end
 end
 
-function KRF_UpdateNameColor(frame)
-	if not frame:IsForbidden() then
-		local isUnitPlayer = UnitIsPlayer(frame.displayedUnit)
-		if isUnitPlayer then
-			local name = frame.name;
-			local isInParty = UnitInPartyOrRaid(frame.displayedUnit);
-			if (not isInParty and KallyeRaidFramesOptions.FriendsClassColor_Nameplates) or (isInParty and KallyeRaidFramesOptions.FriendsClassColor) then
+--[[
+! Manage player name colors (partyframes & nameplates)
+]]
+function KRF_UpdateNameColor(frame, forceColor)
+	if not frame:IsForbidden() and UnitIsPlayer(frame.displayedUnit) then
+		local name = frame.name;
+		if not FrameIsCompact(frame) then
+			-- Nameplates: change color (works outside instances)
+			if KallyeRaidFramesOptions.FriendsClassColor_Nameplates and UnitIsFriend(frame.displayedUnit,"player") then
+				local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
+				if c then
+					name:SetTextColor(c.r, c.g, c.b)
+					name:SetShadowColor(c.r, c.g, c.b, 0.2)
+				end
+			end
+		else
+			-- Compact Raid Frames: change color
+			if forceColor ~= nil then
+				-- Force color (dead color...)
+				if name._InitialColor == nil then
+					local r, g, b, a = name:GetTextColor();
+					name._InitialColor = { r=r, g=g, b=b, a=a };
+				end
+				name:SetTextColor(forceColor.r, forceColor.g, forceColor.b)
+			elseif KallyeRaidFramesOptions.FriendsClassColor then
+				-- Class color
+				if name._InitialColor == nil then
+					local r, g, b, a = name:GetTextColor();
+					name._InitialColor = { r=r, g=g, b=b, a=a };
+				end
 				local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
 				if c then
 					name:SetTextColor(c.r, c.g, c.b)
 					name:SetShadowColor(c.r, c.g, c.b, 0.2)
 				end
 			else
-				if name._InitialColor == nil then
-					local r, g, b, a = name:GetTextColor();
-					name._InitialColor = { r=r, g=g, b=b, a=a };
-				else
-					name:SetTextColor(name._InitialColor.r, name._InitialColor.g, name._InitialColor.b, name._InitialColor.a)
+				-- Back to previous color
+				if name._InitialColor ~= nil then
+					name:SetTextColor(name._InitialColor.r, name._InitialColor.g, name._InitialColor.b, name._InitialColor.a);
+					name._InitialColor = nil;
 				end
-			end
-
-			if FrameIsCompact(frame) and KallyeRaidFramesOptions.MoveRoleIcons then
-				name:SetPoint("TOPLEFT", 5, -5);
 			end
 		end
 	end
@@ -286,13 +307,16 @@ function GetHPSeverity(percent, revert)
 	local BGColorOK=revert and KallyeRaidFramesOptions.RevertBGColorOK or KallyeRaidFramesOptions.BGColorOK
 	local BGColorWarn=revert and KallyeRaidFramesOptions.RevertBGColorWarn or KallyeRaidFramesOptions.BGColorWarn
 	local BGColorLow=revert and KallyeRaidFramesOptions.RevertBGColorLow or KallyeRaidFramesOptions.BGColorLow
+	local pLimitLow = KallyeRaidFramesOptions.LimitLow / 100;
+	local pLimitWarn = KallyeRaidFramesOptions.LimitWarn / 100;
+	local pLimitOk = KallyeRaidFramesOptions.LimitOk / 100;
 
-	if percent > KallyeRaidFramesOptions.LimitOk and percent > KallyeRaidFramesOptions.LimitWarn then
+	if percent > pLimitOk and percent > pLimitWarn then
 		return BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1
-	elseif percent > KallyeRaidFramesOptions.LimitWarn then
-		return mergeColors(BGColorWarn, BGColorOK, (percent - KallyeRaidFramesOptions.LimitWarn)/ (KallyeRaidFramesOptions.LimitOk - KallyeRaidFramesOptions.LimitWarn))
-	elseif percent > KallyeRaidFramesOptions.LimitLow then
-		return mergeColors(BGColorLow, BGColorWarn, (percent - KallyeRaidFramesOptions.LimitLow) / (KallyeRaidFramesOptions.LimitWarn - KallyeRaidFramesOptions.LimitLow))
+	elseif percent > pLimitWarn then
+		return mergeColors(BGColorWarn, BGColorOK, (percent - pLimitWarn)/ (pLimitOk - pLimitWarn))
+	elseif percent > pLimitLow then
+		return mergeColors(BGColorLow, BGColorWarn, (percent - pLimitLow) / (pLimitWarn - pLimitLow))
 	else
 		return BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1
 	end

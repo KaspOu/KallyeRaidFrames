@@ -151,11 +151,10 @@
 									</Anchor>
 								</Anchors>
 							</Button>
-							<Slider name="$parent_LimitLow" inherits="KRFSliderWidget" minValue="0" maxValue="1" valueStep=".01" stepsPerPage="10" obeyStepOnDrag="false">
+							<Slider name="$parent_LimitLow" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_LOW_TOOLTIP" />
-									<Attribute name="formatRatio" value="100" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
@@ -164,11 +163,10 @@
 									</Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="$parent_LimitWarn" inherits="KRFSliderWidget" minValue="0" maxValue="1" valueStep=".01" stepsPerPage="10" obeyStepOnDrag="false">
+							<Slider name="$parent_LimitWarn" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_WARN_TOOLTIP" />
-									<Attribute name="formatRatio" value="100" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
@@ -177,11 +175,10 @@
 									</Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="$parent_LimitOk" inherits="KRFSliderWidget" minValue="0" maxValue="1" valueStep=".01" stepsPerPage="10" obeyStepOnDrag="false">
+							<Slider name="$parent_LimitOk" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_OK_TOOLTIP" />
-									<Attribute name="formatRatio" value="100" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
@@ -235,22 +232,20 @@
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<Slider name="$parent_AlphaNotInRange" inherits="KRFSliderWidget" minValue="0" maxValue="1" valueStep=".01" stepsPerPage="10" obeyStepOnDrag="false">
+							<Slider name="$parent_AlphaNotInRange" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_NOTINRANGE" />
-									<Attribute name="formatRatio" value="100" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_FriendsClassColor" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="$parent_AlphaNotInCombat" inherits="KRFSliderWidget" minValue="0" maxValue="1" valueStep=".01" stepsPerPage="10" obeyStepOnDrag="false">
+							<Slider name="$parent_AlphaNotInCombat" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_NOTINCOMBAT" />
-									<Attribute name="formatRatio" value="100" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>

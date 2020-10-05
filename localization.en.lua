@@ -43,7 +43,7 @@ KRF_OPTION_HIDEDAMAGEICONS = "Hide 'dps' role icon";
 KRF_OPTION_HIDEREALM = "Hide players realm";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
 KRF_OPTION_NOTINRANGE = "Transparency when out of range";
-KRF_OPTION_NOTINCOMBAT = "Transparency when out of combat";
+KRF_OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 KRF_OPTION_SOLORAID = CY.."Always display raid frames "..YL.."*";
 KRF_OPTION_DEBUG_ON = "! Test raidframes !";
 KRF_OPTION_DEBUG_ON_MESSAGE = "Testing raid frames, reclick to stop it!";
@@ -57,7 +57,7 @@ KRF_OPTION_MAXBUFFS = "Max buffs";
 KRF_OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
-KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Players nameplates colored by class";
+KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Players nameplates colored by class (outside raid)";
 
 KRF_OPTION_RESET_OPTIONS = "Reset options";
 KRF_OPTION_RELOAD_REQUIRED = "Some options need a reload (write: /reload )";

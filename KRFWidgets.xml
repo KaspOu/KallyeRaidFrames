@@ -114,10 +114,14 @@
 				self.Label:SetPoint("LEFT", self, "RIGHT", 3.5, 1);
 			</OnLoad>
 			<OnValueChanged>
-				local format = self:GetAttribute("format") or "%d";
+				local format = self:GetAttribute("format") or nil;
 				format = _G[format] or format;
 				local formatRatio = self:GetAttribute("formatRatio") or 1;
-				self.Label:SetFormattedText(format, value * tonumber(formatRatio));
+				if format ~= nil then
+					self.Label:SetFormattedText(format, value * tonumber(formatRatio));
+				else
+					self.Label:SetText(value * tonumber(formatRatio));
+				end
 				self:SetValue(value);
 			</OnValueChanged>
 		</Scripts>

@@ -18,16 +18,16 @@ KRF_DefaultOptions = {
 	RevertBGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
 	RevertBGColorWarn = { r = 1, g= 1, b= 0, a = .8 },
 	RevertBGColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
-	LimitLow = .20,
-	LimitWarn = .50,
-	LimitOk = .70,
+	LimitLow = 20,
+	LimitWarn = 50,
+	LimitOk = 70,
 
 	MoveRoleIcons = true,
 	HideDamageIcons = true,
 	HideRealm = true,
 	FriendsClassColor = false,
-	AlphaNotInRange = .3,
-	AlphaNotInCombat = .5,
+	AlphaNotInRange = 30,
+	AlphaNotInCombat = 50,
 	SoloRaidFrame = false,		 -- Show solo raid (debug)
 
 	BuffsScale = 0.75,
