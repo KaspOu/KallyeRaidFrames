@@ -15,9 +15,9 @@ KRF_DefaultOptions = {
 	BGColorWarn = 		{ r = 1, g= 1, b= 0, a = .4 },
 	BGColorOK =			{ r= .1, g= .1, b= .1, a = .3 },
 	RevertBar = false, -- Revert the bar (sRaidFrames like)
-	RevertBGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
-	RevertBGColorWarn = { r = 1, g= 1, b= 0, a = .8 },
-	RevertBGColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
+	RevertColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
+	RevertColorWarn = { r = 1, g= 1, b= 0, a = .8 },
+	RevertColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
 	LimitLow = 20,
 	LimitWarn = 50,
 	LimitOk = 70,
@@ -125,7 +125,7 @@ function SaveKRFOptions()
 				local previousValue = KallyeRaidFramesOptions[k] or v;
 
 				if control.type == "color" then
-					value = control.GetColor();
+					value = control.GetColor(control);
 				elseif control.type == CONTROLTYPE_SLIDER then
 					value = control:GetValue();
 				elseif type(previousValue) == "boolean" then
@@ -167,7 +167,7 @@ function RefreshKRFOptions()
 				end;
 
 				if control.type == "color" then
-					control.SetColor(value);
+					control.SetColor(control, value);
 				elseif control.type == CONTROLTYPE_SLIDER then
 					control:SetValue(value);
 				elseif type(value) == "boolean" then

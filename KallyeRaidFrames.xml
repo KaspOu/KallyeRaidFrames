@@ -120,7 +120,7 @@
 									</Anchor>
 								</Anchors>
 							</Button>
-							<Button name="$parent_RevertBGColorLow" inherits="KRFColorWidget">
+							<Button name="$parent_RevertColorLow" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_LOW" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_LOW_TOOLTIP" />
@@ -129,24 +129,24 @@
 									<Anchor point="TOPLEFT" relativeTo="$parent_BGColorLow" relativePoint="TOPLEFT"/>
 								</Anchors>
 							</Button>
-							<Button name="$parent_RevertBGColorWarn" inherits="KRFColorWidget">
+							<Button name="$parent_RevertColorWarn" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_WARN" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_WARN_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parent_RevertBGColorLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeTo="$parent_RevertColorLow" relativePoint="TOPLEFT">
 										<Offset x="165" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
-							<Button name="$parent_RevertBGColorOK" inherits="KRFColorWidget">
+							<Button name="$parent_RevertColorOK" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_OK" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_OK_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parent_RevertBGColorLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeTo="$parent_RevertColorLow" relativePoint="TOPLEFT">
 										<Offset x="330" y="0"/>
 									</Anchor>
 								</Anchors>
@@ -425,23 +425,23 @@
 						_G[KRF_OPTIONS.."BGColorLow"]:Show();
 						_G[KRF_OPTIONS.."BGColorWarn"]:Show();
 						_G[KRF_OPTIONS.."BGColorOK"]:Show();
-						_G[KRF_OPTIONS.."RevertBGColorLow"]:Hide();
-						_G[KRF_OPTIONS.."RevertBGColorWarn"]:Hide();
-						_G[KRF_OPTIONS.."RevertBGColorOK"]:Hide();
+						_G[KRF_OPTIONS.."RevertColorLow"]:Hide();
+						_G[KRF_OPTIONS.."RevertColorWarn"]:Hide();
+						_G[KRF_OPTIONS.."RevertColorOK"]:Hide();
 					else
 						_G[KRF_OPTIONS.."BGColorLow"]:Hide();
 						_G[KRF_OPTIONS.."BGColorWarn"]:Hide();
 						_G[KRF_OPTIONS.."BGColorOK"]:Hide();
-						_G[KRF_OPTIONS.."RevertBGColorLow"]:Show();
-						_G[KRF_OPTIONS.."RevertBGColorWarn"]:Show();
-						_G[KRF_OPTIONS.."RevertBGColorOK"]:Show();
+						_G[KRF_OPTIONS.."RevertColorLow"]:Show();
+						_G[KRF_OPTIONS.."RevertColorWarn"]:Show();
+						_G[KRF_OPTIONS.."RevertColorOK"]:Show();
 					end
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorLow"], HealthOption and not RevertBarOption);
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorWarn"], HealthOption and not RevertBarOption);
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorOK"], HealthOption and not RevertBarOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBGColorLow"], HealthOption and RevertBarOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBGColorWarn"], HealthOption and RevertBarOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBGColorOK"], HealthOption and RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorLow"], HealthOption and RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorWarn"], HealthOption and RevertBarOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorOK"], HealthOption and RevertBarOption);
 				end
 			</OnLoad>
 		</Scripts>

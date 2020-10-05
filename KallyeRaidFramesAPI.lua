@@ -18,7 +18,8 @@ function UnitInPartyOrRaid(Unit)
 end
 
 function FrameIsCompact(frame)
-	return strsub(frame:GetName(), 0, 7) == "Compact"
+	local getName = frame:GetName();
+	return getName ~=nil and strsub(getName, 0, 7) == "Compact"
 end
 
 
@@ -109,9 +110,9 @@ function UpdateHealth_Reverted(frame, health)
 			end
 		else
 			-- Unit is dead
-			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertBGColorLow.r, KallyeRaidFramesOptions.RevertBGColorLow.g, KallyeRaidFramesOptions.RevertBGColorLow.b, .8, .3));
-			KRF_UpdateNameColor(frame, KallyeRaidFramesOptions.RevertBGColorLow);
-			frame.name:SetAlpha(KallyeRaidFramesOptions.RevertBGColorLow.a);
+			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .8, .3));
+			KRF_UpdateNameColor(frame, KallyeRaidFramesOptions.RevertColorLow);
+			frame.name:SetAlpha(KallyeRaidFramesOptions.RevertColorLow.a);
 			frame.wasDead = true;
 		end
 
@@ -304,9 +305,9 @@ function lighten(r, v, b, percent, alpha)
 end
 
 function GetHPSeverity(percent, revert)
-	local BGColorOK=revert and KallyeRaidFramesOptions.RevertBGColorOK or KallyeRaidFramesOptions.BGColorOK
-	local BGColorWarn=revert and KallyeRaidFramesOptions.RevertBGColorWarn or KallyeRaidFramesOptions.BGColorWarn
-	local BGColorLow=revert and KallyeRaidFramesOptions.RevertBGColorLow or KallyeRaidFramesOptions.BGColorLow
+	local BGColorOK=revert and KallyeRaidFramesOptions.RevertColorOK or KallyeRaidFramesOptions.BGColorOK
+	local BGColorWarn=revert and KallyeRaidFramesOptions.RevertColorWarn or KallyeRaidFramesOptions.BGColorWarn
+	local BGColorLow=revert and KallyeRaidFramesOptions.RevertColorLow or KallyeRaidFramesOptions.BGColorLow
 	local pLimitLow = KallyeRaidFramesOptions.LimitLow / 100;
 	local pLimitWarn = KallyeRaidFramesOptions.LimitWarn / 100;
 	local pLimitOk = KallyeRaidFramesOptions.LimitOk / 100;
