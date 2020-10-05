@@ -1,125 +1,16 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
+	<Script file="KRFWidgets.lua"/>
 	<CheckButton name="KRFColorWidget" inherits="InterfaceOptionsCheckButtonTemplate" virtual="true">
 		<Scripts>
-			<OnLoad>
-				local text = self:GetAttribute("text");
-				text = _G[text] or text;
-				local tooltip = self:GetAttribute("tooltip") or text;
-				tooltip = _G[tooltip] or tooltip;
-
-				self.type = "color";
-
-				if KRF_ShowColorPicker == nil then
-					function KRF_ShowColorPicker(changedCallback, self)
-						ColorPickerFrame.Self = self;
-						local r,g,b,o = self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a ~= nil and 1-self._RGBA.a or nil;
-						ColorPickerFrame:SetColorRGB(r,g,b);
-						ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (o ~= nil), o;
-						ColorPickerFrame.previousValues = {r,g,b,o};
-						ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc =
-							changedCallback, changedCallback, changedCallback;
-						ColorPickerFrame:Hide(); -- Need to run the OnShow handler.
-						ColorPickerFrame:Show();
-					end
-					function KRF_ColorPickedCallback(restore)
-						local newR, newG, newB, newO;
-						if restore then
-							-- The user bailed, we extract the old color from the table created by ShowColorPicker.
-							newR, newG, newB, newO = unpack(restore);
-						else
-							-- Something changed
-							newO, newR, newG, newB = OpacitySliderFrame:GetValue(), ColorPickerFrame:GetColorRGB();
-						end
-						-- Update our internal storage.
-						r, g, b, a = newR, newG, newB, 1-newO;
-						-- And update any UI elements that use this color...
-						ColorPickerFrame.Self.SetColor({ r = r , g = g, b = b, a = a });
-					end
-				end
-
-				self._RGBA = { r=1, g=1, b=1, a=1}
-				self.SetColor = function(RGBA)
-						self._RGBA = RGBA or self._RGBA;
-						self._colorSwatch:SetVertexColor(self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a)
-					end
-				self.GetColor = function() return self._RGBA; end
-
-				self:EnableMouse(true)
-
-				local transparent = self:CreateTexture(nil, "BACKGROUND")
-				self:SetNormalTexture(transparent)
-
-				local colorSwatch = self:CreateTexture(nil, "OVERLAY")
-				colorSwatch:SetWidth(20)
-				colorSwatch:SetHeight(20)
-				colorSwatch:SetTexture(130939) -- Interface\\ChatFrame\\ChatFrameColorSwatch
-				colorSwatch:SetPoint("LEFT", 4, 0)
-				self._colorSwatch = colorSwatch
-
-				local texture = self:CreateTexture(nil, "BACKGROUND")
-				colorSwatch.background = texture
-				texture:SetWidth(16)
-				texture:SetHeight(16)
-				texture:SetColorTexture(1, 1, 1)
-				texture:SetPoint("CENTER", colorSwatch)
-				texture:Show()
-
-				local checkers = self:CreateTexture(nil, "BACKGROUND")
-				colorSwatch.checkers = checkers
-				checkers:SetWidth(14)
-				checkers:SetHeight(14)
-				checkers:SetTexture(188523) -- Tileset\\Generic\\Checkers
-				checkers:SetTexCoord(.25, 0, 0.5, .25)
-				checkers:SetDesaturated(true)
-				checkers:SetVertexColor(1, 1, 1, 0.75)
-				checkers:SetPoint("CENTER", colorSwatch)
-				checkers:Show()
-
-				self.Text:SetText(text);
-				self.tooltipText = tooltip;
-			</OnLoad>
-			<OnClick>
-				KRF_ShowColorPicker(KRF_ColorPickedCallback, self);
-			</OnClick>
+			<OnLoad function="KRFColorWidget_OnLoad"/>
+			<OnClick function="KRFColorWidget_OnClick"/>
 		</Scripts>
 	</CheckButton>
-	<Slider name="KRFSliderWidget" inherits="VideoOptionsSliderTemplate" virtual="true">
+	<Slider name="KRFSliderWidget" inherits="OptionsSliderTemplate" virtual="true">
 		<Scripts>
-			<OnLoad>
-				local name = self:GetName();
-				local text = self:GetAttribute("text");
-				text = _G[text] or text;
-				local tooltip = self:GetAttribute("tooltip") or " ";
-				tooltip = _G[tooltip] or tooltip;
-
-				self._Value = 0;
-				self.type = CONTROLTYPE_SLIDER;
-				self.tooltip = tooltip;
-				self.name = text;
-				self.SetDisplayValue = self.SetValue;
-				self.SetValue = function (self, value)
-					self:SetDisplayValue(value);
-					self._Value = value;
-				end
-				self.GetCurrentValue = function (self)
-					return self._Value;
-				end
-				_G[name.."Text"]:SetFontObject("OptionsFontSmall");
-				_G[name.."Text"]:SetText(text);
-				_G[name.."High"]:Hide();
-
-				self.Label = _G[name.."Low"];
-				self.Label:ClearAllPoints();
-				self.Label:SetPoint("LEFT", self, "RIGHT", 3.5, 1);
-			</OnLoad>
-			<OnValueChanged>
-				local format = self:GetAttribute("format") or "%d";
-				format = _G[format] or format;
-				local formatRatio = self:GetAttribute("formatRatio") or 1;
-				self.Label:SetFormattedText(format, value * tonumber(formatRatio));
-				self:SetValue(value);
-			</OnValueChanged>
+			<OnLoad function="KRFSliderWidget_OnLoad"/>
+			<OnValueChanged function="KRFSliderWidget_OnValueChanged"/>
 		</Scripts>
 	</Slider>
 	<CheckButton name="KRFHeadingWidget" inherits="InterfaceOptionsCheckButtonTemplate" virtual="true">
@@ -129,67 +20,12 @@
 			<Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT"><Offset x="0" y="0"/></Anchor>
 		</Anchors>
 		<Scripts>
-			<OnLoad>
-				local transparent = self:CreateTexture(nil, "BACKGROUND")
-				self:SetNormalTexture(transparent);
-				self:SetHighlightTexture(transparent);
-				self:SetPushedTexture(transparent);
-
-				local text = self:GetAttribute("text");
-				text = _G[text] or text;
-
-				local label = self:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
-				label:SetPoint("TOP")
-				label:SetPoint("BOTTOM")
-				label:SetJustifyH("CENTER")
-				label:SetText(text);
-
-				local left = self:CreateTexture(nil, "BACKGROUND")
-				left:SetHeight(8)
-				left:SetPoint("LEFT", 3, 0)
-				left:SetPoint("RIGHT", label, "LEFT", -5, 0)
-				left:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
-				left:SetTexCoord(0.81, 0.94, 0.5, 1)
-
-				local right = self:CreateTexture(nil, "BACKGROUND")
-				right:SetHeight(8)
-				right:SetPoint("RIGHT", -3, 0)
-				right:SetPoint("LEFT", label, "RIGHT", 5, 0)
-				right:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
-				right:SetTexCoord(0.81, 0.94, 0.5, 1);
-			</OnLoad>
-			<OnClick>
-				self:SetChecked(false);
-			</OnClick>
+			<OnLoad function="KRFHeadingWidget_OnLoad"/>
+			<OnClick function="KRFHeadingWidget_OnClick"/>
 		</Scripts>
 	</CheckButton>
-	<!-- <Font name="PawnFontBlue" inherits="GameFontNormal" virtual="true">
-		<Color r ="0.56" g="0.76" b="0.90" />
-	</Font>
-	<Font name="PawnFontBlueSmall" inherits="GameFontNormalSmall" virtual="true">
-		<Color r ="0.56" g="0.76" b="0.90" />
-	</Font>
-	<Font name="PawnFontSilverTiny" inherits="GameFontNormalSmall" virtual="true">
-		<Color r ="0.75" g="0.75" b="0.75" />
-		<FontHeight><AbsValue val="8" /></FontHeight>
-	</Font>
-	<Font name="PawnFontSilver" inherits="GameFontNormal" virtual="true">
-		<Color r ="0.75" g="0.75" b="0.75" />
-	</Font>
-	<Font name="PawnFontSilverLarge" inherits="GameFontNormalLarge" virtual="true">
-		<Color r ="0.75" g="0.75" b="0.75" />
-	</Font>
-	https://openclassrooms.com/forum/sujet/code-lua-pour-wow-99378
-	-->
-
 <!--
-CharacterFrameTabButtonTemplate
-UIPanelButtonTemplate
-OptionsButtonTemplate
-UIDropDownMenuButtonTemplate
-SecureUnitButtonTemplate
-SecureActionButtonTemplate
-OptionsListButtonTemplate
-OptionsFrameTabButtonTemplate
-ActionButtonTemplate -->
+Blizzard Templates : https://github.com/tomrus88/BlizzardInterfaceCode
+https://openclassrooms.com/forum/sujet/code-lua-pour-wow-99378
+-->
 </Ui>
