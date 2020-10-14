@@ -8,9 +8,7 @@
 	<Script file="KallyeRaidFrames.lua"/>
 	<Frame name="KallyeRaidFramesEvents">
 		<Scripts>
-			<OnLoad>
-				KRF_OnLoad(self);
-			</OnLoad>
+			<OnLoad function="KRF_OnLoad" />
 		</Scripts>
 	</Frame>
 	<Frame name="KRFOptionsContainer" parent="InterfaceOptionsFramePanelContainer">
@@ -21,7 +19,7 @@
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 					<Size><AbsDimension x="550" y="350" /></Size>
 				</FontString>
-				<!-- Remove Scroll from here (1/2) ######## -->
+				<!--@do-not-package@--><!-- Remove Scroll from here (1/2) ######## --><!--@end-do-not-package@-->
 			</Layer>
 		</Layers>
 		<Frames>
@@ -39,7 +37,7 @@
 						<Size x="550" y="820" />
 						<Layers>
 							<Layer level="ARTWORK">
-								<!-- END Remove Scroll from here (1/2)  ######## -->
+								<!--@do-not-package@--><!-- END Remove Scroll from here (1/2)  ######## --><!--@end-do-not-package@-->
 								<FontString name="$parent_SubtitleLabel" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE" text="KRF_SUBTITLE">
 									<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 								</FontString>
@@ -403,12 +401,12 @@
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<!-- Remove Scroll from here (2/2) ########  -->
+							<!--@do-not-package@--><!-- Remove Scroll from here (2/2) ########  --><!--@end-do-not-package@-->
 						</Frames>
 					</Frame>
 				</ScrollChild>
 			</ScrollFrame>
-			<!-- END Remove Scroll from here (2/2) ########  -->
+			<!--@do-not-package@--><!-- END Remove Scroll from here (2/2) ########  --><!--@end-do-not-package@-->
 		</Frames>
 		<Scripts>
 			<OnLoad>

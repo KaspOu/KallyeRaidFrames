@@ -1,10 +1,10 @@
 --[[
 	Hello to Kallye Raid Frames
+	Last version: @project-version@ (@project-date-iso@)
 ]]
 
 local isInit = false;
 local isPlayer = false;
--- local FOLDER_NAME, private = ...
 
 
 KRF_DefaultOptions = {
@@ -12,13 +12,13 @@ KRF_DefaultOptions = {
 
 	UpdateHealthColor = true,
 	BGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
-	BGColorWarn = 		{ r = 1, g= 1, b= 0, a = .4 },
-	BGColorOK =			{ r= .1, g= .1, b= .1, a = .3 },
+	BGColorWarn = 		{ r = 1, g= 1, b= 0, a = .52 },
+	BGColorOK =			{ r= .1, g= .1, b= .1, a = .15 },
 	RevertBar = false, -- Revert the bar (sRaidFrames like)
 	RevertColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
 	RevertColorWarn = { r = 1, g= 1, b= 0, a = .8 },
 	RevertColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
-	LimitLow = 20,
+	LimitLow = 30,
 	LimitWarn = 50,
 	LimitOk = 70,
 
@@ -27,8 +27,8 @@ KRF_DefaultOptions = {
 	HideRealm = true,
 	FriendsClassColor = false,
 	AlphaNotInRange = 30,
-	AlphaNotInCombat = 50,
-	SoloRaidFrame = false,		 -- Show solo raid (debug)
+	AlphaNotInCombat = 90,
+	SoloRaidFrame = false,		 -- Show solo raid (useful for testing)
 
 	BuffsScale = 0.75,
 	DebuffsScale = 1.25,
@@ -48,6 +48,9 @@ function KRF_OnLoad(self)
 	SLASH_KRF1 = "/krf";
 	SLASH_KRF2 = "/kallye";
 	SLASH_KRF3 = "/kallyeraidframes";
+
+	SlashCmdList["CLEAR"] = SLASH_CLEAR_command;
+	SLASH_CLEAR1 = "/clear";
 
 	if (isInit or InCombatLockdown()) then return; end
 
@@ -77,6 +80,7 @@ function KRF_OnEvent(self, event, ...)
 		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_UpdateName);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_UpdateRoleIcon);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_UpdateHealth);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_UpdateHealth);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_UpdateInRange);
 
 
@@ -106,6 +110,10 @@ function SLASH_KRF_command(msgIn)
 	end
 	InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
 	InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
+end
+
+function SLASH_CLEAR_command(msgIn)
+	SELECTED_CHAT_FRAME:Clear()
 end
 
 

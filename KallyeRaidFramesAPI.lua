@@ -25,6 +25,7 @@ end
 
 --[[
 ! Managing Health & Alpha
+- Normal or revert, depending on option
 ]]
 function KRF_UpdateHealth(frame, health)
 	if KallyeRaidFramesOptions.UpdateHealthColor then
@@ -38,6 +39,8 @@ end
 
 --[[
 ! Managing Alpha depending on range
+- Alpha not in range
+- then alpha out of combat
 ]]
 function KRF_UpdateInRange(frame)
 	if not frame:IsForbidden() and FrameIsCompact(frame) then
@@ -64,7 +67,7 @@ function UpdateHealth_Regular(frame, health)
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .2, .95))
 		end
-		if healthPercentage > 0 then
+		if health > 0 and not UnitIsDeadOrGhost(frame.displayedUnit) then
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false))
 			if frame.wasDead then
 				KRF_UpdateNameColor(frame); -- reset color according options
@@ -84,12 +87,8 @@ end
 TODO : réduire la barre en hauteur, mettre un contour comme sRaidFrames
 ]]
 function UpdateHealth_Reverted(frame, health)
-	-- frame.optionTable.colorNameBySelection
-	-- frame.optionTable.useClassColors
-	-- frame.myHealPredictionBar
-	-- frame.otherHealPredictionBar
 	if not frame:IsForbidden() and UnitInPartyOrRaid(frame.displayedUnit) and FrameIsCompact(frame) then
-		health = health or UnitHealth(frame.displayedUnit)
+		health = health or ( UnitHealth(frame.displayedUnit) + (UnitGetTotalAbsorbs(frame.displayedUnit) or 0) + (UnitGetIncomingHeals(frame.displayedUnit) or 0) );
 		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 		local healthPercentage = ceil((health / unitHealthMax * 100))
 		local healthLost = unitHealthMax - health;
@@ -102,7 +101,7 @@ function UpdateHealth_Reverted(frame, health)
 			frame.name:SetShadowColor(c.r, c.g, c.b, .3)
 		end
 
-		if healthPercentage > 0 then
+		if health > 0 and not UnitIsDeadOrGhost(frame.displayedUnit) then
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame.wasDead then
 				KRF_UpdateNameColor(frame); -- reset color according options
@@ -116,6 +115,7 @@ function UpdateHealth_Reverted(frame, health)
 			frame.wasDead = true;
 		end
 
+		-- Revert healthBar
 		if ( frame.optionTable.smoothHealthUpdates ) then
 			if ( frame.newUnit ) then
 				frame.healthBar:ResetSmoothedValue(healthLost);
@@ -131,7 +131,9 @@ end
 
 --[[
 ! UpdateRoleIcon
-Role Icon on top left, visible only for tanks / heals
+- Role icon on top left
+- Role icon visible only for tanks / heals
+- Reposition name accordingly
 ]]
 function KRF_UpdateRoleIcon(frame)
 	if KallyeRaidFramesOptions.HideDamageIcons or KallyeRaidFramesOptions.MoveRoleIcons then
@@ -157,8 +159,8 @@ end
 
 --[[
 ! Manage buffs
-Scale buffs / debuffs
-Max buffs to display (max 3!)
+- Scale buffs / debuffs
+- Max buffs to display (max 3!)
 ]]
 function KRF_ManageBuffs (frame,numbuffs)
 	for i=1, #frame.buffFrames do
@@ -179,12 +181,9 @@ end
 ! Manage player names (partyframes & nameplates)
 - Hide realm
 - Change name color, according to class
-- PartyFrames: reposition name
 ]]
 function KRF_UpdateName(frame)
 	if not frame:IsForbidden() then
-		-- https://eu.forums.blizzard.com/en/wow/t/improving-default-blizzardui/2890
-
 		local UnitIsPlayerControlled = UnitIsPlayer(frame.displayedUnit)
 		if UnitIsPlayerControlled then
 			KRF_UpdateNameColor(frame);
@@ -209,6 +208,9 @@ end
 
 --[[
 ! Manage player name colors (partyframes & nameplates)
+- Allow specific color (for dead color)
+- Class Color
+- Back to original color after dead or unset class color
 ]]
 function KRF_UpdateNameColor(frame, forceColor)
 	if not frame:IsForbidden() and UnitIsPlayer(frame.displayedUnit) then
