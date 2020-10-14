@@ -7,9 +7,9 @@
 KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
-KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - Whats new:|r\n"
-  .."- EVERYTHING !!\n"
-  .."- Please feel free to give suggestions…...\n"
+KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - What's new:|r\n"
+  .."- Ready for Shadowlands prepatch\n"
+  .."- Reverted bars now detect incoming heals and absorbs\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
@@ -65,6 +65,8 @@ KRF_OPTION_RELOAD_REQUIRED = "Some options need a reload (write: /reload )";
 KRF_OPTION_SHOWMSGNORMAL = GYL.."Display messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Display warnings";
 KRF_OPTION_SHOWMSGERR = GYL.."Display errors";
+
+
 
 
 

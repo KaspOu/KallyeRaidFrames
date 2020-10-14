@@ -136,7 +136,7 @@ function KRFSliderWidget_GetValue(self)
 end
 function KRFSliderWidget_OnLoad (self)
 	self.type = CONTROLTYPE_SLIDER;
-	-- BackdropTemplateMixin.OnBackdropLoaded(self); -- default Blizzard behavior (issue wow9)
+	BackdropTemplateMixin.OnBackdropLoaded(self); -- default Blizzard behavior (issue wow9)
 
 	local name = self:GetName();
 	local text = self:GetAttribute("text");

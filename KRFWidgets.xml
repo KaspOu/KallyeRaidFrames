@@ -24,8 +24,15 @@
 			<OnClick function="KRFHeadingWidget_OnClick"/>
 		</Scripts>
 	</CheckButton>
+<!--@do-not-package@-->
 <!--
+https://authors.curseforge.com/knowledge-base/projects/3451-automatic-packaging
+
 Blizzard Templates : https://github.com/tomrus88/BlizzardInterfaceCode
+>> CompactUnitFrame: https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.xml
 https://openclassrooms.com/forum/sujet/code-lua-pour-wow-99378
+
+https://eu.forums.blizzard.com/en/wow/t/improving-default-blizzardui/2890
 -->
+<!--@end-do-not-package@-->
 </Ui>

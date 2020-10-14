@@ -6,7 +6,7 @@ Modifications to Blizzards default raid/party frames according to my own prefere
     - Highlight unit background depending on health:
        - - default from black, to yellow, then red
        - - options to change colors and %
-    - Optionnal: invert HP bars (less life = bigger red bar !) (sRaidFrames like)
+    - Optionnal: revert HP bars (less life = bigger red bar !) (sRaidFrames like)
     - Transparency of units out of range
     - Roles icons
        - - Move role icons on top left

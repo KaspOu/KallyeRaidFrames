@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - Nouveaut\195\169s :|r\n"
-    .."- TOUT !!\n"
-    .."- N'h\195\169sitez pas si vous avez des suggestions...\n"
+    .."- Pr\195\170t pour le pr\195\169patch Shadowlands\n"
+    .."- Les barres invers\195\169es d\195\169tectent les pr\195\169visions de heals et absorptions\n"
     ;
 
 KRF_SUBTITLE      = "Assistance frames de raid";
@@ -66,6 +66,8 @@ KRF_OPTION_SHOWMSGNORMAL = GYL.."Afficher les messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Afficher les alertes";
 KRF_OPTION_SHOWMSGERR = GYL.."Afficher les erreurs";
 
+--@do-not-package@
 -- https://code.google.com/archive/p/mangadmin/wikis/SpecialCharacters.wiki
 -- https://wowwiki.fandom.com/wiki/Localizing_an_addon
+--@end-do-not-package@
 end
