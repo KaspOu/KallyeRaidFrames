@@ -147,14 +147,14 @@ function SaveKRFOptions()
 			end
 		end
 	);
-	-- Secure limits rules
+	-- Secure limits (low <= warn <= ok)
 	if KallyeRaidFramesOptions.LimitWarn < KallyeRaidFramesOptions.LimitLow then
 		KallyeRaidFramesOptions.LimitWarn = KallyeRaidFramesOptions.LimitLow
 	end
 	if KallyeRaidFramesOptions.LimitOk < KallyeRaidFramesOptions.LimitWarn then
 		KallyeRaidFramesOptions.LimitOk = KallyeRaidFramesOptions.LimitWarn
 	end
-	-- Reset party health as possible
+	-- Reset party health as soon as possible
 	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then

@@ -23,9 +23,8 @@ Modifications to Blizzards default raid/party frames according to my own prefere
 
 
 ## Slash Commands
-/krf - shows options
-
-
+**/krf** - shows options
+/clear - clear chat
 
 
 ## Example
