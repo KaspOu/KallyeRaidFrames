@@ -1,7 +1,26 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Script file="KRFWidgets.lua"/>
-	<CheckButton name="KRFColorWidget" inherits="InterfaceOptionsCheckButtonTemplate" virtual="true">
+	<CheckButton name="KRFCheckboxWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+		<Layers>
+			<Layer level="ARTWORK">
+			<FontString name="$parentText" inherits="GameFontHighlightLeft" parentKey="Text">
+				<Anchors>
+				<Anchor point="LEFT" relativePoint="RIGHT">
+					<Offset>
+					<AbsDimension x="2" y="1"/>
+					</Offset>
+				</Anchor>
+				</Anchors>
+			</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad function="KRFCheckboxWidget_OnLoad"/>
+			<OnClick function="KRFCheckboxWidget_OnClick"/>
+		</Scripts>
+	</CheckButton>
+	<CheckButton name="KRFColorWidget" inherits="KRFCheckboxWidget" virtual="true">
 		<Scripts>
 			<OnLoad function="KRFColorWidget_OnLoad"/>
 			<OnClick function="KRFColorWidget_OnClick"/>
@@ -13,7 +32,7 @@
 			<OnValueChanged function="KRFSliderWidget_OnValueChanged"/>
 		</Scripts>
 	</Slider>
-	<CheckButton name="KRFHeadingWidget" inherits="InterfaceOptionsCheckButtonTemplate" virtual="true">
+	<CheckButton name="KRFHeadingWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
 		<Size x="100" y="40" />
 		<Anchors>
 			<Anchor point="LEFT" relativeTo="$parent" relativePoint="LEFT"><Offset x="20" y="0"/></Anchor>
@@ -32,7 +51,11 @@ Blizzard Templates : https://github.com/tomrus88/BlizzardInterfaceCode
 >> CompactUnitFrame: https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.xml
 https://openclassrooms.com/forum/sujet/code-lua-pour-wow-99378
 
+
 https://eu.forums.blizzard.com/en/wow/t/improving-default-blizzardui/2890
+
+Pour les checkboxes, le composant InterfaceOptionsBaseCheckButtonTemplate plantait ( InterfaceOptionsPanel_CheckButton_OnClick(self); )
+https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/InterfaceOptionsPanels.lua
 -->
 <!--@end-do-not-package@-->
 </Ui>

@@ -434,4 +434,5 @@ end
 ? Réf Blizzard http://wowwiki.wikia.com/wiki/Widget_API
 
 ? /fstack /dump
+? print (tostring(checked))
 ]]

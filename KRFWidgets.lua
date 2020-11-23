@@ -1,3 +1,25 @@
+--[[
+! Checkbox Widget
+Simple checkbutton widget with text
+]]
+function KRFCheckboxWidget_OnClick(self)
+	if ( self:GetChecked() ) then
+		PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
+	else
+		PlaySound(857) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
+	end
+end
+function KRFCheckboxWidget_OnLoad(self)
+	self.type = "checkbox";
+
+	local text = self:GetAttribute("text");
+	text = _G[text] or text;
+	local tooltip = self:GetAttribute("tooltip") or text;
+	tooltip = _G[tooltip] or tooltip;
+
+	self.Text:SetText(text);
+	self.tooltipText = tooltip;
+end
 
 --[[
 ! Heading Widget
@@ -121,6 +143,7 @@ function KRFColorWidget_OnLoad (self)
 	self.tooltipText = tooltip;
 end
 function KRFColorWidget_OnClick(self)
+	PlaySound(852) -- SOUNDKIT.IG_MAINMENU_OPTION
 	KRFColorWidget_ShowColorPicker(KRFColorWidget_ColorPickedCallback, self);
 end
 

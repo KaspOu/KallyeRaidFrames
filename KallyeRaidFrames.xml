@@ -57,31 +57,31 @@
 									<Attribute name="text" value="KRF_OPTION_RAID_HEADER" />
 								</Attributes>
 							</CheckButton>
-							<CheckButton name="$parent_UpdateHealthColor" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_UpdateHealthColor" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_HIGHLIGHTLOWHP" />
+									<Attribute name="tooltip" value="KRF_OPTION_HIGHLIGHTLOWHP" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOP" relativeTo="$parent_LabelRaid" relativePoint="BOTTOM"/>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_HIGHLIGHTLOWHP);
-										self.tooltipText = KRF_OPTION_HIGHLIGHTLOWHP;
-									</OnLoad>
 									<OnUpdate>
 										ManageHealthOptionsEnabled()
 									</OnUpdate>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parent_RevertBar" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_RevertBar" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_REVERTBAR" />
+									<Attribute name="tooltip" value="KRF_OPTION_REVERTBAR" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOP" relativeTo="$parent_UpdateHealthColor" relativePoint="BOTTOM"/>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_REVERTBAR);
-										self.tooltipText = KRF_OPTION_REVERTBAR;
-									</OnLoad>
 									<OnUpdate>
 										ManageHealthOptionsEnabled()
 									</OnUpdate>
@@ -185,50 +185,42 @@
 									</Anchor>
 								</Anchors>
 							</Slider>
-							<CheckButton name="$parent_MoveRoleIcons" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_MoveRoleIcons" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_MOVEROLEICONS" />
+									<Attribute name="tooltip" value="KRF_OPTION_MOVEROLEICONS" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOP" relativeTo="$parent_LimitLow" relativePoint="BOTTOM"><Offset x="0" y="-25"/></Anchor>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_MOVEROLEICONS);
-										self.tooltipText = KRF_OPTION_MOVEROLEICONS;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parent_HideDamageIcons" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_HideDamageIcons" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_HIDEDAMAGEICONS" />
+									<Attribute name="tooltip" value="KRF_OPTION_HIDEDAMAGEICONS" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_MoveRoleIcons" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_HIDEDAMAGEICONS);
-										self.tooltipText = KRF_OPTION_HIDEDAMAGEICONS;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parent_HideRealm" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_HideRealm" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_HIDEREALM" />
+									<Attribute name="tooltip" value="KRF_OPTION_HIDEREALM" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_HideDamageIcons" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_HIDEREALM);
-										self.tooltipText = KRF_OPTION_HIDEREALM;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parent_FriendsClassColor" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_FriendsClassColor" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_FRIENDSCLASSCOLOR" />
+									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_HideRealm" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_FRIENDSCLASSCOLOR);
-										self.tooltipText = KRF_OPTION_FRIENDSCLASSCOLOR;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
 							<Slider name="$parent_AlphaNotInRange" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
@@ -250,16 +242,14 @@
 									<Anchor point="TOPLEFT" relativeTo="$parent_AlphaNotInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</Slider>
-							<CheckButton name="$parent_SoloRaidFrame" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_SoloRaidFrame" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_SOLORAID" />
+									<Attribute name="tooltip" value="KRF_OPTION_SOLORAID" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_AlphaNotInCombat" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_SOLORAID);
-										self.tooltipText = KRF_OPTION_SOLORAID;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
 							<Button name="$parent_Debug" inherits="OptionsButtonTemplate">
 								<Size x="200" y="20" />
@@ -277,9 +267,11 @@
 										if (self.Text:GetText() == KRF_OPTION_DEBUG_ON) then
 											self.Text:SetText(KRF_OPTION_DEBUG_OFF);
 											self.tooltipText = KRF_OPTION_DEBUG_OFF;
+											_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
 										else
 											self.Text:SetText(KRF_OPTION_DEBUG_ON);
 											self.tooltipText = KRF_OPTION_DEBUG_ON;
+											_G.PlaySound(851, "Master") -- SOUNDKIT.IG_MAINMENU_CLOSE
 										end
 									</OnClick>
 								</Scripts>
@@ -334,17 +326,15 @@
 									<Attribute name="text" value="" />
 								</Attributes>
 							</CheckButton>
-							<CheckButton name="$parent_FriendsClassColor_Nameplates" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_FriendsClassColor_Nameplates" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES" />
+									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOP" relativeTo="$parent_LabelOthers" relativePoint="BOTTOM"><Offset x="0" y="-15"/></Anchor>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES);
-										self.tooltipText = KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
 							<Button name="$parent_ResetOptions" inherits="OptionsButtonTemplate">
 								<Size x="200" y="20" />
@@ -360,46 +350,41 @@
 									</OnLoad>
 									<OnClick>
 										KRF_SetDefaultOptions(KRF_DefaultOptions, true);
+										_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
 										ReloadUI();
 									</OnClick>
 								</Scripts>
 							</Button>
-							<CheckButton name="$parent_ShowMsgNormal" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_ShowMsgNormal" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_SHOWMSGNORMAL" />
+									<Attribute name="tooltip" value="KRF_OPTION_SHOWMSGNORMAL" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_ResetOptions" relativePoint="BOTTOMLEFT"><Offset x="0" y="-50"/></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_SHOWMSGNORMAL);
-										self.tooltipText = KRF_OPTION_SHOWMSGNORMAL;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parent_ShowMsgWarning" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_ShowMsgWarning" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_SHOWMSGWARNING" />
+									<Attribute name="tooltip" value="KRF_OPTION_SHOWMSGWARNING" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_ShowMsgNormal" relativePoint="TOPLEFT">
 										<Offset x="165" y="0"/>
 									</Anchor>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_SHOWMSGWARNING);
-										self.tooltipText = KRF_OPTION_SHOWMSGWARNING;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
-							<CheckButton name="$parent_ShowMsgError" inherits="InterfaceOptionsCheckButtonTemplate">
+							<CheckButton name="$parent_ShowMsgError" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_SHOWMSGERR" />
+									<Attribute name="tooltip" value="KRF_OPTION_SHOWMSGERR" />
+								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_ShowMsgNormal" relativePoint="TOPLEFT">
 										<Offset x="330" y="0"/>
 									</Anchor>
 								</Anchors>
-								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRF_OPTION_SHOWMSGERR);
-										self.tooltipText = KRF_OPTION_SHOWMSGERR;
-									</OnLoad>
-								</Scripts>
 							</CheckButton>
 							<!--@do-not-package@--><!-- Remove Scroll from here (2/2) ########  --><!--@end-do-not-package@-->
 						</Frames>
@@ -419,6 +404,10 @@
 				ManageHealthOptionsEnabled = function()
 					local HealthOption, RevertBarOption = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked(), _G[KRF_OPTIONS.."RevertBar"]:GetChecked()
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBar"], HealthOption)
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitLow"], HealthOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitWarn"], HealthOption);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitOk"], HealthOption);
+
 					if not RevertBarOption then
 						_G[KRF_OPTIONS.."BGColorLow"]:Show();
 						_G[KRF_OPTIONS.."BGColorWarn"]:Show();
@@ -434,9 +423,11 @@
 						_G[KRF_OPTIONS.."RevertColorWarn"]:Show();
 						_G[KRF_OPTIONS.."RevertColorOK"]:Show();
 					end
+
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorLow"], HealthOption and not RevertBarOption);
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorWarn"], HealthOption and not RevertBarOption);
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorOK"], HealthOption and not RevertBarOption);
+
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorLow"], HealthOption and RevertBarOption);
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorWarn"], HealthOption and RevertBarOption);
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorOK"], HealthOption and RevertBarOption);

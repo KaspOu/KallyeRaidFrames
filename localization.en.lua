@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - What's new:|r\n"
-  .."- Ready for Shadowlands prepatch\n"
-  .."- Reverted bars now detect incoming heals and absorbs\n"
+  .."- Options fixed\n"
+  .."- Tested on Shadowlands\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
