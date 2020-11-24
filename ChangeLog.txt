@@ -1,3 +1,7 @@
+v0.9.3
+- Options fixed (WTF Blizzard!)
+- Tested on Shadowlands
+
 v0.9.2
 - Ready for Shadowlands prepatch 9.0.1
 - Reverted bars now detect incoming heals and absorbs

@@ -1,3 +1,25 @@
+--[[
+! Checkbox Widget
+Simple checkbutton widget with text
+]]
+function KRFCheckboxWidget_OnClick(self)
+	if ( self:GetChecked() ) then
+		PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
+	else
+		PlaySound(857) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
+	end
+end
+function KRFCheckboxWidget_OnLoad(self)
+	self.type = "checkbox";
+
+	local text = self:GetAttribute("text");
+	text = _G[text] or text;
+	local tooltip = self:GetAttribute("tooltip") or text;
+	tooltip = _G[tooltip] or tooltip;
+
+	self.Text:SetText(text);
+	self.tooltipText = tooltip;
+end
 
 --[[
 ! Heading Widget
@@ -75,12 +97,12 @@ function KRFColorWidget_GetColor(self)
 end
 
 function KRFColorWidget_OnLoad (self)
+	self.type = "color";
+
 	local text = self:GetAttribute("text");
 	text = _G[text] or text;
 	local tooltip = self:GetAttribute("tooltip") or text;
 	tooltip = _G[tooltip] or tooltip;
-
-	self.type = "color";
 
 	self._RGBA = { r=1, g=1, b=1, a=1}
 	self.SetColor = KRFColorWidget_SetColor;
@@ -121,6 +143,7 @@ function KRFColorWidget_OnLoad (self)
 	self.tooltipText = tooltip;
 end
 function KRFColorWidget_OnClick(self)
+	PlaySound(852) -- SOUNDKIT.IG_MAINMENU_OPTION
 	KRFColorWidget_ShowColorPicker(KRFColorWidget_ColorPickedCallback, self);
 end
 
@@ -136,7 +159,11 @@ function KRFSliderWidget_GetValue(self)
 end
 function KRFSliderWidget_OnLoad (self)
 	self.type = CONTROLTYPE_SLIDER;
-	BackdropTemplateMixin.OnBackdropLoaded(self); -- default Blizzard behavior (issue wow9)
+
+	local wowtocversion  = select(4, GetBuildInfo());
+	if (wowtocversion > 90000) then
+		BackdropTemplateMixin.OnBackdropLoaded(self);
+	end
 
 	local name = self:GetName();
 	local text = self:GetAttribute("text");
