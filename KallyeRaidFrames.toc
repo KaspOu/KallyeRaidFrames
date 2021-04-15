@@ -1,9 +1,9 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: Kallye RaidFrames
 ## Title-frFR: Kallye RaidFrames
 ## Notes: Highlight Raid Frames on low health
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute
-## Version: 0.9.4
+## Version: 0.9.5
 ## Author: Kallye of Elune
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
