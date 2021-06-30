@@ -8,8 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - Nouveaut\195\169s :|r\n"
-    .."- Options corrigées\n"
-    .."- Testé dans Shadowlands\n"
+    .."- Mis \195\160 jour pour Shadowlands 9.1\n"
     ;
 
 KRF_SUBTITLE      = "Assistance frames de raid";
@@ -38,7 +37,7 @@ KRF_OPTION_HEALTH_WARN_TOOLTIP = "La couleur sera appliqu\195\169e "..YLL.."\195
 KRF_OPTION_HEALTH_OK = "Vie ok";
 KRF_OPTION_HEALTH_OK_TOOLTIP = "La couleur sera appliqu\195\169e "..YLL.."AU-DESSUS|r DE cette limite\n\n"
     .."ex : Vert apr\195\170s 60%";
-KRF_OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut à gauche";
+KRF_OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut \195\160 gauche";
 KRF_OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne de r\195\180le 'd\195\169g\195\160ts'";
 KRF_OPTION_HIDEREALM = "Masquer le royaume des joueurs";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
