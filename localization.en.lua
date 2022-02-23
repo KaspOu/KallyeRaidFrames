@@ -8,7 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - What's new:|r\n"
-  .."- Ready for Shadowlands 9.1.5\n"
+  .."- Ready for Shadowlands 9.2\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
