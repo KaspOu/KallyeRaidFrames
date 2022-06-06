@@ -8,7 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - Nouveaut\195\169s :|r\n"
-    .."- Mis \195\160 jour pour Shadowlands 9.2\n"
+    .."- Mis \195\160 jour pour Shadowlands 9.2.5\n"
     ;
 
 KRF_SUBTITLE      = "Assistance frames de raid";
