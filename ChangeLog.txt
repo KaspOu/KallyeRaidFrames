@@ -1,3 +1,7 @@
+v10.0.001
+- Ready for DragonFlight prepatch 10.0.0
+- Removed: MaxBuffs, and Always show raid
+
 v9.2.701
 - Bump 9.2.7
 
