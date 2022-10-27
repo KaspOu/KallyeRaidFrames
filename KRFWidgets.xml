@@ -45,7 +45,7 @@
 	</CheckButton>
 <!--@do-not-package@-->
 <!--
-https://authors.curseforge.com/knowledge-base/projects/3451-automatic-packaging
+https://support.curseforge.com/en/support/solutions/articles/9000197281-automatic-packaging
 
 Blizzard Templates : https://github.com/tomrus88/BlizzardInterfaceCode
 >> CompactUnitFrame: https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.xml
@@ -63,7 +63,7 @@ https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML
 
 
 Wow Version:
-/run print((select(4, GetBuildInfo())))
+/run print(select(4, GetBuildInfo()))
 -->
 <!--@end-do-not-package@-->
 </Ui>

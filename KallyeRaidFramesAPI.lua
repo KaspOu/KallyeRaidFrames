@@ -27,8 +27,8 @@ end
 ! Managing Health & Alpha
 - Normal or revert, depending on option
 ]]
-function KRF_UpdateHealth(frame, health)
-	if KallyeRaidFramesOptions.UpdateHealthColor then
+function KRF_Hook_UpdateHealth(frame, health)
+	if not frame:IsForbidden() and KallyeRaidFramesOptions.UpdateHealthColor then
 		if not KallyeRaidFramesOptions.RevertBar then
 			UpdateHealth_Regular(frame, health)
 		else
@@ -42,7 +42,7 @@ end
 - Alpha not in range
 - then alpha out of combat
 ]]
-function KRF_UpdateInRange(frame)
+function KRF_Hook_UpdateInRange(frame)
 	if not frame:IsForbidden() and FrameIsCompact(frame) then
 		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit)
 		if KallyeRaidFramesOptions.AlphaNotInRange < 100 and hasCheckedRange and not isInRange then
@@ -135,8 +135,8 @@ end
 - Role icon visible only for tanks / heals
 - Reposition name accordingly
 ]]
-function KRF_UpdateRoleIcon(frame)
-	if KallyeRaidFramesOptions.HideDamageIcons or KallyeRaidFramesOptions.MoveRoleIcons then
+function KRF_Hook_UpdateRoleIcon(frame)
+	if not frame:IsForbidden() and (KallyeRaidFramesOptions.HideDamageIcons or KallyeRaidFramesOptions.MoveRoleIcons) then
 		local icon = frame.roleIcon;
 		if not icon then
 			return;
@@ -162,7 +162,7 @@ end
 - Scale buffs / debuffs
 - Max buffs to display (max 3!)
 ]]
-function KRF_ManageBuffs (frame,numbuffs)
+function KRF_Hook_ManageBuffs (frame,numbuffs)
 	for i=1, #frame.buffFrames do
 		frame.buffFrames[i]:SetScale(KallyeRaidFramesOptions.BuffsScale);
 	end
@@ -171,9 +171,10 @@ function KRF_ManageBuffs (frame,numbuffs)
 		frame.debuffFrames[i]:SetScale(KallyeRaidFramesOptions.DebuffsScale);
 	end
 
-	if KallyeRaidFramesOptions.MaxBuffs > 0 then
-		frame.maxBuffs = KallyeRaidFramesOptions.MaxBuffs;
-	end
+	-- ! MaxBuffs Deprecated
+	-- if KallyeRaidFramesOptions.MaxBuffs > 0 then
+	-- 	frame.maxBuffs = KallyeRaidFramesOptions.MaxBuffs;
+	-- end
 end
 
 
@@ -182,7 +183,7 @@ end
 - Hide realm
 - Change name color, according to class
 ]]
-function KRF_UpdateName(frame)
+function KRF_Hook_UpdateName(frame)
 	if not frame:IsForbidden() then
 		local UnitIsPlayerControlled = UnitIsPlayer(frame.displayedUnit)
 		if UnitIsPlayerControlled then
@@ -255,39 +256,9 @@ function KRF_UpdateNameColor(frame, forceColor)
 	end
 end
 
-
---[[
-! SoloPartyFrames
-]]
-local Blizzard_GetDisplayedAllyFrames = GetDisplayedAllyFrames; -- protect original behavior
-function SoloRaid_GetDisplayedAllyFrames()
-	-- Call original default behavior
-	local daf = Blizzard_GetDisplayedAllyFrames()
-
-	if not daf then
-		return 'party'
-	else
-		return daf
-	end
-end
-
---[[
-! SoloPartyFrames
-]]
-local Blizzard_CompactRaidFrameContainer_OnEvent = CompactRaidFrameContainer_OnEvent;  -- protect original behavior
-function SoloRaid_CompactRaidFrameContainer_OnEvent(self, event, ...)
-	-- Call original default behavior
-	Blizzard_CompactRaidFrameContainer_OnEvent(self, event, ...)
-
-	-- If all these are true, then the above call already did the TryUpdate
-	local unit = ... or ""
-	if ( unit == "player" or strsub(unit, 1, 4) == "raid" or strsub(unit, 1, 5) == "party" ) then
-		return
-	end
-	-- Always update the RaidFrame
-	if ( event == "UNIT_PET" ) and ( self.displayPets ) then
-		CompactRaidFrameContainer_TryUpdate(self)
-	end
+local Blizzard_ShouldShowRaidFrames = ShouldShowRaidFrames;  -- protect original behavior
+function SoloRaid_ShouldShowRaidFrames()
+	return true
 end
 
 function mergeRGBA(r1, v1, b1, a1, r2, v2, b2, a2, percent)
@@ -409,7 +380,7 @@ function KRF_RaidFrames_ResetHealth(frame, testMode)
 		frame.statusText:SetText(format("%d%%", frame._testHealthPercentage));
 	end
 	frame.healthBar:SetValue(health);
-	KRF_UpdateHealth(frame, health);
+	KRF_Hook_UpdateHealth(frame, health);
 end
 
 function KRF_DebugFrames(toggle)
@@ -427,12 +398,17 @@ function KRF_DebugFrames(toggle)
 	end
 end
 
+--@do-not-package@
 --[[
 ? Help : https://github.com/fgprodigal/BlizzardInterfaceCode_zhTW/blob/master/Interface/FrameXML/CompactUnitFrame.lua
 ? https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.lua
 ? Depuis http://www.wowinterface.com/forums/showthread.php?t=56237
 ? Réf Blizzard http://wowwiki.wikia.com/wiki/Widget_API
 
+? https://www.curseforge.com/wow/addons/blizzard-raid-frames-solo-frame
+
 ? /fstack /dump
+? /console scriptErrors 1
 ? print (tostring(checked))
 ]]
+--@end-do-not-package@

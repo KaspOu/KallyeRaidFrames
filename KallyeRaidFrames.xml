@@ -11,7 +11,7 @@
 			<OnLoad function="KRF_OnLoad" />
 		</Scripts>
 	</Frame>
-	<Frame name="KRFOptionsContainer" parent="InterfaceOptionsFramePanelContainer">
+	<Frame name="KRFOptionsContainer">
 		<Layers>
 			<Layer level="ARTWORK">
 
@@ -251,7 +251,7 @@
 									<Anchor point="TOPLEFT" relativeTo="$parent_AlphaNotInCombat" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</CheckButton>
-							<Button name="$parent_Debug" inherits="OptionsButtonTemplate">
+							<Button name="$parent_Debug" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
 									<Anchor point="TOP" relativeTo="$parent_SoloRaidFrame" />
@@ -336,7 +336,7 @@
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 							</CheckButton>
-							<Button name="$parent_ResetOptions" inherits="OptionsButtonTemplate">
+							<Button name="$parent_ResetOptions" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_FriendsClassColor_Nameplates" relativePoint="BOTTOMLEFT">
@@ -403,6 +403,11 @@
 
 				ManageHealthOptionsEnabled = function()
 					local HealthOption, RevertBarOption = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked(), _G[KRF_OPTIONS.."RevertBar"]:GetChecked()
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."MaxBuffs"], false)
+					_G[KRF_OPTIONS.."MaxBuffs"]:SetAlpha(.2);
+					KRF_OptionsEnable(_G[KRF_OPTIONS.."SoloRaidFrame"], false)
+					_G[KRF_OPTIONS.."SoloRaidFrame"]:SetAlpha(.2);
+
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBar"], HealthOption)
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitLow"], HealthOption);
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitWarn"], HealthOption);

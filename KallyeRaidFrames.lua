@@ -18,9 +18,9 @@ KRF_DefaultOptions = {
 	RevertColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
 	RevertColorWarn = { r = 1, g= 1, b= 0, a = .8 },
 	RevertColorOK =			{ r= 0, g= 1, b= 0, a = 1 },
-	LimitLow = 30,
+	LimitLow = 25,
 	LimitWarn = 50,
-	LimitOk = 70,
+	LimitOk = 75,
 
 	MoveRoleIcons = true,
 	HideDamageIcons = true,
@@ -70,30 +70,28 @@ function KRF_OnEvent(self, event, ...)
 	if ((event == "UNIT_NAME_UPDATE" and arg1 == "player") or event == "PLAYER_ENTERING_WORLD") then
 		isPlayer = true;
 		-- self:UnRegisterEvent("PLAYER_ENTERING_WORLD");
-	elseif(event == "ADDON_LOADED" and arg1 == KRF_ADDON_NAME) then
+	elseif (event == "ADDON_LOADED" and arg1 == KRF_ADDON_NAME) then
 		isLoaded = true;
 		self:UnregisterEvent("ADDON_LOADED");
 		KRF_SetDefaultOptions(KRF_DefaultOptions);
 
 		-- ! Hooks
-		_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_ManageBuffs);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_UpdateName);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_UpdateRoleIcon);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_UpdateHealth);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_UpdateHealth);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_UpdateInRange);
+		_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
 
 
-		-- ! SoloRaid Frames (require reload)
-		if (KallyeRaidFramesOptions.SoloRaidFrame) then
-			_G.CompactRaidFrameManager:Show()
-			_G.CompactRaidFrameManager.Hide = function() end
-			_G.CompactRaidFrameContainer:Show()
-			_G.CompactRaidFrameContainer.Hide = function() end
-
-			_G.GetDisplayedAllyFrames = SoloRaid_GetDisplayedAllyFrames;
-			_G.CompactRaidFrameContainer_OnEvent = SoloRaid_CompactRaidFrameContainer_OnEvent;
-		end
+		-- ! SoloRaid Frames (requires reload) !! deprecated !!
+		-- if (KallyeRaidFramesOptions.SoloRaidFrame) then
+		-- 	-- _G.ShouldShowRaidFrames = SoloRaid_ShouldShowRaidFrames;
+		-- 	_G.IsInRaid = SoloRaid_ShouldShowRaidFrames;
+		-- 	CompactRaidFrameContainer:ApplyToFrames("group", CompactRaidGroup_UpdateUnits);
+		-- 	CompactRaidFrameContainer:TryUpdate();
+		-- 	UpdateRaidAndPartyFrames();
+		-- end
 
 		-- ! Addon Loaded ^^
 		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
@@ -109,7 +107,6 @@ function SLASH_KRF_command(msgIn)
 		return;
 	end
 	InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
-	InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
 end
 
 function SLASH_CLEAR_command(msgIn)
@@ -120,7 +117,8 @@ end
 function OptionsWReloadValues()
 	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)
 		..tostring(KallyeRaidFramesOptions.UpdateHealthColor)
-		-- ..tostring(KallyeRaidFramesOptions.RevertBar);
+		..tostring(KallyeRaidFramesOptions.BuffsScale)
+		..tostring(KallyeRaidFramesOptions.DebuffsScale);
 end
 
 function SaveKRFOptions()
