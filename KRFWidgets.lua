@@ -14,11 +14,22 @@ function KRFCheckboxWidget_OnLoad(self)
 
 	local text = self:GetAttribute("text");
 	text = _G[text] or text;
-	local tooltip = self:GetAttribute("tooltip") or text;
-	tooltip = _G[tooltip] or tooltip;
 
 	self.Text:SetText(text);
-	self.tooltipText = tooltip;
+end
+function KRFCheckboxWidget_OnEnter(self)
+	if (not self:IsEnabled()) then return end;
+	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
+	text = _G[text] or text;
+
+	local tooltip = self:GetAttribute("tooltip") or "";
+	tooltip = _G[tooltip] or tooltip;
+	tooltip = tooltip ~= text and tooltip or "";
+
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+	GameTooltip:SetText(WH..text);
+	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
+	GameTooltip:AppendText("");
 end
 
 --[[
@@ -101,8 +112,6 @@ function KRFColorWidget_OnLoad (self)
 
 	local text = self:GetAttribute("text");
 	text = _G[text] or text;
-	local tooltip = self:GetAttribute("tooltip") or text;
-	tooltip = _G[tooltip] or tooltip;
 
 	self._RGBA = { r=1, g=1, b=1, a=1}
 	self.SetColor = KRFColorWidget_SetColor;
@@ -140,11 +149,23 @@ function KRFColorWidget_OnLoad (self)
 	checkers:Show()
 
 	self.Text:SetText(text);
-	self.tooltipText = tooltip;
 end
 function KRFColorWidget_OnClick(self)
 	PlaySound(852) -- SOUNDKIT.IG_MAINMENU_OPTION
 	KRFColorWidget_ShowColorPicker(KRFColorWidget_ColorPickedCallback, self);
+end
+function KRFColorWidget_OnEnter(self)
+	if (not self:IsEnabled()) then return end;
+	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
+	text = _G[text] or text;
+	local tooltip = self:GetAttribute("tooltip") or "";
+	tooltip = _G[tooltip] or tooltip;
+	tooltip = tooltip ~= text and tooltip or "";
+
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+	GameTooltip:SetText(WH..text);
+	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
+	GameTooltip:AppendText("");
 end
 
 --[[
@@ -168,8 +189,6 @@ function KRFSliderWidget_OnLoad (self)
 	local name = self:GetName();
 	local text = self:GetAttribute("text");
 	text = _G[text] or text;
-	local tooltip = self:GetAttribute("tooltip") or text;
-	tooltip = _G[tooltip] or tooltip;
 
 	self._Value = 0;
 
@@ -198,4 +217,18 @@ function KRFSliderWidget_OnValueChanged(self, value)
 		self.Label:SetText(value * tonumber(formatRatio));
 	end
 	self:SetValue(value);
+end
+function KRFSliderWidget_OnEnter(self)
+	if (not self:IsEnabled()) then return end;
+	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
+	text = _G[text] or text;
+
+	local tooltip = self:GetAttribute("tooltip") or "";
+	tooltip = _G[tooltip] or tooltip;
+	tooltip = tooltip ~= text and tooltip or "";
+
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+	GameTooltip:SetText(WH..text);
+	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
+	GameTooltip:AppendText("");
 end

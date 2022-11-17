@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - Nouveaut\195\169s :|r\n"
-    .."- Pr\195\170t pour DragonFlight (prepatch) 10.0.0\n"
-    .."- Retir\195\169s : Max buffs, et Toujours afficher les raids\n"
+    .."- Pr\195\170t pour DragonFlight 10.0.2 (pr\195\169patch phase 2)\n"
+    .."- Les tooltips d'aide sont de retour\n"
     ;
 
 KRF_SUBTITLE      = "Assistance frames de raid";
@@ -41,7 +41,9 @@ KRF_OPTION_HEALTH_OK_TOOLTIP = "La couleur sera appliqu\195\169e "..YLL.."AU-DES
 KRF_OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut \195\160 gauche";
 KRF_OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne de r\195\180le 'd\195\169g\195\160ts'";
 KRF_OPTION_HIDEREALM = "Masquer le royaume des joueurs";
+KRF_OPTION_HIDEREALM_TOOLTIP = "Les noms de royaumes seront masqu\195\169s, ainsi "..YLL.."Illidan - Varimathras|r deviendra "..YLL.."Illidan (*)|r";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
+KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
 KRF_OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 KRF_OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
 KRF_OPTION_SOLORAID = CY.."Toujours afficher les frames de raid "..YL.."*";
@@ -52,8 +54,8 @@ KRF_OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
 KRF_OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
 
 KRF_OPTION_BUFFS_HEADER = "Buffs / Debuffs";
-KRF_OPTION_BUFFSSCALE = "Taille des buffs *";
-KRF_OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs *";
+KRF_OPTION_BUFFSSCALE = "Taille des buffs "..YL.."*";
+KRF_OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..YL.."*";
 KRF_OPTION_MAXBUFFS = "Afficher maximum";
 KRF_OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";

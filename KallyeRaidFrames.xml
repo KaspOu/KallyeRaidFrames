@@ -152,6 +152,7 @@
 							<Slider name="$parent_LimitLow" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
+									<Attribute name="title" value="KRF_OPTION_HEALTH_LOW" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_LOW_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
@@ -164,6 +165,7 @@
 							<Slider name="$parent_LimitWarn" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
+									<Attribute name="title" value="KRF_OPTION_HEALTH_WARN" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_WARN_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
@@ -176,6 +178,7 @@
 							<Slider name="$parent_LimitOk" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
+									<Attribute name="title" value="KRF_OPTION_HEALTH_OK" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_OK_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
@@ -207,7 +210,7 @@
 							<CheckButton name="$parent_HideRealm" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HIDEREALM" />
-									<Attribute name="tooltip" value="KRF_OPTION_HIDEREALM" />
+									<Attribute name="tooltip" value="KRF_OPTION_HIDEREALM_TOOLTIP" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_HideDamageIcons" relativePoint="BOTTOMLEFT"/>
@@ -216,7 +219,7 @@
 							<CheckButton name="$parent_FriendsClassColor" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_FRIENDSCLASSCOLOR" />
-									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR" />
+									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_HideRealm" relativePoint="BOTTOMLEFT"/>
