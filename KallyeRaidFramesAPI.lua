@@ -410,5 +410,6 @@ end
 ? /fstack /dump
 ? /console scriptErrors 1
 ? print (tostring(checked))
+? /run print(select(4, GetBuildInfo()))
 ]]
 --@end-do-not-package@

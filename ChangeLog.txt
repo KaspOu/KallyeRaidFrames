@@ -1,3 +1,7 @@
+v10.0.201
+- DragonFlight prepatch phase 2
+- Tooltips are back
+
 v10.0.001
 - Ready for DragonFlight prepatch 10.0.0
 - Removed: MaxBuffs, and Always show raid

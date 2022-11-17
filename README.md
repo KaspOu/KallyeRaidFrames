@@ -14,8 +14,6 @@ Modifications to Blizzards default raid/party frames according to my own prefere
     - Buffs/Debuffs
        - - Larger Debuffs
        - - Smaller buffs
-       - - Max buffs showed
-    - Always display raid frames
 
 2. **Changes to both CompactRaidFrames and Nameplates**
     - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
@@ -29,3 +27,6 @@ Modifications to Blizzards default raid/party frames according to my own prefere
 
 ## Example
 ![]( https://media.forgecdn.net/attachments/315/778/wowscrnshot_100520_184645.jpg )
+
+
+https://www.curseforge.com/members/kaspou/projects

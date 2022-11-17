@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - What's new:|r\n"
-  .."- Ready for DragonFlight prepatch 10.0.0\n"
-  .."- Removed: MaxBuffs and Always show raid\n"
+  .."- Ready for DragonFlight 10.0.2 (prepatch phase 2)\n"
+  .."- Help tooltips are back\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
@@ -41,7 +41,9 @@ KRF_OPTION_HEALTH_OK_TOOLTIP = "OK health color applied "..YLL.."AFTER|r this li
 KRF_OPTION_MOVEROLEICONS = "Adjust role icons on top left";
 KRF_OPTION_HIDEDAMAGEICONS = "Hide 'dps' role icon";
 KRF_OPTION_HIDEREALM = "Hide players realm";
+KRF_OPTION_HIDEREALM_TOOLTIP = "Realm names will be masked, "..YLL.."Illidan - Varimathras|r will become "..YLL.."Illidan (*)|r";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
+KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
 KRF_OPTION_NOTINRANGE = "Transparency when out of range";
 KRF_OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 KRF_OPTION_SOLORAID = CY.."Always display raid frames "..YL.."*";
@@ -52,8 +54,8 @@ KRF_OPTION_DEBUG_OFF = "! STOP Test !";
 KRF_OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 KRF_OPTION_BUFFS_HEADER = "Buffs / Debuffs";
-KRF_OPTION_BUFFSSCALE = "Buffs relative size*";
-KRF_OPTION_DEBUFFSSCALE = "Debuffs relative size*";
+KRF_OPTION_BUFFSSCALE = "Buffs relative size"..YL.."*";
+KRF_OPTION_DEBUFFSSCALE = "Debuffs relative size"..YL.."*";
 KRF_OPTION_MAXBUFFS = "Max buffs";
 KRF_OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
