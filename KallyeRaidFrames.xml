@@ -279,9 +279,25 @@
 									</OnClick>
 								</Scripts>
 							</Button>
+							<Button name="$parent_EditMode" inherits="UIPanelButtonTemplate">
+								<Size x="300" y="20" />
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parent_SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										self.Text:SetText(KRF_OPTION_EDITMODE_PARTY);
+										self.tooltipText = KRF_OPTION_EDITMODE_PARTY_TOOLTIP;
+									</OnLoad>
+									<OnClick>
+										KRF_ShowEditMode("PartyFrame");
+										_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
+									</OnClick>
+								</Scripts>
+							</Button>
 							<CheckButton name="$parent_LabelMaxBuffs" inherits="KRFHeadingWidget">
 								<Anchors>
-									<Anchor point="TOP" relativeTo="$parent_Debug" relativePoint="BOTTOM" />
+									<Anchor point="TOP" relativeTo="$parent_EditMode" relativePoint="BOTTOM"><Offset x="0" y="-15" /></Anchor>
 								</Anchors>
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_BUFFS_HEADER" />

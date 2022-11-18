@@ -395,17 +395,29 @@ function KRF_DebugFrames(toggle)
 		KRF_AddMsgWarn(_G.KRF_IsDebugFramesTimerActive and KRF_OPTION_DEBUG_ON_MESSAGE or KRF_OPTION_DEBUG_OFF_MESSAGE);
 	end
 	if _G.KRF_IsDebugFramesTimerActive then
-		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true)
+		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true);
 	else
-		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false)
+		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 	end
 	if _G.KRF_IsDebugFramesTimerActive then
-		C_Timer.After(.5, KRF_DebugFrames)
+		C_Timer.After(.5, KRF_DebugFrames);
+	end
+end
+
+function KRF_ShowEditMode(window)
+	ShowUIPanel(EditModeManagerFrame);
+	if window == "PartyFrame" then
+		EditModeManagerFrame.AccountSettings.Settings.PartyFrames:SetControlChecked(true);
+		--EditModeManagerFrame:SelectSystem(PartyFrame);
+		PartyFrame:SelectSystem();
+		PartyFrame:HighlightSystem();
+		KRF_AddMsgWarn(KRF_OPTION_EDITMODE_PARTY_NOTE);
 	end
 end
 
 --@do-not-package@
 --[[
+? Changements: https://wowpedia.fandom.com/wiki/Patch_10.0.2/API_changes
 ? Help : https://github.com/fgprodigal/BlizzardInterfaceCode_zhTW/blob/master/Interface/FrameXML/CompactUnitFrame.lua
 ? https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.lua
 ? Depuis http://www.wowinterface.com/forums/showthread.php?t=56237

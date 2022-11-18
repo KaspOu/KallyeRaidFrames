@@ -47,10 +47,14 @@ KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Colore le nom du joueur (sur la t\195\17
 KRF_OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 KRF_OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
 KRF_OPTION_SOLORAID = CY.."Toujours afficher les cadres de groupe "..YL.."*";
-KRF_OPTION_SOLORAID_TOOLTIP = "Nécessite d'activer l'option Utiliser l'interface de type Raid (Mode \195\137dition : Cadre de Groupe)";
-KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."L'option 'Toujours afficher les cadres de groupe' est active :|r "..YL..KRF_OPTION_SOLORAID_TOOLTIP;
+KRF_OPTION_SOLORAID_TOOLTIP = "Nécessite d'activer l'option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
+KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."L'option 'Toujours afficher les cadres de groupe' est active :|r "..YLD..KRF_OPTION_SOLORAID_TOOLTIP;
+
+KRF_OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
+KRF_OPTION_EDITMODE_PARTY_NOTE = "Note : Tapez "..YL.."/reload|r apr\195\168s pour \195\169viter les erreurs qui suivraient";
+KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "Active le "..YL..HUD_EDIT_MODE_MENU.."|r, et affiche directement les options de "..YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r.\n\n"..CY..KRF_OPTION_EDITMODE_PARTY_NOTE.."|r";
 KRF_OPTION_DEBUG_ON = "! Tester les cadres !";
-KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de groupe / raid activ\195\169 (testable en Mode \195\137dition)\n"
+KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de groupe / raid activ\195\169 (testable en "..HUD_EDIT_MODE_MENU..")\n"
                 .."Recliquez pour stopper !";
 KRF_OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
 KRF_OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
