@@ -248,7 +248,7 @@
 							<CheckButton name="$parent_SoloRaidFrame" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_SOLORAID" />
-									<Attribute name="tooltip" value="KRF_OPTION_SOLORAID" />
+									<Attribute name="tooltip" value="KRF_OPTION_SOLORAID_TOOLTIP" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_AlphaNotInCombat" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
@@ -408,8 +408,6 @@
 					local HealthOption, RevertBarOption = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked(), _G[KRF_OPTIONS.."RevertBar"]:GetChecked()
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."MaxBuffs"], false)
 					_G[KRF_OPTIONS.."MaxBuffs"]:SetAlpha(.2);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."SoloRaidFrame"], false)
-					_G[KRF_OPTIONS.."SoloRaidFrame"]:SetAlpha(.2);
 
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBar"], HealthOption)
 					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitLow"], HealthOption);

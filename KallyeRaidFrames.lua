@@ -84,14 +84,10 @@ function KRF_OnEvent(self, event, ...)
 		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
 
 
-		-- ! SoloRaid Frames (requires reload) !! deprecated !!
-		-- if (KallyeRaidFramesOptions.SoloRaidFrame) then
-		-- 	-- _G.ShouldShowRaidFrames = SoloRaid_ShouldShowRaidFrames;
-		-- 	_G.IsInRaid = SoloRaid_ShouldShowRaidFrames;
-		-- 	CompactRaidFrameContainer:ApplyToFrames("group", CompactRaidGroup_UpdateUnits);
-		-- 	CompactRaidFrameContainer:TryUpdate();
-		-- 	UpdateRaidAndPartyFrames();
-		-- end
+		-- ! SoloRaid Frames
+		if (KallyeRaidFramesOptions.SoloRaidFrame) then
+			hooksecurefunc("CompactPartyFrame_UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+		end
 
 		-- ! Addon Loaded ^^
 		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
@@ -156,7 +152,10 @@ function SaveKRFOptions()
 	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
-		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true)
+		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true);
+	end
+	if KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
+		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES, true);
 	end
 end
 

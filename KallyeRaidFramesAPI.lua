@@ -162,7 +162,7 @@ end
 - Scale buffs / debuffs
 - Max buffs to display (max 3!)
 ]]
-function KRF_Hook_ManageBuffs (frame,numbuffs)
+function KRF_Hook_ManageBuffs(frame,numbuffs)
 	for i=1, #frame.buffFrames do
 		frame.buffFrames[i]:SetScale(KallyeRaidFramesOptions.BuffsScale);
 	end
@@ -256,9 +256,15 @@ function KRF_UpdateNameColor(frame, forceColor)
 	end
 end
 
-local Blizzard_ShouldShowRaidFrames = ShouldShowRaidFrames;  -- protect original behavior
-function SoloRaid_ShouldShowRaidFrames()
-	return true
+--[[
+! Solo Party Frames
+- Show Party Frames even if solo (but not in raid)
+]]
+function KRF_Hook_CompactPartyFrame_UpdateVisibility()
+	local PartyFramesShown = EditModeManagerFrame:ArePartyFramesForcedShown() or (IsInGroup() and not IsInRaid()) or (not IsInGroup() and not IsInRaid());
+	local ShowCompactPartyFrame = PartyFramesShown and EditModeManagerFrame:UseRaidStylePartyFrames();
+	CompactPartyFrame:SetShown(ShowCompactPartyFrame);
+	PartyFrame:UpdatePaddingAndLayout();
 end
 
 function mergeRGBA(r1, v1, b1, a1, r2, v2, b2, a2, percent)

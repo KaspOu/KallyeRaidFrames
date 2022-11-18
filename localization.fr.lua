@@ -12,8 +12,8 @@ KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - Nouveaut\195\169s :|r\n"
     .."- Les tooltips d'aide sont de retour\n"
     ;
 
-KRF_SUBTITLE      = "Assistance frames de raid";
-KRF_DESC          = "Am\195\169liore les frames de groupe/raid et des unit\195\169s amies.\n\n"
+KRF_SUBTITLE      = "Assistance cadres de raid";
+KRF_DESC          = "Am\195\169liore les cadres de groupe/raid et des unit\195\169s amies.\n\n"
 .." - Met en \195\169vidence le fond des joueurs en manque de vie\n\n"
 .." - Les barres invers\195\169es utiliseront votre choix de couleurs\n\n"
 .." - Transparence des unit\195\169s hors de port\195\169e";
@@ -46,9 +46,11 @@ KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
 KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
 KRF_OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 KRF_OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
-KRF_OPTION_SOLORAID = CY.."Toujours afficher les frames de raid "..YL.."*";
-KRF_OPTION_DEBUG_ON = "! Tester les frames !";
-KRF_OPTION_DEBUG_ON_MESSAGE = "Test des frames de raid activ\195\169 (testable en Mode \195\137dition)\n"
+KRF_OPTION_SOLORAID = CY.."Toujours afficher les cadres de groupe "..YL.."*";
+KRF_OPTION_SOLORAID_TOOLTIP = "Nécessite d'activer l'option Utiliser l'interface de type Raid (Mode \195\137dition : Cadre de Groupe)";
+KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."L'option 'Toujours afficher les cadres de groupe' est active :|r "..YL..KRF_OPTION_SOLORAID_TOOLTIP;
+KRF_OPTION_DEBUG_ON = "! Tester les cadres !";
+KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de groupe / raid activ\195\169 (testable en Mode \195\137dition)\n"
                 .."Recliquez pour stopper !";
 KRF_OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
 KRF_OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
@@ -63,7 +65,7 @@ KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
 
 KRF_OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
-KRF_OPTION_RELOAD_REQUIRED = "Certains changements requi\195\168rent un rechargement (\195\169crivez : /reload )";
+KRF_OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..YL.."/reload|r )";
 
 KRF_OPTION_SHOWMSGNORMAL = GYL.."Afficher les messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Afficher les alertes";
