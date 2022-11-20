@@ -337,13 +337,19 @@ function KRF_AddMsgD(msg, r, g, b)
 	end
 end
 
-function KRF_OptionsEnable(FrameObject, isEnabled)
+function KRF_OptionsEnable(FrameObject, isEnabled, disabledAlpha)
 	if isEnabled then
 		FrameObject:Enable();
 		FrameObject:SetAlpha(1);
 	else
 		FrameObject:Disable();
-		FrameObject:SetAlpha(.6);
+		FrameObject:SetAlpha(disabledAlpha or .6);
+	end
+end
+function KRF_OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled)
+	FrameObject:SetShown(isShowned);
+	if (isShowned) then
+		KRF_OptionsEnable(FrameObject, isEnabled);
 	end
 end
 

@@ -168,7 +168,7 @@ function RefreshKRFOptions()
 				local value = KallyeRaidFramesOptions[k];
 				if value == nil then
 					value = v;
-					KRF_AddMsgErr(format("Option not found (%s) loading default value...", k));
+					KRF_AddMsgErr(format("Option not found ("..YLD.."%s|r), loading default value...", k));
 				end;
 
 				if control.type == "color" then
@@ -181,4 +181,22 @@ function RefreshKRFOptions()
 			end
 		end
 	);
+end
+
+function ManageKRFOptionsVisibility()
+	local HealthOption, RevertBarOption = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked(), _G[KRF_OPTIONS.."RevertBar"]:GetChecked()
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."MaxBuffs"], false, .2);
+
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBar"], HealthOption)
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitLow"] , HealthOption);
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitWarn"], HealthOption);
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitOk"]  , HealthOption);
+
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."BGColorLow"] , not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."BGColorWarn"], not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."BGColorOK"]  , not RevertBarOption, HealthOption);
+
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."RevertColorLow"] , RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."RevertColorWarn"], RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."RevertColorOK"]  , RevertBarOption, HealthOption);
 end

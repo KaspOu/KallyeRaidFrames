@@ -67,9 +67,7 @@
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
-									<OnUpdate>
-										ManageHealthOptionsEnabled()
-									</OnUpdate>
+									<OnUpdate function="ManageKRFOptionsVisibility" />
 								</Scripts>
 							</CheckButton>
 							<CheckButton name="$parent_RevertBar" inherits="KRFCheckboxWidget">
@@ -82,9 +80,7 @@
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
-									<OnUpdate>
-										ManageHealthOptionsEnabled()
-									</OnUpdate>
+									<OnUpdate function="ManageKRFOptionsVisibility" />
 								</Scripts>
 							</CheckButton>
 							<Button name="$parent_BGColorLow" inherits="KRFColorWidget">
@@ -419,41 +415,6 @@
 				self.okay = SaveKRFOptions;
 				self.refresh = RefreshKRFOptions;
 				InterfaceOptions_AddCategory(self);
-
-				ManageHealthOptionsEnabled = function()
-					local HealthOption, RevertBarOption = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked(), _G[KRF_OPTIONS.."RevertBar"]:GetChecked()
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."MaxBuffs"], false)
-					_G[KRF_OPTIONS.."MaxBuffs"]:SetAlpha(.2);
-
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBar"], HealthOption)
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitLow"], HealthOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitWarn"], HealthOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitOk"], HealthOption);
-
-					if not RevertBarOption then
-						_G[KRF_OPTIONS.."BGColorLow"]:Show();
-						_G[KRF_OPTIONS.."BGColorWarn"]:Show();
-						_G[KRF_OPTIONS.."BGColorOK"]:Show();
-						_G[KRF_OPTIONS.."RevertColorLow"]:Hide();
-						_G[KRF_OPTIONS.."RevertColorWarn"]:Hide();
-						_G[KRF_OPTIONS.."RevertColorOK"]:Hide();
-					else
-						_G[KRF_OPTIONS.."BGColorLow"]:Hide();
-						_G[KRF_OPTIONS.."BGColorWarn"]:Hide();
-						_G[KRF_OPTIONS.."BGColorOK"]:Hide();
-						_G[KRF_OPTIONS.."RevertColorLow"]:Show();
-						_G[KRF_OPTIONS.."RevertColorWarn"]:Show();
-						_G[KRF_OPTIONS.."RevertColorOK"]:Show();
-					end
-
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorLow"], HealthOption and not RevertBarOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorWarn"], HealthOption and not RevertBarOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."BGColorOK"], HealthOption and not RevertBarOption);
-
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorLow"], HealthOption and RevertBarOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorWarn"], HealthOption and RevertBarOption);
-					KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertColorOK"], HealthOption and RevertBarOption);
-				end
 			</OnLoad>
 		</Scripts>
 
