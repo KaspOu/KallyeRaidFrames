@@ -29,4 +29,6 @@ Modifications to Blizzards default raid/party frames according to my own prefere
 ![]( https://media.forgecdn.net/attachments/315/778/wowscrnshot_100520_184645.jpg )
 
 
+Kallye Raid Frames is licensed under the GNU General Public License version 3.
+
 https://www.curseforge.com/members/kaspou/projects
