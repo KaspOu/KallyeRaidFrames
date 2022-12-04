@@ -7,9 +7,10 @@ if (GetLocale() == "frFR") then
 KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
-KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - Nouveaut\195\169s :|r\n"
-    .."- Pr\195\170t pour DragonFlight 10.0.2 (pr\195\169patch phase 2)\n"
-    .."- Les tooltips d'aide sont de retour\n"
+KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
+    .."- Pr\195\170t pour DragonFlight 10.0.2\n"
+    .."- Option de retour : 'Toujours afficher les cadres de groupe'\n"
+    .."- Bouton vers le Mode Edition : Cadres de groupe\n"
     ;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";

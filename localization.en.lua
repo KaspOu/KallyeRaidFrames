@@ -7,9 +7,10 @@
 KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
-KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - What's new:|r\n"
-  .."- Ready for DragonFlight 10.0.2 (prepatch phase 2)\n"
-  .."- Help tooltips are back\n"
+KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
+  .."- Ready for DragonFlight 10.0.2\n"
+  .."- Always show party frames option back\n"
+  .."- Button to Edit mode: Party frames\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";

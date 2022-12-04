@@ -261,10 +261,14 @@ end
 - Show Party Frames even if solo (but not in raid)
 ]]
 function KRF_Hook_CompactPartyFrame_UpdateVisibility()
-	local PartyFramesShown = EditModeManagerFrame:ArePartyFramesForcedShown() or (IsInGroup() and not IsInRaid()) or (not IsInGroup() and not IsInRaid());
-	local ShowCompactPartyFrame = PartyFramesShown and EditModeManagerFrame:UseRaidStylePartyFrames();
-	CompactPartyFrame:SetShown(ShowCompactPartyFrame);
-	PartyFrame:UpdatePaddingAndLayout();
+	if not CompactPartyFrame:IsForbidden() then
+		local PartyFramesShown = EditModeManagerFrame:ArePartyFramesForcedShown() or (IsInGroup() and not IsInRaid()) or (not IsInGroup() and not IsInRaid());
+		local ShowCompactPartyFrame = PartyFramesShown and EditModeManagerFrame:UseRaidStylePartyFrames();
+		if CompactPartyFrame:IsShown() ~= ShowCompactPartyFrame then
+			CompactPartyFrame:SetShown(ShowCompactPartyFrame);
+			PartyFrame:UpdatePaddingAndLayout();
+		end
+	end
 end
 
 function mergeRGBA(r1, v1, b1, a1, r2, v2, b2, a2, percent)
