@@ -7,9 +7,10 @@
 KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
-KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE..YLL.." - What's new:|r\n"
-  .."- Ready for DragonFlight 10.0.2 (prepatch phase 2)\n"
-  .."- Help tooltips are back\n"
+KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
+  .."- Ready for DragonFlight 10.0.2\n"
+  .."- Always show party frames option back\n"
+  .."- Button to Edit mode: Party frames\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
@@ -46,9 +47,15 @@ KRF_OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
 KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
 KRF_OPTION_NOTINRANGE = "Transparency when out of range";
 KRF_OPTION_NOTINCOMBAT = "Raid transparency out of combat";
-KRF_OPTION_SOLORAID = CY.."Always display raid frames "..YL.."*";
-KRF_OPTION_DEBUG_ON = "! Test raidframes !";
-KRF_OPTION_DEBUG_ON_MESSAGE = "Testing raid frames (you can test in Edit Mode)\n"
+KRF_OPTION_SOLORAID = CY.."Always show party frames "..YL.."*";
+KRF_OPTION_SOLORAID_TOOLTIP = "Require option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
+KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."Option 'Always show party frames' enabled:|r "..YL..KRF_OPTION_SOLORAID_TOOLTIP;
+
+KRF_OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
+KRF_OPTION_EDITMODE_PARTY_NOTE = "Note: Use "..YL.."/reload|r after editing, to avoid possibles errors";
+KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "Enter "..YL..HUD_EDIT_MODE_MENU.."|r, and open "..YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r options window.\n\n"..CY..KRF_OPTION_EDITMODE_PARTY_NOTE.."|r";
+KRF_OPTION_DEBUG_ON = "! Test party/raid frames !";
+KRF_OPTION_DEBUG_ON_MESSAGE = "Testing party / raid frames (you can test in "..HUD_EDIT_MODE_MENU..")\n"
                   .."Reclick to stop it!";
 KRF_OPTION_DEBUG_OFF = "! STOP Test !";
 KRF_OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
@@ -63,7 +70,7 @@ KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Players nameplates colored by class (outside instances)";
 
 KRF_OPTION_RESET_OPTIONS = "Reset options";
-KRF_OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: /reload )";
+KRF_OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..YL.."/reload|r )";
 
 KRF_OPTION_SHOWMSGNORMAL = GYL.."Display messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Display warnings";

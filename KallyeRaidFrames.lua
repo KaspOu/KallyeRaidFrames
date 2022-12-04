@@ -84,14 +84,10 @@ function KRF_OnEvent(self, event, ...)
 		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
 
 
-		-- ! SoloRaid Frames (requires reload) !! deprecated !!
-		-- if (KallyeRaidFramesOptions.SoloRaidFrame) then
-		-- 	-- _G.ShouldShowRaidFrames = SoloRaid_ShouldShowRaidFrames;
-		-- 	_G.IsInRaid = SoloRaid_ShouldShowRaidFrames;
-		-- 	CompactRaidFrameContainer:ApplyToFrames("group", CompactRaidGroup_UpdateUnits);
-		-- 	CompactRaidFrameContainer:TryUpdate();
-		-- 	UpdateRaidAndPartyFrames();
-		-- end
+		-- ! SoloRaid Frames
+		if (KallyeRaidFramesOptions.SoloRaidFrame) then
+			hooksecurefunc("CompactPartyFrame_UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+		end
 
 		-- ! Addon Loaded ^^
 		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
@@ -156,7 +152,10 @@ function SaveKRFOptions()
 	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
-		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true)
+		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true);
+	end
+	if KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
+		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES, true);
 	end
 end
 
@@ -169,7 +168,7 @@ function RefreshKRFOptions()
 				local value = KallyeRaidFramesOptions[k];
 				if value == nil then
 					value = v;
-					KRF_AddMsgErr(format("Option not found (%s) loading default value...", k));
+					KRF_AddMsgErr(format("Option not found ("..YLD.."%s|r), loading default value...", k));
 				end;
 
 				if control.type == "color" then
@@ -182,4 +181,22 @@ function RefreshKRFOptions()
 			end
 		end
 	);
+end
+
+function ManageKRFOptionsVisibility()
+	local HealthOption, RevertBarOption = _G[KRF_OPTIONS.."UpdateHealthColor"]:GetChecked(), _G[KRF_OPTIONS.."RevertBar"]:GetChecked()
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."MaxBuffs"], false, .2);
+
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."RevertBar"], HealthOption)
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitLow"] , HealthOption);
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitWarn"], HealthOption);
+	KRF_OptionsEnable(_G[KRF_OPTIONS.."LimitOk"]  , HealthOption);
+
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."BGColorLow"] , not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."BGColorWarn"], not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."BGColorOK"]  , not RevertBarOption, HealthOption);
+
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."RevertColorLow"] , RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."RevertColorWarn"], RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(_G[KRF_OPTIONS.."RevertColorOK"]  , RevertBarOption, HealthOption);
 end

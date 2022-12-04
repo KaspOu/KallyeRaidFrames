@@ -162,7 +162,7 @@ end
 - Scale buffs / debuffs
 - Max buffs to display (max 3!)
 ]]
-function KRF_Hook_ManageBuffs (frame,numbuffs)
+function KRF_Hook_ManageBuffs(frame,numbuffs)
 	for i=1, #frame.buffFrames do
 		frame.buffFrames[i]:SetScale(KallyeRaidFramesOptions.BuffsScale);
 	end
@@ -256,9 +256,19 @@ function KRF_UpdateNameColor(frame, forceColor)
 	end
 end
 
-local Blizzard_ShouldShowRaidFrames = ShouldShowRaidFrames;  -- protect original behavior
-function SoloRaid_ShouldShowRaidFrames()
-	return true
+--[[
+! Solo Party Frames
+- Show Party Frames even if solo (but not in raid)
+]]
+function KRF_Hook_CompactPartyFrame_UpdateVisibility()
+	if not CompactPartyFrame:IsForbidden() then
+		local PartyFramesShown = EditModeManagerFrame:ArePartyFramesForcedShown() or (IsInGroup() and not IsInRaid()) or (not IsInGroup() and not IsInRaid());
+		local ShowCompactPartyFrame = PartyFramesShown and EditModeManagerFrame:UseRaidStylePartyFrames();
+		if CompactPartyFrame:IsShown() ~= ShowCompactPartyFrame then
+			CompactPartyFrame:SetShown(ShowCompactPartyFrame);
+			PartyFrame:UpdatePaddingAndLayout();
+		end
+	end
 end
 
 function mergeRGBA(r1, v1, b1, a1, r2, v2, b2, a2, percent)
@@ -331,13 +341,19 @@ function KRF_AddMsgD(msg, r, g, b)
 	end
 end
 
-function KRF_OptionsEnable(FrameObject, isEnabled)
+function KRF_OptionsEnable(FrameObject, isEnabled, disabledAlpha)
 	if isEnabled then
 		FrameObject:Enable();
 		FrameObject:SetAlpha(1);
 	else
 		FrameObject:Disable();
-		FrameObject:SetAlpha(.6);
+		FrameObject:SetAlpha(disabledAlpha or .6);
+	end
+end
+function KRF_OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled)
+	FrameObject:SetShown(isShowned);
+	if (isShowned) then
+		KRF_OptionsEnable(FrameObject, isEnabled);
 	end
 end
 
@@ -389,17 +405,29 @@ function KRF_DebugFrames(toggle)
 		KRF_AddMsgWarn(_G.KRF_IsDebugFramesTimerActive and KRF_OPTION_DEBUG_ON_MESSAGE or KRF_OPTION_DEBUG_OFF_MESSAGE);
 	end
 	if _G.KRF_IsDebugFramesTimerActive then
-		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true)
+		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true);
 	else
-		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false)
+		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 	end
 	if _G.KRF_IsDebugFramesTimerActive then
-		C_Timer.After(.5, KRF_DebugFrames)
+		C_Timer.After(.5, KRF_DebugFrames);
+	end
+end
+
+function KRF_ShowEditMode(window)
+	ShowUIPanel(EditModeManagerFrame);
+	if window == "PartyFrame" then
+		EditModeManagerFrame.AccountSettings.Settings.PartyFrames:SetControlChecked(true);
+		--EditModeManagerFrame:SelectSystem(PartyFrame);
+		PartyFrame:SelectSystem();
+		PartyFrame:HighlightSystem();
+		KRF_AddMsgWarn(KRF_OPTION_EDITMODE_PARTY_NOTE);
 	end
 end
 
 --@do-not-package@
 --[[
+? Changements: https://wowpedia.fandom.com/wiki/Patch_10.0.2/API_changes
 ? Help : https://github.com/fgprodigal/BlizzardInterfaceCode_zhTW/blob/master/Interface/FrameXML/CompactUnitFrame.lua
 ? https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.lua
 ? Depuis http://www.wowinterface.com/forums/showthread.php?t=56237
