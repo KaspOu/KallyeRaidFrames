@@ -1,3 +1,6 @@
+v10.0.203
+- Fix options issues raised by somes
+
 v10.0.202
 - Always show party frames option back
 - Button added: 'Edit Mode: party frames'
