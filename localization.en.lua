@@ -8,9 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
-  .."- Ready for DragonFlight 10.0.2\n"
-  .."- Always show party frames option back\n"
-  .."- Button to Edit mode: Party frames\n"
+  .."- Out of range transparency fixed (with highlighted backgrounds)\n"
+  .."- Fix unexpected performance issue\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
@@ -46,7 +45,9 @@ KRF_OPTION_HIDEREALM_TOOLTIP = "Realm names will be masked, "..YLL.."Illidan - V
 KRF_OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
 KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
 KRF_OPTION_NOTINRANGE = "Transparency when out of range";
+KRF_OPTION_NOTINRANGE_TOOLTIP = CY.."Wow default: 55%";
 KRF_OPTION_NOTINCOMBAT = "Raid transparency out of combat";
+KRF_OPTION_NOTINCOMBAT_TOOLTIP = CY.."Wow default: 100%";
 KRF_OPTION_SOLORAID = CY.."Always show party frames "..YL.."*";
 KRF_OPTION_SOLORAID_TOOLTIP = "Require option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
 KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."Option 'Always show party frames' enabled:|r "..YL..KRF_OPTION_SOLORAID_TOOLTIP;
@@ -62,7 +63,9 @@ KRF_OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 KRF_OPTION_BUFFS_HEADER = "Buffs / Debuffs";
 KRF_OPTION_BUFFSSCALE = "Buffs relative size"..YL.."*";
+KRF_OPTION_BUFFSSCALE_TOOLTIP = CY.."Set to 1 if you experience some addon conflict";
 KRF_OPTION_DEBUFFSSCALE = "Debuffs relative size"..YL.."*";
+KRF_OPTION_DEBUFFSSCALE_TOOLTIP = CY.."Set to 1 if you experience some addon conflict";
 KRF_OPTION_MAXBUFFS = "Max buffs";
 KRF_OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";

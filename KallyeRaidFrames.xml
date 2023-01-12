@@ -216,6 +216,7 @@
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_NOTINRANGE" />
+									<Attribute name="tooltip" value="KRF_OPTION_NOTINRANGE_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
@@ -226,6 +227,7 @@
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_NOTINCOMBAT" />
+									<Attribute name="tooltip" value="KRF_OPTION_NOTINCOMBAT_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
@@ -294,6 +296,7 @@
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_BUFFSSCALE" />
+									<Attribute name="tooltip" value="KRF_OPTION_BUFFSSCALE_TOOLTIP" />
 									<Attribute name="format" value="x %.2f" />
 								</Attributes>
 								<Anchors>
@@ -318,6 +321,7 @@
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_DEBUFFSSCALE" />
+									<Attribute name="tooltip" value="KRF_OPTION_DEBUFFSSCALE_TOOLTIP" />
 									<Attribute name="format" value="x %.2f" />
 								</Attributes>
 								<Anchors>
@@ -406,6 +410,7 @@
 				self.okay = SaveKRFOptions;
 				self.refresh = RefreshKRFOptions;
 				InterfaceOptions_AddCategory(self);
+				KRFOptionsFrame:Hide();
 			</OnLoad>
 		</Scripts>
 

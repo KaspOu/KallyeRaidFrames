@@ -1,3 +1,7 @@
+v10.0.204
+- Out of range transparency fixed with highlighted backgrounds.
+- Fix unexpected performance issue
+
 v10.0.203
 - Fix options issues raised by somes
 

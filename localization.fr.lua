@@ -8,9 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
-    .."- Pr\195\170t pour DragonFlight 10.0.2\n"
-    .."- Option de retour : 'Toujours afficher les cadres de groupe'\n"
-    .."- Bouton vers le Mode Edition : Cadres de groupe\n"
+    .."- Transparence hors de port\195\169e corrig\195\169e (avec la mise en \195\169vidence des joueurs)\n"
+    .."- Correction d'un impact inattendu sur les performances\n"
     ;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";
@@ -46,7 +45,9 @@ KRF_OPTION_HIDEREALM_TOOLTIP = "Les noms de royaumes seront masqu\195\169s, ains
 KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
 KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
 KRF_OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
+KRF_OPTION_NOTINRANGE_TOOLTIP = "Par d\195\169faut dans Wow : 55%";
 KRF_OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
+KRF_OPTION_NOTINCOMBAT_TOOLTIP = "Par d\195\169faut dans Wow : 100%";
 KRF_OPTION_SOLORAID = CY.."Toujours afficher les cadres de groupe "..YL.."*";
 KRF_OPTION_SOLORAID_TOOLTIP = "Nécessite d'activer l'option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
 KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."L'option 'Toujours afficher les cadres de groupe' est active :|r "..YLD..KRF_OPTION_SOLORAID_TOOLTIP;
@@ -62,7 +63,9 @@ KRF_OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre
 
 KRF_OPTION_BUFFS_HEADER = "Buffs / Debuffs";
 KRF_OPTION_BUFFSSCALE = "Taille des buffs "..YL.."*";
+KRF_OPTION_BUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
 KRF_OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..YL.."*";
+KRF_OPTION_DEBUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
 KRF_OPTION_MAXBUFFS = "Afficher maximum";
 KRF_OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
