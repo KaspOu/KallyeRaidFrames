@@ -4,7 +4,6 @@
 ]]
 
 local isInit = false;
-local isPlayer = false;
 
 
 KRF_DefaultOptions = {
@@ -26,8 +25,8 @@ KRF_DefaultOptions = {
 	HideDamageIcons = true,
 	HideRealm = true,
 	FriendsClassColor = false,
-	AlphaNotInRange = 30,
-	AlphaNotInCombat = 90,
+	AlphaNotInRange = 55, -- 30
+	AlphaNotInCombat = 100, -- 70
 	SoloRaidFrame = false,		 -- Show solo raid (useful for testing)
 
 	BuffsScale = 0.75,
@@ -61,32 +60,31 @@ function KRF_OnLoad(self)
 		end
 	);
 	self:RegisterEvent("ADDON_LOADED");
-	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 end -- END KRF_OnLoad
 
 -- KRF_OnEvent
 function KRF_OnEvent(self, event, ...)
 	local arg1 = select(1, ...);
-	if ((event == "UNIT_NAME_UPDATE" and arg1 == "player") or event == "PLAYER_ENTERING_WORLD") then
-		isPlayer = true;
-		-- self:UnRegisterEvent("PLAYER_ENTERING_WORLD");
-	elseif (event == "ADDON_LOADED" and arg1 == KRF_ADDON_NAME) then
-		isLoaded = true;
+	if (event == "ADDON_LOADED" and arg1 == KRF_ADDON_NAME) then
 		self:UnregisterEvent("ADDON_LOADED");
+		isLoaded = true;
 		KRF_SetDefaultOptions(KRF_DefaultOptions);
 
 		-- ! Hooks
-		_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
-
+		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
+			_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
+		end
+		if KallyeRaidFramesOptions.BuffsScale ~= 1 or KallyeRaidFramesOptions.DebuffsScale ~= 1 then
+			_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
+		end
 
 		-- ! SoloRaid Frames
 		if (KallyeRaidFramesOptions.SoloRaidFrame) then
-			hooksecurefunc("CompactPartyFrame_UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+			_G.hooksecurefunc("CompactPartyFrame_UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
 		end
 
 		-- ! Addon Loaded ^^
@@ -102,14 +100,18 @@ function SLASH_KRF_command(msgIn)
 		KRF_AddMsgWarn(KRF_INIT_FAILED, true);
 		return;
 	end
-	if Settings then
-		Settings.OpenToCategory(KRF_TITLE);
+	if msgIn == "test" then
+		KRF_DebugFrames(true);
 	else
-		InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
+		if Settings then
+			Settings.OpenToCategory(KRF_TITLE);
+		else
+			InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
+		end
 	end
 end
 
-function SLASH_CLEAR_command(msgIn)
+function SLASH_CLEAR_command()
 	SELECTED_CHAT_FRAME:Clear()
 end
 
@@ -118,7 +120,8 @@ function OptionsWReloadValues()
 	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)
 		..tostring(KallyeRaidFramesOptions.UpdateHealthColor)
 		..tostring(KallyeRaidFramesOptions.BuffsScale)
-		..tostring(KallyeRaidFramesOptions.DebuffsScale);
+		..tostring(KallyeRaidFramesOptions.DebuffsScale)
+		..tostring(KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100);
 end
 
 function SaveKRFOptions()
@@ -162,9 +165,11 @@ function SaveKRFOptions()
 	if KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
 		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES, true);
 	end
+	KRFOptionsFrame:Hide();
 end
 
 function RefreshKRFOptions()
+	KRFOptionsFrame:Show();
 	-- Auto detect options controls and load them
 	local FramePrefix = "KRFOptionsFrame_";
 	foreach(KRF_DefaultOptions,

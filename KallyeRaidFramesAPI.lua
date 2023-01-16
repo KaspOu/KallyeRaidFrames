@@ -37,20 +37,30 @@ function KRF_Hook_UpdateHealth(frame, health)
 	end
 end
 
+local startsWith = {
+	play = true, -- player
+	part = true, -- party
+	raid = true,
+}
+
 --[[
 ! Managing Alpha depending on range
 - Alpha not in range
 - then alpha out of combat
 ]]
 function KRF_Hook_UpdateInRange(frame)
-	if not frame:IsForbidden() and FrameIsCompact(frame) then
-		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit)
+	if startsWith[strsub(frame.displayedUnit, 1, 4)] and not frame:IsForbidden() then
+		frame.optionTable.fadeOutOfRange = false; -- avoid setAlpha from Blizzard code
+		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
+		local newAlpha = 1;
 		if KallyeRaidFramesOptions.AlphaNotInRange < 100 and hasCheckedRange and not isInRange then
-			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInRange/100);
-		elseif not InCombatLockdown() and not _G.KRF_IsDebugFramesTimerActive and KallyeRaidFramesOptions.AlphaNotInCombat < 100 then
-			frame:SetAlpha(KallyeRaidFramesOptions.AlphaNotInCombat/100);
-		else
-			frame.name:SetAlpha(1);
+			newAlpha = KallyeRaidFramesOptions.AlphaNotInRange/100;
+		elseif not InCombatLockdown() and KallyeRaidFramesOptions.AlphaNotInCombat < 100 then
+			newAlpha = KallyeRaidFramesOptions.AlphaNotInCombat/100;
+		end
+		if (floor(frame:GetAlpha()*100) ~= floor(newAlpha*100)) then
+			frame:SetAlpha(newAlpha);
+			frame.background:SetAlpha(newAlpha);
 		end
 	end
 end
@@ -163,12 +173,19 @@ end
 - Max buffs to display (max 3!)
 ]]
 function KRF_Hook_ManageBuffs(frame,numbuffs)
-	for i=1, #frame.buffFrames do
-		frame.buffFrames[i]:SetScale(KallyeRaidFramesOptions.BuffsScale);
+	if KallyeRaidFramesOptions.BuffsScale ~= 1 then
+		for i=1, #frame.buffFrames do
+			frame.buffFrames[i]:SetScale(KallyeRaidFramesOptions.BuffsScale);
+		end
 	end
 
-	for i=1, #frame.debuffFrames do
-		frame.debuffFrames[i]:SetScale(KallyeRaidFramesOptions.DebuffsScale);
+	if KallyeRaidFramesOptions.DebuffsScale ~= 1 then
+		for i=1, #frame.debuffFrames do
+			frame.debuffFrames[i]:SetScale(KallyeRaidFramesOptions.DebuffsScale);
+		end
+		for i=1, #frame.dispelDebuffFrames do
+			frame.dispelDebuffFrames[i]:SetScale(KallyeRaidFramesOptions.DebuffsScale);
+		end
 	end
 
 	-- ! MaxBuffs Deprecated
@@ -262,7 +279,7 @@ end
 ]]
 function KRF_Hook_CompactPartyFrame_UpdateVisibility()
 	if not CompactPartyFrame:IsForbidden() then
-		local PartyFramesShown = EditModeManagerFrame:ArePartyFramesForcedShown() or (IsInGroup() and not IsInRaid()) or (not IsInGroup() and not IsInRaid());
+		local PartyFramesShown = EditModeManagerFrame:ArePartyFramesForcedShown() or not IsInRaid();
 		local ShowCompactPartyFrame = PartyFramesShown and EditModeManagerFrame:UseRaidStylePartyFrames();
 		if CompactPartyFrame:IsShown() ~= ShowCompactPartyFrame then
 			CompactPartyFrame:SetShown(ShowCompactPartyFrame);
