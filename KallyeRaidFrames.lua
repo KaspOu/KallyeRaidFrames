@@ -165,11 +165,16 @@ function SaveKRFOptions()
 	if KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
 		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES, true);
 	end
-	KRFOptionsFrame:Hide();
+	if KRFOptionsFrame ~= nil and KRFOptionsFrame.HandleVis ~= nil then
+		KRFOptionsFrame:Hide();
+	end
 end
 
 function RefreshKRFOptions()
-	KRFOptionsFrame:Show();
+	if KRFOptionsFrame ~= nil then
+		KRFOptionsFrame:Show();
+		KRFOptionsFrame.HandleVis = true;
+	end
 	-- Auto detect options controls and load them
 	local FramePrefix = "KRFOptionsFrame_";
 	foreach(KRF_DefaultOptions,

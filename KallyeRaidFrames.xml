@@ -410,7 +410,9 @@
 				self.okay = SaveKRFOptions;
 				self.refresh = RefreshKRFOptions;
 				InterfaceOptions_AddCategory(self);
-				KRFOptionsFrame:Hide();
+				if KRFOptionsFrame ~= nil and KRFOptionsFrame.HandleVis ~= nil then
+					KRFOptionsFrame:Hide();
+				end
 			</OnLoad>
 		</Scripts>
 

@@ -1,3 +1,6 @@
+v10.0.205
+- Fix KRFOptionsFrame error for some Wow clients
+
 v10.0.204
 - Out of range transparency fixed with highlighted backgrounds.
 - Fix unexpected performance issue
