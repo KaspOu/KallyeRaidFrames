@@ -12,9 +12,15 @@ function KRF_SetDefaultOptions(DefaultOptions, reset)
 	end
 end
 
+local startsWith = {
+	play = true, -- player
+	part = true, -- party
+	raid = true,
+}
 
-function UnitInPartyOrRaid(Unit)
-	return UnitInParty(Unit) or UnitInRaid(Unit) or UnitIsUnit(Unit, "player")
+function UnitInPartyOrRaid(frame)
+	return startsWith[strsub(frame.displayedUnit, 1, 4)];
+	-- return UnitInParty(Unit) or UnitInRaid(Unit) or UnitIsUnit(Unit, "player")
 end
 
 function FrameIsCompact(frame)
@@ -37,20 +43,13 @@ function KRF_Hook_UpdateHealth(frame, health)
 	end
 end
 
-local startsWith = {
-	play = true, -- player
-	part = true, -- party
-	raid = true,
-}
-
 --[[
 ! Managing Alpha depending on range
 - Alpha not in range
 - then alpha out of combat
 ]]
 function KRF_Hook_UpdateInRange(frame)
-	if startsWith[strsub(frame.displayedUnit, 1, 4)] and not frame:IsForbidden() then
-		frame.optionTable.fadeOutOfRange = false; -- avoid setAlpha from Blizzard code
+	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
 		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
 		local newAlpha = 1;
 		if KallyeRaidFramesOptions.AlphaNotInRange < 100 and hasCheckedRange and not isInRange then
@@ -68,7 +67,7 @@ end
 ! Managing Health color: background
 ]]
 function UpdateHealth_Regular(frame, health)
-	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame.displayedUnit) and FrameIsCompact(frame) then
+	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
 		health = health or UnitHealth(frame.displayedUnit)
 		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 		local healthPercentage = ceil((health / unitHealthMax * 100))
@@ -97,7 +96,7 @@ end
 TODO : réduire la barre en hauteur, mettre un contour comme sRaidFrames
 ]]
 function UpdateHealth_Reverted(frame, health)
-	if not frame:IsForbidden() and UnitInPartyOrRaid(frame.displayedUnit) and FrameIsCompact(frame) then
+	if not frame:IsForbidden() and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
 		health = health or ( UnitHealth(frame.displayedUnit) + (UnitGetTotalAbsorbs(frame.displayedUnit) or 0) + (UnitGetIncomingHeals(frame.displayedUnit) or 0) );
 		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 		local healthPercentage = ceil((health / unitHealthMax * 100))
