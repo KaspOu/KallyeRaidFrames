@@ -4,6 +4,7 @@
 ]]
 
 local isInit = false;
+local isLoaded = false;
 
 
 KRF_DefaultOptions = {
@@ -24,6 +25,7 @@ KRF_DefaultOptions = {
 	MoveRoleIcons = true,
 	HideDamageIcons = true,
 	HideRealm = true,
+	IconOnDeath = true,
 	FriendsClassColor = false,
 	AlphaNotInRange = 55, -- 30
 	AlphaNotInCombat = 100, -- 70
@@ -73,7 +75,7 @@ function KRF_OnEvent(self, event, ...)
 		-- ! Hooks
 		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
+		_G.hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateHealth);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
 		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
 			-- DefaultCompactMiniFrameOptions.fadeOutOfRange = false;

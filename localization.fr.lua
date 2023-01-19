@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
-    .."- Transparence hors de port\195\169e corrig\195\169e (avec la mise en \195\169vidence des joueurs)\n"
-    .."- Correction d'un impact inattendu sur les performances\n"
+    .."- Ajout de "..RT8.." aux noms des morts\n"
+    .."- Corrections (Couleur des morts, Transparence hors de port\195\169e, bugs mineurs...)\n"
     ;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";
@@ -42,6 +42,7 @@ KRF_OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut \195\160 gauche"
 KRF_OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne de r\195\180le 'd\195\169g\195\160ts'";
 KRF_OPTION_HIDEREALM = "Masquer le royaume des joueurs";
 KRF_OPTION_HIDEREALM_TOOLTIP = "Les noms de royaumes seront masqu\195\169s, ainsi "..YLL.."Illidan - Varimathras|r deviendra "..YLL.."Illidan (*)|r";
+KRF_OPTION_ICONONDEATH = "Ajouter "..RT8.." aux noms des morts";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
 KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
 KRF_OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";

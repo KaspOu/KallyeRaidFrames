@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
-  .."- Out of range transparency fixed (with highlighted backgrounds)\n"
-  .."- Fix unexpected performance issue\n"
+  .."- Add "..RT8.." to death players names\n"
+  .."- Fixes (Deaths name color, Out of range transparency, minor errors...)\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
@@ -42,6 +42,7 @@ KRF_OPTION_MOVEROLEICONS = "Adjust role icons on top left";
 KRF_OPTION_HIDEDAMAGEICONS = "Hide 'dps' role icon";
 KRF_OPTION_HIDEREALM = "Hide players realm";
 KRF_OPTION_HIDEREALM_TOOLTIP = "Realm names will be masked, "..YLL.."Illidan - Varimathras|r will become "..YLL.."Illidan (*)|r";
+KRF_OPTION_ICONONDEATH = "Add "..RT8.." to dead players names";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
 KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
 KRF_OPTION_NOTINRANGE = "Transparency when out of range";
