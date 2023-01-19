@@ -29,3 +29,5 @@ CY  = BCC(0.5, 1.0, 1.0);
 GY  = BCC(0.5, 0.5, 0.5);
 GYD = BCC(0.35, 0.35, 0.35);
 GYL = BCC(0.65, 0.65, 0.65);
+
+RT8 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t";

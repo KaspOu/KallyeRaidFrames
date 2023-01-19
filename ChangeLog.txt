@@ -1,3 +1,8 @@
+v10.0.206
+- Add skull icon before death players names
+- Always show correct color for deaths and d/c names
+- Fix error on first fight
+
 v10.0.205
 - Fix KRFOptionsFrame error for some Wow clients
 
