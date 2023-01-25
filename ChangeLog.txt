@@ -1,3 +1,7 @@
+v10.0.207
+- Readjustements
+- Wow DF 10.0.5
+
 v10.0.206
 - Add skull icon before death players names
 - Always show correct color for deaths and d/c names
