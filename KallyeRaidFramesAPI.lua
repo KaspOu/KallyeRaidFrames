@@ -76,13 +76,16 @@ function UpdateHealth_Regular(frame, health)
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .2, .95))
 		end
-		if health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
+		if not UnitIsConnected(frame.unit) then
+			frame.background:SetColorTexture(GetHPSeverity(1, false))
+			KRF_UpdateNameColor(frame);
+		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false))
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
 					KRF_Hook_UpdateName(frame);
 				end
-				KRF_UpdateNameColor(frame); -- reset color according options
+				KRF_UpdateNameColor(frame); -- reset
 				frame._wasDead = false;
 			end
 		else
@@ -116,13 +119,16 @@ function UpdateHealth_Reverted(frame, health)
 			frame.name:SetShadowColor(c.r, c.g, c.b, .3)
 		end
 
-		if health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
+		if not UnitIsConnected(frame.unit) then
+			frame.healthBar:SetStatusBarColor(GetHPSeverity(1, true));
+			KRF_UpdateNameColor(frame);
+		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
 					KRF_Hook_UpdateName(frame);
 				end
-				KRF_UpdateNameColor(frame); -- reset color according options
+				KRF_UpdateNameColor(frame); -- reset
 				frame._wasDead = false;
 			end
 		else
@@ -131,7 +137,7 @@ function UpdateHealth_Reverted(frame, health)
 				KRF_Hook_UpdateName(frame);
 			end
 			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .8, .3));
-			KRF_UpdateNameColor(frame, UnitIsConnected(frame.unit) and KallyeRaidFramesOptions.RevertColorLow or {r= 0.5, g= 0.5, b= 0.5});
+			KRF_UpdateNameColor(frame, KallyeRaidFramesOptions.RevertColorLow);
 			frame.name:SetAlpha(KallyeRaidFramesOptions.RevertColorLow.a);
 			frame._wasDead = true;
 		end
@@ -215,13 +221,13 @@ function KRF_Hook_UpdateName(frame)
 	if not frame:IsForbidden() then
 		if UnitIsPlayer(frame.displayedUnit) then
 			local playerNameServer = GetUnitName(frame.displayedUnit, true);
-			KRF_UpdateNameColor(frame);
+			local isDead = KRF_UnitIsDeadOrGhost(frame);
+			if (not isDead) then
+				KRF_UpdateNameColor(frame);
+			end
 
 			local name = frame.name;
-			local dead = "";
-			if KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame) then
-				dead = RT8;
-			end
+			local dead = (KallyeRaidFramesOptions.IconOnDeath and isDead) and RT8 or "";
 
 			if KallyeRaidFramesOptions.HideRealm then
 				local playerName = GetUnitName(frame.displayedUnit, false);
@@ -236,7 +242,7 @@ function KRF_Hook_UpdateName(frame)
 					name:SetText(dead..playerName);
 				end
 			elseif KallyeRaidFramesOptions.IconOnDeath then
-				name:SetText(playerNameServer..dead);
+				name:SetText(dead..playerNameServer);
 			end
 		end
 	end
@@ -268,7 +274,7 @@ function KRF_UpdateNameColor(frame, forceColor)
 					local r, g, b, a = name:GetTextColor();
 					name._InitialColor = { r=r, g=g, b=b, a=a };
 				end
-				name:SetVertexColor(forceColor.r, forceColor.g, forceColor.b)
+				name:SetVertexColor(forceColor.r, forceColor.g, forceColor.b, forceColor.a or 1);
 			elseif KallyeRaidFramesOptions.FriendsClassColor then
 				-- Class color
 				if name._InitialColor == nil then
@@ -286,6 +292,10 @@ function KRF_UpdateNameColor(frame, forceColor)
 					name:SetVertexColor(name._InitialColor.r, name._InitialColor.g, name._InitialColor.b, name._InitialColor.a);
 					name._InitialColor = nil;
 				end
+			end
+			if not UnitIsConnected(frame.unit) then
+				local r, g, b, a = name:GetTextColor();
+				name:SetVertexColor(r, g, b, 0.5);
 			end
 		end
 	end
