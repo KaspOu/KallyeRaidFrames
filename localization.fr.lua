@@ -9,7 +9,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
     .."- Ajout de "..RT8.." aux noms des morts\n"
-    .."- Corrections (Couleur des morts, Transparence hors de port\195\169e, bugs mineurs...)\n"
+    .."- Corrections (Couleurs des joueurs morts, Transparence hors de port\195\169e, bugs mineurs...)\n"
     ;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";
@@ -44,7 +44,7 @@ KRF_OPTION_HIDEREALM = "Masquer le royaume des joueurs";
 KRF_OPTION_HIDEREALM_TOOLTIP = "Les noms de royaumes seront masqu\195\169s, ainsi "..YLL.."Illidan - Varimathras|r deviendra "..YLL.."Illidan (*)|r";
 KRF_OPTION_ICONONDEATH = "Ajouter "..RT8.." aux noms des morts";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
-KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
+KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Am\195\169liore la couleur des cadres des joueurs d'apr\195\168s leur classe";
 KRF_OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 KRF_OPTION_NOTINRANGE_TOOLTIP = "Par d\195\169faut dans Wow : 55%";
 KRF_OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
@@ -72,6 +72,7 @@ KRF_OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
+KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
 
 KRF_OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 KRF_OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..YL.."/reload|r )";

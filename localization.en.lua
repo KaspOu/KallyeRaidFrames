@@ -9,7 +9,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
   .."- Add "..RT8.." to death players names\n"
-  .."- Fixes (Deaths name color, Out of range transparency, minor errors...)\n"
+  .."- Fixes (Deaths color and background, Out of range transparency, minor errors...)\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
@@ -44,7 +44,7 @@ KRF_OPTION_HIDEREALM = "Hide players realm";
 KRF_OPTION_HIDEREALM_TOOLTIP = "Realm names will be masked, "..YLL.."Illidan - Varimathras|r will become "..YLL.."Illidan (*)|r";
 KRF_OPTION_ICONONDEATH = "Add "..RT8.." to dead players names";
 KRF_OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
-KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
+KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Enhance player color according to their class (party/raid frames)";
 KRF_OPTION_NOTINRANGE = "Transparency when out of range";
 KRF_OPTION_NOTINRANGE_TOOLTIP = CY.."Wow default: 55%";
 KRF_OPTION_NOTINCOMBAT = "Raid transparency out of combat";
@@ -72,6 +72,7 @@ KRF_OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Players nameplates colored by class (outside instances)";
+KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
 
 KRF_OPTION_RESET_OPTIONS = "Reset options";
 KRF_OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..YL.."/reload|r )";
