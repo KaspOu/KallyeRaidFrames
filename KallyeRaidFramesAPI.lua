@@ -23,7 +23,10 @@ local function UnitInPartyOrRaid(frame)
 end
 
 local function KRF_UnitIsDeadOrGhost(frame)
-	return UnitIsDeadOrGhost(frame.displayedUnit) or (_G.KRF_IsDebugFramesTimerActive and frame._testHealthPercentage == 0)
+	if _G.KRF_IsDebugFramesTimerActive then
+		return (frame._testHealthPercentage == 0 and not frame._testUnitDisconnected);
+	end
+	return UnitIsDeadOrGhost(frame.unit);
 end
 
 local function FrameIsCompact(frame)
@@ -53,13 +56,12 @@ end
 - Normal or revert, depending on option
 ]]
 function KRF_Hook_UpdateHealth(frame, health)
-	if not frame:IsForbidden() and KallyeRaidFramesOptions.UpdateHealthColor then
+	if KallyeRaidFramesOptions.UpdateHealthColor and not frame:IsForbidden() then
 		if not KallyeRaidFramesOptions.RevertBar then
 			UpdateHealth_Regular(frame, health)
 		else
 			UpdateHealth_Reverted(frame, health)
 		end
-		KRF_UpdateNameColor(frame);
 	end
 end
 
@@ -98,33 +100,31 @@ function UpdateHealth_Regular(frame, health)
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .2, .95))
 		end
 		if not UnitIsConnected(frame.unit) then
-			frame.background:SetColorTexture(GetHPSeverity(1, false))
+			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .6, .4));
+			KRF_UpdateNameColor(frame);
 		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false))
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
-					KRF_Hook_UpdateName(frame);
+					KRF_Hook_UpdateName(frame, true);
 				end
+				KRF_UpdateNameColor(frame);
 				frame._wasDead = false;
 			end
 		else
 			-- Unit is dead
-			if (KallyeRaidFramesOptions.IconOnDeath) then
-				KRF_Hook_UpdateName(frame);
-			end
-			if KallyeRaidFramesOptions.FriendsClassColor then
-				frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
-			else
-				frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .6, .4));
-			end
 			frame._wasDead = true;
+			if (KallyeRaidFramesOptions.IconOnDeath) then
+				KRF_Hook_UpdateName(frame, true);
+			end
+			KRF_UpdateNameColor(frame);
+			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
 		end
 	end
 end
 
 --[[
 ! Managing Health color: reverted bar
-TODO : réduire la barre en hauteur, mettre un contour comme sRaidFrames
 ]]
 function UpdateHealth_Reverted(frame, health)
 	if not frame:IsForbidden() and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
@@ -137,27 +137,30 @@ function UpdateHealth_Reverted(frame, health)
 		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
 
 		if c and frame and frame.background and frame.optionTable.useClassColors then
-			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8))
-			frame.name:SetShadowColor(c.r, c.g, c.b, .3)
+			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
+			frame.name:SetShadowColor(c.r, c.g, c.b, .3);
 		end
 
 		if not UnitIsConnected(frame.unit) then
-			frame.healthBar:SetStatusBarColor(GetHPSeverity(1, true));
+			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .6, .4));
+			KRF_UpdateNameColor(frame);
 		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
-					KRF_Hook_UpdateName(frame);
+					KRF_Hook_UpdateName(frame, true);
 				end
+				KRF_UpdateNameColor(frame);
 				frame._wasDead = false;
 			end
 		else
 			-- Unit is dead
-			if (KallyeRaidFramesOptions.IconOnDeath) then
-				KRF_Hook_UpdateName(frame);
-			end
-			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .8, .3));
 			frame._wasDead = true;
+			if (KallyeRaidFramesOptions.IconOnDeath) then
+				KRF_Hook_UpdateName(frame, true);
+			end
+			KRF_UpdateNameColor(frame);
+			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .8, .3));
 		end
 
 		-- Revert healthBar
@@ -233,13 +236,15 @@ end
 ! Manage player names (partyframes & nameplates)
 - Hide realm
 - Add death icon (option)
-- Call to KRF_UpdateNameColor
+- Call to KRF_UpdateNameColor (only inside hook)
 ]]
-function KRF_Hook_UpdateName(frame)
+function KRF_Hook_UpdateName(frame, calledOutsideHook)
 	if not frame:IsForbidden() then
 		if UnitIsPlayer(frame.displayedUnit) then
 			local playerNameServer = GetUnitName(frame.displayedUnit, true);
-			KRF_UpdateNameColor(frame);
+			if (not calledOutsideHook) then
+				KRF_UpdateNameColor(frame);
+			end
 
 			local name = frame.name;
 			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and RT8 or "";
@@ -275,8 +280,8 @@ function KRF_UpdateNameColor(frame)
 			if KallyeRaidFramesOptions.FriendsClassColor_Nameplates and UnitIsFriend(frame.displayedUnit,"player") then
 				local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
 				if c then
-					name:SetVertexColor(c.r, c.g, c.b)
-					name:SetShadowColor(c.r, c.g, c.b, 0.2)
+					name:SetVertexColor(c.r, c.g, c.b);
+					name:SetShadowColor(c.r, c.g, c.b, 0.2);
 				end
 			end
 		else
@@ -322,21 +327,21 @@ function KRF_Hook_CompactPartyFrame_UpdateVisibility()
 end
 
 function GetHPSeverity(percent, revert)
-	local BGColorOK=revert and KallyeRaidFramesOptions.RevertColorOK or KallyeRaidFramesOptions.BGColorOK
-	local BGColorWarn=revert and KallyeRaidFramesOptions.RevertColorWarn or KallyeRaidFramesOptions.BGColorWarn
-	local BGColorLow=revert and KallyeRaidFramesOptions.RevertColorLow or KallyeRaidFramesOptions.BGColorLow
+	local BGColorOK=revert and KallyeRaidFramesOptions.RevertColorOK or KallyeRaidFramesOptions.BGColorOK;
+	local BGColorWarn=revert and KallyeRaidFramesOptions.RevertColorWarn or KallyeRaidFramesOptions.BGColorWarn;
+	local BGColorLow=revert and KallyeRaidFramesOptions.RevertColorLow or KallyeRaidFramesOptions.BGColorLow;
 	local pLimitLow = KallyeRaidFramesOptions.LimitLow / 100;
 	local pLimitWarn = KallyeRaidFramesOptions.LimitWarn / 100;
 	local pLimitOk = KallyeRaidFramesOptions.LimitOk / 100;
 
-	if percent > pLimitOk and percent > pLimitWarn then
-		return BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1
+	if percent > pLimitOk then
+		return BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1;
 	elseif percent > pLimitWarn then
-		return mergeColors(BGColorWarn, BGColorOK, (percent - pLimitWarn)/ (pLimitOk - pLimitWarn))
+		return mergeColors(BGColorWarn, BGColorOK, (percent - pLimitWarn)/ (pLimitOk - pLimitWarn));
 	elseif percent > pLimitLow then
-		return mergeColors(BGColorLow, BGColorWarn, (percent - pLimitLow) / (pLimitWarn - pLimitLow))
+		return mergeColors(BGColorLow, BGColorWarn, (percent - pLimitLow) / (pLimitWarn - pLimitLow));
 	else
-		return BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1
+		return BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1;
 	end
 end
 
@@ -421,12 +426,12 @@ function KRF_RaidFrames_ResetHealth(frame, testMode)
 	local health = UnitHealth(frame.displayedUnit);
 	if testMode then
 		if frame._testHealthPercentage == nil then
-			frame._testHealthPercentage = fastrandom(0,100)
+			frame._testHealthPercentage = fastrandom(0, 100)
 		end
 
 		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 		frame._testHealthPercentage = (frame._testHealthPercentage == 0) and 100 or math.max(0, frame._testHealthPercentage - 5);
-		health = ceil(health * frame._testHealthPercentage / 100);
+		health = ceil(unitHealthMax * frame._testHealthPercentage / 100);
 		if frame._testHealthPercentage > 0 then
 			frame.statusText:SetText(format("%d%%", frame._testHealthPercentage));
 		else
@@ -437,18 +442,27 @@ function KRF_RaidFrames_ResetHealth(frame, testMode)
 	KRF_Hook_UpdateHealth(frame, health);
 end
 
-function KRF_DebugFrames(toggle)
-	if toggle == true then
-		_G.KRF_IsDebugFramesTimerActive = not _G.KRF_IsDebugFramesTimerActive;
-		KRF_AddMsgWarn(_G.KRF_IsDebugFramesTimerActive and KRF_OPTION_DEBUG_ON_MESSAGE or KRF_OPTION_DEBUG_OFF_MESSAGE);
+function KRF_DebugFrames()
+	_G.KRF_IsDebugFramesTimerActive = not _G.KRF_IsDebugFramesTimerActive;
+	if _G.KRF_IsDebugFramesTimerActive then
+		KRF_AddMsgWarn(KRF_OPTION_DEBUG_ON_MESSAGE);
+		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_OFF);
+		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_OFF;
+		_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
+		KRF_LoopDebug();
+	else
+		KRF_AddMsgWarn(KRF_OPTION_DEBUG_OFF_MESSAGE);
+		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_ON);
+		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_ON;
+		_G.PlaySound(851, "Master") -- SOUNDKIT.IG_MAINMENU_CLOSE
 	end
+end
+function KRF_LoopDebug()
 	if _G.KRF_IsDebugFramesTimerActive then
 		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true);
+		C_Timer.After(.5, KRF_LoopDebug);
 	else
 		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
-	end
-	if _G.KRF_IsDebugFramesTimerActive then
-		C_Timer.After(.5, KRF_DebugFrames);
 	end
 end
 

@@ -105,7 +105,7 @@ function SLASH_KRF_command(msgIn)
 		return;
 	end
 	if msgIn == "test" then
-		KRF_DebugFrames(true);
+		KRF_DebugFrames();
 	else
 		if Settings then
 			Settings.OpenToCategory(KRF_TITLE);
