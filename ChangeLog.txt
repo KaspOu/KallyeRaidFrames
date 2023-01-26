@@ -1,3 +1,8 @@
+v10.0.209
+- Better code: colors are now consistents
+- Special background for disconnected players
+- Test mode includes D/C state
+
 v10.0.208
 - Enhanced code for frame name colors
 - Deaths background no more highlighted

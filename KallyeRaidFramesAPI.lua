@@ -22,6 +22,13 @@ local function UnitInPartyOrRaid(frame)
 	-- return UnitInParty(Unit) or UnitInRaid(Unit) or UnitIsUnit(Unit, "player")
 end
 
+local function KRF_UnitIsConnected(frame)
+	if _G.KRF_IsDebugFramesTimerActive then
+		return not frame._testUnitDisconnected;
+	end
+	return UnitIsConnected(frame.unit);
+end
+
 local function KRF_UnitIsDeadOrGhost(frame)
 	if _G.KRF_IsDebugFramesTimerActive then
 		return (frame._testHealthPercentage == 0 and not frame._testUnitDisconnected);
@@ -91,18 +98,30 @@ end
 ]]
 function UpdateHealth_Regular(frame, health)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
-		health = health or UnitHealth(frame.displayedUnit)
-		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
-		local healthPercentage = ceil((health / unitHealthMax * 100))
-
 		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .2, .95))
 		end
-		if not UnitIsConnected(frame.unit) then
+		if not KRF_UnitIsConnected(frame) then
+			-- Disconnected
+			frame.healthBar:SetValue(0);
 			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .6, .4));
+			KRF_Hook_UpdateName(frame, true);
 			KRF_UpdateNameColor(frame);
-		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
+		elseif KRF_UnitIsDeadOrGhost(frame) then
+			-- Dead
+			frame.healthBar:SetValue(0);
+			frame._wasDead = true;
+			if (KallyeRaidFramesOptions.IconOnDeath) then
+				KRF_Hook_UpdateName(frame, true);
+			end
+			KRF_UpdateNameColor(frame);
+			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
+		else
+			-- Alive
+			health = health or UnitHealth(frame.displayedUnit);
+			local unitHealthMax = UnitHealthMax(frame.displayedUnit);
+			local healthPercentage = ceil((health / unitHealthMax * 100));
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false))
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
@@ -111,14 +130,6 @@ function UpdateHealth_Regular(frame, health)
 				KRF_UpdateNameColor(frame);
 				frame._wasDead = false;
 			end
-		else
-			-- Unit is dead
-			frame._wasDead = true;
-			if (KallyeRaidFramesOptions.IconOnDeath) then
-				KRF_Hook_UpdateName(frame, true);
-			end
-			KRF_UpdateNameColor(frame);
-			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
 		end
 	end
 end
@@ -128,12 +139,6 @@ end
 ]]
 function UpdateHealth_Reverted(frame, health)
 	if not frame:IsForbidden() and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
-		health = health or ( UnitHealth(frame.displayedUnit) + (UnitGetTotalAbsorbs(frame.displayedUnit) or 0) + (UnitGetIncomingHeals(frame.displayedUnit) or 0) );
-		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
-		local healthPercentage = ceil((health / unitHealthMax * 100))
-		local healthLost = unitHealthMax - health;
-
-		frame.name:SetAlpha(1);
 		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
 
 		if c and frame and frame.background and frame.optionTable.useClassColors then
@@ -141,10 +146,26 @@ function UpdateHealth_Reverted(frame, health)
 			frame.name:SetShadowColor(c.r, c.g, c.b, .3);
 		end
 
-		if not UnitIsConnected(frame.unit) then
+		if not KRF_UnitIsConnected(frame) then
+			-- Disconnected
+			frame.healthBar:SetValue(0);
 			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .6, .4));
+			KRF_Hook_UpdateName(frame, true);
 			KRF_UpdateNameColor(frame);
-		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
+		elseif KRF_UnitIsDeadOrGhost(frame) then
+			-- Dead
+			frame.healthBar:SetValue(0);
+			frame._wasDead = true;
+			if (KallyeRaidFramesOptions.IconOnDeath) then
+				KRF_Hook_UpdateName(frame, true);
+			end
+			KRF_UpdateNameColor(frame);
+		else
+			-- Alive
+			health = health or UnitHealth(frame.displayedUnit);
+			local unitHealthMax = UnitHealthMax(frame.displayedUnit);
+			local healthPercentage = ceil((health / unitHealthMax * 100));
+			local healthLost = unitHealthMax - health;
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
@@ -153,26 +174,13 @@ function UpdateHealth_Reverted(frame, health)
 				KRF_UpdateNameColor(frame);
 				frame._wasDead = false;
 			end
-		else
-			-- Unit is dead
-			frame._wasDead = true;
-			if (KallyeRaidFramesOptions.IconOnDeath) then
-				KRF_Hook_UpdateName(frame, true);
-			end
-			KRF_UpdateNameColor(frame);
-			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .8, .3));
-		end
 
-		-- Revert healthBar
-		if ( frame.optionTable.smoothHealthUpdates ) then
-			if ( frame.newUnit ) then
-				frame.healthBar:ResetSmoothedValue(healthLost);
-				frame.newUnit = false;
-			else
+			-- Set reverted value
+			if (  frame.optionTable.smoothHealthUpdates ) then
 				frame.healthBar:SetSmoothedValue(healthLost);
+			else
+				frame.healthBar:SetValue(healthLost);
 			end
-		else
-			frame.healthBar:SetValue(healthLost);
 		end
 	end
 end
@@ -288,23 +296,20 @@ function KRF_UpdateNameColor(frame)
 			-- Party / Raid Frames
 			if KallyeRaidFramesOptions.FriendsClassColor then
 				if KRF_UnitIsDeadOrGhost(frame) then
-					if not KallyeRaidFramesOptions.RevertBar then
-						name:SetVertexColor(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, KallyeRaidFramesOptions.RevertColorLow.a or 1);
-						name:SetShadowColor(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, 0.2);
-					else
-						name:SetVertexColor(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, KallyeRaidFramesOptions.RevertColorLow.a or 1);
-						name:SetShadowColor(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, 0.2);
-					end
+					local lowColor = (not KallyeRaidFramesOptions.RevertBar) and KallyeRaidFramesOptions.BGColorLow or KallyeRaidFramesOptions.RevertColorLow;
+					name:SetVertexColor(lowColor.r, lowColor.g, lowColor.b, lowColor.a or 1);
+					name:SetShadowColor(lowColor.r, lowColor.g, lowColor.b, 0.2);
 				else
 					local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
 					if c then
-						name:SetVertexColor(c.r, c.g, c.b);
-						name:SetShadowColor(c.r, c.g, c.b, 0.2);
+						local r, g, b = c.r, c.g, c.b;
+						if (not KallyeRaidFramesOptions.RevertBar) then
+							r, g, b = lighten(r, g, b, 0.20);
+						end
+						name:SetVertexColor(r, g, b);
+						name:SetShadowColor(r, g, b, 0.2);
 					end
-				end
-				if not UnitIsConnected(frame.unit) then
-					local r, g, b, a = name:GetTextColor();
-					name:SetVertexColor(r, g, b, 0.5);
+					name:SetAlpha(KRF_UnitIsConnected(frame) and 1 or 0.5);
 				end
 			end
 		end
@@ -429,13 +434,20 @@ function KRF_RaidFrames_ResetHealth(frame, testMode)
 			frame._testHealthPercentage = fastrandom(0, 100)
 		end
 
+		if frame._testHealthPercentage == 0 and not frame._testUnitDisconnected then
+			frame._testUnitDisconnected = true;
+			frame.statusText:SetText(PLAYER_OFFLINE);
+			KRF_Hook_UpdateHealth(frame, 0);
+			return
+		end
+		frame._testUnitDisconnected = nil;
 		local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 		frame._testHealthPercentage = (frame._testHealthPercentage == 0) and 100 or math.max(0, frame._testHealthPercentage - 5);
 		health = ceil(unitHealthMax * frame._testHealthPercentage / 100);
-		if frame._testHealthPercentage > 0 then
-			frame.statusText:SetText(format("%d%%", frame._testHealthPercentage));
-		else
+		if frame._testHealthPercentage <= 0 then
 			frame.statusText:SetText(DEAD);
+		else
+			frame.statusText:SetText(format("%d%%", frame._testHealthPercentage));
 		end
 	end
 	frame.healthBar:SetValue(health);
