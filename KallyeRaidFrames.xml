@@ -203,14 +203,6 @@
 									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_HideDamageIcons" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_IconOnDeath" inherits="KRFCheckboxWidget">
-								<Attributes>
-									<Attribute name="text" value="KRF_OPTION_ICONONDEATH" />
-								</Attributes>
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_HideRealm" relativePoint="BOTTOMLEFT"/>
-								</Anchors>
-							</CheckButton>
 
 							<CheckButton name="KRFOptionsFrame_FriendsClassColor" inherits="KRFCheckboxWidget">
 								<Attributes>
@@ -223,6 +215,14 @@
 									</Anchor>
 								</Anchors>
 							</CheckButton>
+							<CheckButton name="KRFOptionsFrame_IconOnDeath" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_ICONONDEATH" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_FriendsClassColor" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</CheckButton>
 
 							<Slider name="KRFOptionsFrame_AlphaNotInRange" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
@@ -232,7 +232,7 @@
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_IconOnDeath" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_HideRealm" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</Slider>
 							<Slider name="KRFOptionsFrame_AlphaNotInCombat" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
@@ -351,7 +351,7 @@
 							<CheckButton name="KRFOptionsFrame_FriendsClassColor_Nameplates" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES" />
-									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES" />
+									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOP" relativeTo="KRFOptionsFrame_LabelOthers" relativePoint="BOTTOM"><Offset x="0" y="-15"/></Anchor>

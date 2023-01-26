@@ -17,15 +17,34 @@ local startsWith = {
 	part = true, -- party
 	raid = true,
 }
-
-function UnitInPartyOrRaid(frame)
+local function UnitInPartyOrRaid(frame)
 	return startsWith[strsub(frame.displayedUnit, 1, 4)];
 	-- return UnitInParty(Unit) or UnitInRaid(Unit) or UnitIsUnit(Unit, "player")
 end
 
-function FrameIsCompact(frame)
+local function KRF_UnitIsDeadOrGhost(frame)
+	return UnitIsDeadOrGhost(frame.displayedUnit) or (_G.KRF_IsDebugFramesTimerActive and frame._testHealthPercentage == 0)
+end
+
+local function FrameIsCompact(frame)
 	local getName = frame:GetName();
 	return getName ~=nil and strsub(getName, 0, 7) == "Compact"
+end
+
+local function mergeRGBA(r1, g1, b1, a1, r2, g2, b2, a2, percent)
+	return r1*(1-percent) + r2*percent, g1*(1-percent) + g2*percent, b1*(1-percent) + b2*percent, a1*(1-percent) + a2*percent
+end
+local function mergeRGB(r1, g1, b1, r2, g2, b2, percent, alpha)
+	return r1*(1-percent) + r2*percent, g1*(1-percent) + g2*percent, b1*(1-percent) + b2*percent, alpha
+end
+local function mergeColors(color1, color2, percent)
+	return mergeRGBA(color1.r, color1.g, color1.b, color1.a, color2.r, color2.g, color2.b, color2.a, percent)
+end
+local function darken(r, g, b, percent, alpha)
+	return r*(1-percent), g*(1-percent), b*(1-percent), alpha or 1
+end
+local function lighten(r, g, b, percent, alpha)
+	return r*(1-percent) + percent, g*(1-percent) + percent, b*(1-percent) + percent, alpha or 1
 end
 
 
@@ -40,6 +59,7 @@ function KRF_Hook_UpdateHealth(frame, health)
 		else
 			UpdateHealth_Reverted(frame, health)
 		end
+		KRF_UpdateNameColor(frame);
 	end
 end
 
@@ -47,6 +67,7 @@ end
 ! Managing Alpha depending on range
 - Alpha not in range
 - then alpha out of combat
+- Disabled if alpha values are equals to blizzard default (100% / 55%)
 ]]
 function KRF_Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
@@ -78,14 +99,12 @@ function UpdateHealth_Regular(frame, health)
 		end
 		if not UnitIsConnected(frame.unit) then
 			frame.background:SetColorTexture(GetHPSeverity(1, false))
-			KRF_UpdateNameColor(frame);
 		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false))
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
 					KRF_Hook_UpdateName(frame);
 				end
-				KRF_UpdateNameColor(frame); -- reset
 				frame._wasDead = false;
 			end
 		else
@@ -93,8 +112,11 @@ function UpdateHealth_Regular(frame, health)
 			if (KallyeRaidFramesOptions.IconOnDeath) then
 				KRF_Hook_UpdateName(frame);
 			end
-			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .8, .3));
-			KRF_UpdateNameColor(frame, KallyeRaidFramesOptions.BGColorLow);
+			if KallyeRaidFramesOptions.FriendsClassColor then
+				frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
+			else
+				frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .6, .4));
+			end
 			frame._wasDead = true;
 		end
 	end
@@ -121,14 +143,12 @@ function UpdateHealth_Reverted(frame, health)
 
 		if not UnitIsConnected(frame.unit) then
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(1, true));
-			KRF_UpdateNameColor(frame);
 		elseif health > 0 and not KRF_UnitIsDeadOrGhost(frame) then
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
 					KRF_Hook_UpdateName(frame);
 				end
-				KRF_UpdateNameColor(frame); -- reset
 				frame._wasDead = false;
 			end
 		else
@@ -137,8 +157,6 @@ function UpdateHealth_Reverted(frame, health)
 				KRF_Hook_UpdateName(frame);
 			end
 			frame.healthBar:SetStatusBarColor(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .8, .3));
-			KRF_UpdateNameColor(frame, KallyeRaidFramesOptions.RevertColorLow);
-			frame.name:SetAlpha(KallyeRaidFramesOptions.RevertColorLow.a);
 			frame._wasDead = true;
 		end
 
@@ -187,7 +205,6 @@ end
 --[[
 ! Manage buffs
 - Scale buffs / debuffs
-- Max buffs to display (max 3!)
 ]]
 function KRF_Hook_ManageBuffs(frame,numbuffs)
 	if KallyeRaidFramesOptions.BuffsScale ~= 1 then
@@ -215,19 +232,17 @@ end
 --[[
 ! Manage player names (partyframes & nameplates)
 - Hide realm
-- Change name color, according to class
+- Add death icon (option)
+- Call to KRF_UpdateNameColor
 ]]
 function KRF_Hook_UpdateName(frame)
 	if not frame:IsForbidden() then
 		if UnitIsPlayer(frame.displayedUnit) then
 			local playerNameServer = GetUnitName(frame.displayedUnit, true);
-			local isDead = KRF_UnitIsDeadOrGhost(frame);
-			if (not isDead) then
-				KRF_UpdateNameColor(frame);
-			end
+			KRF_UpdateNameColor(frame);
 
 			local name = frame.name;
-			local dead = (KallyeRaidFramesOptions.IconOnDeath and isDead) and RT8 or "";
+			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and RT8 or "";
 
 			if KallyeRaidFramesOptions.HideRealm then
 				local playerName = GetUnitName(frame.displayedUnit, false);
@@ -250,11 +265,9 @@ end
 
 --[[
 ! Manage player name colors (partyframes & nameplates)
-- Allow specific color (for dead color)
-- Class Color
-- Back to original color after dead or unset class color
+- Class Color for Nameplates or Frames (inc. Dead / Disconnected)
 ]]
-function KRF_UpdateNameColor(frame, forceColor)
+function KRF_UpdateNameColor(frame)
 	if not frame:IsForbidden() and UnitIsPlayer(frame.displayedUnit) then
 		local name = frame.name;
 		if not FrameIsCompact(frame) then
@@ -267,35 +280,27 @@ function KRF_UpdateNameColor(frame, forceColor)
 				end
 			end
 		else
-			-- Compact Raid Frames: change color
-			if forceColor ~= nil then
-				-- Force color (dead color...)
-				if name._InitialColor == nil then
+			-- Party / Raid Frames
+			if KallyeRaidFramesOptions.FriendsClassColor then
+				if KRF_UnitIsDeadOrGhost(frame) then
+					if not KallyeRaidFramesOptions.RevertBar then
+						name:SetVertexColor(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, KallyeRaidFramesOptions.RevertColorLow.a or 1);
+						name:SetShadowColor(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, 0.2);
+					else
+						name:SetVertexColor(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, KallyeRaidFramesOptions.RevertColorLow.a or 1);
+						name:SetShadowColor(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, 0.2);
+					end
+				else
+					local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
+					if c then
+						name:SetVertexColor(c.r, c.g, c.b);
+						name:SetShadowColor(c.r, c.g, c.b, 0.2);
+					end
+				end
+				if not UnitIsConnected(frame.unit) then
 					local r, g, b, a = name:GetTextColor();
-					name._InitialColor = { r=r, g=g, b=b, a=a };
+					name:SetVertexColor(r, g, b, 0.5);
 				end
-				name:SetVertexColor(forceColor.r, forceColor.g, forceColor.b, forceColor.a or 1);
-			elseif KallyeRaidFramesOptions.FriendsClassColor then
-				-- Class color
-				if name._InitialColor == nil then
-					local r, g, b, a = name:GetTextColor();
-					name._InitialColor = { r=r, g=g, b=b, a=a };
-				end
-				local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
-				if c then
-					name:SetVertexColor(c.r, c.g, c.b);
-					name:SetShadowColor(c.r, c.g, c.b, 0.2);
-				end
-			else
-				-- Back to previous color
-				if name._InitialColor ~= nil then
-					name:SetVertexColor(name._InitialColor.r, name._InitialColor.g, name._InitialColor.b, name._InitialColor.a);
-					name._InitialColor = nil;
-				end
-			end
-			if not UnitIsConnected(frame.unit) then
-				local r, g, b, a = name:GetTextColor();
-				name:SetVertexColor(r, g, b, 0.5);
 			end
 		end
 	end
@@ -314,26 +319,6 @@ function KRF_Hook_CompactPartyFrame_UpdateVisibility()
 			PartyFrame:UpdatePaddingAndLayout();
 		end
 	end
-end
-
-function KRF_UnitIsDeadOrGhost(frame)
-	return UnitIsDeadOrGhost(frame.displayedUnit) or (_G.KRF_IsDebugFramesTimerActive and frame._testHealthPercentage == 0)
-end
-
-function mergeRGBA(r1, v1, b1, a1, r2, v2, b2, a2, percent)
-	return r1*(1-percent) + r2*percent, v1*(1-percent) + v2*percent, b1*(1-percent) + b2*percent, a1*(1-percent) + a2*percent
-end
-function mergeRGB(r1, v1, b1, r2, v2, b2, percent, alpha)
-	return r1*(1-percent) + r2*percent, v1*(1-percent) + v2*percent, b1*(1-percent) + b2*percent, alpha
-end
-function mergeColors(color1, color2, percent)
-	return mergeRGBA(color1.r, color1.g, color1.b, color1.a, color2.r, color2.g, color2.b, color2.a, percent)
-end
-function darken(r, v, b, percent, alpha)
-	return r*(1-percent), v*(1-percent), b*(1-percent), alpha or 1
-end
-function lighten(r, v, b, percent, alpha)
-	return r*(1-percent) + percent, v*(1-percent) + percent, b*(1-percent) + percent, alpha or 1
 end
 
 function GetHPSeverity(percent, revert)

@@ -1,3 +1,7 @@
+v10.0.208
+- Enhanced code for frame name colors
+- Deaths background no more highlighted
+
 v10.0.207
 - Readjustements
 - Wow DF 10.0.5
