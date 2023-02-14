@@ -94,7 +94,9 @@ function KRF_OnEvent(self, event, ...)
 		-- ! Addon Loaded ^^
 		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
 			KallyeRaidFramesOptions.Version = KRF_DefaultOptions.Version;
-			KRF_AddMsg(KRF_WHATSNEW);
+			if (KRF_WHATSNEW ~= "") then
+				KRF_AddMsg(KRF_WHATSNEW);
+			end
 		end
 	end
 end -- END KRF_OnEvent
@@ -105,7 +107,7 @@ function SLASH_KRF_command(msgIn)
 		return;
 	end
 	if msgIn == "test" then
-		KRF_DebugFrames(true);
+		KRF_DebugFrames();
 	else
 		if Settings then
 			Settings.OpenToCategory(KRF_TITLE);

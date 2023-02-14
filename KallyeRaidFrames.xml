@@ -267,16 +267,7 @@
 										self.tooltipText = KRF_OPTION_DEBUG_ON;
 									</OnLoad>
 									<OnClick>
-										KRF_DebugFrames(true);
-										if (self.Text:GetText() == KRF_OPTION_DEBUG_ON) then
-											self.Text:SetText(KRF_OPTION_DEBUG_OFF);
-											self.tooltipText = KRF_OPTION_DEBUG_OFF;
-											_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
-										else
-											self.Text:SetText(KRF_OPTION_DEBUG_ON);
-											self.tooltipText = KRF_OPTION_DEBUG_ON;
-											_G.PlaySound(851, "Master") -- SOUNDKIT.IG_MAINMENU_CLOSE
-										end
+										KRF_DebugFrames();
 									</OnClick>
 								</Scripts>
 							</Button>

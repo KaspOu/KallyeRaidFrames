@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
-  .."- Add "..RT8.." to death players names\n"
-  .."- Fixes (Deaths color and background, Out of range transparency, minor errors...)\n"
+  .."- Death and D/C colors are now consistents."
+  .."- Special display for disconnected players (included in Test mode)\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";

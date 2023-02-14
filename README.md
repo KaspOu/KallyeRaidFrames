@@ -8,6 +8,8 @@ Modifications to Blizzards default raid/party frames according to my own prefere
        - - options to change colors and %
     - Optionnal: revert HP bars (less life = bigger red bar !) (sRaidFrames like)
     - Transparency of units out of range
+    - Skull icon added before dead players names.
+    - Always show party frames
     - Roles icons
        - - Move role icons on top left
        - - Hides DPS role icons
@@ -22,6 +24,7 @@ Modifications to Blizzards default raid/party frames according to my own prefere
 
 ## Slash Commands
 **/krf** - shows options
+**/krf test** - toggle test mode
 /clear - clear chat
 
 
