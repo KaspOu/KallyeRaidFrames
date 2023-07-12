@@ -1,3 +1,8 @@
+v10.1.501
+- Fixed Always show group
+- Added addon logo
+- Wow DF 10.1.5
+
 v10.1.001
 - Wow DF 10.1.0
 

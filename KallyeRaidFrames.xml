@@ -17,7 +17,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<ScrollFrame name="KRFOptionsScrollFrame" inherits="UIPanelScrollFrameTemplate" enablemouse="true">
+			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" enablemouse="true">
 				<Size x="550" y="565" />
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent" x="0" y="-28"/>
