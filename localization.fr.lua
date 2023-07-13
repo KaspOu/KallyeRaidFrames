@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
-    .."- Couleurs des morts et d\195\169connect\195\169s corrig\195\169es.\n"
-    .."- Affichage sp\195\169cial des d\195\169connect\195\169s (inclut en mode test)\n"
+    .."- Corrections (raid toujours visible / transparences).\n"
+    .."- Nouvelle ic\195\180ne\n"
     ;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";

@@ -2,14 +2,17 @@
 
 Modifications to Blizzards default raid/party frames according to my own preferences
 
-1. **Changes to Blizzard CompactRaidFrames**
+1. **Always show Raid frames**
+    - Works while solo ^^
+    - With Always show party frames option enabled.
+
+2. **Changes to Blizzard CompactRaidFrames**
     - Highlight unit background depending on health:
        - - default from black, to yellow, then red
        - - options to change colors and %
     - Optionnal: revert HP bars (less life = bigger red bar !) (sRaidFrames like)
     - Transparency of units out of range
     - Skull icon added before dead players names.
-    - Always show party frames
     - Roles icons
        - - Move role icons on top left
        - - Hides DPS role icons
@@ -17,7 +20,7 @@ Modifications to Blizzards default raid/party frames according to my own prefere
        - - Larger Debuffs
        - - Smaller buffs
 
-2. **Changes to both CompactRaidFrames and Nameplates**
+3. **Changes to both CompactRaidFrames and Nameplates**
     - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
     - Change player name color according to class
 
