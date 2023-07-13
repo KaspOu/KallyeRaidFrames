@@ -1,3 +1,6 @@
+v10.1.502
+- Fixed out of range transparency issues
+
 v10.1.501
 - Fixed Always show group
 - Added addon logo
