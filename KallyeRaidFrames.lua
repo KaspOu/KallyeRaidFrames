@@ -88,7 +88,7 @@ function KRF_OnEvent(self, event, ...)
 
 		-- ! SoloRaid Frames
 		if (KallyeRaidFramesOptions.SoloRaidFrame) then
-			_G.hooksecurefunc("CompactPartyFrame_UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+			_G.hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
 		end
 
 		-- ! Addon Loaded ^^

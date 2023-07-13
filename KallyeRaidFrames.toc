@@ -1,12 +1,13 @@
-## Interface: 100100
+## Interface: 100105
 ## Title: Kallye RaidFrames
 ## Title-frFR: Kallye RaidFrames
 ## Notes: Highlight Raid Frames on low health
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute
-## Version: 10.1.001
+## Version: 10.1.501
 ## Author: Kallye of Elune
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
+## IconTexture: Interface\AddOns\KallyeRaidFrames\Logo32
 
 ## X-License: MIT
 ## X-Category: Unit Frames

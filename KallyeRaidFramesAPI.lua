@@ -481,7 +481,7 @@ end
 function KRF_ShowEditMode(window)
 	ShowUIPanel(EditModeManagerFrame);
 	if window == "PartyFrame" then
-		EditModeManagerFrame.AccountSettings.Settings.PartyFrames:SetControlChecked(true);
+		C_EditMode.SetAccountSetting(Enum.EditModeAccountSetting.ShowPartyFrames, 1);
 		--EditModeManagerFrame:SelectSystem(PartyFrame);
 		PartyFrame:SelectSystem();
 		PartyFrame:HighlightSystem();
