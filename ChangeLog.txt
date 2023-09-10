@@ -1,3 +1,6 @@
+v10.1.701
+- Wow DF 10.1.7
+
 v10.1.502
 - Fixed out of range transparency issues
 
