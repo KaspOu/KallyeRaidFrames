@@ -122,7 +122,7 @@ function UpdateHealth_Regular(frame, health)
 			health = health or UnitHealth(frame.displayedUnit);
 			local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 			local healthPercentage = ceil((health / unitHealthMax * 100));
-			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false))
+			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false));
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
 					KRF_Hook_UpdateName(frame, true);
@@ -176,10 +176,28 @@ function UpdateHealth_Reverted(frame, health)
 			end
 
 			-- Set reverted value
-			if (  frame.optionTable.smoothHealthUpdates ) then
+			if (frame.optionTable.smoothHealthUpdates ) then
 				frame.healthBar:SetSmoothedValue(healthLost);
 			else
 				frame.healthBar:SetValue(healthLost);
+			end
+			if ( frame.optionTable.displayHealPrediction and healthLost > 0) then
+				local hbS = frame.healthBar:GetStatusBarTexture();
+				frame.myHealPrediction:ClearAllPoints();
+				frame.myHealPrediction:SetPoint("TOPRIGHT", hbS, "TOPRIGHT");
+				frame.myHealPrediction:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
+				frame.otherHealPrediction:ClearAllPoints();
+				frame.otherHealPrediction:SetPoint("TOPRIGHT", frame.myHealPrediction, "TOPLEFT");
+				frame.otherHealPrediction:SetPoint("BOTTOMRIGHT", frame.myHealPrediction, "BOTTOMLEFT");				
+				frame.totalAbsorb:ClearAllPoints();
+				-- frame.totalAbsorb:SetPoint("TOPRIGHT", hbS, "TOPRIGHT");
+				-- frame.totalAbsorb:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
+				frame.totalAbsorb:SetPoint("TOPRIGHT", frame.otherHealPrediction, "TOPLEFT");
+				frame.totalAbsorb:SetPoint("BOTTOMRIGHT", frame.otherHealPrediction, "BOTTOMLEFT");	
+			else
+				frame.myHealPrediction:Hide();
+				frame.otherHealPrediction:Hide();
+				frame.totalAbsorb:Hide();
 			end
 		end
 	end
@@ -499,7 +517,7 @@ end
 
 ? https://www.curseforge.com/wow/addons/blizzard-raid-frames-solo-frame
 
-? /fstack /dump
+? /fstack /dump CompactPartyFrameMember1.myHealPrediction
 ? /console scriptErrors 1
 ? print (tostring(checked))
 ? /run print(select(4, GetBuildInfo()))

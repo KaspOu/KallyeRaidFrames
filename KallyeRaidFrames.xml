@@ -349,10 +349,28 @@
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 							</CheckButton>
-							<Button name="KRFOptionsFrame_ResetOptions" inherits="UIPanelButtonTemplate">
+							<Button name="KRFOptionsFrame_WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_FriendsClassColor_Nameplates" relativePoint="BOTTOMLEFT">
+										<Offset x="0" y="-25"/>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										self.Text:SetText(KRF_OPTION_WHATSNEW);
+										self.tooltipText = KRF_OPTION_WHATSNEW;
+									</OnLoad>
+									<OnClick>
+										-- KRF_AddMsg(KRF_WHATSNEW);
+										SLASH_KRF_command("new");
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="KRFOptionsFrame_ResetOptions" inherits="UIPanelButtonTemplate">
+								<Size x="200" y="20" />
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_WhatsNew" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-25"/>
 									</Anchor>
 								</Anchors>
@@ -384,7 +402,7 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_ShowMsgNormal" relativePoint="TOPLEFT">
-										<Offset x="165" y="0"/>
+										<Offset x="170" y="0"/>
 									</Anchor>
 								</Anchors>
 							</CheckButton>
@@ -395,7 +413,7 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_ShowMsgNormal" relativePoint="TOPLEFT">
-										<Offset x="330" y="0"/>
+										<Offset x="340" y="0"/>
 									</Anchor>
 								</Anchors>
 							</CheckButton>

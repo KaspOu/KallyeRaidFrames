@@ -8,8 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
-  .."- Bugfixes (Raid always visible / Out of range transparency)."
-  .."- New icon\n"
+  .."- Fixed Reverted HP bars: heal prediction and absorb positions.\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
@@ -80,6 +79,7 @@ KRF_OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..YL.."/re
 KRF_OPTION_SHOWMSGNORMAL = GYL.."Display messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Display warnings";
 KRF_OPTION_SHOWMSGERR = GYL.."Display errors";
+KRF_OPTION_WHATSNEW = "What's new";
 
 
 
