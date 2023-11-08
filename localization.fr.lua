@@ -8,8 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
-    .."- Corrections (raid toujours visible / transparences).\n"
-    .."- Nouvelle ic\195\180ne\n"
+    .."- Corrections (Barres invers\195\169es : Position de la pr\195\169diction de heal).\n"
     ;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";
@@ -80,6 +79,7 @@ KRF_OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un recharg
 KRF_OPTION_SHOWMSGNORMAL = GYL.."Afficher les messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Afficher les alertes";
 KRF_OPTION_SHOWMSGERR = GYL.."Afficher les erreurs";
+KRF_OPTION_WHATSNEW = "Nouveaut\195\169s";
 
 --@do-not-package@
 -- https://code.google.com/archive/p/mangadmin/wikis/SpecialCharacters.wiki

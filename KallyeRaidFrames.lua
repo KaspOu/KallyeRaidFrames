@@ -107,6 +107,8 @@ function SLASH_KRF_command(msgIn)
 	end
 	if msgIn == "test" then
 		KRF_DebugFrames();
+	elseif msgIn == "new" then
+		KRF_AddMsg(KRF_WHATSNEW);
 	else
 		if Settings then
 			Settings.OpenToCategory(KRF_TITLE);
@@ -123,6 +125,7 @@ end
 
 function OptionsWReloadValues()
 	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)
+		..tostring(KallyeRaidFramesOptions.RevertBar)
 		..tostring(KallyeRaidFramesOptions.UpdateHealthColor)
 		..tostring(KallyeRaidFramesOptions.BuffsScale)
 		..tostring(KallyeRaidFramesOptions.DebuffsScale)
