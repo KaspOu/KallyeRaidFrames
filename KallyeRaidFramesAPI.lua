@@ -267,7 +267,6 @@ end
 function KRF_Hook_UpdateName(frame, calledOutsideHook)
 	if not frame:IsForbidden() then
 		if UnitIsPlayer(frame.displayedUnit) then
-			local playerNameServer = GetUnitName(frame.displayedUnit, true);
 			if (not calledOutsideHook) then
 				KRF_UpdateNameColor(frame);
 			end
@@ -276,19 +275,14 @@ function KRF_Hook_UpdateName(frame, calledOutsideHook)
 			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and RT8 or "";
 
 			if KallyeRaidFramesOptions.HideRealm then
-				local playerName = GetUnitName(frame.displayedUnit, false);
-				if playerName ~= playerNameServer then
-					if strsub(playerName, -3) == "(*)" then
-						-- ? playerName can already contains (*) if name has unicode chars
-						name:SetText(dead..playerName);
-					else
-						name:SetText(dead..playerName.." (*)");
-					end
+				local playerName, realm = UnitName(frame.displayedUnit);
+				if realm and realm ~= "" then
+					name:SetText(dead..playerName..FOREIGN_SERVER_LABEL); -- " (*)"
 				else
 					name:SetText(dead..playerName);
 				end
 			elseif KallyeRaidFramesOptions.IconOnDeath then
-				name:SetText(dead..playerNameServer);
+				name:SetText(dead..GetUnitName(frame.displayedUnit, true));
 			end
 		end
 	end
