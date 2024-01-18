@@ -31,6 +31,9 @@ function KRFCheckboxWidget_OnEnter(self)
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end
+function KRFCheckboxWidget_OnLeave(self)
+	-- GameTooltip:Hide();
+end
 
 --[[
 ! Heading Widget
@@ -167,6 +170,9 @@ function KRFColorWidget_OnEnter(self)
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end
+function KRFColorWidget_OnLeave(self)
+	GameTooltip:Hide();
+end
 
 --[[
 ! Slider Widget
@@ -187,13 +193,11 @@ function KRFSliderWidget_OnLoad (self)
 	end
 
 	local name = self:GetName();
-	local text = self:GetAttribute("text");
+	local text = self:GetAttribute("text") or "";
 	text = _G[text] or text;
 
 	self._Value = 0;
 
-	self.tooltipText = tooltip;
-	self.name = text;
 	self.SetDisplayValue = self.SetValue;
 	self.SetValue = KRFSliderWidget_SetValue
 	self.GetCurrentValue = KRFSliderWidget_GetValue
@@ -227,8 +231,11 @@ function KRFSliderWidget_OnEnter(self)
 	tooltip = _G[tooltip] or tooltip;
 	tooltip = tooltip ~= text and tooltip or "";
 
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+	GameTooltip:SetOwner(self, "ANCHOR_TOP");
 	GameTooltip:SetText(WH..text);
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
+end
+function KRFSliderWidget_OnLeave(self)
+	GameTooltip:Hide();
 end

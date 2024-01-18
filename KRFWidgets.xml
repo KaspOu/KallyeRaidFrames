@@ -19,6 +19,7 @@
 			<OnLoad function="KRFCheckboxWidget_OnLoad"/>
 			<OnClick function="KRFCheckboxWidget_OnClick"/>
 			<OnEnter function="KRFCheckboxWidget_OnEnter"/>
+			<OnLeave function="KRFCheckboxWidget_OnLeave"/>
 		</Scripts>
 	</CheckButton>
 	<CheckButton name="KRFColorWidget" inherits="KRFCheckboxWidget" virtual="true">
@@ -26,6 +27,7 @@
 			<OnLoad function="KRFColorWidget_OnLoad"/>
 			<OnClick function="KRFColorWidget_OnClick"/>
 			<OnEnter function="KRFColorWidget_OnEnter"/>
+			<OnLeave function="KRFColorWidget_OnLeave"/>
 		</Scripts>
 	</CheckButton>
 	<Slider name="KRFSliderWidget" inherits="OptionsSliderTemplate" virtual="true">
@@ -33,6 +35,7 @@
 			<OnLoad function="KRFSliderWidget_OnLoad"/>
 			<OnValueChanged function="KRFSliderWidget_OnValueChanged"/>
 			<OnEnter function="KRFSliderWidget_OnEnter"/>
+			<OnLeave function="KRFSliderWidget_OnLeave"/>
 		</Scripts>
 	</Slider>
 	<CheckButton name="KRFHeadingWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">

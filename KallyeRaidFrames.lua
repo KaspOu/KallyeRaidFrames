@@ -80,6 +80,7 @@ function KRF_OnEvent(self, event, ...)
 		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
 			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
 			_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
+			_G.hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateInRange);
 		end
 		if KallyeRaidFramesOptions.BuffsScale ~= 1 or KallyeRaidFramesOptions.DebuffsScale ~= 1 then
 			_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
