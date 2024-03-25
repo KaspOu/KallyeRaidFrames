@@ -1,3 +1,7 @@
+v10.2.601
+- Minor fixes
+- Wow DF 10.2.6
+
 v10.2.501
 - Minor fixes
 - Update compatibility with 10.2.5

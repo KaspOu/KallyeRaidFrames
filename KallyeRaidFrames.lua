@@ -142,6 +142,7 @@ function SaveKRFOptions()
 			if (_G[FramePrefix..k] ~= nil) then
 				local control = _G[FramePrefix..k];
 				local previousValue = KallyeRaidFramesOptions[k] or v;
+				local value = nil;
 
 				if control.type == "color" then
 					value = control.GetColor(control);

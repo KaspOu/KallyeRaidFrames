@@ -8,7 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
-    .."- Corrections (Barres invers\195\169es : Position de la pr\195\169diction de heal).\n"
+    .."- Correction de la d\195\169tection de port\195\169e.\n"
     ;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";

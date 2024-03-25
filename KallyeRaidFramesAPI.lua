@@ -388,15 +388,6 @@ function KRF_AddMsgErr(msg, force)
 	end
 end
 
-function KRF_AddMsgD(msg, r, g, b)
-	if (r == nil) then r = 0.5; end
-	if (g == nil) then g = 0.8; end
-	if (b == nil) then b = 1; end
-	if (DEFAULT_CHAT_FRAME and O and O.Debug) then
-		DEFAULT_CHAT_FRAME:AddMessage(msg, r, g, b);
-	end
-end
-
 function KRF_OptionsEnable(FrameObject, isEnabled, disabledAlpha)
 	if isEnabled then
 		FrameObject:Enable();
@@ -472,13 +463,13 @@ function KRF_DebugFrames()
 		KRF_AddMsgWarn(KRF_OPTION_DEBUG_ON_MESSAGE);
 		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_OFF);
 		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_OFF;
-		_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
+		_G.PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
 		KRF_LoopDebug();
 	else
 		KRF_AddMsgWarn(KRF_OPTION_DEBUG_OFF_MESSAGE);
 		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_ON);
 		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_ON;
-		_G.PlaySound(851, "Master") -- SOUNDKIT.IG_MAINMENU_CLOSE
+		_G.PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE, "Master")
 	end
 end
 function KRF_LoopDebug()

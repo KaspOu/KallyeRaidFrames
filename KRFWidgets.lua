@@ -4,9 +4,9 @@ Simple checkbutton widget with text
 ]]
 function KRFCheckboxWidget_OnClick(self)
 	if ( self:GetChecked() ) then
-		PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON, "Master")
 	else
-		PlaySound(857) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF, "Master")
 	end
 end
 function KRFCheckboxWidget_OnLoad(self)
@@ -97,7 +97,7 @@ function KRFColorWidget_ColorPickedCallback(restore)
 		newO, newR, newG, newB = OpacitySliderFrame:GetValue(), ColorPickerFrame:GetColorRGB();
 	end
 	-- Update our internal storage.
-	r, g, b, a = newR, newG, newB, 1-newO;
+	local r, g, b, a = newR, newG, newB, 1-newO;
 	-- And update any UI elements that use this color...
 	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = r , g = g, b = b, a = a });
 end
@@ -154,7 +154,7 @@ function KRFColorWidget_OnLoad (self)
 	self.Text:SetText(text);
 end
 function KRFColorWidget_OnClick(self)
-	PlaySound(852) -- SOUNDKIT.IG_MAINMENU_OPTION
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION, "Master")
 	KRFColorWidget_ShowColorPicker(KRFColorWidget_ColorPickedCallback, self);
 end
 function KRFColorWidget_OnEnter(self)
