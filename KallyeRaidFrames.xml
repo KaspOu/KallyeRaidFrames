@@ -283,7 +283,7 @@
 									</OnLoad>
 									<OnClick>
 										KRF_ShowEditMode("PartyFrame");
-										_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
+										_G.PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
 									</OnClick>
 								</Scripts>
 							</Button>
@@ -381,7 +381,7 @@
 									</OnLoad>
 									<OnClick>
 										KRF_SetDefaultOptions(KRF_DefaultOptions, true);
-										_G.PlaySound(850, "Master") -- SOUNDKIT.IG_MAINMENU_OPEN
+										_G.PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
 										ReloadUI();
 									</OnClick>
 								</Scripts>

@@ -8,7 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." What's new:\n"
-  .."- Fixed Reverted HP bars: heal prediction and absorb positions.\n"
+  .."- Fixed unit range detection.\n"
   ;
 
 KRF_SUBTITLE      = "Raid frames support";
