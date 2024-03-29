@@ -1,7 +1,13 @@
 
 KRF_VERSION       = C_AddOns.GetAddOnMetadata("KallyeRaidFrames", "Version");
 KRF_VERSIONNR     = tonumber(gsub(KRF_VERSION, "%D", ""), 10);
-KRF_ADDON_NAME,KRF_TITLE, KRF_NOTES = C_AddOns.GetAddOnInfo("KallyeRaidFrames");
+if (C_AddOns.GetAddOnInfo) then
+  KRF_ADDON_NAME,KRF_TITLE, KRF_NOTES = C_AddOns.GetAddOnInfo("KallyeRaidFrames");
+else
+  KRF_ADDON_NAME,KRF_TITLE, KRF_NOTES = GetAddOnInfo("KallyeRaidFrames");
+end
+
+KRF_IS_RETAIL = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE);
 
 
 -- Returns a chat color code string

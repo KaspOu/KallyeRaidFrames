@@ -7,9 +7,11 @@ if (GetLocale() == "frFR") then
 KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
-KRF_WHATSNEW = OR.."- "..KRF_VERS_TITLE.." -"..YLL.." Nouveaut\195\169s :\n"
-    .."- Correction de la d\195\169tection de port\195\169e.\n"
+KRF_WHATSNEW = " Nouveaut\195\169s :\n"
+    .."- Correction du s\195\169lecteur de couleur.\n"
+    .."- Versions |cffff1111Wow Classic|r & |cff87CEEBWrath|r !\n"
     ;
+KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;
 
 KRF_SUBTITLE      = "Assistance cadres de raid";
 KRF_DESC          = "Am\195\169liore les cadres de groupe/raid et des unit\195\169s amies.\n\n"
@@ -49,15 +51,14 @@ KRF_OPTION_NOTINRANGE_TOOLTIP = "Par d\195\169faut dans Wow : 55%";
 KRF_OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
 KRF_OPTION_NOTINCOMBAT_TOOLTIP = "Par d\195\169faut dans Wow : 100%";
 KRF_OPTION_SOLORAID = CY.."Toujours afficher les cadres de groupe "..YL.."*";
-KRF_OPTION_SOLORAID_TOOLTIP = "Nécessite d'activer l'option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
-KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."L'option 'Toujours afficher les cadres de groupe' est active :|r "..YLD..KRF_OPTION_SOLORAID_TOOLTIP;
+KRF_OPTION_SOLORAID_TOOLTIP = "Affiche les cadres de groupe en mode solo";
+KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = "#";
 
-KRF_OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
+KRF_OPTION_EDITMODE_PARTY = "#";
 KRF_OPTION_EDITMODE_PARTY_NOTE = "Note : Tapez "..YL.."/reload|r apr\195\168s pour \195\169viter les erreurs qui suivraient";
-KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "Active le "..YL..HUD_EDIT_MODE_MENU.."|r, et affiche directement les options de "..YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r.\n\n"..CY..KRF_OPTION_EDITMODE_PARTY_NOTE.."|r";
+KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "#";
 KRF_OPTION_DEBUG_ON = "! Tester les cadres !";
-KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de groupe / raid activ\195\169 (testable en "..HUD_EDIT_MODE_MENU..")\n"
-                .."Recliquez pour stopper !";
+KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de groupe / raid activ\195\169, recliquez pour stopper !";
 KRF_OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
 KRF_OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
 
@@ -80,6 +81,19 @@ KRF_OPTION_SHOWMSGNORMAL = GYL.."Afficher les messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Afficher les alertes";
 KRF_OPTION_SHOWMSGERR = GYL.."Afficher les erreurs";
 KRF_OPTION_WHATSNEW = "Nouveaut\195\169s";
+
+-- Edit Mode - Since DragonFlight (10)
+if (CompactPartyFrame) then
+    KRF_OPTION_SOLORAID_TOOLTIP = "Nécessite d'activer l'option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
+    KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."L'option 'Toujours afficher les cadres de groupe' est active :|r "..YLD..KRF_OPTION_SOLORAID_TOOLTIP;
+
+    KRF_OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
+    -- KRF_OPTION_EDITMODE_PARTY_NOTE = "Note : Tapez "..YL.."/reload|r apr\195\168s pour \195\169viter les erreurs qui suivraient";
+    KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "Active le "..YL..HUD_EDIT_MODE_MENU.."|r, et affiche directement les options de "..YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r.\n\n"..CY..KRF_OPTION_EDITMODE_PARTY_NOTE.."|r";
+    -- KRF_OPTION_DEBUG_ON = "! Tester les cadres !";
+    KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de groupe / raid activ\195\169 (testable en "..HUD_EDIT_MODE_MENU..")\n"
+                    .."Recliquez pour stopper !";
+end
 
 --@do-not-package@
 -- https://code.google.com/archive/p/mangadmin/wikis/SpecialCharacters.wiki

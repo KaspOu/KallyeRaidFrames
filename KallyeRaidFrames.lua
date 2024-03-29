@@ -76,7 +76,14 @@ function KRF_OnEvent(self, event, ...)
 		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
 		_G.hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateHealth);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
+		if (CompactUnitFrame_UpdateHealPrediction) then
+			-- Since DragonFlight (10)
+			_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
+		else
+			-- Classic
+			_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
+		end
+		
 		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
 			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
 			_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
@@ -88,7 +95,19 @@ function KRF_OnEvent(self, event, ...)
 
 		-- ! SoloRaid Frames
 		if (KallyeRaidFramesOptions.SoloRaidFrame) then
-			_G.hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+			if (CompactPartyFrame) then
+				-- Edit Mode - Since DragonFlight (10)
+				_G.hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+			else
+				-- Classic
+				_G.CompactRaidFrameManager:Show()
+				_G.CompactRaidFrameManager.Hide = function() end
+				_G.CompactRaidFrameContainer:Show()
+				_G.CompactRaidFrameContainer.Hide = function() end
+
+				_G.GetDisplayedAllyFrames = SoloRaid_GetDisplayedAllyFrames;
+				_G.CompactRaidFrameContainer_OnEvent = SoloRaid_CompactRaidFrameContainer_OnEvent;
+			end
 		end
 
 		-- ! Addon Loaded ^^
@@ -172,7 +191,8 @@ function SaveKRFOptions()
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
 		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true);
 	end
-	if KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
+	-- Edit Mode - Since DragonFlight (10)
+	if CompactPartyFrame and KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
 		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES, true);
 	end
 	if KRFOptionsFrame ~= nil and KRFOptionsFrame.HandleVis ~= nil then
@@ -211,6 +231,11 @@ end
 
 function ManageKRFOptionsVisibility()
 	local HealthOption, RevertBarOption = KRFOptionsFrame_UpdateHealthColor:GetChecked(), KRFOptionsFrame_RevertBar:GetChecked()
+
+	-- Edit Mode - Since DragonFlight (10)
+	if (not HUD_EDIT_MODE_MENU) then
+		KRF_OptionsEnable(KRFOptionsFrame_EditMode, false, .2);
+	end
 	KRF_OptionsEnable(KRFOptionsFrame_MaxBuffs, false, .2);
 
 	KRF_OptionsEnable(KRFOptionsFrame_RevertBar, HealthOption)

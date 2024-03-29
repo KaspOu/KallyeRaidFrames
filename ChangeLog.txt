@@ -1,3 +1,7 @@
+v10.2.602
+- Wow Classic & Wrath !
+- Fixed new color picker
+
 v10.2.601
 - Minor fixes
 - Wow DF 10.2.6
@@ -28,7 +32,7 @@ v10.0.701
 - Wow DF 10.0.7
 
 v10.0.209
-- Better code: colors are now consistents
+- Better code: colors are now consistent
 - Special background for disconnected players
 - Test mode includes D/C state
 
@@ -53,7 +57,7 @@ v10.0.204
 - Fix unexpected performance issue
 
 v10.0.203
-- Fix options issues raised by somes
+- Fix options issues raised by some
 
 v10.0.202
 - Always show party frames option back

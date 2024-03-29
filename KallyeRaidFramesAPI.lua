@@ -79,7 +79,7 @@ end
 - Disabled if alpha values are equals to blizzard default (100% / 55%)
 ]]
 function KRF_Hook_UpdateInRange(frame)
-	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
+	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then		
 		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
 		local newAlpha = 1;
 		if KallyeRaidFramesOptions.AlphaNotInRange < 100 and hasCheckedRange and not isInRange then
@@ -329,7 +329,7 @@ function KRF_UpdateNameColor(frame)
 end
 
 --[[
-! Solo Party Frames
+! Solo Party Frames main, since DragonFlight (10)
 - Show Party Frames even if solo (but not in raid)
 ]]
 function KRF_Hook_CompactPartyFrame_UpdateVisibility()
@@ -340,6 +340,37 @@ function KRF_Hook_CompactPartyFrame_UpdateVisibility()
 			CompactPartyFrame:SetShown(ShowCompactPartyFrame);
 			PartyFrame:UpdatePaddingAndLayout();
 		end
+	end
+end
+
+--[[
+! Solo Party Frames Classic
+- Show Party Frames even if solo
+]]
+local Blizzard_GetDisplayedAllyFrames = GetDisplayedAllyFrames; -- protect original behavior
+function SoloRaid_GetDisplayedAllyFrames()
+	-- Call original default behavior
+	local daf = Blizzard_GetDisplayedAllyFrames()
+
+	if not daf then
+		return 'party'
+	else
+		return daf
+	end
+end
+local Blizzard_CompactRaidFrameContainer_OnEvent = CompactRaidFrameContainer_OnEvent;  -- protect original behavior
+function SoloRaid_CompactRaidFrameContainer_OnEvent(self, event, ...)
+	-- Call original default behavior
+	Blizzard_CompactRaidFrameContainer_OnEvent(self, event, ...)
+
+	-- If all these are true, then the above call already did the TryUpdate
+	local unit = ... or ""
+	if ( unit == "player" or strsub(unit, 1, 4) == "raid" or strsub(unit, 1, 5) == "party" ) then
+		return
+	end
+	-- Always update the RaidFrame
+	if ( event == "UNIT_PET" ) and ( self.displayPets ) then
+		CompactRaidFrameContainer_TryUpdate(self)
 	end
 end
 
