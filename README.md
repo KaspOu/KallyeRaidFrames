@@ -1,34 +1,34 @@
 # Kallye Raid Frames
+_EN / FR_
 
-Modifications to Blizzards default raid/party frames according to my own preferences
+Modifications to Blizzards default raid/party frames according to my own preferences.  
+All features are optional.
 
-1. **Always show Raid frames**
-    - Works while solo ^^
-    - With Always show party frames option enabled.
+1._**Always show Raid frames**
+- Works while solo ^^
 
-2. **Changes to Blizzard CompactRaidFrames**
-    - Highlight unit background depending on health:
-       - - default from black, to yellow, then red
-       - - options to change colors and %
-    - Optionnal: revert HP bars (less life = bigger red bar !) (sRaidFrames like)
-    - Transparency of units out of range
-    - Skull icon added before dead players names.
-    - Roles icons
-       - - Move role icons on top left
-       - - Hides DPS role icons
-    - Buffs/Debuffs
-       - - Larger Debuffs
-       - - Smaller buffs
+2._**Changes to Blizzard CompactRaidFrames**
+- Highlight unit background depending on health:
+  - default from black, to yellow, then red
+  - options to change colors and %
+- Invert HP bars (less life = bigger red bar !) (sRaidFrames like)
+- Skull icon added before dead players names. **(NEW)**
+- Transparency of units out of range
+- Roles icons
+   - Move role icons on top left
+   - Hides DPS role icons
+- Buffs/Debuffs
+   - Larger Debuffs
+   - Smaller buffs
 
-3. **Changes to both CompactRaidFrames and Nameplates**
-    - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
-    - Change player name color according to class
+3._**Changes to both CompactRaidFrames and Nameplates**
+- Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
+- Change player nameplate (on the head) color according to class
 
 
 ## Slash Commands
-**/krf** - shows options
+**/krf** - shows options  
 **/krf test** - toggle test mode
-/clear - clear chat
 
 
 ## Example

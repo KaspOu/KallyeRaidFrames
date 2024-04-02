@@ -75,34 +75,60 @@ end
 
 --[[
 ! Color Widget
+-- Removed OpacitySliderFrame, Since Dragonflight (10)
 ]]
-function KRFColorWidget_ShowColorPicker(changedCallback, self)
+function KRFColorWidget_ShowColorPicker(pickedCallback, cancelledCallback, self)
 	ColorPickerFrame.Self = self;
-	local r,g,b,o = self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a ~= nil and 1-self._RGBA.a or nil;
+	local r,g,b,o = self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a or nil;
+	local info = {
+		swatchFunc = pickedCallback,
+
+		hasOpacity = (o ~= nil),
+		opacityFunc = pickedCallback,
+		opacity = o,
+
+		cancelFunc = cancelledCallback,
+
+		r = r,
+		g = g,
+		b = b,
+	}
+	ColorPickerFrame:SetupColorPickerAndShow(info)
+end
+function KRFColorWidget_ColorPickedCallback()
+	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
+	local newA = ColorPickerFrame:GetColorAlpha();
+	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
+end
+function KRFColorWidget_ColorCancelledCallback()
+	local newR, newG, newB, newA = ColorPickerFrame:GetPreviousValues();
+	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
+end
+--[[
+! Color Widget Classic
+]]
+function KRFColorWidget_ShowColorPicker_Classic(pickedCallback, cancelledCallback, self)
+	ColorPickerFrame.Self = self;
+	local r,g,b,o = self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a or nil;
 	ColorPickerFrame:SetColorRGB(r,g,b);
-	ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (o ~= nil), o;
-	ColorPickerFrame.previousValues = {r,g,b,o};
-	ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc =
-		changedCallback, changedCallback, changedCallback;
+	ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (o ~= nil), 1 - o;
+	ColorPickerFrame._previousValues = {r, g, b, o};
+	ColorPickerFrame.func, ColorPickerFrame.swatchFunc, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc =
+		pickedCallback, pickedCallback, pickedCallback, cancelledCallback;
 	ColorPickerFrame:Hide(); -- Need to run the OnShow handler.
 	ColorPickerFrame:Show();
 end
-function KRFColorWidget_ColorPickedCallback(restore)
-	local newR, newG, newB, newO;
-	if restore then
-		-- The user bailed, we extract the old color from the table created by ShowColorPicker.
-		newR, newG, newB, newO = unpack(restore);
-	else
-		-- Something changed
-		newO, newR, newG, newB = OpacitySliderFrame:GetValue(), ColorPickerFrame:GetColorRGB();
-	end
-	-- Update our internal storage.
-	local r, g, b, a = newR, newG, newB, 1-newO;
-	-- And update any UI elements that use this color...
-	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = r , g = g, b = b, a = a });
+function KRFColorWidget_ColorPickedCallback_Classic()
+	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
+	local newA = 1 - OpacitySliderFrame:GetValue();
+	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
+end
+function KRFColorWidget_ColorCancelledCallback_Classic()
+	local newR, newG, newB, newA = unpack(ColorPickerFrame._previousValues);
+	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
 end
 
-function KRFColorWidget_SetColor (self, RGBA)
+function KRFColorWidget_SetColor(self, RGBA)
 	self._RGBA = RGBA or self._RGBA;
 	self._colorSwatch:SetVertexColor(self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a)
 end
@@ -155,7 +181,12 @@ function KRFColorWidget_OnLoad (self)
 end
 function KRFColorWidget_OnClick(self)
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION, "Master")
-	KRFColorWidget_ShowColorPicker(KRFColorWidget_ColorPickedCallback, self);
+	if (not OpacitySliderFrame) then
+		-- Removed OpacitySliderFrame, Since Dragonflight (10)
+		KRFColorWidget_ShowColorPicker(KRFColorWidget_ColorPickedCallback, KRFColorWidget_ColorCancelledCallback, self);
+	else
+		KRFColorWidget_ShowColorPicker_Classic(KRFColorWidget_ColorPickedCallback_Classic, KRFColorWidget_ColorCancelledCallback_Classic, self);
+	end
 end
 function KRFColorWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
@@ -186,9 +217,8 @@ function KRFSliderWidget_GetValue(self)
 end
 function KRFSliderWidget_OnLoad (self)
 	self.type = CONTROLTYPE_SLIDER;
-
-	local wowtocversion  = select(4, GetBuildInfo());
-	if (wowtocversion > 90000) then
+	-- Since Shadowlands (9)
+	if (BackdropTemplateMixin) then
 		BackdropTemplateMixin.OnBackdropLoaded(self);
 	end
 
