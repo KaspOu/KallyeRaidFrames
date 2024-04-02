@@ -1,3 +1,5 @@
+package-as: KallyeRaidFrames
+
 manual-changelog: ChangeLog.txt
 
 license-output: License.txt
