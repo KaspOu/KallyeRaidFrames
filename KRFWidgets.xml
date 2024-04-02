@@ -52,6 +52,7 @@
 <!--@do-not-package@-->
 <!--
 https://support.curseforge.com/en/support/solutions/articles/9000197281-automatic-packaging
+https://support.curseforge.com/en/support/solutions/articles/9000197952-preparing-the-packagemeta-file
 
 Blizzard Templates : https://github.com/tomrus88/BlizzardInterfaceCode
 >> CompactUnitFrame: https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.xml

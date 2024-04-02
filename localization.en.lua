@@ -14,7 +14,7 @@ KRF_WHATSNEW = " What's new:\n"
 KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;
 
 KRF_SUBTITLE      = "Raid frames support";
-KRF_DESC          = "Enhance party/raid frames and nameplates on friendly units\n\n"
+KRF_DESC          = "Enhance raid frames and nameplates on friendly units\n\n"
 .." - Highlight raid frames background on low health\n\n"
 .." - Inverted frames will use your choice of colors\n\n"
 .." - Transparency when unit out of range";
@@ -50,14 +50,13 @@ KRF_OPTION_NOTINRANGE = "Transparency when out of range";
 KRF_OPTION_NOTINRANGE_TOOLTIP = CY.."Wow default: 55%";
 KRF_OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 KRF_OPTION_NOTINCOMBAT_TOOLTIP = CY.."Wow default: 100%";
-KRF_OPTION_SOLORAID = CY.."Always show party frames "..YL.."*";
-KRF_OPTION_SOLORAID_TOOLTIP = "Display party frames while solo";
-KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = "#";
+KRF_OPTION_SOLORAID = CY.."Display raid frames while solo "..YL.."*";
+KRF_OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames";
 
 KRF_OPTION_EDITMODE_PARTY = "#";
 KRF_OPTION_EDITMODE_PARTY_NOTE = "Note: Use "..YL.."/reload|r after editing, to avoid possibles errors";
 KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "#";
-KRF_OPTION_DEBUG_ON = "! Test party/raid frames !";
+KRF_OPTION_DEBUG_ON = "! Test raid frames !";
 KRF_OPTION_DEBUG_ON_MESSAGE = "Testing party / raid frames, reclick to stop it!";
 KRF_OPTION_DEBUG_OFF = "! STOP Test !";
 KRF_OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
@@ -83,14 +82,13 @@ KRF_OPTION_SHOWMSGERR = GYL.."Display errors";
 KRF_OPTION_WHATSNEW = "What's new";
 
 -- Edit Mode - Since DragonFlight (10)
-if (CompactPartyFrame) then
-  KRF_OPTION_SOLORAID_TOOLTIP = "Require option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
-  KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES = RDL.."Option 'Always show party frames' enabled:|r "..YL..KRF_OPTION_SOLORAID_TOOLTIP;
-
+if (EditModeManagerFrame.UseRaidStylePartyFrames) then
+  if (not EditModeManagerFrame:UseRaidStylePartyFrames()) then
+    KRF_OPTION_SOLORAID_TOOLTIP = "I suggest you to activate option "..YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
+    KRF_DESC = KRF_DESC.."\n\n - "..KRF_OPTION_SOLORAID_TOOLTIP;
+  end
   KRF_OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
-  -- KRF_OPTION_EDITMODE_PARTY_NOTE = "Note: Use "..YL.."/reload|r after editing, to avoid possibles errors";
   KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "Enter "..YL..HUD_EDIT_MODE_MENU.."|r, and open "..YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r options window.\n\n"..CY..KRF_OPTION_EDITMODE_PARTY_NOTE.."|r";
-  -- KRF_OPTION_DEBUG_ON = "! Test party/raid frames !";
   KRF_OPTION_DEBUG_ON_MESSAGE = "Testing party / raid frames (you can test in "..HUD_EDIT_MODE_MENU..")\n"
                     .."Reclick to stop it!";
 end

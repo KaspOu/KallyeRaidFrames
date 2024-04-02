@@ -1,3 +1,6 @@
+v10.2.603
+- Wow Classic 1.15.2
+
 v10.2.602
 - Wow Classic & Wrath !
 - Fixed new color picker

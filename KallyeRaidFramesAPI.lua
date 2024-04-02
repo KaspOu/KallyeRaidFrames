@@ -329,28 +329,23 @@ function KRF_UpdateNameColor(frame)
 end
 
 --[[
-! Solo Party Frames main, since DragonFlight (10)
-- Show Party Frames even if solo (but not in raid)
+! Solo Raid Frames main, since DragonFlight (10)
+- Show Raid Frames if solo
 ]]
 function KRF_Hook_CompactPartyFrame_UpdateVisibility()
-	if not CompactPartyFrame:IsForbidden() then
-		local PartyFramesShown = EditModeManagerFrame:ArePartyFramesForcedShown() or not IsInRaid();
-		local ShowCompactPartyFrame = PartyFramesShown and EditModeManagerFrame:UseRaidStylePartyFrames();
-		if CompactPartyFrame:IsShown() ~= ShowCompactPartyFrame then
-			CompactPartyFrame:SetShown(ShowCompactPartyFrame);
-			PartyFrame:UpdatePaddingAndLayout();
-		end
+	if (not IsInGroup() and not IsInRaid()) then
+		CompactPartyFrame:SetShown(true);
 	end
 end
 
 --[[
 ! Solo Party Frames Classic
-- Show Party Frames even if solo
+- Show Party/Raid Frames even if solo
 ]]
-local Blizzard_GetDisplayedAllyFrames = GetDisplayedAllyFrames; -- protect original behavior
-function SoloRaid_GetDisplayedAllyFrames()
+local KRF_Blizzard_GetDisplayedAllyFrames = GetDisplayedAllyFrames; -- protect original behavior
+function KRF_SoloRaid_GetDisplayedAllyFrames()
 	-- Call original default behavior
-	local daf = Blizzard_GetDisplayedAllyFrames()
+	local daf = KRF_Blizzard_GetDisplayedAllyFrames()
 
 	if not daf then
 		return 'party'
@@ -358,10 +353,10 @@ function SoloRaid_GetDisplayedAllyFrames()
 		return daf
 	end
 end
-local Blizzard_CompactRaidFrameContainer_OnEvent = CompactRaidFrameContainer_OnEvent;  -- protect original behavior
-function SoloRaid_CompactRaidFrameContainer_OnEvent(self, event, ...)
+local KRF_Blizzard_CompactRaidFrameContainer_OnEvent = CompactRaidFrameContainer_OnEvent;  -- protect original behavior
+function KRF_SoloRaid_CompactRaidFrameContainer_OnEvent(self, event, ...)
 	-- Call original default behavior
-	Blizzard_CompactRaidFrameContainer_OnEvent(self, event, ...)
+	KRF_Blizzard_CompactRaidFrameContainer_OnEvent(self, event, ...)
 
 	-- If all these are true, then the above call already did the TryUpdate
 	local unit = ... or ""
@@ -399,7 +394,7 @@ end
 ]]
 function KRF_AddMsg(msg, force)
 	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgNormal)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", YLL, msg));
+		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", YLL, msg or ""));
 	end
 end
 --[[
@@ -407,7 +402,7 @@ end
 ]]
 function KRF_AddMsgWarn(msg, force)
 	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgWarning)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", CY, msg));
+		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", CY, msg or ""));
 	end
 end
 --[[
@@ -415,7 +410,7 @@ end
 ]]
 function KRF_AddMsgErr(msg, force)
 	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgError)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s: %s|r", RDL, KRF_TITLE, msg));
+		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s: %s|r", RDL, KRF_TITLE, msg or ""));
 	end
 end
 
