@@ -25,7 +25,7 @@
 				</Anchors>
 				<ScrollChild>
 					<Frame name="KRFOptionsFrame">
-						<Size x="550" y="820" />
+						<Size x="550" y="830" />
 						<Layers>
 							<Layer level="ARTWORK">
 								<!--@do-not-package@--><!-- END Remove Scroll from here (1/2)  ######## --><!--@end-do-not-package@-->
@@ -42,7 +42,7 @@
 						<Frames>
 							<CheckButton name="KRFOptionsFrame_LabelRaid" inherits="KRFHeadingWidget">
 								<Anchors>
-									<Anchor point="TOP" relativeTo="$parent"><Offset x="0" y="-130"/></Anchor>
+									<Anchor point="TOP" relativeTo="$parent"><Offset x="0" y="-140"/></Anchor>
 								</Anchors>
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_RAID_HEADER" />

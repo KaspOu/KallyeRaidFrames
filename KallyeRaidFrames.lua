@@ -70,6 +70,7 @@ function KRF_OnEvent(self, event, ...)
 	if (event == "ADDON_LOADED" and arg1 == KRF_ADDON_NAME) then
 		self:UnregisterEvent("ADDON_LOADED");
 		isLoaded = true;
+
 		KRF_SetDefaultOptions(KRF_DefaultOptions);
 
 		-- ! Hooks
@@ -95,7 +96,7 @@ function KRF_OnEvent(self, event, ...)
 
 		-- ! SoloRaid Frames
 		if (KallyeRaidFramesOptions.SoloRaidFrame) then
-			if (CompactPartyFrame) then
+			if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 				-- Edit Mode - Since DragonFlight (10)
 				_G.hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
 			else
@@ -105,8 +106,8 @@ function KRF_OnEvent(self, event, ...)
 				_G.CompactRaidFrameContainer:Show()
 				_G.CompactRaidFrameContainer.Hide = function() end
 
-				_G.GetDisplayedAllyFrames = SoloRaid_GetDisplayedAllyFrames;
-				_G.CompactRaidFrameContainer_OnEvent = SoloRaid_CompactRaidFrameContainer_OnEvent;
+				_G.GetDisplayedAllyFrames = KRF_SoloRaid_GetDisplayedAllyFrames;
+				_G.CompactRaidFrameContainer_OnEvent = KRF_SoloRaid_CompactRaidFrameContainer_OnEvent;
 			end
 		end
 
@@ -125,10 +126,12 @@ function SLASH_KRF_command(msgIn)
 		KRF_AddMsgWarn(KRF_INIT_FAILED, true);
 		return;
 	end
-	if msgIn == "test" then
-		KRF_DebugFrames();
-	elseif msgIn == "new" then
+	if msgIn == "new" then
 		KRF_AddMsg(KRF_WHATSNEW);
+	elseif msgIn == "test" then
+		KRF_DebugFrames();
+	elseif msgIn == "edit" then
+		KRF_ShowEditMode("PartyFrame");
 	else
 		if Settings then
 			Settings.OpenToCategory(KRF_TITLE);
@@ -192,8 +195,8 @@ function SaveKRFOptions()
 		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true);
 	end
 	-- Edit Mode - Since DragonFlight (10)
-	if CompactPartyFrame and KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
-		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_REQUIRE_USERAIDPARTYFRAMES, true);
+	if EditModeManagerFrame.UseRaidStylePartyFrames and KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
+		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_TOOLTIP, true);
 	end
 	if KRFOptionsFrame ~= nil and KRFOptionsFrame.HandleVis ~= nil then
 		KRFOptionsFrame:Hide();
@@ -232,10 +235,13 @@ end
 function ManageKRFOptionsVisibility()
 	local HealthOption, RevertBarOption = KRFOptionsFrame_UpdateHealthColor:GetChecked(), KRFOptionsFrame_RevertBar:GetChecked()
 
-	-- Edit Mode - Since DragonFlight (10)
-	if (not HUD_EDIT_MODE_MENU) then
+	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
+		-- Edit Mode - Since DragonFlight (10)		
+		KRFOptionsFrame_EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
+	else
 		KRF_OptionsEnable(KRFOptionsFrame_EditMode, false, .2);
 	end
+
 	KRF_OptionsEnable(KRFOptionsFrame_MaxBuffs, false, .2);
 
 	KRF_OptionsEnable(KRFOptionsFrame_RevertBar, HealthOption)
