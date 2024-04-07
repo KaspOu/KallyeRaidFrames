@@ -8,7 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = " What's new:\n"
-    .."- Fixed new color picker.\n"
+    .."- Wow Classic: Nameplate class color will affect bar color too.\n"
     .."- |cffff1111Wow Classic|r & |cff87CEEBWrath|r versions!\n"
   ;
 KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;

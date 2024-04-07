@@ -57,6 +57,10 @@ local function lighten(r, g, b, percent, alpha)
 	return r*(1-percent) + percent, g*(1-percent) + percent, b*(1-percent) + percent, alpha or 1
 end
 
+local function KRF_GetClassColors()
+	return CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS;
+end
+
 
 --[[
 ! Managing Health & Alpha
@@ -98,7 +102,7 @@ end
 ]]
 function UpdateHealth_Regular(frame, health)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
-		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
+		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .2, .95))
 		end
@@ -139,7 +143,7 @@ end
 ]]
 function UpdateHealth_Reverted(frame, health)
 	if not frame:IsForbidden() and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
-		local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.unit))];
+		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
 
 		if c and frame and frame.background and frame.optionTable.useClassColors then
 			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
@@ -266,7 +270,7 @@ end
 ]]
 function KRF_Hook_UpdateName(frame, calledOutsideHook)
 	if not frame:IsForbidden() then
-		if UnitIsPlayer(frame.displayedUnit) then
+		if UnitPlayerControlled(frame.displayedUnit) then
 			if (not calledOutsideHook) then
 				KRF_UpdateNameColor(frame);
 			end
@@ -293,15 +297,22 @@ end
 - Class Color for Nameplates or Frames (inc. Dead / Disconnected)
 ]]
 function KRF_UpdateNameColor(frame)
-	if not frame:IsForbidden() and UnitIsPlayer(frame.displayedUnit) then
+	if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) then
 		local name = frame.name;
+		local r, g, b, a = UnitSelectionColor(frame.displayedUnit);
+		-- pet default color, or player class color
+		local c = not UnitIsPlayer(frame.displayedUnit) and {r= r, g= g, b=b, a=a} or KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))];
 		if not FrameIsCompact(frame) then
 			-- Nameplates: change color (works outside instances)
-			if KallyeRaidFramesOptions.FriendsClassColor_Nameplates and UnitIsFriend(frame.displayedUnit,"player") then
-				local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
-				if c then
+			if c and KallyeRaidFramesOptions.FriendsClassColor_Nameplates and UnitIsFriend(frame.displayedUnit,"player") then
+				if UnitIsPlayer(frame.displayedUnit) then
+					-- change nameplate text color only for players, not pets
 					name:SetVertexColor(c.r, c.g, c.b);
 					name:SetShadowColor(c.r, c.g, c.b, 0.2);
+				end
+				if (not KRF_HAS_colorNameBySelection) then
+					local healthBar = frame.healthBar;
+					healthBar:SetStatusBarColor(c.r, c.g, c.b);
 				end
 			end
 		else
@@ -312,7 +323,6 @@ function KRF_UpdateNameColor(frame)
 					name:SetVertexColor(lowColor.r, lowColor.g, lowColor.b, lowColor.a or 1);
 					name:SetShadowColor(lowColor.r, lowColor.g, lowColor.b, 0.2);
 				else
-					local c = RAID_CLASS_COLORS[select(2,UnitClass(frame.displayedUnit))];
 					if c then
 						local r, g, b = c.r, c.g, c.b;
 						if (not KallyeRaidFramesOptions.RevertBar) then
@@ -525,12 +535,14 @@ end
 ? https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/CompactUnitFrame.lua
 ? Depuis http://www.wowinterface.com/forums/showthread.php?t=56237
 ? Réf Blizzard http://wowwiki.wikia.com/wiki/Widget_API
+? Hooks: https://wowpedia.fandom.com/wiki/Category:API_functions/restricted
 
 ? https://www.curseforge.com/wow/addons/blizzard-raid-frames-solo-frame
 
 ? /fstack /dump CompactPartyFrameMember1.myHealPrediction
 ? /console scriptErrors 1
 ? print (tostring(checked))
-? /run print(select(4, GetBuildInfo()))
+? /run print(select(4, GetBuildInfo()))  
+? wowversion, wowbuild, wowdate, wowtocversion = GetBuildInfo()
 ]]
 --@end-do-not-package@

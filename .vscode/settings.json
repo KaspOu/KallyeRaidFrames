@@ -92,7 +92,8 @@
         "UnitName",
         "UpdateRaidAndPartyFrames",
         "WOW_PROJECT_ID",
-        "WOW_PROJECT_MAINLINE"
+        "WOW_PROJECT_MAINLINE",
+        "CUSTOM_CLASS_COLORS"
     ],
     "cSpell.words": [
         "prepatch"

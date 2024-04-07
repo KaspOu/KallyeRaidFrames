@@ -1,3 +1,6 @@
+v10.2.604
+- Wow Classic: Nameplate color will change bar color too
+
 v10.2.603
 - Wow Classic 1.15.2
 

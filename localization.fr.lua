@@ -8,7 +8,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = " Nouveaut\195\169s :\n"
-    .."- Correction du s\195\169lecteur de couleur.\n"
+    .."- Classic: Changer la couleur du texte d'info affecte aussi la barre d'info.\n"
     .."- Versions |cffff1111Wow Classic|r & |cff87CEEBWrath|r !\n"
     ;
 KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;
