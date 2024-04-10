@@ -1,0 +1,23 @@
+## Interface: 40400
+## Title: Kallye RaidFrames
+## Title-frFR: Kallye RaidFrames
+## Notes: Highlight Raid Frames on low health, Always show raid
+## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Raid toujours visible
+## Version: 10.2.604
+## Author: Kallye of Elune
+## SavedVariables: KallyeRaidFramesOptions
+## - SavedVariablesPerCharacter: characterSettings
+## IconTexture: Interface\AddOns\KallyeRaidFrames\Logo32
+
+## X-Category: Raid Frames, Interface Enhancements
+## X-License: MIT
+## X-Website: https://bitbucket.org/KaspOu/kallyeraidframes/
+## X-Curse-Project-ID: 410566
+
+KallyeRaidFrames.globals.lua
+localization.en.lua
+localization.fr.lua
+KRFWidgets.xml
+KallyeRaidFramesAPI.lua
+KallyeRaidFrames.lua
+KallyeRaidFrames.xml

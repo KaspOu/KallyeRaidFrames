@@ -9,7 +9,7 @@ end
 
 KRF_IS_RETAIL = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE);
 
-KRF_HAS_colorNameBySelection = KRF_IS_RETAIL;
+KRF_HAS_colorNameBySelection = KRF_IS_RETAIL; -- colorNameBySelection, Since BfA (7)
 
 
 -- Returns a chat color code string

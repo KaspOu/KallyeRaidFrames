@@ -310,6 +310,7 @@ function KRF_UpdateNameColor(frame)
 					name:SetVertexColor(c.r, c.g, c.b);
 					name:SetShadowColor(c.r, c.g, c.b, 0.2);
 				end
+				-- colorNameBySelection: nameplates already colored, Since BfA (7)
 				if (not KRF_HAS_colorNameBySelection) then
 					local healthBar = frame.healthBar;
 					healthBar:SetStatusBarColor(c.r, c.g, c.b);
