@@ -97,5 +97,27 @@
     ],
     "cSpell.words": [
         "prepatch"
-    ]
+    ],
+    "peacock.color": "731116",
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#9f181e",
+        "activityBar.background": "#9f181e",
+        "activityBarBadge.background": "#051c04",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "sash.hoverBorder": "#9f181e",
+        "statusBar.background": "#731116",
+        "statusBarItem.hoverBackground": "#9f181e",
+        "statusBarItem.remoteBackground": "#731116",
+        "sideBar.border": "#9f181e",
+        "tab.activeBorder": "#9f181e",
+        "titleBar.activeBackground": "#731116",
+        "titleBar.inactiveBackground": "#73111699",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "commandCenter.border": "#e7e7e799",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    }
 }
