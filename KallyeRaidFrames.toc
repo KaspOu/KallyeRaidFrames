@@ -3,7 +3,7 @@
 ## Title-frFR: Kallye RaidFrames
 ## Notes: Highlight Raid Frames on low health, Solo show raid
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Affiche le Raid en solo
-## Version: 10.2.604
+## Version: 10.2.701
 ## Author: Kallye of Elune
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings

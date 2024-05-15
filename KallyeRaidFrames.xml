@@ -25,7 +25,7 @@
 				</Anchors>
 				<ScrollChild>
 					<Frame name="KRFOptionsFrame">
-						<Size x="550" y="830" />
+						<Size x="550" y="850" />
 						<Layers>
 							<Layer level="ARTWORK">
 								<!--@do-not-package@--><!-- END Remove Scroll from here (1/2)  ######## --><!--@end-do-not-package@-->
@@ -349,11 +349,21 @@
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 							</CheckButton>
+							<CheckButton name="KRFOptionsFrame_EnemiesClassColor_Nameplates" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES" />
+									<Attribute name="tooltip" value="KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOP" relativeTo="KRFOptionsFrame_FriendsClassColor_Nameplates" relativePoint="BOTTOM"><Offset x="0" y="0"/></Anchor>
+									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
+								</Anchors>
+							</CheckButton>
 							<Button name="KRFOptionsFrame_WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_FriendsClassColor_Nameplates" relativePoint="BOTTOMLEFT">
-										<Offset x="0" y="-25"/>
+										<Offset x="0" y="-40"/>
 									</Anchor>
 								</Anchors>
 								<Scripts>

@@ -1,3 +1,8 @@
+v10.2.701
+- Enemies nameplates color option added
+- Wow Cataclysm
+- Wow DF 10.2.7
+
 v10.2.604
 - Wow Classic: Nameplate color will change bar color too
 

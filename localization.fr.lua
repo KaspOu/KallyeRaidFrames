@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = " Nouveaut\195\169s :\n"
-    .."- Classic: Changer la couleur du texte d'info affecte aussi la barre d'info.\n"
-    .."- Versions |cffff1111Wow Classic|r & |cff87CEEBWrath|r !\n"
+    .."- Ajout de l'option de coloration des barres de noms ennemies.\n"
+    .."- Versions |cffff1111Wow Classic|r & |cffc16600Cata|r !\n"
     ;
 KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;
 
@@ -72,6 +72,8 @@ KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
+KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activer pour les ennemis";
+KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = "";
 
 KRF_OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 KRF_OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..YL.."/reload|r )";
