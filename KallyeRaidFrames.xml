@@ -17,7 +17,13 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" enablemouse="true">
+			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" enablemouse="true">				
+				<KeyValues>
+					<KeyValue key="scrollBarHideIfUnscrollable" value="false" type="boolean"/>
+					<KeyValue key="scrollBarX" value="2" type="number"/>
+					<KeyValue key="scrollBarTopY" value="6" type="number"/>
+					<KeyValue key="scrollBarBottomY" value="-9" type="number"/>
+				</KeyValues>
 				<Size x="550" y="565" />
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent" x="0" y="-28"/>
