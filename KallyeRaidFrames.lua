@@ -35,6 +35,7 @@ KRF_DefaultOptions = {
 	DebuffsScale = 1.25,
 	MaxBuffs = 3,
 	FriendsClassColor_Nameplates = true,
+	EnemiesClassColor_Nameplates = false,
 
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
@@ -233,7 +234,13 @@ function RefreshKRFOptions()
 end
 
 function ManageKRFOptionsVisibility()
-	local HealthOption, RevertBarOption = KRFOptionsFrame_UpdateHealthColor:GetChecked(), KRFOptionsFrame_RevertBar:GetChecked()
+	local HealthOption,
+		RevertBarOption,
+		NameplatesOption
+			= 
+			KRFOptionsFrame_UpdateHealthColor:GetChecked(),
+			KRFOptionsFrame_RevertBar:GetChecked(),
+			KRFOptionsFrame_FriendsClassColor_Nameplates:GetChecked();
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		-- Edit Mode - Since DragonFlight (10)		
@@ -256,4 +263,6 @@ function ManageKRFOptionsVisibility()
 	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorLow , RevertBarOption, HealthOption);
 	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorWarn, RevertBarOption, HealthOption);
 	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorOK  , RevertBarOption, HealthOption);
+
+	KRF_OptionsEnable(KRFOptionsFrame_EnemiesClassColor_Nameplates, NameplatesOption);
 end

@@ -304,7 +304,7 @@ function KRF_UpdateNameColor(frame)
 		local c = not UnitIsPlayer(frame.displayedUnit) and {r= r, g= g, b=b, a=a} or KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))];
 		if not FrameIsCompact(frame) then
 			-- Nameplates: change color (works outside instances)
-			if c and KallyeRaidFramesOptions.FriendsClassColor_Nameplates and UnitIsFriend(frame.displayedUnit,"player") then
+			if c and KallyeRaidFramesOptions.FriendsClassColor_Nameplates and (KallyeRaidFramesOptions.EnemiesClassColor_Nameplates or UnitIsFriend(frame.displayedUnit,"player")) then
 				if UnitIsPlayer(frame.displayedUnit) then
 					-- change nameplate text color only for players, not pets
 					name:SetVertexColor(c.r, c.g, c.b);
@@ -312,6 +312,7 @@ function KRF_UpdateNameColor(frame)
 				end
 				-- colorNameBySelection: nameplates already colored, Since BfA (7)
 				if (not KRF_HAS_colorNameBySelection) then
+					-- on every refresh, not only player, it will avoid misscolorations on updates
 					local healthBar = frame.healthBar;
 					healthBar:SetStatusBarColor(c.r, c.g, c.b);
 				end

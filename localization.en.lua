@@ -8,8 +8,8 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 
 -- Whats new info
 KRF_WHATSNEW = " What's new:\n"
-    .."- Wow Classic: Nameplate class color will affect bar color too.\n"
-    .."- |cffff1111Wow Classic|r & |cff87CEEBWrath|r versions!\n"
+    .."- Added enemy colored nameplates option.\n"
+    .."- |cffff1111Wow Classic|r & |cffc16600Cata|r versions!\n"
   ;
 KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;
 
@@ -72,6 +72,8 @@ KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Players nameplates colored by class (outside instances)";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
+KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activate for enemies nameplates";
+KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = "";
 
 KRF_OPTION_RESET_OPTIONS = "Reset options";
 KRF_OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..YL.."/reload|r )";
