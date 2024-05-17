@@ -431,6 +431,9 @@
 						</Frames>
 					</Frame>
 				</ScrollChild>
+				<ScrollBars>
+					<VerticalScrollBar name="KRFOptionsFrame_ScrollBar" inherits="UIPanelScrollBarTemplate"/>
+				</ScrollBars>
 			</ScrollFrame>
 			<!--@do-not-package@--><!-- END Remove Scroll from here (2/2) ########  --><!--@end-do-not-package@-->
 		</Frames>
