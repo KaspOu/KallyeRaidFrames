@@ -17,7 +17,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" enablemouse="true">				
+			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" enablemouse="true" setAllPoints="true">				
 				<KeyValues>
 					<KeyValue key="scrollBarHideIfUnscrollable" value="false" type="boolean"/>
 					<KeyValue key="scrollBarX" value="2" type="number"/>
@@ -26,11 +26,11 @@
 				</KeyValues>
 				<Size x="550" y="565" />
 				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent" x="0" y="-28"/>
-					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="$parent" x="-30" y="8"/>
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="KRFOptionsContainer" x="0" y="-28"/>
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="KRFOptionsContainer" x="-30" y="8"/>
 				</Anchors>
 				<ScrollChild>
-					<Frame name="KRFOptionsFrame">
+					<Frame name="KRFOptionsFrame" parentKey="ScrollChild">
 						<Size x="550" y="850" />
 						<Layers>
 							<Layer level="ARTWORK">
