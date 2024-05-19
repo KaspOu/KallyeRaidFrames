@@ -9,6 +9,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 -- Whats new info
 KRF_WHATSNEW = " Nouveaut\195\169s :\n"
     .."- Ajout de l'option de coloration des barres de noms ennemies.\n"
+    .."- Am\195\169liorations UI (bouton info, fond d\195\169grad\195\169).\n"
     .."- Versions |cffff1111Wow Classic|r & |cffc16600Cata|r !\n"
     ;
 KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;

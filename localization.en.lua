@@ -9,6 +9,7 @@ KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
 -- Whats new info
 KRF_WHATSNEW = " What's new:\n"
     .."- Added enemy colored nameplates option.\n"
+    .."- UI enhancements (info button, gradient background).\n"
     .."- |cffff1111Wow Classic|r & |cffc16600Cata|r versions!\n"
   ;
 KRF_WHATSNEW = YL..KRF_VERS_TITLE.." -"..YLL..KRF_WHATSNEW;

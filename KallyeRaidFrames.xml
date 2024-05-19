@@ -11,13 +11,13 @@
 
 				<FontString name="$parent_HeaderLabel" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_TITLE">
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
-					<Size><AbsDimension x="550" y="350" /></Size>
+					<Size><AbsDimension x="550" y="30" /></Size>
 				</FontString>
 				<!--@do-not-package@--><!-- Remove Scroll from here (1/2) ######## --><!--@end-do-not-package@-->
 			</Layer>
 		</Layers>
 		<Frames>
-			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" enablemouse="true" setAllPoints="true">				
+			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" Framelevel="0" enablemouse="true" setAllPoints="true">				
 				<KeyValues>
 					<KeyValue key="scrollBarHideIfUnscrollable" value="false" type="boolean"/>
 					<KeyValue key="scrollBarX" value="6" type="number"/>
@@ -41,7 +41,7 @@
 					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="KRFOptionsContainer" x="-30" y="8"/>
 				</Anchors>
 				<ScrollChild>
-					<Frame name="KRFOptionsFrame" parentKey="ScrollChild">
+					<Frame name="KRFOptionsFrame" parentKey="Child">
 						<Size x="550" y="850" />
 						<Layers>
 							<Layer level="ARTWORK">
