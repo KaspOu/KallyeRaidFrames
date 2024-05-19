@@ -40,6 +40,8 @@ KRF_DefaultOptions = {
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
 	ShowMsgError = true,
+
+	DebugMode = false,
 };
 KRF_SetDefaultOptions(KRF_DefaultOptions);
 
@@ -119,6 +121,9 @@ function KRF_OnEvent(self, event, ...)
 				KRF_AddMsg(KRF_WHATSNEW);
 			end
 		end
+		if (KallyeRaidFramesOptions.DebugMode) then
+			SLASH_KRF_command()
+		end
 	end
 end -- END KRF_OnEvent
 
@@ -133,6 +138,10 @@ function SLASH_KRF_command(msgIn)
 		KRF_DebugFrames();
 	elseif msgIn == "edit" then
 		KRF_ShowEditMode("PartyFrame");
+	elseif msgIn == "debug" then
+		KallyeRaidFramesOptions.DebugMode = not KallyeRaidFramesOptions.DebugMode;
+		KRF_AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and GR.."true" or RD.."false"), true);
+		SLASH_KRF_command();
 	else
 		if Settings then
 			Settings.OpenToCategory(KRF_TITLE);
