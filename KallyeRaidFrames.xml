@@ -11,38 +11,59 @@
 
 				<FontString name="$parent_HeaderLabel" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_TITLE">
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
-					<Size><AbsDimension x="550" y="350" /></Size>
+					<Size><AbsDimension x="550" y="30" /></Size>
 				</FontString>
 				<!--@do-not-package@--><!-- Remove Scroll from here (1/2) ######## --><!--@end-do-not-package@-->
 			</Layer>
 		</Layers>
 		<Frames>
-			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" enablemouse="true">
+			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" Framelevel="0" enablemouse="true" setAllPoints="true">				
+				<KeyValues>
+					<KeyValue key="scrollBarHideIfUnscrollable" value="false" type="boolean"/>
+					<KeyValue key="scrollBarX" value="6" type="number"/>
+					<KeyValue key="scrollBarTopY" value="3" type="number"/>
+					<KeyValue key="scrollBarBottomY" value="-3" type="number"/>
+				</KeyValues>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture setAllPoints="true">
+							<Color b=".7" a=".4"/>
+							<Gradient orientation="VERTICAL">
+								<MinColor b=".7"/>
+								<MaxColor b="0"/>
+							</Gradient>
+						</Texture>
+					</Layer>
+				</Layers>
 				<Size x="550" y="565" />
 				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent" x="0" y="-28"/>
-					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="$parent" x="-30" y="8"/>
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="KRFOptionsContainer" x="0" y="-28"/>
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="KRFOptionsContainer" x="-30" y="8"/>
 				</Anchors>
 				<ScrollChild>
-					<Frame name="KRFOptionsFrame">
+					<Frame name="KRFOptionsFrame" parentKey="Child">
 						<Size x="550" y="850" />
 						<Layers>
 							<Layer level="ARTWORK">
 								<!--@do-not-package@--><!-- END Remove Scroll from here (1/2)  ######## --><!--@end-do-not-package@-->
-								<FontString name="KRFOptionsFrame_SubtitleLabel" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE" text="KRF_SUBTITLE">
-									<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
-								</FontString>
-								<FontString name="KRFOptionsFrame_TooltipLabel" inherits="GameFontHighlight" justifyH="LEFT" justifyV="MIDDLE" text="KRF_DESC">
-									<Anchors><Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_SubtitleLabel" relativePoint="BOTTOMLEFT">
-										<Offset><AbsDimension x="0" y="-15" /></Offset>
-									</Anchor></Anchors>
-								</FontString>
 							</Layer>
 						</Layers>
 						<Frames>
+							<Button name="KRFOptionsContainer_Info" inherits="UIPanelInfoButton" parent="KRFOptionsContainer">
+								<Size x="20" y="20" />
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parent"><Offset x="2" y="-9"/></Anchor>
+								</Anchors>
+								<Scripts>
+									<OnEnter>
+										GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT");
+										GameTooltip:SetText(YL..KRF_SUBTITLE.."|r\n\n"..WH..KRF_DESC);
+									</OnEnter>
+								</Scripts>
+							</Button>
 							<CheckButton name="KRFOptionsFrame_LabelRaid" inherits="KRFHeadingWidget">
 								<Anchors>
-									<Anchor point="TOP" relativeTo="$parent"><Offset x="0" y="-140"/></Anchor>
+									<Anchor point="TOP" relativeTo="$parent"><Offset x="0" y="0"/></Anchor>
 								</Anchors>
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_RAID_HEADER" />
@@ -369,7 +390,7 @@
 								<Scripts>
 									<OnLoad>
 										self.Text:SetText(KRF_OPTION_WHATSNEW);
-										self.tooltipText = KRF_OPTION_WHATSNEW;
+										self.tooltipText = KRF_WHATSNEW;
 									</OnLoad>
 									<OnClick>
 										-- KRF_AddMsg(KRF_WHATSNEW);

@@ -1,13 +1,14 @@
 ## Interface: 40400
-## Title: Kallye RaidFrames
-## Title-frFR: Kallye RaidFrames
+## Title: |cff00ff00Kallye|r RaidFrames
+## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Raid toujours visible
-## Version: 10.2.604
-## Author: Kallye of Elune
+## Version: 10.2.702
+## Author: Kallye of Elune (EU)
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
 ## IconTexture: Interface\AddOns\KallyeRaidFrames\Logo32
+## AddonCompartmentFunc: SLASH_KRF_command
 
 ## X-Category: Raid Frames, Interface Enhancements
 ## X-License: MIT
