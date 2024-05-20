@@ -71,6 +71,7 @@ KRF_OPTION_MAXBUFFS = "Afficher maximum";
 KRF_OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
+KRF_OPTION_OTHERS_HEADER = "Nameplates";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
 KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activer pour les ennemis";
@@ -78,6 +79,7 @@ KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = KRF_OPTION_FRIENDSCLASSCOLOR_N
 
 KRF_OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 KRF_OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..YL.."/reload|r )";
+KRF_OPTIONS_ASTERIX = YL.."*|r"..WH..": Options n\195\169cessitant un rechargement";
 
 KRF_OPTION_SHOWMSGNORMAL = GYL.."Afficher les messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Afficher les alertes";

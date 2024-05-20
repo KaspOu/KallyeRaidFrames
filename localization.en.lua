@@ -71,6 +71,7 @@ KRF_OPTION_MAXBUFFS = "Max buffs";
 KRF_OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display";
 KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
+KRF_OPTION_OTHERS_HEADER = "Nameplates";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Players nameplates colored by class (outside instances)";
 KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
 KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activate for enemies nameplates";
@@ -78,6 +79,7 @@ KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = KRF_OPTION_FRIENDSCLASSCOLOR_N
 
 KRF_OPTION_RESET_OPTIONS = "Reset options";
 KRF_OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..YL.."/reload|r )";
+KRF_OPTIONS_ASTERIX = YL.."*|r"..WH..": Options requiring reloading";
 
 KRF_OPTION_SHOWMSGNORMAL = GYL.."Display messages";
 KRF_OPTION_SHOWMSGWARNING = GYL.."Display warnings";

@@ -166,13 +166,12 @@ function OptionsWReloadValues()
 end
 
 function SaveKRFOptions()
-	local FramePrefix = "KRFOptionsFrame_";
 	local PreviousOptionsWReload = OptionsWReloadValues();
 	-- Auto detect options controls and save them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (_G[FramePrefix..k] ~= nil) then
-				local control = _G[FramePrefix..k];
+			if (KRFOptionsFrame[k] ~= nil) then
+				local control = KRFOptionsFrame[k];
 				local previousValue = KallyeRaidFramesOptions[k] or v;
 				local value = nil;
 
@@ -219,11 +218,10 @@ function RefreshKRFOptions()
 		KRFOptionsFrame.HandleVis = true;
 	end
 	-- Auto detect options controls and load them
-	local FramePrefix = "KRFOptionsFrame_";
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (_G[FramePrefix..k] ~= nil) then
-				local control = _G[FramePrefix..k];
+			if (KRFOptionsFrame[k] ~= nil) then
+				local control = KRFOptionsFrame[k];
 				local value = KallyeRaidFramesOptions[k];
 				if value == nil then
 					value = v;
@@ -247,31 +245,31 @@ function ManageKRFOptionsVisibility()
 		RevertBarOption,
 		NameplatesOption
 			= 
-			KRFOptionsFrame_UpdateHealthColor:GetChecked(),
-			KRFOptionsFrame_RevertBar:GetChecked(),
-			KRFOptionsFrame_FriendsClassColor_Nameplates:GetChecked();
+			KRFOptionsFrame.UpdateHealthColor:GetChecked(),
+			KRFOptionsFrame.RevertBar:GetChecked(),
+			KRFOptionsFrame.FriendsClassColor_Nameplates:GetChecked();
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		-- Edit Mode - Since DragonFlight (10)		
-		KRFOptionsFrame_EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
+		KRFOptionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
 	else
-		KRF_OptionsEnable(KRFOptionsFrame_EditMode, false, .2);
+		KRF_OptionsEnable(KRFOptionsFrame.EditMode, false, .2);
 	end
 
-	KRF_OptionsEnable(KRFOptionsFrame_MaxBuffs, false, .2);
+	KRF_OptionsEnable(KRFOptionsFrame.MaxBuffs, false, .2);
 
-	KRF_OptionsEnable(KRFOptionsFrame_RevertBar, HealthOption)
-	KRF_OptionsEnable(KRFOptionsFrame_LimitLow , HealthOption);
-	KRF_OptionsEnable(KRFOptionsFrame_LimitWarn, HealthOption);
-	KRF_OptionsEnable(KRFOptionsFrame_LimitOk  , HealthOption);
+	KRF_OptionsEnable(KRFOptionsFrame.RevertBar, HealthOption)
+	KRF_OptionsEnable(KRFOptionsFrame.LimitLow , HealthOption);
+	KRF_OptionsEnable(KRFOptionsFrame.LimitWarn, HealthOption);
+	KRF_OptionsEnable(KRFOptionsFrame.LimitOk  , HealthOption);
 
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_BGColorLow , not RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_BGColorWarn, not RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_BGColorOK  , not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorLow , not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorWarn, not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorOK  , not RevertBarOption, HealthOption);
 
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorLow , RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorWarn, RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorOK  , RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorLow , RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
 
-	KRF_OptionsEnable(KRFOptionsFrame_EnemiesClassColor_Nameplates, NameplatesOption);
+	KRF_OptionsEnable(KRFOptionsFrame.EnemiesClassColor_Nameplates, NameplatesOption);
 end

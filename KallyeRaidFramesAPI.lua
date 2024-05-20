@@ -12,6 +12,24 @@ function KRF_SetDefaultOptions(DefaultOptions, reset)
 	end
 end
 
+StaticPopupDialogs["KRF_CONFIRM_RESET"] = {
+	showAlert = true,
+	text = CONFIRM_RESET_SETTINGS,
+	button1 = ALL_SETTINGS,
+	-- button3 = CURRENT_SETTINGS,
+	button2 = CANCEL,
+	OnAccept = function()												
+		KRF_SetDefaultOptions(KRF_DefaultOptions, true);
+		ReloadUI();
+	end,
+	-- OnAlt  = function()	end,
+	timeout = STATICPOPUP_TIMEOUT,
+	timeoutInformationalOnly = false,
+	whileDead = true,
+	hideOnEscape = true,
+	preferredIndex = 3,  -- avoid some UI taint
+};
+
 local startsWith = {
 	play = true, -- player
 	part = true, -- party
@@ -499,14 +517,14 @@ function KRF_DebugFrames()
 	_G.KRF_IsDebugFramesTimerActive = not _G.KRF_IsDebugFramesTimerActive;
 	if _G.KRF_IsDebugFramesTimerActive then
 		KRF_AddMsgWarn(KRF_OPTION_DEBUG_ON_MESSAGE);
-		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_OFF);
-		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_OFF;
+		KRFOptionsFrame.Debug.Text:SetText(KRF_OPTION_DEBUG_OFF);
+		KRFOptionsFrame.Debug.tooltipText = KRF_OPTION_DEBUG_OFF;
 		_G.PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
 		KRF_LoopDebug();
 	else
 		KRF_AddMsgWarn(KRF_OPTION_DEBUG_OFF_MESSAGE);
-		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_ON);
-		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_ON;
+		KRFOptionsFrame.Debug.Text:SetText(KRF_OPTION_DEBUG_ON);
+		KRFOptionsFrame.Debug.tooltipText = KRF_OPTION_DEBUG_ON;
 		_G.PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE, "Master")
 	end
 end

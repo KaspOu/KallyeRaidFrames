@@ -12,9 +12,25 @@
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 					<Size><AbsDimension x="550" y="30" /></Size>
 				</FontString>
+				<FontString name="$parent_HeaderLabel" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_ASTERIX">
+					<Anchors><Anchor point="BOTTOMRIGHT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
+					<Size><AbsDimension x="270" y="20" /></Size>
+				</FontString>
 			</Layer>
 		</Layers>
 		<Frames>
+			<Button inherits="UIPanelInfoButton">
+				<Size x="20" y="20" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent"><Offset x="2" y="-9"/></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT");
+						GameTooltip:SetText(YL..KRF_SUBTITLE.."|r\n\n"..WH..KRF_DESC);
+					</OnEnter>
+				</Scripts>
+			</Button>
 			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" Framelevel="0" enablemouse="true" setAllPoints="true">				
 				<KeyValues>
 					<KeyValue key="scrollBarHideIfUnscrollable" value="false" type="boolean"/>
@@ -25,40 +41,23 @@
 				<Layers>
 					<Layer level="BACKGROUND">
 						<Texture setAllPoints="true">
-							<Color b=".7" a=".4"/>
+							<Color b=".8" a=".5"/>
 							<Gradient orientation="VERTICAL">
-								<MinColor b=".7"/>
+								<MinColor b=".8"/>
 								<MaxColor b="0"/>
 							</Gradient>
 						</Texture>
 					</Layer>
 				</Layers>
-				<Size x="550" y="565" />
 				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="KRFOptionsContainer" x="0" y="-28"/>
-					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="KRFOptionsContainer" x="-30" y="8"/>
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent" x="0" y="-28"/>
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="$parent" x="-30" y="8"/>
 				</Anchors>
 				<ScrollChild>
-					<Frame name="KRFOptionsFrame" parentKey="Child">
-						<Size x="550" y="850" />
-						<Layers>
-							<Layer level="ARTWORK">
-							</Layer>
-						</Layers>
+					<Frame name="KRFOptionsFrame">
+						<Size x="550" y="800" />
 						<Frames>
-							<Button name="KRFOptionsContainer_Info" inherits="UIPanelInfoButton" parent="KRFOptionsContainer">
-								<Size x="20" y="20" />
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parent"><Offset x="2" y="-9"/></Anchor>
-								</Anchors>
-								<Scripts>
-									<OnEnter>
-										GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT");
-										GameTooltip:SetText(YL..KRF_SUBTITLE.."|r\n\n"..WH..KRF_DESC);
-									</OnEnter>
-								</Scripts>
-							</Button>
-							<CheckButton name="KRFOptionsFrame_LabelRaid" inherits="KRFHeadingWidget">
+							<CheckButton parentKey="LabelRaid" inherits="KRFHeadingWidget">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="$parent"><Offset x="0" y="0"/></Anchor>
 								</Anchors>
@@ -66,95 +65,95 @@
 									<Attribute name="text" value="KRF_OPTION_RAID_HEADER" />
 								</Attributes>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_UpdateHealthColor" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="UpdateHealthColor" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HIGHLIGHTLOWHP" />
 									<Attribute name="tooltip" value="KRF_OPTION_HIGHLIGHTLOWHP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_LabelRaid" relativePoint="BOTTOM"/>
+									<Anchor point="TOP" relativeKey="$parent.LabelRaid" relativePoint="BOTTOM"/>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
 									<OnUpdate function="ManageKRFOptionsVisibility" />
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_RevertBar" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="RevertBar" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_REVERTBAR" />
 									<Attribute name="tooltip" value="KRF_OPTION_REVERTBAR" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_UpdateHealthColor" relativePoint="BOTTOM"/>
+									<Anchor point="TOP" relativeKey="$parent.UpdateHealthColor" relativePoint="BOTTOM"/>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
 									<OnUpdate function="ManageKRFOptionsVisibility" />
 								</Scripts>
 							</CheckButton>
-							<Button name="KRFOptionsFrame_BGColorLow" inherits="KRFColorWidget">
+							<Button parentKey="BGColorLow" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_LOW" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_LOW_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_RevertBar" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeKey="$parent.RevertBar" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 							</Button>
-							<Button name="KRFOptionsFrame_BGColorWarn" inherits="KRFColorWidget">
+							<Button parentKey="BGColorWarn" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_WARN" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_WARN_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_BGColorLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.BGColorLow" relativePoint="TOPLEFT">
 										<Offset x="165" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
-							<Button name="KRFOptionsFrame_BGColorOK" inherits="KRFColorWidget">
+							<Button parentKey="BGColorOK" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_OK" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_OK_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_BGColorLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.BGColorLow" relativePoint="TOPLEFT">
 										<Offset x="330" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
-							<Button name="KRFOptionsFrame_RevertColorLow" inherits="KRFColorWidget">
+							<Button parentKey="RevertColorLow" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_LOW" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_LOW_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_BGColorLow" relativePoint="TOPLEFT"/>
+									<Anchor point="TOPLEFT" relativeKey="$parent.BGColorLow" relativePoint="TOPLEFT"/>
 								</Anchors>
 							</Button>
-							<Button name="KRFOptionsFrame_RevertColorWarn" inherits="KRFColorWidget">
+							<Button parentKey="RevertColorWarn" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_WARN" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_WARN_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_RevertColorLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.RevertColorLow" relativePoint="TOPLEFT">
 										<Offset x="165" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
-							<Button name="KRFOptionsFrame_RevertColorOK" inherits="KRFColorWidget">
+							<Button parentKey="RevertColorOK" inherits="KRFColorWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HEALTH_OK" />
 									<Attribute name="tooltip" value="KRF_OPTION_HEALTH_OK_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_RevertColorLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.RevertColorLow" relativePoint="TOPLEFT">
 										<Offset x="330" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
-							<Slider name="KRFOptionsFrame_LimitLow" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+							<Slider parentKey="LimitLow" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
 									<Attribute name="title" value="KRF_OPTION_HEALTH_LOW" />
@@ -162,12 +161,12 @@
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_BGColorLow" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.BGColorLow" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-10"/>
 									</Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="KRFOptionsFrame_LimitWarn" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+							<Slider parentKey="LimitWarn" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
 									<Attribute name="title" value="KRF_OPTION_HEALTH_WARN" />
@@ -175,12 +174,12 @@
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_LimitLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.LimitLow" relativePoint="TOPLEFT">
 										<Offset x="165" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="KRFOptionsFrame_LimitOk" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+							<Slider parentKey="LimitOk" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="100" y="15" />
 								<Attributes>
 									<Attribute name="title" value="KRF_OPTION_HEALTH_OK" />
@@ -188,61 +187,61 @@
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_LimitLow" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.LimitLow" relativePoint="TOPLEFT">
 										<Offset x="330" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Slider>
-							<CheckButton name="KRFOptionsFrame_MoveRoleIcons" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="MoveRoleIcons" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_MOVEROLEICONS" />
 									<Attribute name="tooltip" value="KRF_OPTION_MOVEROLEICONS" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_LimitLow" relativePoint="BOTTOM"><Offset x="0" y="-25"/></Anchor>
+									<Anchor point="TOP" relativeKey="$parent.LimitLow" relativePoint="BOTTOM"><Offset x="0" y="-25"/></Anchor>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_HideDamageIcons" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="HideDamageIcons" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HIDEDAMAGEICONS" />
 									<Attribute name="tooltip" value="KRF_OPTION_HIDEDAMAGEICONS" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_MoveRoleIcons" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeKey="$parent.MoveRoleIcons" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_HideRealm" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="HideRealm" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_HIDEREALM" />
 									<Attribute name="tooltip" value="KRF_OPTION_HIDEREALM_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_HideDamageIcons" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeKey="$parent.HideDamageIcons" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 							</CheckButton>
 
-							<CheckButton name="KRFOptionsFrame_FriendsClassColor" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="FriendsClassColor" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_FRIENDSCLASSCOLOR" />
 									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_MoveRoleIcons" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.MoveRoleIcons" relativePoint="TOPLEFT">
 										<Offset x="270" y="0"/>
 									</Anchor>
 								</Anchors>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_IconOnDeath" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="IconOnDeath" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_ICONONDEATH" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_FriendsClassColor" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeKey="$parent.FriendsClassColor" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 							</CheckButton>
 
-							<Slider name="KRFOptionsFrame_AlphaNotInRange" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+							<Slider parentKey="AlphaNotInRange" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_NOTINRANGE" />
@@ -250,10 +249,10 @@
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_HideRealm" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.HideRealm" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="KRFOptionsFrame_AlphaNotInCombat" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+							<Slider parentKey="AlphaNotInCombat" inherits="KRFSliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_NOTINCOMBAT" />
@@ -261,22 +260,22 @@
 									<Attribute name="format" value="%d %%" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_AlphaNotInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaNotInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</Slider>
-							<CheckButton name="KRFOptionsFrame_SoloRaidFrame" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="SoloRaidFrame" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_SOLORAID" />
 									<Attribute name="tooltip" value="KRF_OPTION_SOLORAID_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_AlphaNotInCombat" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaNotInCombat" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</CheckButton>
-							<Button name="KRFOptionsFrame_Debug" inherits="UIPanelButtonTemplate">
+							<Button parentKey="Debug" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_SoloRaidFrame" />
+									<Anchor point="TOP" relativeKey="$parent.SoloRaidFrame" />
 									<Anchor point="RIGHT" relativeTo="$parent"><Offset x="0" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
@@ -289,10 +288,10 @@
 									</OnClick>
 								</Scripts>
 							</Button>
-							<Button name="KRFOptionsFrame_EditMode" inherits="UIPanelButtonTemplate">
+							<Button parentKey="EditMode" inherits="UIPanelButtonTemplate">
 								<Size x="300" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
@@ -305,15 +304,15 @@
 									</OnClick>
 								</Scripts>
 							</Button>
-							<CheckButton name="KRFOptionsFrame_LabelMaxBuffs" inherits="KRFHeadingWidget">
+							<CheckButton parentKey="LabelMaxBuffs" inherits="KRFHeadingWidget">
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_EditMode" relativePoint="BOTTOM"><Offset x="0" y="-15" /></Anchor>
+									<Anchor point="TOP" relativeKey="$parent.EditMode" relativePoint="BOTTOM"><Offset x="0" y="-15" /></Anchor>
 								</Anchors>
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_BUFFS_HEADER" />
 								</Attributes>
 							</CheckButton>
-							<Slider name="KRFOptionsFrame_BuffsScale" inherits="KRFSliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
+							<Slider parentKey="BuffsScale" inherits="KRFSliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_BUFFSSCALE" />
@@ -321,11 +320,11 @@
 									<Attribute name="format" value="x %.2f" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_LabelMaxBuffs" relativePoint="BOTTOM"><Offset x="0" y="-15"/></Anchor>
+									<Anchor point="TOP" relativeKey="$parent.LabelMaxBuffs" relativePoint="BOTTOM"><Offset x="0" y="-15"/></Anchor>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="KRFOptionsFrame_MaxBuffs" inherits="KRFSliderWidget" minValue="1" maxValue="3" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
+							<Slider parentKey="MaxBuffs" inherits="KRFSliderWidget" minValue="1" maxValue="3" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_MAXBUFFS" />
@@ -333,12 +332,12 @@
 									<Attribute name="format" value="KRF_OPTION_MAXBUFFS_FORMAT" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_BuffsScale" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="TOPLEFT">
 										<Offset x="270" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Slider>
-							<Slider name="KRFOptionsFrame_DebuffsScale" inherits="KRFSliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
+							<Slider parentKey="DebuffsScale" inherits="KRFSliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_DEBUFFSSCALE" />
@@ -346,59 +345,67 @@
 									<Attribute name="format" value="x %.2f" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</Slider>
-							<CheckButton name="KRFOptionsFrame_LabelOthers" inherits="KRFHeadingWidget">
+							<CheckButton parentKey="LabelOthers" inherits="KRFHeadingWidget">
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_DebuffsScale" relativePoint="BOTTOM" />
+									<Anchor point="TOP" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOM"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 								<Attributes>
-									<Attribute name="text" value="" />
+									<Attribute name="text" value="KRF_OPTION_OTHERS_HEADER" />
 								</Attributes>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_FriendsClassColor_Nameplates" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="FriendsClassColor_Nameplates" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES" />
 									<Attribute name="tooltip" value="KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_LabelOthers" relativePoint="BOTTOM"><Offset x="0" y="-15"/></Anchor>
+									<Anchor point="TOP" relativeKey="$parent.LabelOthers" relativePoint="BOTTOM"><Offset x="0" y="-0"/></Anchor>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_EnemiesClassColor_Nameplates" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="EnemiesClassColor_Nameplates" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES" />
 									<Attribute name="tooltip" value="KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOP" relativeTo="KRFOptionsFrame_FriendsClassColor_Nameplates" relativePoint="BOTTOM"><Offset x="0" y="0"/></Anchor>
+									<Anchor point="TOP" relativeKey="$parent.FriendsClassColor_Nameplates" relativePoint="BOTTOM"><Offset x="0" y="0"/></Anchor>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
 								</Anchors>
 							</CheckButton>
-							<Button name="KRFOptionsFrame_WhatsNew" inherits="UIPanelButtonTemplate">
+							<Button parentKey="WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_FriendsClassColor_Nameplates" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.FriendsClassColor_Nameplates" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-40"/>
 									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
 										self.Text:SetText(KRF_OPTION_WHATSNEW);
-										self.tooltipText = KRF_WHATSNEW;
 									</OnLoad>
 									<OnClick>
-										-- KRF_AddMsg(KRF_WHATSNEW);
 										SLASH_KRF_command("new");
 									</OnClick>
+									<OnEnter>										
+										GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
+										GameTooltip:SetText(KRF_WHATSNEW);
+									</OnEnter>
 								</Scripts>
 							</Button>
-							<Button name="KRFOptionsFrame_ResetOptions" inherits="UIPanelButtonTemplate">
+							<Button inherits="UIPanelInfoButton">
+								<Size x="20" y="20" />
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.WhatsNew"><Offset x="40" y="-2"/></Anchor>
+								</Anchors>
+							</Button>
+							<Button parentKey="ResetOptions" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_WhatsNew" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.WhatsNew" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-25"/>
 									</Anchor>
 								</Anchors>
@@ -408,39 +415,37 @@
 										self.tooltipText = KRF_OPTION_RESET_OPTIONS;
 									</OnLoad>
 									<OnClick>
-										KRF_SetDefaultOptions(KRF_DefaultOptions, true);
-										_G.PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
-										ReloadUI();
+										StaticPopup_Show ("KRF_CONFIRM_RESET")
 									</OnClick>
 								</Scripts>
 							</Button>
-							<CheckButton name="KRFOptionsFrame_ShowMsgNormal" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="ShowMsgNormal" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_SHOWMSGNORMAL" />
 									<Attribute name="tooltip" value="KRF_OPTION_SHOWMSGNORMAL" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_ResetOptions" relativePoint="BOTTOMLEFT"><Offset x="0" y="-50"/></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.ResetOptions" relativePoint="BOTTOMLEFT"><Offset x="0" y="-50"/></Anchor>
 								</Anchors>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_ShowMsgWarning" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="ShowMsgWarning" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_SHOWMSGWARNING" />
 									<Attribute name="tooltip" value="KRF_OPTION_SHOWMSGWARNING" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_ShowMsgNormal" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.ShowMsgNormal" relativePoint="TOPLEFT">
 										<Offset x="170" y="0"/>
 									</Anchor>
 								</Anchors>
 							</CheckButton>
-							<CheckButton name="KRFOptionsFrame_ShowMsgError" inherits="KRFCheckboxWidget">
+							<CheckButton parentKey="ShowMsgError" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_SHOWMSGERR" />
 									<Attribute name="tooltip" value="KRF_OPTION_SHOWMSGERR" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="KRFOptionsFrame_ShowMsgNormal" relativePoint="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.ShowMsgNormal" relativePoint="TOPLEFT">
 										<Offset x="340" y="0"/>
 									</Anchor>
 								</Anchors>
@@ -456,7 +461,21 @@
 				self.name = KRF_TITLE;
 				self.okay = SaveKRFOptions;
 				self.refresh = RefreshKRFOptions;
-				InterfaceOptions_AddCategory(self);
+				InterfaceOptions_AddCategory(self);				
+				if (KRFOptionsScrollFrame ~= nil) then
+					local BACKDROP_TOOLTIP = {
+						bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+						edgeFile = "Interface\\FriendsFrame\\UI-Toast-Border",
+						tile = true,
+						tileSize = 8,
+						edge = true,
+						edgeSize = 8,
+						insets = {left = 2, right = 2, top = 2, bottom = 2},
+					};
+
+					if (BackdropTemplateMixin) then Mixin(KRFOptionsScrollFrame, BackdropTemplateMixin) end
+					KRFOptionsScrollFrame:SetBackdrop(BACKDROP_TOOLTIP)
+				end
 				if KRFOptionsFrame ~= nil and KRFOptionsFrame.HandleVis ~= nil then
 					KRFOptionsFrame:Hide();
 				end

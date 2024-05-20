@@ -1,3 +1,6 @@
+v10.2.704
+- UI enhancements
+
 v10.2.703
 - Finally found main issue: packager bug, thanks to foxlit and Tsxy
 

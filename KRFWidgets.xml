@@ -4,7 +4,7 @@
 	<CheckButton name="KRFCheckboxWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
 		<Layers>
 			<Layer level="ARTWORK">
-			<FontString name="$parentText" inherits="GameFontHighlightLeft" parentKey="Text">
+			<FontString inherits="GameFontHighlightLeft" parentKey="Text">
 				<Anchors>
 				<Anchor point="LEFT" relativePoint="RIGHT">
 					<Offset>
