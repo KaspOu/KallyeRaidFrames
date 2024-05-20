@@ -8,12 +8,10 @@
 	<Frame name="KRFOptionsContainer">
 		<Layers>
 			<Layer level="ARTWORK">
-
 				<FontString name="$parent_HeaderLabel" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_TITLE">
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 					<Size><AbsDimension x="550" y="30" /></Size>
 				</FontString>
-				<!--@do-not-package@--><!-- Remove Scroll from here (1/2) ######## --><!--@end-do-not-package@-->
 			</Layer>
 		</Layers>
 		<Frames>
@@ -45,7 +43,6 @@
 						<Size x="550" y="850" />
 						<Layers>
 							<Layer level="ARTWORK">
-								<!--@do-not-package@--><!-- END Remove Scroll from here (1/2)  ######## --><!--@end-do-not-package@-->
 							</Layer>
 						</Layers>
 						<Frames>
@@ -448,12 +445,10 @@
 									</Anchor>
 								</Anchors>
 							</CheckButton>
-							<!--@do-not-package@--><!-- Remove Scroll from here (2/2) ########  --><!--@end-do-not-package@-->
 						</Frames>
 					</Frame>
 				</ScrollChild>
 			</ScrollFrame>
-			<!--@do-not-package@--><!-- END Remove Scroll from here (2/2) ########  --><!--@end-do-not-package@-->
 		</Frames>
 		<Scripts>
 			<OnLoad>
