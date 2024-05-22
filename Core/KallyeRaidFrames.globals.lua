@@ -6,8 +6,9 @@ if (C_AddOns.GetAddOnInfo) then
 else
   KRF_ADDON_NAME,KRF_TITLE, KRF_NOTES = GetAddOnInfo("KallyeRaidFrames");
 end
+BINDING_NAME_KRaidFrames =  KRF_ADDON_NAME.." options";
 
-KRF_IS_RETAIL = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE);
+KRF_IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 
 KRF_HAS_colorNameBySelection = KRF_IS_RETAIL; -- colorNameBySelection, Since BfA (7)
 

@@ -330,7 +330,7 @@ function KRF_UpdateNameColor(frame)
 				end
 				-- colorNameBySelection: nameplates already colored, Since BfA (7)
 				if (not KRF_HAS_colorNameBySelection) then
-					-- on every refresh, not only player, it will avoid misscolorations on updates
+					-- on every refresh, it will avoid misscolorations on updates
 					local healthBar = frame.healthBar;
 					healthBar:SetStatusBarColor(c.r, c.g, c.b);
 				end
