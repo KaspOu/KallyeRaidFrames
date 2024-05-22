@@ -77,40 +77,40 @@ function KRF_OnEvent(self, event, ...)
 		KRF_SetDefaultOptions(KRF_DefaultOptions);
 
 		-- ! Hooks
-		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateHealth);
+		hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
+		hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
+		hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateHealth);
 		if (CompactUnitFrame_UpdateHealPrediction) then
 			-- Since DragonFlight (10)
-			_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
+			hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
 		else
 			-- Classic
-			_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
+			hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
 		end
 		
 		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
 			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
-			_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
-			_G.hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateInRange);
+			hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
+			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateInRange);
 		end
 		if KallyeRaidFramesOptions.BuffsScale ~= 1 or KallyeRaidFramesOptions.DebuffsScale ~= 1 then
-			_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
+			hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
 		end
 
 		-- ! SoloRaid Frames
 		if (KallyeRaidFramesOptions.SoloRaidFrame) then
 			if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 				-- Edit Mode - Since DragonFlight (10)
-				_G.hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+				hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
 			else
 				-- Classic
-				_G.CompactRaidFrameManager:Show()
-				_G.CompactRaidFrameManager.Hide = function() end
-				_G.CompactRaidFrameContainer:Show()
-				_G.CompactRaidFrameContainer.Hide = function() end
+				CompactRaidFrameManager:Show()
+				CompactRaidFrameManager.Hide = function() end
+				CompactRaidFrameContainer:Show()
+				CompactRaidFrameContainer.Hide = function() end
 
-				_G.GetDisplayedAllyFrames = KRF_SoloRaid_GetDisplayedAllyFrames;
-				_G.CompactRaidFrameContainer_OnEvent = KRF_SoloRaid_CompactRaidFrameContainer_OnEvent;
+				GetDisplayedAllyFrames = KRF_SoloRaid_GetDisplayedAllyFrames;
+				CompactRaidFrameContainer_OnEvent = KRF_SoloRaid_CompactRaidFrameContainer_OnEvent;
 			end
 		end
 
@@ -140,7 +140,7 @@ function SLASH_KRF_command(msgIn)
 		KRF_ShowEditMode("PartyFrame");
 	elseif msgIn == "debug" then
 		KallyeRaidFramesOptions.DebugMode = not KallyeRaidFramesOptions.DebugMode;
-		KRF_AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and GR.."true" or RD.."false"), true);
+		KRF_AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and KRF_Globals.GR.."true" or KRF_Globals.RD.."false"), true);
 		SLASH_KRF_command();
 	else
 		if Settings then
@@ -225,7 +225,7 @@ function RefreshKRFOptions()
 				local value = KallyeRaidFramesOptions[k];
 				if value == nil then
 					value = v;
-					KRF_AddMsgErr(format("Option not found ("..YLD.."%s|r), loading default value...", k));
+					KRF_AddMsgErr(format("Option not found ("..KRF_Globals.YLD.."%s|r), loading default value...", k));
 				end;
 
 				if control.type == "color" then

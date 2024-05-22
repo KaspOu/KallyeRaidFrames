@@ -27,7 +27,7 @@ function KRFCheckboxWidget_OnEnter(self)
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:SetText(WH..text);
+	GameTooltip:SetText(KRF_Globals.WH..text);
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end
@@ -197,7 +197,7 @@ function KRFColorWidget_OnEnter(self)
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:SetText(WH..text);
+	GameTooltip:SetText(KRF_Globals.WH..text);
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end
@@ -260,7 +260,7 @@ function KRFSliderWidget_OnEnter(self)
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_TOP");
-	GameTooltip:SetText(WH..text);
+	GameTooltip:SetText(KRF_Globals.WH..text);
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end

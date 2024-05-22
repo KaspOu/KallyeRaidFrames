@@ -8,11 +8,11 @@
 	<Frame name="KRFOptionsContainer">
 		<Layers>
 			<Layer level="ARTWORK">
-				<FontString name="$parent_HeaderLabel" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_TITLE">
+				<FontString name="$parent_Title" inherits="GameFontNormalLarge" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_TITLE">
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 					<Size><AbsDimension x="550" y="30" /></Size>
 				</FontString>
-				<FontString name="$parent_HeaderLabel" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_ASTERIX">
+				<FontString name="$parent_FooterNote" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="TOP" text="KRF_OPTIONS_ASTERIX">
 					<Anchors><Anchor point="BOTTOMRIGHT"><Offset><AbsDimension x="20" y="-10" /></Offset></Anchor></Anchors>
 					<Size><AbsDimension x="270" y="20" /></Size>
 				</FontString>
@@ -27,16 +27,16 @@
 				<Scripts>
 					<OnEnter>
 						GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT");
-						GameTooltip:SetText(YL..KRF_SUBTITLE.."|r\n\n"..WH..KRF_DESC);
+						GameTooltip:SetText(KRF_Globals.YL..KRF_SUBTITLE.."|r\n\n"..KRF_Globals.WH..KRF_DESC);
 					</OnEnter>
 				</Scripts>
 			</Button>
 			<ScrollFrame name="KRFOptionsScrollFrame" inherits="ScrollFrameTemplate" Framelevel="0" enablemouse="true" setAllPoints="true">				
 				<KeyValues>
 					<KeyValue key="scrollBarHideIfUnscrollable" value="false" type="boolean"/>
-					<KeyValue key="scrollBarX" value="6" type="number"/>
-					<KeyValue key="scrollBarTopY" value="3" type="number"/>
-					<KeyValue key="scrollBarBottomY" value="-3" type="number"/>
+					<KeyValue key="scrollBarX" value="KRF_Globals.scrollBarX" type="global"/>
+					<KeyValue key="scrollBarTopY" value="0" type="number"/>
+					<KeyValue key="scrollBarBottomY" value="-0" type="number"/>
 				</KeyValues>
 				<Layers>
 					<Layer level="BACKGROUND">
@@ -300,7 +300,7 @@
 									</OnLoad>
 									<OnClick>
 										KRF_ShowEditMode("PartyFrame");
-										_G.PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
+										PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
 									</OnClick>
 								</Scripts>
 							</Button>
