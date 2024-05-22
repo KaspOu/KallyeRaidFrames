@@ -231,13 +231,27 @@
 										<Offset x="270" y="0"/>
 									</Anchor>
 								</Anchors>
+							</CheckButton>							
+							<CheckButton parentKey="BlizzFriendsClassColor" inherits="KRFCheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="KRF_OPTION_BLIZZARDFRIENDSCLASSCOLOR" />
+									<Attribute name="tooltip" value="KRF_OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.FriendsClassColor" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+								<Scripts>
+									<OnShow>
+										self:SetChecked(GetCVarBool("raidFramesDisplayClassColor"));
+									</OnShow>
+								</Scripts>
 							</CheckButton>
 							<CheckButton parentKey="IconOnDeath" inherits="KRFCheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="KRF_OPTION_ICONONDEATH" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.FriendsClassColor" relativePoint="BOTTOMLEFT"/>
+									<Anchor point="TOPLEFT" relativeKey="$parent.BlizzFriendsClassColor" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 							</CheckButton>
 

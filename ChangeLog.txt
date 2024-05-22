@@ -1,4 +1,5 @@
 v10.2.705
+- Added Blizzard raid class colors option (CVar)
 - Enhancements, Code cleaning
 
 v10.2.704

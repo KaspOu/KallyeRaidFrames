@@ -200,6 +200,8 @@ function SaveKRFOptions()
 	-- Reset party health as soon as possible
 	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 
+	SetCVar("raidFramesDisplayClassColor", KRFOptionsFrame.BlizzFriendsClassColor:GetChecked());
+
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
 		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true);
 	end
@@ -254,6 +256,7 @@ function ManageKRFOptionsVisibility()
 		KRFOptionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
 	else
 		KRF_OptionsEnable(KRFOptionsFrame.EditMode, false, .2);
+		KRF_OptionsEnable(KRFOptionsFrame.BlizzFriendsClassColor, false, .2);
 	end
 
 	KRF_OptionsEnable(KRFOptionsFrame.MaxBuffs, false, .2);
