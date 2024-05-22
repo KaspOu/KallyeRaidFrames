@@ -15,9 +15,9 @@
 ## X-Website: https://bitbucket.org/KaspOu/kallyeraidframes/
 ## X-Curse-Project-ID: 410566
 
-KallyeRaidFrames.globals.lua
-locales.xml
-KRFWidgets.xml
-KallyeRaidFramesAPI.lua
-KallyeRaidFrames.lua
-KallyeRaidFrames.xml
+Core\KallyeRaidFrames.globals.lua
+Core\locales.xml
+Core\KRFWidgets.xml
+Core\KallyeRaidFramesAPI.lua
+Core\KallyeRaidFrames.lua
+Core\KallyeRaidFrames.xml
