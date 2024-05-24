@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-	<Script file="KRFWidgets.lua"/>
-	<CheckButton name="KRFCheckboxWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+	<Include file="KRFWidgets.lua"/>
+	<CheckButton name="KRFUI_CheckboxWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
 		<Layers>
 			<Layer level="ARTWORK">
 			<FontString inherits="GameFontHighlightLeft" parentKey="Text">
@@ -16,37 +16,37 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad function="KRFCheckboxWidget_OnLoad"/>
-			<OnClick function="KRFCheckboxWidget_OnClick"/>
-			<OnEnter function="KRFCheckboxWidget_OnEnter"/>
-			<OnLeave function="KRFCheckboxWidget_OnLeave"/>
+			<OnLoad> KRFUI.CheckboxWidget_OnLoad(self)</OnLoad>
+			<OnClick>KRFUI.CheckboxWidget_OnClick(self)</OnClick>
+			<OnEnter>KRFUI.CheckboxWidget_OnEnter(self)</OnEnter>
+			<OnLeave>KRFUI.CheckboxWidget_OnLeave(self)</OnLeave>
 		</Scripts>
 	</CheckButton>
-	<CheckButton name="KRFColorWidget" inherits="KRFCheckboxWidget" virtual="true">
+	<CheckButton name="KRFUI_ColorWidget" inherits="KRFUI_CheckboxWidget" virtual="true">
 		<Scripts>
-			<OnLoad function="KRFColorWidget_OnLoad"/>
-			<OnClick function="KRFColorWidget_OnClick"/>
-			<OnEnter function="KRFColorWidget_OnEnter"/>
-			<OnLeave function="KRFColorWidget_OnLeave"/>
+			<OnLoad> KRFUI.ColorWidget_OnLoad(self)</OnLoad>
+			<OnClick>KRFUI.ColorWidget_OnClick(self)</OnClick>
+			<OnEnter>KRFUI.ColorWidget_OnEnter(self)</OnEnter>
+			<OnLeave>KRFUI.ColorWidget_OnLeave(self)</OnLeave>
 		</Scripts>
 	</CheckButton>
-	<Slider name="KRFSliderWidget" inherits="OptionsSliderTemplate" virtual="true">
+	<Slider name="KRFUI_SliderWidget" inherits="OptionsSliderTemplate" virtual="true">
 		<Scripts>
-			<OnLoad function="KRFSliderWidget_OnLoad"/>
-			<OnValueChanged function="KRFSliderWidget_OnValueChanged"/>
-			<OnEnter function="KRFSliderWidget_OnEnter"/>
-			<OnLeave function="KRFSliderWidget_OnLeave"/>
+			<OnLoad> KRFUI.SliderWidget_OnLoad(self)</OnLoad>
+			<OnEnter>KRFUI.SliderWidget_OnEnter(self)</OnEnter>
+			<OnLeave>KRFUI.SliderWidget_OnLeave(self)</OnLeave>
+			<OnValueChanged>KRFUI.SliderWidget_OnValueChanged(self, value)</OnValueChanged>
 		</Scripts>
 	</Slider>
-	<CheckButton name="KRFHeadingWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+	<CheckButton name="KRFUI_HeadingWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
 		<Size x="100" y="40" />
 		<Anchors>
 			<Anchor point="LEFT" relativeTo="$parent" relativePoint="LEFT"><Offset x="20" y="0"/></Anchor>
 			<Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT"><Offset x="0" y="0"/></Anchor>
 		</Anchors>
 		<Scripts>
-			<OnLoad function="KRFHeadingWidget_OnLoad"/>
-			<OnClick function="KRFHeadingWidget_OnClick"/>
+			<OnLoad> KRFUI.HeadingWidget_OnLoad(self)</OnLoad>
+			<OnClick>KRFUI.HeadingWidget_OnClick(self)</OnClick>
 		</Scripts>
 	</CheckButton>
 <!--@do-not-package@-->

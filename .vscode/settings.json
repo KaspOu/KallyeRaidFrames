@@ -86,7 +86,9 @@
         "ALL_SETTINGS",
         "CANCEL",
         "STATICPOPUP_TIMEOUT",
-        "CompactRaidFrameManager"
+        "CompactRaidFrameManager",
+        "InterfaceOptions_AddCategory",
+        "StaticPopup_Show"
     ],
     "cSpell.words": [
         "prepatch"

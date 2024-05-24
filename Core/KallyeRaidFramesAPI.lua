@@ -1,4 +1,7 @@
-function KRF_SetDefaultOptions(DefaultOptions, reset)
+local _, ns = ...
+local l = ns.I18N;
+
+function ns.SetDefaultOptions(DefaultOptions, reset)
 	if reset or KallyeRaidFramesOptions == nil then
 		KallyeRaidFramesOptions = CopyTable(DefaultOptions)
 	else
@@ -12,24 +15,6 @@ function KRF_SetDefaultOptions(DefaultOptions, reset)
 	end
 end
 
-StaticPopupDialogs["KRF_CONFIRM_RESET"] = {
-	showAlert = true,
-	text = CONFIRM_RESET_SETTINGS,
-	button1 = ALL_SETTINGS,
-	-- button3 = CURRENT_SETTINGS,
-	button2 = CANCEL,
-	OnAccept = function()												
-		KRF_SetDefaultOptions(KRF_DefaultOptions, true);
-		ReloadUI();
-	end,
-	-- OnAlt  = function()	end,
-	timeout = STATICPOPUP_TIMEOUT,
-	timeoutInformationalOnly = false,
-	whileDead = true,
-	hideOnEscape = true,
-	preferredIndex = 3,  -- avoid some UI taint
-};
-
 local startsWith = {
 	play = true, -- player
 	part = true, -- party
@@ -41,14 +26,14 @@ local function UnitInPartyOrRaid(frame)
 end
 
 local function KRF_UnitIsConnected(frame)
-	if KRF_Globals.IsDebugFramesTimerActive then
+	if ns.IsDebugFramesTimerActive then
 		return not frame._testUnitDisconnected;
 	end
 	return UnitIsConnected(frame.unit);
 end
 
 local function KRF_UnitIsDeadOrGhost(frame)
-	if KRF_Globals.IsDebugFramesTimerActive then
+	if ns.IsDebugFramesTimerActive then
 		return (frame._testHealthPercentage == 0 and not frame._testUnitDisconnected);
 	end
 	return UnitIsDeadOrGhost(frame.unit);
@@ -62,17 +47,16 @@ end
 local function mergeRGBA(r1, g1, b1, a1, r2, g2, b2, a2, percent)
 	return r1*(1-percent) + r2*percent, g1*(1-percent) + g2*percent, b1*(1-percent) + b2*percent, a1*(1-percent) + a2*percent
 end
-local function mergeRGB(r1, g1, b1, r2, g2, b2, percent, alpha)
-	return r1*(1-percent) + r2*percent, g1*(1-percent) + g2*percent, b1*(1-percent) + b2*percent, alpha
-end
 local function mergeColors(color1, color2, percent)
 	return mergeRGBA(color1.r, color1.g, color1.b, color1.a, color2.r, color2.g, color2.b, color2.a, percent)
 end
 local function darken(r, g, b, percent, alpha)
-	return r*(1-percent), g*(1-percent), b*(1-percent), alpha or 1
+	-- return r*(1-percent), g*(1-percent), b*(1-percent), alpha or 1
+	return mergeRGBA(r, g, b, alpha or 1, 0, 0, 0, alpha or 1, percent)
 end
 local function lighten(r, g, b, percent, alpha)
-	return r*(1-percent) + percent, g*(1-percent) + percent, b*(1-percent) + percent, alpha or 1
+	-- return r*(1-percent) + percent, g*(1-percent) + percent, b*(1-percent) + percent, alpha or 1
+	return mergeRGBA(r, g, b, alpha or 1, 1, 1, 1, alpha or 1, percent)
 end
 
 local function KRF_GetClassColors()
@@ -84,7 +68,7 @@ end
 ! Managing Health & Alpha
 - Normal or revert, depending on option
 ]]
-function KRF_Hook_UpdateHealth(frame, health)
+function ns.Hook_UpdateHealth(frame, health)
 	if KallyeRaidFramesOptions.UpdateHealthColor and not frame:IsForbidden() then
 		if not KallyeRaidFramesOptions.RevertBar then
 			UpdateHealth_Regular(frame, health)
@@ -100,7 +84,7 @@ end
 - then alpha out of combat
 - Disabled if alpha values are equals to blizzard default (100% / 55%)
 ]]
-function KRF_Hook_UpdateInRange(frame)
+function ns.Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then		
 		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
 		local newAlpha = 1;
@@ -128,16 +112,16 @@ function UpdateHealth_Regular(frame, health)
 			-- Disconnected
 			frame.healthBar:SetValue(0);
 			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .6, .4));
-			KRF_Hook_UpdateName(frame, true);
-			KRF_UpdateNameColor(frame);
+			ns.Hook_UpdateName(frame, true);
+			ns.UpdateNameColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
 			frame._wasDead = true;
 			if (KallyeRaidFramesOptions.IconOnDeath) then
-				KRF_Hook_UpdateName(frame, true);
+				ns.Hook_UpdateName(frame, true);
 			end
-			KRF_UpdateNameColor(frame);
+			ns.UpdateNameColor(frame);
 			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
 		else
 			-- Alive
@@ -147,9 +131,9 @@ function UpdateHealth_Regular(frame, health)
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false));
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
-					KRF_Hook_UpdateName(frame, true);
+					ns.Hook_UpdateName(frame, true);
 				end
-				KRF_UpdateNameColor(frame);
+				ns.UpdateNameColor(frame);
 				frame._wasDead = false;
 			end
 		end
@@ -172,16 +156,16 @@ function UpdateHealth_Reverted(frame, health)
 			-- Disconnected
 			frame.healthBar:SetValue(0);
 			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .6, .4));
-			KRF_Hook_UpdateName(frame, true);
-			KRF_UpdateNameColor(frame);
+			ns.Hook_UpdateName(frame, true);
+			ns.UpdateNameColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
 			frame._wasDead = true;
 			if (KallyeRaidFramesOptions.IconOnDeath) then
-				KRF_Hook_UpdateName(frame, true);
+				ns.Hook_UpdateName(frame, true);
 			end
-			KRF_UpdateNameColor(frame);
+			ns.UpdateNameColor(frame);
 		else
 			-- Alive
 			health = health or UnitHealth(frame.displayedUnit);
@@ -191,9 +175,9 @@ function UpdateHealth_Reverted(frame, health)
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame._wasDead then
 				if (KallyeRaidFramesOptions.IconOnDeath) then
-					KRF_Hook_UpdateName(frame, true);
+					ns.Hook_UpdateName(frame, true);
 				end
-				KRF_UpdateNameColor(frame);
+				ns.UpdateNameColor(frame);
 				frame._wasDead = false;
 			end
 
@@ -231,7 +215,7 @@ end
 - Role icon visible only for tanks / heals
 - Reposition name accordingly
 ]]
-function KRF_Hook_UpdateRoleIcon(frame)
+function ns.Hook_UpdateRoleIcon(frame)
 	if not frame:IsForbidden() and (KallyeRaidFramesOptions.HideDamageIcons or KallyeRaidFramesOptions.MoveRoleIcons) then
 		local icon = frame.roleIcon;
 		if not icon then
@@ -257,7 +241,7 @@ end
 ! Manage buffs
 - Scale buffs / debuffs
 ]]
-function KRF_Hook_ManageBuffs(frame,numbuffs)
+function ns.Hook_ManageBuffs(frame,numbuffs)
 	if KallyeRaidFramesOptions.BuffsScale ~= 1 then
 		for i=1, #frame.buffFrames do
 			frame.buffFrames[i]:SetScale(KallyeRaidFramesOptions.BuffsScale);
@@ -284,17 +268,17 @@ end
 ! Manage player names (partyframes & nameplates)
 - Hide realm
 - Add death icon (option)
-- Call to KRF_UpdateNameColor (only inside hook)
+- Call to ns.UpdateNameColor (only inside hook)
 ]]
-function KRF_Hook_UpdateName(frame, calledOutsideHook)
+function ns.Hook_UpdateName(frame, calledOutsideHook)
 	if not frame:IsForbidden() then
 		if UnitPlayerControlled(frame.displayedUnit) then
 			if (not calledOutsideHook) then
-				KRF_UpdateNameColor(frame);
+				ns.UpdateNameColor(frame);
 			end
 
 			local name = frame.name;
-			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and KRF_Globals.RT8 or "";
+			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or "";
 
 			if KallyeRaidFramesOptions.HideRealm then
 				local playerName, realm = UnitName(frame.displayedUnit);
@@ -314,7 +298,7 @@ end
 ! Manage player name colors (partyframes & nameplates)
 - Class Color for Nameplates or Frames (inc. Dead / Disconnected)
 ]]
-function KRF_UpdateNameColor(frame)
+function ns.UpdateNameColor(frame)
 	if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) then
 		local name = frame.name;
 		local r, g, b, a = UnitSelectionColor(frame.displayedUnit);
@@ -329,7 +313,7 @@ function KRF_UpdateNameColor(frame)
 					name:SetShadowColor(c.r, c.g, c.b, 0.2);
 				end
 				-- colorNameBySelection: nameplates already colored, Since BfA (7)
-				if (not KRF_HAS_colorNameBySelection) then
+				if (not ns.HAS_colorNameBySelection) then
 					-- on every refresh, it will avoid misscolorations on updates
 					local healthBar = frame.healthBar;
 					healthBar:SetStatusBarColor(c.r, c.g, c.b);
@@ -362,7 +346,7 @@ end
 ! Solo Raid Frames main, since DragonFlight (10)
 - Show Raid Frames if solo
 ]]
-function KRF_Hook_CompactPartyFrame_UpdateVisibility()
+function ns.Hook_CompactPartyFrame_UpdateVisibility()
 	if (not IsInGroup() and not IsInRaid()) then
 		CompactPartyFrame:SetShown(true);
 	end
@@ -373,7 +357,7 @@ end
 - Show Party/Raid Frames even if solo
 ]]
 local KRF_Blizzard_GetDisplayedAllyFrames = GetDisplayedAllyFrames; -- protect original behavior
-function KRF_SoloRaid_GetDisplayedAllyFrames()
+function ns.SoloRaid_GetDisplayedAllyFrames()
 	-- Call original default behavior
 	local daf = KRF_Blizzard_GetDisplayedAllyFrames()
 
@@ -384,7 +368,7 @@ function KRF_SoloRaid_GetDisplayedAllyFrames()
 	end
 end
 local KRF_Blizzard_CompactRaidFrameContainer_OnEvent = CompactRaidFrameContainer_OnEvent;  -- protect original behavior
-function KRF_SoloRaid_CompactRaidFrameContainer_OnEvent(self, event, ...)
+function ns.SoloRaid_CompactRaidFrameContainer_OnEvent(self, event, ...)
 	-- Call original default behavior
 	KRF_Blizzard_CompactRaidFrameContainer_OnEvent(self, event, ...)
 
@@ -418,33 +402,7 @@ function GetHPSeverity(percent, revert)
 	end
 end
 
-
---[[
-!  Default chat
-]]
-function KRF_AddMsg(msg, force)
-	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgNormal)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", KRF_Globals.YLL, msg or ""));
-	end
-end
---[[
-!  Warning chat
-]]
-function KRF_AddMsgWarn(msg, force)
-	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgWarning)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", KRF_Globals.CY, msg or ""));
-	end
-end
---[[
-!  Error chat
-]]
-function KRF_AddMsgErr(msg, force)
-	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgError)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s: %s|r", KRF_Globals.RDL, KRF_TITLE, msg or ""));
-	end
-end
-
-function KRF_OptionsEnable(FrameObject, isEnabled, disabledAlpha)
+function ns.OptionsEnable(FrameObject, isEnabled, disabledAlpha)
 	if isEnabled then
 		FrameObject:Enable();
 		FrameObject:SetAlpha(1);
@@ -453,14 +411,14 @@ function KRF_OptionsEnable(FrameObject, isEnabled, disabledAlpha)
 		FrameObject:SetAlpha(disabledAlpha or .6);
 	end
 end
-function KRF_OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled)
+function ns.OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled)
 	FrameObject:SetShown(isShowned);
 	if (isShowned) then
-		KRF_OptionsEnable(FrameObject, isEnabled);
+		ns.OptionsEnable(FrameObject, isEnabled);
 	end
 end
 
-function KRF_ApplyFuncToRaidFrames(func, ...)
+function ns.ApplyFuncToRaidFrames(func, ...)
 	for member = 1, 40 do
 		local frame = _G["CompactRaidFrame"..member];
 		if frame and frame:IsVisible() then
@@ -486,7 +444,7 @@ function KRF_ApplyFuncToRaidFrames(func, ...)
 	end
 end
 
-function KRF_RaidFrames_ResetHealth(frame, testMode)
+function ns.RaidFrames_ResetHealth(frame, testMode)
 	local health = UnitHealth(frame.displayedUnit);
 	if testMode then
 		if frame._testHealthPercentage == nil then
@@ -496,7 +454,7 @@ function KRF_RaidFrames_ResetHealth(frame, testMode)
 		if frame._testHealthPercentage == 0 and not frame._testUnitDisconnected then
 			frame._testUnitDisconnected = true;
 			frame.statusText:SetText(PLAYER_OFFLINE);
-			KRF_Hook_UpdateHealth(frame, 0);
+			ns.Hook_UpdateHealth(frame, 0);
 			return
 		end
 		frame._testUnitDisconnected = nil;
@@ -510,41 +468,41 @@ function KRF_RaidFrames_ResetHealth(frame, testMode)
 		end
 	end
 	frame.healthBar:SetValue(health);
-	KRF_Hook_UpdateHealth(frame, health);
+	ns.Hook_UpdateHealth(frame, health);
 end
 
-function KRF_DebugFrames()
-	KRF_Globals.IsDebugFramesTimerActive = not KRF_Globals.IsDebugFramesTimerActive;
-	if KRF_Globals.IsDebugFramesTimerActive then
-		KRF_AddMsgWarn(KRF_OPTION_DEBUG_ON_MESSAGE);
-		KRFOptionsFrame.Debug.Text:SetText(KRF_OPTION_DEBUG_OFF);
-		KRFOptionsFrame.Debug.tooltipText = KRF_OPTION_DEBUG_OFF;
+function ns.DebugFrames()
+	ns.IsDebugFramesTimerActive = not ns.IsDebugFramesTimerActive;
+	if ns.IsDebugFramesTimerActive then
+		ns.AddMsgWarn(l.OPTION_DEBUG_ON_MESSAGE);
+		ns.optionsFrame.Debug.Text:SetText(l.OPTION_DEBUG_OFF);
+		ns.optionsFrame.Debug.tooltipText = l.OPTION_DEBUG_OFF;
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
-		KRF_LoopDebug();
+		ns.LoopDebug();
 	else
-		KRF_AddMsgWarn(KRF_OPTION_DEBUG_OFF_MESSAGE);
-		KRFOptionsFrame.Debug.Text:SetText(KRF_OPTION_DEBUG_ON);
-		KRFOptionsFrame.Debug.tooltipText = KRF_OPTION_DEBUG_ON;
+		ns.AddMsgWarn(l.OPTION_DEBUG_OFF_MESSAGE);
+		ns.optionsFrame.Debug.Text:SetText(l.OPTION_DEBUG_ON);
+		ns.optionsFrame.Debug.tooltipText = l.OPTION_DEBUG_ON;
 		PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE, "Master")
 	end
 end
-function KRF_LoopDebug()
-	if KRF_Globals.IsDebugFramesTimerActive then
-		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true);
-		C_Timer.After(.5, KRF_LoopDebug);
+function ns.LoopDebug()
+	if ns.IsDebugFramesTimerActive then
+		ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, true);
+		C_Timer.After(.5, ns.LoopDebug);
 	else
-		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
+		ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
 	end
 end
 
-function KRF_ShowEditMode(window)
+function ns.ShowEditMode(window)
 	ShowUIPanel(EditModeManagerFrame);
 	if window == "PartyFrame" then
 		C_EditMode.SetAccountSetting(Enum.EditModeAccountSetting.ShowPartyFrames, 1);
 		--EditModeManagerFrame:SelectSystem(PartyFrame);
 		PartyFrame:SelectSystem();
 		PartyFrame:HighlightSystem();
-		KRF_AddMsgWarn(KRF_OPTION_EDITMODE_PARTY_NOTE);
+		ns.AddMsgWarn(l.OPTION_EDITMODE_PARTY_NOTE);
 	end
 end
 

@@ -19,5 +19,4 @@ Core\KallyeRaidFrames.globals.lua
 Core\locales.xml
 Core\KRFWidgets.xml
 Core\KallyeRaidFramesAPI.lua
-Core\KallyeRaidFrames.lua
 Core\KallyeRaidFrames.xml

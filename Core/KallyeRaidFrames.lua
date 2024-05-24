@@ -2,13 +2,14 @@
 	Hello to Kallye Raid Frames
 	Last version: @project-version@ (@project-date-iso@)
 ]]
-
+local _, ns = ...
+local l = ns.I18N;
 local isInit = false;
 local isLoaded = false;
 
 
-KRF_DefaultOptions = {
-	Version = KRF_VERSION,
+local KRF_DefaultOptions = {
+	Version = ns.VERSION,
 
 	UpdateHealthColor = true,
 	BGColorLow =		{ r= 1, g= 0, b= 0, a = 1 },
@@ -43,10 +44,99 @@ KRF_DefaultOptions = {
 
 	DebugMode = false,
 };
-KRF_SetDefaultOptions(KRF_DefaultOptions);
+ns.SetDefaultOptions(KRF_DefaultOptions);
 
 
-function KRF_OnLoad(self)
+
+local function SLASH_KRF_command(msgIn)
+	if (not isLoaded) then
+		ns.AddMsgWarn(l.INIT_FAILED, true);
+		return;
+	end
+	if msgIn == "new" then
+		ns.AddMsg(l.WHATSNEW);
+	elseif msgIn == "test" then
+		ns.DebugFrames();
+	elseif msgIn == "edit" then
+		ns.ShowEditMode("PartyFrame");
+	elseif msgIn == "debug" then
+		KallyeRaidFramesOptions.DebugMode = not KallyeRaidFramesOptions.DebugMode;
+		ns.AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and l.GR.."true" or l.RD.."false"), true);
+		SLASH_KRF_command();
+	else
+		if Settings then
+			Settings.OpenToCategory(ns.TITLE);
+		else
+			InterfaceOptionsFrame_OpenToCategory(ns.TITLE);
+		end
+	end
+end
+
+local function SLASH_CLEAR_command()
+	SELECTED_CHAT_FRAME:Clear()
+end
+
+-- KRF_OnEvent
+local function OnEvent(self, event, ...)
+	local arg1 = select(1, ...);
+	if (event == "ADDON_LOADED" and arg1 == ns.ADDON_NAME) then
+		self:UnregisterEvent("ADDON_LOADED");
+		isLoaded = true;
+
+		ns.SetDefaultOptions(KRF_DefaultOptions);
+
+		-- ! Hooks
+		hooksecurefunc("CompactUnitFrame_UpdateName", ns.Hook_UpdateName);
+		hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", ns.Hook_UpdateRoleIcon);
+		hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateHealth);
+		if (CompactUnitFrame_UpdateHealPrediction) then
+			-- Since DragonFlight (10)
+			hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", ns.Hook_UpdateHealth);
+		else
+			-- Classic
+			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth);
+		end
+		
+		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
+			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
+			hooksecurefunc("CompactUnitFrame_UpdateInRange", ns.Hook_UpdateInRange);
+			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateInRange);
+		end
+		if KallyeRaidFramesOptions.BuffsScale ~= 1 or KallyeRaidFramesOptions.DebuffsScale ~= 1 then
+			hooksecurefunc("CompactUnitFrame_SetMaxBuffs", ns.Hook_ManageBuffs);
+		end
+
+		-- ! SoloRaid Frames
+		if (KallyeRaidFramesOptions.SoloRaidFrame) then
+			if (EditModeManagerFrame.UseRaidStylePartyFrames) then
+				-- Edit Mode - Since DragonFlight (10)
+				hooksecurefunc(CompactPartyFrame, "UpdateVisibility", ns.Hook_CompactPartyFrame_UpdateVisibility);
+			else
+				-- Classic
+				CompactRaidFrameManager:Show()
+				CompactRaidFrameManager.Hide = function() end
+				CompactRaidFrameContainer:Show()
+				CompactRaidFrameContainer.Hide = function() end
+
+				GetDisplayedAllyFrames = ns.SoloRaid_GetDisplayedAllyFrames;
+				CompactRaidFrameContainer_OnEvent = ns.SoloRaid_CompactRaidFrameContainer_OnEvent;
+			end
+		end
+
+		-- ! Addon Loaded ^^
+		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
+			KallyeRaidFramesOptions.Version = KRF_DefaultOptions.Version;
+			if (l.WHATSNEW ~= "") then
+				ns.AddMsg(l.WHATSNEW);
+			end
+		end
+		if (KallyeRaidFramesOptions.DebugMode) then
+			SLASH_KRF_command()
+		end
+	end
+end -- END KRF_OnEvent
+
+local function InitAddon(frame)
 
 	SlashCmdList["KRF"] = SLASH_KRF_command;
 	SLASH_KRF1 = "/krf";
@@ -59,104 +149,21 @@ function KRF_OnLoad(self)
 	if (isInit or InCombatLockdown()) then return; end
 
 	isInit = true;
-	self:SetScript("OnEvent",
-		function(self, event, ...)
-			KRF_OnEvent(self, event, ...);
+	frame:SetScript("OnEvent",
+		function(frame, event, ...)
+			OnEvent(frame, event, ...);
 		end
 	);
-	self:RegisterEvent("ADDON_LOADED");
+	frame:RegisterEvent("ADDON_LOADED");
 end -- END KRF_OnLoad
 
--- KRF_OnEvent
-function KRF_OnEvent(self, event, ...)
-	local arg1 = select(1, ...);
-	if (event == "ADDON_LOADED" and arg1 == KRF_ADDON_NAME) then
-		self:UnregisterEvent("ADDON_LOADED");
-		isLoaded = true;
-
-		KRF_SetDefaultOptions(KRF_DefaultOptions);
-
-		-- ! Hooks
-		hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
-		hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
-		hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateHealth);
-		if (CompactUnitFrame_UpdateHealPrediction) then
-			-- Since DragonFlight (10)
-			hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
-		else
-			-- Classic
-			hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
-		end
-		
-		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
-			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
-			hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
-			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateInRange);
-		end
-		if KallyeRaidFramesOptions.BuffsScale ~= 1 or KallyeRaidFramesOptions.DebuffsScale ~= 1 then
-			hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
-		end
-
-		-- ! SoloRaid Frames
-		if (KallyeRaidFramesOptions.SoloRaidFrame) then
-			if (EditModeManagerFrame.UseRaidStylePartyFrames) then
-				-- Edit Mode - Since DragonFlight (10)
-				hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
-			else
-				-- Classic
-				CompactRaidFrameManager:Show()
-				CompactRaidFrameManager.Hide = function() end
-				CompactRaidFrameContainer:Show()
-				CompactRaidFrameContainer.Hide = function() end
-
-				GetDisplayedAllyFrames = KRF_SoloRaid_GetDisplayedAllyFrames;
-				CompactRaidFrameContainer_OnEvent = KRF_SoloRaid_CompactRaidFrameContainer_OnEvent;
-			end
-		end
-
-		-- ! Addon Loaded ^^
-		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
-			KallyeRaidFramesOptions.Version = KRF_DefaultOptions.Version;
-			if (KRF_WHATSNEW ~= "") then
-				KRF_AddMsg(KRF_WHATSNEW);
-			end
-		end
-		if (KallyeRaidFramesOptions.DebugMode) then
-			SLASH_KRF_command()
-		end
-	end
-end -- END KRF_OnEvent
-
-function SLASH_KRF_command(msgIn)
-	if (not isLoaded) then
-		KRF_AddMsgWarn(KRF_INIT_FAILED, true);
-		return;
-	end
-	if msgIn == "new" then
-		KRF_AddMsg(KRF_WHATSNEW);
-	elseif msgIn == "test" then
-		KRF_DebugFrames();
-	elseif msgIn == "edit" then
-		KRF_ShowEditMode("PartyFrame");
-	elseif msgIn == "debug" then
-		KallyeRaidFramesOptions.DebugMode = not KallyeRaidFramesOptions.DebugMode;
-		KRF_AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and KRF_Globals.GR.."true" or KRF_Globals.RD.."false"), true);
-		SLASH_KRF_command();
-	else
-		if Settings then
-			Settings.OpenToCategory(KRF_TITLE);
-		else
-			InterfaceOptionsFrame_OpenToCategory(KRF_TITLE);
-		end
-	end
-end
-
-function SLASH_CLEAR_command()
-	SELECTED_CHAT_FRAME:Clear()
+do
+	local eventsFrame = CreateFrame("Frame", nil, UIParent)
+	InitAddon(eventsFrame);
 end
 
 
-function OptionsWReloadValues()
+local function OptionsWReloadValues()
 	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)
 		..tostring(KallyeRaidFramesOptions.RevertBar)
 		..tostring(KallyeRaidFramesOptions.UpdateHealthColor)
@@ -165,13 +172,13 @@ function OptionsWReloadValues()
 		..tostring(KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100);
 end
 
-function SaveKRFOptions()
+local function SaveKRFOptions()
 	local PreviousOptionsWReload = OptionsWReloadValues();
 	-- Auto detect options controls and save them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (KRFOptionsFrame[k] ~= nil) then
-				local control = KRFOptionsFrame[k];
+			if (ns.optionsFrame[k] ~= nil) then
+				local control = ns.optionsFrame[k];
 				local previousValue = KallyeRaidFramesOptions[k] or v;
 				local value = nil;
 
@@ -183,7 +190,7 @@ function SaveKRFOptions()
 					value = control:GetChecked();
 				end
 				if value == nil then
-					KRF_AddMsgErr(format("Incorrect field value, loading default value for %s...", k));
+					ns.AddMsgErr(format("Incorrect field value, loading default value for %s...", k));
 					value = v;
 				end;
 				KallyeRaidFramesOptions[k] = value;
@@ -198,34 +205,34 @@ function SaveKRFOptions()
 		KallyeRaidFramesOptions.LimitOk = KallyeRaidFramesOptions.LimitWarn
 	end
 	-- Reset party health as soon as possible
-	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
+	ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
 
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
-		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true);
+		ns.AddMsgWarn(l.OPTION_RELOAD_REQUIRED, true);
 	end
 	-- Edit Mode - Since DragonFlight (10)
 	if EditModeManagerFrame.UseRaidStylePartyFrames and KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
-		KRF_AddMsgWarn(KRF_OPTION_SOLORAID_TOOLTIP, true);
+		ns.AddMsgWarn(l.OPTION_SOLORAID_TOOLTIP, true);
 	end
-	if KRFOptionsFrame ~= nil and KRFOptionsFrame.HandleVis ~= nil then
-		KRFOptionsFrame:Hide();
+	if ns.optionsFrame ~= nil and ns.optionsFrame.HandleVis ~= nil then
+		ns.optionsFrame:Hide();
 	end
 end
 
-function RefreshKRFOptions()
-	if KRFOptionsFrame ~= nil then
-		KRFOptionsFrame:Show();
-		KRFOptionsFrame.HandleVis = true;
+local function RefreshKRFOptions()
+	if ns.optionsFrame ~= nil then
+		ns.optionsFrame:Show();
+		ns.optionsFrame.HandleVis = true;
 	end
 	-- Auto detect options controls and load them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (KRFOptionsFrame[k] ~= nil) then
-				local control = KRFOptionsFrame[k];
+			if (ns.optionsFrame[k] ~= nil) then
+				local control = ns.optionsFrame[k];
 				local value = KallyeRaidFramesOptions[k];
 				if value == nil then
 					value = v;
-					KRF_AddMsgErr(format("Option not found ("..KRF_Globals.YLD.."%s|r), loading default value...", k));
+					ns.AddMsgErr(format("Option not found ("..l.YLD.."%s|r), loading default value...", k));
 				end;
 
 				if control.type == "color" then
@@ -240,37 +247,104 @@ function RefreshKRFOptions()
 	);
 end
 
-function ManageKRFOptionsVisibility()
+function KRFUI.ManageOptionsVisibility()
 	local HealthOption,
 		RevertBarOption,
 		NameplatesOption
 			= 
-			KRFOptionsFrame.UpdateHealthColor:GetChecked(),
-			KRFOptionsFrame.RevertBar:GetChecked(),
-			KRFOptionsFrame.FriendsClassColor_Nameplates:GetChecked();
+			ns.optionsFrame.UpdateHealthColor:GetChecked(),
+			ns.optionsFrame.RevertBar:GetChecked(),
+			ns.optionsFrame.FriendsClassColor_Nameplates:GetChecked();
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		-- Edit Mode - Since DragonFlight (10)		
-		KRFOptionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
+		ns.optionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
 	else
-		KRF_OptionsEnable(KRFOptionsFrame.EditMode, false, .2);
-		KRF_OptionsEnable(KRFOptionsFrame.BlizzFriendsClassColor, false, .2);
+		ns.OptionsEnable(ns.optionsFrame.EditMode, false, .2);
+		ns.OptionsEnable(ns.optionsFrame.BlizzFriendsClassColor, false, .2);
 	end
 
-	KRF_OptionsEnable(KRFOptionsFrame.MaxBuffs, false, .2);
+	ns.OptionsEnable(ns.optionsFrame.MaxBuffs, false, .2);
 
-	KRF_OptionsEnable(KRFOptionsFrame.RevertBar, HealthOption)
-	KRF_OptionsEnable(KRFOptionsFrame.LimitLow , HealthOption);
-	KRF_OptionsEnable(KRFOptionsFrame.LimitWarn, HealthOption);
-	KRF_OptionsEnable(KRFOptionsFrame.LimitOk  , HealthOption);
+	ns.OptionsEnable(ns.optionsFrame.RevertBar, HealthOption)
+	ns.OptionsEnable(ns.optionsFrame.LimitLow , HealthOption);
+	ns.OptionsEnable(ns.optionsFrame.LimitWarn, HealthOption);
+	ns.OptionsEnable(ns.optionsFrame.LimitOk  , HealthOption);
 
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorLow , not RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorWarn, not RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorOK  , not RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorLow , not RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorWarn, not RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorOK  , not RevertBarOption, HealthOption);
 
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorLow , RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorLow , RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
 
-	KRF_OptionsEnable(KRFOptionsFrame.EnemiesClassColor_Nameplates, NameplatesOption);
+	ns.OptionsEnable(ns.optionsFrame.EnemiesClassColor_Nameplates, NameplatesOption);
+end
+
+
+StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
+	showAlert = true,
+	text = CONFIRM_RESET_SETTINGS,
+	button1 = ALL_SETTINGS,
+	-- button3 = CURRENT_SETTINGS,
+	button2 = CANCEL,
+	OnAccept = function()												
+		ns.SetDefaultOptions(KRF_DefaultOptions, true);
+		ReloadUI();
+	end,
+	-- OnAlt  = function()	end,
+	timeout = STATICPOPUP_TIMEOUT,
+	timeoutInformationalOnly = false,
+	whileDead = true,
+	hideOnEscape = true,
+	preferredIndex = 3,  -- avoid some UI taint
+};
+
+function KRFUI.ConfirmReset()
+	StaticPopup_Show(ns.ADDON_NAME.."_CONFIRM_RESET")
+end
+function KRFUI.DebugFrames()
+	ns.DebugFrames();
+end
+function KRFUI.ShowEditMode(window)
+	ns.ShowEditMode(window);
+end
+
+function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
+	ns.containerFrame = self;
+	ns.scrollFrame = scrollFrame;
+	ns.optionsFrame = optionsFrame;
+	RefreshKRFOptions();
+	self.name = ns.TITLE;
+	self.okay = SaveKRFOptions;
+	self.refresh = RefreshKRFOptions;
+	InterfaceOptions_AddCategory(self);
+	if (ns.scrollFrame ~= nil) then
+		local BACKDROP_TOOLTIP = {
+			bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+			edgeFile = "Interface\\FriendsFrame\\UI-Toast-Border",
+			tile = true,
+			tileSize = 8,
+			edge = true,
+			edgeSize = 8,
+			insets = {left = 2, right = 2, top = 2, bottom = 2},
+		};
+
+		if (BackdropTemplateMixin) then Mixin(ns.scrollFrame, BackdropTemplateMixin) end
+		ns.scrollFrame:SetBackdrop(BACKDROP_TOOLTIP)
+	end
+	if ns.optionsFrame ~= nil and ns.optionsFrame.HandleVis ~= nil then
+		ns.optionsFrame:Hide();
+	end
+
+	-- Localize FontStrings
+	foreach(self,
+		function (k, v)
+			local child = self[k];
+			if type(child) == "table" and child:GetObjectType() == "FontString" then
+				child:SetText(l[child:GetText()]);
+			end
+		end
+	);
 end

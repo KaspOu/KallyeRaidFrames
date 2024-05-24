@@ -3,101 +3,103 @@
 -------------------------------------------------------------------------------
 
 if (GetLocale() == "frFR") then
+local _, ns = ...
+local l = ns.I18N;
 
-KRF_VERS_TITLE    = format("%s %s", KRF_TITLE, KRF_VERSION);
+l.VERS_TITLE    = format("%s %s", ns.TITLE, ns.VERSION);
 
 -- Whats new info
-KRF_WHATSNEW = " Nouveaut\195\169s :\n"
+l.WHATSNEW = " Nouveaut\195\169s :\n"
     .."- Ajout de l'option de coloration des barres de noms ennemies.\n"
     .."- Am\195\169liorations UI (bouton info, fond d\195\169grad\195\169).\n"
     .."- Versions |cffff1111Wow Classic|r & |cffc16600Cata|r !\n"
     ;
-KRF_WHATSNEW = KRF_Globals.YL..KRF_VERS_TITLE.." -"..KRF_Globals.YLL..KRF_WHATSNEW;
+l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
-KRF_SUBTITLE      = "Assistance cadres de raid";
-KRF_DESC          = "Am\195\169liore les cadres de raid.\n\n"
+l.SUBTITLE      = "Assistance cadres de raid";
+l.DESC          = "Am\195\169liore les cadres de raid.\n\n"
 .." - Met en \195\169vidence le fond des joueurs en manque de vie\n\n"
 .." - Les barres invers\195\169es utiliseront votre choix de couleurs\n\n"
 .." - Transparence des unit\195\169s hors de port\195\169e";
-KRF_OPTIONS_TITLE = format("%s - Options", KRF_VERS_TITLE);
+l.OPTIONS_TITLE = format("%s - Options", l.VERS_TITLE);
 
 -- Messages
-KRF_MSG_LOADED         = format("%s lanc\195\169", KRF_VERS_TITLE);
-KRF_MSG_SDB            = "Kallye menu d\'Options";
+l.MSG_LOADED         = format("%s lanc\195\169", l.VERS_TITLE);
+l.MSG_SDB            = "Kallye menu d\'Options";
 
-KRF_INIT_FAILED = format("%s pas charg\195\169 correctement !", KRF_VERS_TITLE);
+l.INIT_FAILED = format("%s pas charg\195\169 correctement !", l.VERS_TITLE);
 
 
-KRF_OPTION_RAID_HEADER = "Groupe / Raid";
-KRF_OPTION_HIGHLIGHTLOWHP = "Mettre en \195\169vidence le manque de vie (couleurs dynamiques)"..KRF_Globals.YL.."*";
-KRF_OPTION_REVERTBAR = "Barres de "..KRF_Globals.YL.."vies invers\195\169es|r (moins on a de vie, plus la barre grandit !) ";
-KRF_OPTION_HEALTH_LOW = "Presque mort !";
-KRF_OPTION_HEALTH_LOW_TOOLTIP = "La couleur sera appliqu\195\169e "..KRF_Globals.YLL.."SOUS|r cette limite\n\n"
+l.OPTION_RAID_HEADER = "Groupe / Raid";
+l.OPTION_HIGHLIGHTLOWHP = "Mettre en \195\169vidence le manque de vie (couleurs dynamiques)"..l.YL.."*";
+l.OPTION_REVERTBAR = "Barres de "..l.YL.."vies invers\195\169es|r (moins on a de vie, plus la barre grandit !) ";
+l.OPTION_HEALTH_LOW = "Presque mort !";
+l.OPTION_HEALTH_LOW_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."SOUS|r cette limite\n\n"
     .."ex : Rouge sous 25%";
-KRF_OPTION_HEALTH_WARN = "Attention";
-KRF_OPTION_HEALTH_WARN_TOOLTIP = "La couleur sera appliqu\195\169e "..KRF_Globals.YLL.."\195\128|r cette limite\n\n"
+l.OPTION_HEALTH_WARN = "Attention";
+l.OPTION_HEALTH_WARN_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."\195\128|r cette limite\n\n"
     .."ex : Jaune \195\160 50%";
-KRF_OPTION_HEALTH_OK = "Bonne sant\195\169";
-KRF_OPTION_HEALTH_OK_TOOLTIP = "La couleur sera appliqu\195\169e "..KRF_Globals.YLL.."AU-DESSUS|r DE cette limite\n\n"
+l.OPTION_HEALTH_OK = "Bonne sant\195\169";
+l.OPTION_HEALTH_OK_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."AU-DESSUS|r DE cette limite\n\n"
     .."ex : Vert apr\195\170s 75%";
-KRF_OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut \195\160 gauche";
-KRF_OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne de r\195\180le 'd\195\169g\195\160ts'";
-KRF_OPTION_HIDEREALM = "Masquer le royaume des joueurs";
-KRF_OPTION_HIDEREALM_TOOLTIP = "Les noms de royaumes seront masqu\195\169s, ainsi "..KRF_Globals.YLL.."Illidan - Varimathras|r deviendra "..KRF_Globals.YLL.."Illidan (*)|r";
-KRF_OPTION_ICONONDEATH = "Ajouter "..KRF_Globals.RT8.." aux noms des morts";
-KRF_OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
-KRF_OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Am\195\169liore la couleur des cadres des joueurs d'apr\195\168s leur classe";
-KRF_OPTION_BLIZZARDFRIENDSCLASSCOLOR = "Blizzard : "..KRF_OPTION_FRIENDSCLASSCOLOR;
-KRF_OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = "Option de base des couleurs de classe sur les cadres de raid";
-KRF_OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
-KRF_OPTION_NOTINRANGE_TOOLTIP = "Par d\195\169faut dans Wow : 55%";
-KRF_OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
-KRF_OPTION_NOTINCOMBAT_TOOLTIP = "Par d\195\169faut dans Wow : 100%";
-KRF_OPTION_SOLORAID = KRF_Globals.CY.."Affiche les cadres de raid en mode solo "..KRF_Globals.YL.."*";
-KRF_OPTION_SOLORAID_TOOLTIP = "Cadres de groupe/raid toujours visibles";
+l.OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut \195\160 gauche";
+l.OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne de r\195\180le 'd\195\169g\195\160ts'";
+l.OPTION_HIDEREALM = "Masquer le royaume des joueurs";
+l.OPTION_HIDEREALM_TOOLTIP = "Les noms de royaumes seront masqu\195\169s, ainsi "..l.YLL.."Illidan - Varimathras|r deviendra "..l.YLL.."Illidan (*)|r";
+l.OPTION_ICONONDEATH = "Ajouter "..l.RT8.." aux noms des morts";
+l.OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
+l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Am\195\169liore la couleur des cadres des joueurs d'apr\195\168s leur classe";
+l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = "Blizzard : "..l.OPTION_FRIENDSCLASSCOLOR;
+l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = "Option de base des couleurs de classe sur les cadres de raid";
+l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
+l.OPTION_NOTINRANGE_TOOLTIP = "Par d\195\169faut dans Wow : 55%";
+l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
+l.OPTION_NOTINCOMBAT_TOOLTIP = "Par d\195\169faut dans Wow : 100%";
+l.OPTION_SOLORAID = l.CY.."Affiche les cadres de raid en mode solo "..l.YL.."*";
+l.OPTION_SOLORAID_TOOLTIP = "Cadres de groupe/raid toujours visibles";
 
-KRF_OPTION_EDITMODE_PARTY = "#";
-KRF_OPTION_EDITMODE_PARTY_NOTE = "#";
-KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "#";
-KRF_OPTION_DEBUG_ON = "! Tester les cadres de raid !";
-KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de raid activ\195\169, recliquez pour stopper !";
-KRF_OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
-KRF_OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
+l.OPTION_EDITMODE_PARTY = "#";
+l.OPTION_EDITMODE_PARTY_NOTE = "#";
+l.OPTION_EDITMODE_PARTY_TOOLTIP = "#";
+l.OPTION_DEBUG_ON = "! Tester les cadres de raid !";
+l.OPTION_DEBUG_ON_MESSAGE = "Test des cadres de raid activ\195\169, recliquez pour stopper !";
+l.OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
+l.OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
 
-KRF_OPTION_BUFFS_HEADER = "Buffs / Debuffs";
-KRF_OPTION_BUFFSSCALE = "Taille des buffs "..KRF_Globals.YL.."*";
-KRF_OPTION_BUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
-KRF_OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..KRF_Globals.YL.."*";
-KRF_OPTION_DEBUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
-KRF_OPTION_MAXBUFFS = "Afficher maximum";
-KRF_OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
-KRF_OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
+l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
+l.OPTION_BUFFSSCALE = "Taille des buffs "..l.YL.."*";
+l.OPTION_BUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
+l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..l.YL.."*";
+l.OPTION_DEBUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
+l.OPTION_MAXBUFFS = "Afficher maximum";
+l.OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
+l.OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
-KRF_OPTION_OTHERS_HEADER = "Nameplates";
-KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
-KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
-KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activer pour les ennemis";
-KRF_OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = KRF_OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP;
+l.OPTION_OTHERS_HEADER = "Nameplates";
+l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
+l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
+l.OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activer pour les ennemis";
+l.OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP;
 
-KRF_OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
-KRF_OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..KRF_Globals.YL.."/reload|r )";
-KRF_OPTIONS_ASTERIX = KRF_Globals.YL.."*|r"..KRF_Globals.WH..": Options n\195\169cessitant un rechargement";
+l.OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
+l.OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..l.YL.."/reload|r )";
+l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": Options n\195\169cessitant un rechargement";
 
-KRF_OPTION_SHOWMSGNORMAL = KRF_Globals.GYL.."Afficher les messages";
-KRF_OPTION_SHOWMSGWARNING = KRF_Globals.GYL.."Afficher les alertes";
-KRF_OPTION_SHOWMSGERR = KRF_Globals.GYL.."Afficher les erreurs";
-KRF_OPTION_WHATSNEW = "Nouveaut\195\169s";
+l.OPTION_SHOWMSGNORMAL = l.GYL.."Afficher les messages";
+l.OPTION_SHOWMSGWARNING = l.GYL.."Afficher les alertes";
+l.OPTION_SHOWMSGERR = l.GYL.."Afficher les erreurs";
+l.OPTION_WHATSNEW = "Nouveaut\195\169s";
 
 -- Edit Mode - Since DragonFlight (10)
 if (EditModeManagerFrame.UseRaidStylePartyFrames) then
     if (not EditModeManagerFrame:UseRaidStylePartyFrames()) then
-        KRF_OPTION_SOLORAID_TOOLTIP = "Pensez \195\160 activer l'option "..KRF_Globals.YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
-        KRF_DESC = KRF_DESC.."\n\n - "..KRF_OPTION_SOLORAID_TOOLTIP;
+        l.OPTION_SOLORAID_TOOLTIP = "Pensez \195\160 activer l'option "..l.YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
+        l.DESC = l.DESC.."\n\n - "..l.OPTION_SOLORAID_TOOLTIP;
     end
-    KRF_OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
-    KRF_OPTION_EDITMODE_PARTY_NOTE = "Note : Tapez "..KRF_Globals.YL.."/reload|r apr\195\168s le "..HUD_EDIT_MODE_MENU..", pour \195\169viter toute erreur";
-    KRF_OPTION_EDITMODE_PARTY_TOOLTIP = "Active le "..KRF_Globals.YL..HUD_EDIT_MODE_MENU.."|r, et affiche directement les options de "..KRF_Globals.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r.\n\n"..KRF_Globals.CY..KRF_OPTION_EDITMODE_PARTY_NOTE.."|r";
-    KRF_OPTION_DEBUG_ON_MESSAGE = "Test des cadres de raid activ\195\169 (testable en "..HUD_EDIT_MODE_MENU..")\n"
+    l.OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
+    l.OPTION_EDITMODE_PARTY_NOTE = "Note : Tapez "..l.YL.."/reload|r apr\195\168s le "..HUD_EDIT_MODE_MENU..", pour \195\169viter toute erreur";
+    l.OPTION_EDITMODE_PARTY_TOOLTIP = "Active le "..l.YL..HUD_EDIT_MODE_MENU.."|r, et affiche directement les options de "..l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r.\n\n"..l.CY..l.OPTION_EDITMODE_PARTY_NOTE.."|r";
+    l.OPTION_DEBUG_ON_MESSAGE = "Test des cadres de raid activ\195\169 (testable en "..HUD_EDIT_MODE_MENU..")\n"
                     .."Recliquez pour stopper !";
 end
 

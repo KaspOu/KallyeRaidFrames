@@ -1,5 +1,5 @@
 <Bindings>
   <Binding name="KRaidFrames">
-    SLASH_KRF_command();
+    SlashCmdList["KRF"]();
   </Binding>
 </Bindings>
