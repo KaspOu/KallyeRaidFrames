@@ -3,6 +3,7 @@ ns.VERSION       = C_AddOns.GetAddOnMetadata(addonName, "Version");
 ns.VERSIONNR     = tonumber(gsub(ns.VERSION, "%D", ""), 10);
 local GetAddOnInfo = C_AddOns.GetAddOnInfo or GetAddOnInfo;
 ns.ADDON_NAME,ns.TITLE, ns.NOTES = GetAddOnInfo(addonName);
+ns.MODULES = {};
 
 BINDING_NAME_KRaidFrames =  ns.ADDON_NAME.." options";
 
@@ -42,16 +43,16 @@ l.GYL = BCC(0.65, 0.65, 0.65);
 --[[
 !  Default chat
 ]]
-function ns.AddMsg(msg)
-	if (DEFAULT_CHAT_FRAME) then
+function ns.AddMsg(msg, force)
+	if (DEFAULT_CHAT_FRAME and KallyeRaidFramesOptions.ShowMsgNormal or force) then
 		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", l.YLL, msg or ""));
 	end
 end
 --[[
 !  Warning chat
 ]]
-function ns.AddMsgWarn(msg)
-	if (DEFAULT_CHAT_FRAME) then
+function ns.AddMsgWarn(msg, force)
+	if (DEFAULT_CHAT_FRAME and KallyeRaidFramesOptions.ShowMsgWarning or force) then
 		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", l.CY, msg or ""));
 	end
 end
@@ -59,9 +60,17 @@ end
 --[[
 !  Error chat
 ]]
-function ns.AddMsgErr(msg)
-	if (DEFAULT_CHAT_FRAME) then
+function ns.AddMsgErr(msg, force)
+	if (DEFAULT_CHAT_FRAME and KallyeRaidFramesOptions.ShowMsgError or force) then
 		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s: %s|r", l.RDL, ns.TITLE, msg or ""));
+	end
+end
+--[[
+!  Debug chat
+]]
+function ns.AddMsgDebug(msg, force)
+	if (DEFAULT_CHAT_FRAME and KallyeRaidFramesOptions.DebugMode or force) then
+		DEFAULT_CHAT_FRAME:AddMessage(format("DEBUG: %s%s|r", l.YLL, msg or ""));
 	end
 end
 

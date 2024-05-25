@@ -106,22 +106,12 @@ local function OnEvent(self, event, ...)
 			hooksecurefunc("CompactUnitFrame_SetMaxBuffs", ns.Hook_ManageBuffs);
 		end
 
-		-- ! SoloRaid Frames
-		if (KallyeRaidFramesOptions.SoloRaidFrame) then
-			if (EditModeManagerFrame.UseRaidStylePartyFrames) then
-				-- Edit Mode - Since DragonFlight (10)
-				hooksecurefunc(CompactPartyFrame, "UpdateVisibility", ns.Hook_CompactPartyFrame_UpdateVisibility);
-			else
-				-- Classic
-				CompactRaidFrameManager:Show()
-				CompactRaidFrameManager.Hide = function() end
-				CompactRaidFrameContainer:Show()
-				CompactRaidFrameContainer.Hide = function() end
-
-				GetDisplayedAllyFrames = ns.SoloRaid_GetDisplayedAllyFrames;
-				CompactRaidFrameContainer_OnEvent = ns.SoloRaid_CompactRaidFrameContainer_OnEvent;
+		-- Load Modules
+		foreach(ns.MODULES,
+			function(k, v)
+				ns.MODULES[k]:Init(KallyeRaidFramesOptions);
 			end
-		end
+        );
 
 		-- ! Addon Loaded ^^
 		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
@@ -210,10 +200,13 @@ local function SaveKRFOptions()
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
 		ns.AddMsgWarn(l.OPTION_RELOAD_REQUIRED, true);
 	end
-	-- Edit Mode - Since DragonFlight (10)
-	if EditModeManagerFrame.UseRaidStylePartyFrames and KallyeRaidFramesOptions.SoloRaidFrame and not EditModeManagerFrame:UseRaidStylePartyFrames() then
-		ns.AddMsgWarn(l.OPTION_SOLORAID_TOOLTIP, true);
-	end
+	
+	-- OnSave: Modules
+	foreach(ns.MODULES,
+		function(k, v)
+			ns.MODULES[k]:OnSaveOptions(KallyeRaidFramesOptions);
+		end
+	);
 	if ns.optionsFrame ~= nil and ns.optionsFrame.HandleVis ~= nil then
 		ns.optionsFrame:Hide();
 	end
