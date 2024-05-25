@@ -1,0 +1,158 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Include file="OptionsNameplatesColor.lua" />
+	<Frame name="KRFOptionsNameplatesColor" virtual="true">
+		<Size x="550" y="180" />
+		<Frames>
+			<CheckButton parentKey="LabelOthers" inherits="KRFUI_HeadingWidget">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent" relativePoint="TOP"><Offset x="0" y="0" /></Anchor>
+				</Anchors>
+				<Attributes>
+					<Attribute name="text" value="OPTION_OTHERS_HEADER" />
+				</Attributes>
+			</CheckButton>
+			
+			<!-- Friends Names -->
+			<Frame parentKey="FriendsNameplates_Txt_UseColor" name="$parent_FriendsNameplates_Txt_UseColor" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR" />
+					<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="150" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="0" />
+					<Attribute name="color1" value="RDL" />
+					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
+					<Attribute name="value2" value="1" />
+					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
+					<Attribute name="value3" value="2" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.LabelOthers" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
+					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" /></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEvent>
+						KRFUI.ManageNameplatesOptions()
+					</OnEvent>
+				</Scripts>
+			</Frame>
+				<Button parentKey="FriendsNameplates_Txt_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Attributes>
+						<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_TXT_COLOR" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Txt_UseColor" relativePoint="TOPRIGHT"><Offset x="0" /></Anchor>
+					</Anchors>
+				</Button>
+
+			<!-- Friends Bars -->
+			<Frame parentKey="FriendsNameplates_Bar_UseColor" name="$parent_FriendsNameplates_Bar_UseColor" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR" />
+					<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="150" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="0" />
+					<Attribute name="color1" value="RDL" />
+					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
+					<Attribute name="value2" value="1" />
+					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
+					<Attribute name="value3" value="2" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Txt_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Txt_UseColor"><Offset x="0" /></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEvent>
+						KRFUI.ManageNameplatesOptions()
+					</OnEvent>
+				</Scripts>
+			</Frame>
+				<Button parentKey="FriendsNameplates_Bar_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Attributes>
+						<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_BAR_COLOR" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="TOPRIGHT"><Offset x="0" y="-0"/></Anchor>
+					</Anchors>
+				</Button>
+
+			<!-- Enemies Names -->
+			<Frame parentKey="EnemiesNameplates_Txt_UseColor" name="$parent_EnemiesNameplates_Txt_UseColor" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR" />
+					<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="150" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="0" />
+					<Attribute name="color1" value="RDL" />
+					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
+					<Attribute name="value2" value="1" />
+					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
+					<Attribute name="value3" value="2" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.LabelOthers" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="RIGHT"><Offset x="50" /></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEvent>
+						KRFUI.ManageNameplatesOptions()
+					</OnEvent>
+				</Scripts>
+			</Frame>
+				<Button parentKey="EnemiesNameplates_Txt_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Attributes>
+						<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_TXT_COLOR" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Txt_UseColor" relativePoint="TOPRIGHT"><Offset x="0" /></Anchor>
+					</Anchors>
+				</Button>
+
+			<!-- Enemies Bars -->
+			<Frame parentKey="EnemiesNameplates_Bar_UseColor" name="$parent_EnemiesNameplates_Bar_UseColor" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR" />
+					<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="150" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="0" />
+					<Attribute name="color1" value="RDL" />
+					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
+					<Attribute name="value2" value="1" />
+					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
+					<Attribute name="value3" value="2" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Txt_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_Txt_UseColor"><Offset x="0" /></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEvent>
+						KRFUI.ManageNameplatesOptions()
+					</OnEvent>
+				</Scripts>
+			</Frame>
+				<Button parentKey="EnemiesNameplates_Bar_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Attributes>
+						<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_BAR_COLOR" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor" relativePoint="TOPRIGHT"><Offset x="0" y="-0"/></Anchor>
+					</Anchors>
+				</Button>
+		</Frames>
+		<Scripts>
+			<OnShow>
+				C_Timer.After(1, KRFUI.ManageNameplatesOptions)
+			</OnShow>
+		</Scripts>
+	</Frame>
+</Ui>

@@ -75,7 +75,19 @@ l.OPTION_MAXBUFFS = "Afficher maximum";
 l.OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
 l.OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 
-l.OPTION_OTHERS_HEADER = "Nameplates";
+l.OPTION_OTHERS_HEADER = "Barres d'infos";
+l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Par d\195\169faut";
+l.OPTION_NAMEPLATES_USECOLOR_CLASS = "Couleurs de classe";
+l.OPTION_NAMEPLATES_USECOLOR_CUSTOM = "Votre choix de couleur : ";
+l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Coloration des noms alli\195\169s";
+l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur de texte des barres d'info alli\195\169es (hors instances)";
+l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Coloration des barres alli\195\169es"..l.GYL.." (Classic)";
+l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info alli\195\169es (hors instances)";
+l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Coloration des noms ennemis";
+l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur de texte des barres d'info ennemies (hors instances)";
+l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Coloration des barres ennemies"..l.GYL.." (Classic)";
+l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info ennemies (hors instances)";
+
 l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
 l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
 l.OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activer pour les ennemis";

@@ -1,5 +1,5 @@
 local _, ns = ...
-local l = ns.I18N;
+local l = ns.I18N
 
 
 --[[
@@ -17,17 +17,17 @@ function KRFUI.CheckboxWidget_OnLoad(self)
 	self.type = "checkbox";
 
 	local text = self:GetAttribute("text");
-	text = KRFUI.l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text;
 
 	self.Text:SetText(text);
 end
 function KRFUI.CheckboxWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
-	text = KRFUI.l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text;
 
 	local tooltip = self:GetAttribute("tooltip") or "";
-	tooltip = KRFUI.l[tooltip] or _G[tooltip] or tooltip;
+	tooltip = l[tooltip] or _G[tooltip] or tooltip;
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
@@ -50,7 +50,7 @@ function KRFUI.HeadingWidget_OnLoad (self)
 	self:SetPushedTexture(transparent);
 
 	local text = self:GetAttribute("text");
-	text = KRFUI.l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text;
 
 	local label = self:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
 	label:SetPoint("TOP")
@@ -145,7 +145,7 @@ function KRFUI.ColorWidget_OnLoad (self)
 	self.type = "color";
 
 	local text = self:GetAttribute("text");
-	text = KRFUI.l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text;
 
 	self._RGBA = { r=1, g=1, b=1, a=1}
 	self.SetColor = ColorWidget_SetColor;
@@ -196,14 +196,18 @@ end
 function KRFUI.ColorWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
-	text = KRFUI.l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text;
 	local tooltip = self:GetAttribute("tooltip") or "";
-	tooltip = KRFUI.l[tooltip] or _G[tooltip] or tooltip;
+	tooltip = l[tooltip] or _G[tooltip] or tooltip;
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
 	GameTooltip:SetText(l.WH..text);
-	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
+	if (text ~= "") then
+		GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
+	else
+		GameTooltip:SetText(tooltip, 1, 0.82, 0, 1);
+	end
 	GameTooltip:AppendText("");
 end
 function KRFUI.ColorWidget_OnLeave(self)
@@ -228,7 +232,7 @@ function KRFUI.SliderWidget_OnLoad (self)
 	end
 
 	local text = self:GetAttribute("text") or "";
-	text = KRFUI.l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text;
 
 	self._Value = 0;
 
@@ -245,7 +249,7 @@ function KRFUI.SliderWidget_OnLoad (self)
 end
 function KRFUI.SliderWidget_OnValueChanged(self, value)
 	local format = self:GetAttribute("format") or nil;
-	format = KRFUI.l[format] or _G[format] or format;
+	format = l[format] or _G[format] or format;
 	self.Label =self.Low;
 	local formatRatio = self:GetAttribute("formatRatio") or 1;
 	if format ~= nil then
@@ -258,10 +262,10 @@ end
 function KRFUI.SliderWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
-	text = KRFUI.l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text;
 
 	local tooltip = self:GetAttribute("tooltip") or "";
-	tooltip = KRFUI.l[tooltip] or _G[tooltip] or tooltip;
+	tooltip = l[tooltip] or _G[tooltip] or tooltip;
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_TOP");
@@ -270,5 +274,114 @@ function KRFUI.SliderWidget_OnEnter(self)
 	GameTooltip:AppendText("");
 end
 function KRFUI.SliderWidget_OnLeave(self)
+	GameTooltip:Hide();
+end
+
+local function DropDownWidget_OnSelect(dropdown, value, text)
+	dropdown:GetScript("OnEvent")(dropdown, "select")
+end
+local function DropDownWidget_Func(self, b)
+	local val, txt = b.menuList, b.value
+	UIDropDownMenu_SetSelectedValue(self, val, txt)
+	UIDropDownMenu_SetText(self, txt)
+	b.checked = true
+	DropDownWidget_OnSelect(self, val, txt)
+end
+
+local function DropDownWidget_Initialize(self, level, _)
+	local info = UIDropDownMenu_CreateInfo()
+	local i = 0
+	local autoWidth	= 0;
+	local curValue = self:GetValue()
+	local localFunc = function(b) DropDownWidget_Func(self, b) end
+	while(i == 0 or self:GetAttribute("text"..i))
+	do
+		local val, txt, color
+		if i == 0 then
+			val, txt, color = nil, self:GetAttribute("text"), nil
+		else
+			val, txt, color = self:GetAttribute("value"..i), self:GetAttribute("text"..i), self:GetAttribute("color"..i)
+		end
+		txt = l[txt] or _G[txt] or txt;
+		color = l[color] or _G[color] or color;
+
+		info.isTitle = not val;
+		info.notCheckable = not val;
+
+		info.disabled = false;
+		info.text = txt;
+		info.checked = (val == curValue)
+		info.menuList= val
+		info.hasArrow = false
+		info.tooltipTitle = self:GetAttribute("text");
+		info.tooltipText = txt;
+		info.colorCode = color;
+		info.justifyH = self:GetAttribute("justify") or "RIGHT";
+		info.func = localFunc;
+		UIDropDownMenu_AddButton(info, UIDROPDOWNMENU_MENU_LEVEL);
+
+		-- autodetect dropdown option width
+		self.dd_title:SetText(txt);
+		local textWidth = self.dd_title:GetStringWidth() + 20;
+		autoWidth = math.max(autoWidth, textWidth);
+		i=i+1;
+	end
+	local txt = self:GetAttribute("text")
+	txt = l[txt] or _G[txt] or txt;
+	self.dd_title:SetText(txt);
+	UIDropDownMenu_SetWidth(self, self:GetAttribute("width") or autoWidth);
+	UIDropDownMenu_JustifyText(self, self:GetAttribute("justify") or "RIGHT")
+end
+local function DropDownWidget_SetValue(self, value)
+	local i = 1
+	while(self:GetAttribute("text"..i))
+	do
+		local key, val = self:GetAttribute("value"..i), self:GetAttribute("text"..i);
+		val = l[val] or _G[val] or val;
+		if (key == value) then
+			UIDropDownMenu_SetSelectedValue(self, key);
+			UIDropDownMenu_SetText(self, val);
+			return;
+		end
+		i=i+1;
+	end
+end
+local function DropDownWidget_GetValue(self, value)
+	return UIDropDownMenu_GetSelectedValue(self);
+end
+local function DropDownWidget_Disable(self)
+	if (not self:GetName()) then
+		ns.AddMsgErr("Dropdown with no name, can't disable: "..(self:GetAttribute("text") or ""), true);
+	end;
+	UIDropDownMenu_DisableDropDown(self)
+end
+local function DropDownWidget_Enable(self)
+	if (not self:GetName()) then
+		ns.AddMsgErr("Dropdown with no name, can't enable: "..(self:GetAttribute("text") or ""), true);
+	end;
+	UIDropDownMenu_EnableDropDown(self)
+end
+function KRFUI.DropDownWidget_OnLoad(self)
+	self.type = "dropdown";
+	self.Disable = DropDownWidget_Disable;
+	self.Enable = DropDownWidget_Enable;
+	self.SetValue = DropDownWidget_SetValue;
+	self.GetValue = DropDownWidget_GetValue;
+    self.dd_title = self:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    self.dd_title:SetPoint("TOPLEFT", 20, 15)
+	UIDropDownMenu_Initialize(self, DropDownWidget_Initialize);
+end
+
+function KRFUI.DropDownWidget_OnEnter(self)
+	local tooltip = self:GetAttribute("tooltip") or "";
+	if (tooltip == "") then return; end;
+	tooltip = l[tooltip] or _G[tooltip] or tooltip;
+
+	GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
+	GameTooltip:SetText(tooltip);
+	GameTooltip:Show();
+end
+
+function KRFUI.DropDownWidget_OnLeave(self)
 	GameTooltip:Hide();
 end

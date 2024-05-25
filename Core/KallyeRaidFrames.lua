@@ -35,6 +35,16 @@ local KRF_DefaultOptions = {
 	BuffsScale = 0.75,
 	DebuffsScale = 1.25,
 	MaxBuffs = 3,
+	FriendsNameplates_Txt_UseColor = "1",
+	FriendsNameplates_Txt_Color = { r= 1, g= 1, b= 1, a = 1 },
+	FriendsNameplates_Bar_UseColor = "1",
+	FriendsNameplates_Bar_Color = { r= 0, g= 0, b= 1, a = 1 },
+	
+	EnemiesNameplates_Txt_UseColor = "0",
+	EnemiesNameplates_Txt_Color = { r= 0, g= 1, b= 0, a = 1 },
+	EnemiesNameplates_Bar_UseColor = "0",
+	EnemiesNameplates_Bar_Color = { r= 0, g= 1, b= 0, a = 1 },
+	
 	FriendsClassColor_Nameplates = true,
 	EnemiesClassColor_Nameplates = false,
 
@@ -167,13 +177,16 @@ local function SaveKRFOptions()
 	-- Auto detect options controls and save them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (ns.optionsFrame[k] ~= nil) then
-				local control = ns.optionsFrame[k];
+			local optionsObject = ns.FindControl(k);
+			if (optionsObject ~= nil) then
+				local control = optionsObject;
 				local previousValue = KallyeRaidFramesOptions[k] or v;
 				local value = nil;
 
 				if control.type == "color" then
-					value = control.GetColor(control);
+					value = control:GetColor();
+				elseif control.type == "dropdown" then
+					value = control:GetValue();
 				elseif control.type == CONTROLTYPE_SLIDER then
 					value = control:GetValue();
 				elseif type(previousValue) == "boolean" then
@@ -220,8 +233,9 @@ local function RefreshKRFOptions()
 	-- Auto detect options controls and load them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (ns.optionsFrame[k] ~= nil) then
-				local control = ns.optionsFrame[k];
+			local optionsObject = ns.FindControl(k);
+			if (optionsObject ~= nil) then
+				local control = optionsObject;
 				local value = KallyeRaidFramesOptions[k];
 				if value == nil then
 					value = v;
@@ -229,11 +243,15 @@ local function RefreshKRFOptions()
 				end;
 
 				if control.type == "color" then
-					control.SetColor(control, value);
+					control:SetColor(value);
+				elseif control.type == "dropdown" then
+					control:SetValue(value);
 				elseif control.type == CONTROLTYPE_SLIDER then
 					control:SetValue(value);
 				elseif type(value) == "boolean" then
 					control:SetChecked(value);
+				else
+					ns.AddMsgDebug(format("Type non prevu pour %s - %s, type de valeur: %s", k, control.type or "unknown", type(value)));
 				end
 			end
 		end
@@ -242,12 +260,10 @@ end
 
 function KRFUI.ManageOptionsVisibility()
 	local HealthOption,
-		RevertBarOption,
-		NameplatesOption
+		RevertBarOption
 			= 
 			ns.optionsFrame.UpdateHealthColor:GetChecked(),
-			ns.optionsFrame.RevertBar:GetChecked(),
-			ns.optionsFrame.FriendsClassColor_Nameplates:GetChecked();
+			ns.optionsFrame.RevertBar:GetChecked();
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		-- Edit Mode - Since DragonFlight (10)		
@@ -271,10 +287,22 @@ function KRFUI.ManageOptionsVisibility()
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorLow , RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
-
-	ns.OptionsEnable(ns.optionsFrame.EnemiesClassColor_Nameplates, NameplatesOption);
 end
 
+function ns.FindControl(ControlName)
+	if ns.optionsFrame[ControlName] then
+		return ns.optionsFrame[ControlName];
+	else
+		local i = 1
+		while(ns.optionsFrame["Options"..i])
+		do
+			if (ns.optionsFrame["Options"..i][ControlName]) then
+				return ns.optionsFrame["Options"..i][ControlName];
+			end
+			i=i+1;
+		end
+	end
+end
 
 StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 	showAlert = true,

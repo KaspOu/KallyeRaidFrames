@@ -1,3 +1,10 @@
+v10.2.706
+- More Nameplate options:
+    > default / class color / custom color
+    > separation between text & nameplates
+- Key shortcut support added
+- Isolated and Modulable Code
+
 v10.2.705
 - Added Blizzard raid class colors option (CVar)
 - Enhancements, Code cleaning

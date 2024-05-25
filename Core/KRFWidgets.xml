@@ -49,6 +49,14 @@
 			<OnClick>KRFUI.HeadingWidget_OnClick(self)</OnClick>
 		</Scripts>
 	</CheckButton>
+	<Frame name="KRFUI_DropDownWidget" type="DropDown" inherits="UIDropDownMenuTemplate" virtual="true">
+		<Size x="100" y="40" />
+		<Scripts>
+			<OnLoad> KRFUI.DropDownWidget_OnLoad(self)</OnLoad>
+			<OnEnter>KRFUI.DropDownWidget_OnEnter(self)</OnEnter>
+			<OnLeave>KRFUI.DropDownWidget_OnLeave(self)</OnLeave>
+		</Scripts>
+	</Frame>
 <!--@do-not-package@-->
 <!--
 https://support.curseforge.com/en/support/solutions/articles/9000197281-automatic-packaging
@@ -63,6 +71,8 @@ https://eu.forums.blizzard.com/en/wow/t/improving-default-blizzardui/2890
 
 Pour les checkboxes, le composant InterfaceOptionsBaseCheckButtonTemplate plantait ( InterfaceOptionsPanel_CheckButton_OnClick(self); )
 https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/InterfaceOptionsPanels.lua
+
+https://wowwiki-archive.fandom.com/wiki/UI_Object_UIDropDownMenu
 
 /fstack: Shows a Z-ordered (I think) list of all the UI frames under the cursor
 /etrace: Shows a running commentary of game events (and the parameters passed to them) as they happen

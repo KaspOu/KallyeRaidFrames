@@ -3,7 +3,7 @@
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Raid toujours visible
-## Version: 10.2.705
+## Version: 10.2.706
 ## Author: Kallye of Elune (EU)
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings

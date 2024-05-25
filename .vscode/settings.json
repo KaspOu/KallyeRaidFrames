@@ -88,7 +88,24 @@
         "STATICPOPUP_TIMEOUT",
         "CompactRaidFrameManager",
         "InterfaceOptions_AddCategory",
-        "StaticPopup_Show"
+        "StaticPopup_Show",
+        "UIDropDownMenu_SetWidth",
+        "UIDropDownMenu_SetText",
+        "UIDropDownMenu_Initialize",
+        "UIDropDownMenu_AddButton",
+        "UIDropDownMenu_CreateInfo",
+        "UIDropDownMenu_SetSelectedValue",
+        "UIDropDownMenu_GetSelectedValue",
+        "UIDropDownMenu_GetText",
+        "UIDropDownMenu_OnUpdate",
+        "UIDropDownMenu_RefreshDropDownSize",
+        "UIDropDownMenu_JustifyText",
+        "FCF_SetChatWindowBackGroundColor",
+        "FCF_CancelWindowColorSettings",
+        "UIDROPDOWNMENU_MENU_LEVEL",
+        "UIDropDownMenu_DisableDropDown",
+        "UIDropDownMenu_EnableDropDown",
+        "UIDropDownMenu_GetSelectedID"
     ],
     "cSpell.words": [
         "prepatch"

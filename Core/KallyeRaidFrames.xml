@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Include file="KallyeRaidFrames.lua"/>
+	<Include file="OptionsNameplatesColor.xml" />
 	<Frame name="KRFUI_OptionsContainer">
 		<Layers>
 			<Layer level="ARTWORK">
@@ -365,38 +366,23 @@
 									<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
 							</Slider>
-							<CheckButton parentKey="LabelOthers" inherits="KRFUI_HeadingWidget">
+							<Frame parentKey="Options1" inherits="KRFOptionsNameplatesColor">
+								<Layers>
+									<Layer level="BACKGROUND">
+										<Texture setAllPoints="true">
+											<Color r=".8" a=".1"/>
+										</Texture>
+									</Layer>
+								</Layers>				
 								<Anchors>
-									<Anchor point="TOP" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOM"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
-								<Attributes>
-									<Attribute name="text" value="OPTION_OTHERS_HEADER" />
-								</Attributes>
-							</CheckButton>
-							<CheckButton parentKey="FriendsClassColor_Nameplates" inherits="KRFUI_CheckboxWidget">
-								<Attributes>
-									<Attribute name="text" value="OPTION_FRIENDSCLASSCOLOR_NAMEPLATES" />
-									<Attribute name="tooltip" value="OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP" />
-								</Attributes>
-								<Anchors>
-									<Anchor point="TOP" relativeKey="$parent.LabelOthers" relativePoint="BOTTOM"><Offset x="0" y="-0"/></Anchor>
-									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
-								</Anchors>
-							</CheckButton>
-							<CheckButton parentKey="EnemiesClassColor_Nameplates" inherits="KRFUI_CheckboxWidget">
-								<Attributes>
-									<Attribute name="text" value="OPTION_ENEMIESCLASSCOLOR_NAMEPLATES" />
-									<Attribute name="tooltip" value="OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP" />
-								</Attributes>
-								<Anchors>
-									<Anchor point="TOP" relativeKey="$parent.FriendsClassColor_Nameplates" relativePoint="BOTTOM"><Offset x="0" y="0"/></Anchor>
-									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
-								</Anchors>
-							</CheckButton>
+							</Frame>
+							
 							<Button parentKey="WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.FriendsClassColor_Nameplates" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.Options1" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-40"/>
 									</Anchor>
 								</Anchors>
@@ -472,7 +458,7 @@
 				</ScrollChild>
 			</ScrollFrame>
 		</Frames>
-		<Scripts>			
+		<Scripts>
 			<OnLoad>
 				KRFUI.OptionsContainer_OnLoad(self, KRFUI_OptionsScrollFrame, KRFUI_OptionsFrame)
 			</OnLoad>

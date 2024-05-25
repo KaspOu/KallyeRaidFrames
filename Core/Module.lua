@@ -6,56 +6,62 @@ local function noop() end;
 ns.Module = {};
 ns.Module.__index = ns.Module;
 
--- Calls from modules
+-- Constructeur pour les modules
 function ns.Module:new(onInit, name)
-	local self = {};
-	setmetatable(self, ns.Module);
-	self.onInit = onInit;
-	self.name = name;
-	self.onSaveOptions = noop;
-	self.getInfo = noop;
-	self.isloaded = false;
+	local instance = setmetatable({}, ns.Module);
+	instance.onInit = onInit or noop;
+	instance.name = name or "Unnamed";
+	instance.onSaveOptions = noop;
+	instance.getInfo = noop;
+	instance.isloaded = false;
 
-	tinsert(ns.MODULES, self);
-	return self;
+	table.insert(ns.MODULES, instance);
+	return instance;
 end
+
+--#region Setters for callbacks
 function ns.Module:SetOnSaveOptions(onSaveOptions)
-	self.onSaveOptions = onSaveOptions;
-	return self;
-end
-function ns.Module:SetGetInfo(getInfo)
-	self.getInfo = getInfo;
+	self.onSaveOptions = onSaveOptions or noop;
 	return self;
 end
 
--- Calls from Core
+function ns.Module:SetGetInfo(getInfo)
+	self.getInfo = getInfo or noop;
+	return self;
+end
+--#endregion
+
+--#region CalledByCore
 function ns.Module:Init(...)
-	if (ns.AddMsgDebug) then
-		ns.AddMsgDebug(format("Loading <%s> module...", self.name or "Unnamed?"));
+	if ns.AddMsgDebug then
+		ns.AddMsgDebug(string.format("Loading <%s> module...", self.name));
 	end
 	self.onInit(self, ...);
 	self.isloaded = true;
 	return self;
 end
+
 function ns.Module:OnSaveOptions(...)
-	if (self.isloaded) then
-		self.onSaveOptions(self, ...);
-	else
-		ns.AddMsgWarn(l.INIT_FAILED);
-	end
+    if not self.isloaded then
+        ns.AddMsgWarn(l.INIT_FAILED)
+        return
+    end
+    self.onSaveOptions(self, ...)
 end
 -- Only if Standalone
 function ns.Module:GetInfo(...)
-	if (self.isloaded) then
-		self.getInfo(self, ...);
-	else
-		ns.AddMsgWarn(l.INIT_FAILED);
-	end
+    if not self.isloaded then
+        ns.AddMsgWarn(l.INIT_FAILED)
+        return
+    end
+    self.getInfo(self, ...)
 end
 
 function ns.Module:Name()
 	return self.name;
 end
+
 function ns.Module:IsLoaded()
 	return self.isloaded;
 end
+--#endregion
