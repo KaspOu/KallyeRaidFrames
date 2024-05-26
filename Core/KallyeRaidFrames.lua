@@ -36,21 +36,18 @@ local KRF_DefaultOptions = {
 	DebuffsScale = 1.25,
 	MaxBuffs = 3,
 	FriendsNameplates_Txt_UseColor = "1",
-	FriendsNameplates_Txt_Color = { r= 1, g= 1, b= 1, a = 1 },
-	FriendsNameplates_Bar_UseColor = "1",
-	FriendsNameplates_Bar_Color = { r= 0, g= 0, b= 1, a = 1 },
+	FriendsNameplates_Txt_Color = { r= .235, g= .941, b= 1, a = 1 },
+	FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1",
+	FriendsNameplates_Bar_Color = { r= .235, g= .941, b= 1, a = 1 },
 	
-	EnemiesNameplates_Txt_UseColor = "0",
-	EnemiesNameplates_Txt_Color = { r= 0, g= 1, b= 0, a = 1 },
+	EnemiesNameplates_Txt_UseColor = "1",
+	EnemiesNameplates_Txt_Color = { r= .87, g= 0, b= .05, a = 1 },
 	EnemiesNameplates_Bar_UseColor = "0",
-	EnemiesNameplates_Bar_Color = { r= 0, g= 1, b= 0, a = 1 },
-	
-	FriendsClassColor_Nameplates = true,
-	EnemiesClassColor_Nameplates = false,
+	EnemiesNameplates_Bar_Color = { r= .87, g= 0, b= .05, a = 1 },
 
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
-	ShowMsgError = true,
+	ShowMsgError = false,
 
 	DebugMode = false,
 };
@@ -73,6 +70,8 @@ local function SLASH_KRF_command(msgIn)
 		KallyeRaidFramesOptions.DebugMode = not KallyeRaidFramesOptions.DebugMode;
 		ns.AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and l.GR.."true" or l.RD.."false"), true);
 		SLASH_KRF_command();
+	elseif msgIn == "reset" then
+		StaticPopup_Show(ns.ADDON_NAME.."_CONFIRM_RESET")
 	else
 		if Settings then
 			Settings.OpenToCategory(ns.TITLE);

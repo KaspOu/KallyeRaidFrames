@@ -5,6 +5,7 @@ local GetAddOnInfo = C_AddOns.GetAddOnInfo or GetAddOnInfo;
 ns.ADDON_NAME,ns.TITLE, ns.NOTES = GetAddOnInfo(addonName);
 ns.MODULES = {};
 
+BINDING_HEADER_KRaidFrames = ns.ADDON_NAME;
 BINDING_NAME_KRaidFrames =  ns.ADDON_NAME.." options";
 
 ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));

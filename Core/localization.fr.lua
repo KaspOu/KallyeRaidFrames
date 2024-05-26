@@ -80,18 +80,15 @@ l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Par d\195\169faut";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS = "Couleurs de classe";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM = "Votre choix de couleur : ";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Coloration des noms alli\195\169s";
-l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur de texte des barres d'info alli\195\169es (hors instances)";
+l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info alli\195\169es (hors instances)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Coloration des barres alli\195\169es"..l.GYL.." (Classic)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info alli\195\169es (hors instances)";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Coloration des noms ennemis";
-l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur de texte des barres d'info ennemies (hors instances)";
+l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info ennemies (hors instances)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Coloration des barres ennemies"..l.GYL.." (Classic)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info ennemies (hors instances)";
-
-l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Barre d'info des unit\195\169s color\195\169e par classe (hors instances)";
-l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Colore le nom du joueur (sur la t\195\170te) d'apr\195\168s sa classe (ne fonctionne pas en instance)";
-l.OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activer pour les ennemis";
-l.OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP;
+l.OPTION_SHOWPVPICONS = "Afficher les ic\195\180nes JcJ";
+l.OPTION_SHOWPVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les barres d'info, amies comme ennemies.";
 
 l.OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 l.OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..l.YL.."/reload|r )";

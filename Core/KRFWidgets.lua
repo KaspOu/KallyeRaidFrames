@@ -2,6 +2,28 @@ local _, ns = ...
 local l = ns.I18N
 
 
+--- Function to display a tooltip
+--- @param frame frame The frame to which the tooltip is attached
+--- @param title string The title of the tooltip
+--- @param text string The text of the tooltip (optional)
+--- @param anchor string The anchor of the tooltip (optional)
+--- @return nil
+local function showTooltip(frame, title, text, anchor)
+	title = l[title] or _G[title] or title;
+	text = l[text] or _G[text] or text;
+	text = text ~= title and text or "";
+
+	GameTooltip:SetOwner(frame, anchor or "ANCHOR_RIGHT");
+	if (title ~= "") then
+		GameTooltip:SetText(l.WH..title);
+		GameTooltip:AddLine(text, 1, 0.82, 0, 1);
+	else
+		GameTooltip:SetText(text, 1, 0.82, 0, 1);
+	end
+	GameTooltip:AppendText("");
+end
+
+-- #region Checkbox Widget
 --[[
 ! Checkbox Widget
 Simple checkbutton widget with text
@@ -24,21 +46,15 @@ end
 function KRFUI.CheckboxWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
-	text = l[text] or _G[text] or text;
-
 	local tooltip = self:GetAttribute("tooltip") or "";
-	tooltip = l[tooltip] or _G[tooltip] or tooltip;
-	tooltip = tooltip ~= text and tooltip or "";
-
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:SetText(l.WH..text);
-	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
-	GameTooltip:AppendText("");
+	showTooltip(self, text, tooltip, "ANCHOR_RIGHT")
 end
 function KRFUI.CheckboxWidget_OnLeave(self)
 	-- GameTooltip:Hide();
 end
+-- #endregion Checkbox Widget
 
+-- #region Heading Widget
 --[[
 ! Heading Widget
 Using a checkbutton widget and hide checkbox
@@ -76,7 +92,9 @@ end
 function KRFUI.HeadingWidget_OnClick(self)
 	self:SetChecked(false);
 end
+-- #endregion Heading Widget
 
+-- #region Color Widget
 --[[
 ! Color Widget
 -- Removed OpacitySliderFrame, Since Dragonflight (10)
@@ -193,27 +211,20 @@ function KRFUI.ColorWidget_OnClick(self)
 		ColorWidget_ShowColorPicker_Classic(ColorWidget_ColorPickedCallback_Classic, ColorWidget_ColorCancelledCallback_Classic, self);
 	end
 end
+
+
 function KRFUI.ColorWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
-	text = l[text] or _G[text] or text;
 	local tooltip = self:GetAttribute("tooltip") or "";
-	tooltip = l[tooltip] or _G[tooltip] or tooltip;
-	tooltip = tooltip ~= text and tooltip or "";
-
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:SetText(l.WH..text);
-	if (text ~= "") then
-		GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
-	else
-		GameTooltip:SetText(tooltip, 1, 0.82, 0, 1);
-	end
-	GameTooltip:AppendText("");
+	showTooltip(self, text, tooltip, "ANCHOR_RIGHT")
 end
 function KRFUI.ColorWidget_OnLeave(self)
 	GameTooltip:Hide();
 end
+-- #endregion Color Widget
 
+-- #region Slider Widget
 --[[
 ! Slider Widget
 ]]
@@ -261,22 +272,19 @@ function KRFUI.SliderWidget_OnValueChanged(self, value)
 end
 function KRFUI.SliderWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
-	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
-	text = l[text] or _G[text] or text;
-
-	local tooltip = self:GetAttribute("tooltip") or "";
-	tooltip = l[tooltip] or _G[tooltip] or tooltip;
-	tooltip = tooltip ~= text and tooltip or "";
-
-	GameTooltip:SetOwner(self, "ANCHOR_TOP");
-	GameTooltip:SetText(l.WH..text);
-	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
-	GameTooltip:AppendText("");
+	local text = self:GetAttribute("text") or self:GetAttribute("title") or ""
+	local tooltip = self:GetAttribute("tooltip") or ""
+	showTooltip(self, text, tooltip, "ANCHOR_TOP")
 end
 function KRFUI.SliderWidget_OnLeave(self)
 	GameTooltip:Hide();
 end
+-- #endregion Slider Widget
 
+-- #region DropDown Widget
+--[[
+! DropDown Widget
+]]
 local function DropDownWidget_OnSelect(dropdown, value, text)
 	dropdown:GetScript("OnEvent")(dropdown, "select")
 end
@@ -296,13 +304,15 @@ local function DropDownWidget_Initialize(self, level, _)
 	local localFunc = function(b) DropDownWidget_Func(self, b) end
 	while(i == 0 or self:GetAttribute("text"..i))
 	do
+		local tooltip = self:GetAttribute("text")
 		local val, txt, color
 		if i == 0 then
-			val, txt, color = nil, self:GetAttribute("text"), nil
+			val, txt, color = nil, tooltip, nil
 		else
 			val, txt, color = self:GetAttribute("value"..i), self:GetAttribute("text"..i), self:GetAttribute("color"..i)
 		end
 		txt = l[txt] or _G[txt] or txt;
+		tooltip = l[tooltip] or _G[tooltip] or tooltip;
 		color = l[color] or _G[color] or color;
 
 		info.isTitle = not val;
@@ -313,7 +323,7 @@ local function DropDownWidget_Initialize(self, level, _)
 		info.checked = (val == curValue)
 		info.menuList= val
 		info.hasArrow = false
-		info.tooltipTitle = self:GetAttribute("text");
+		info.tooltipTitle = tooltip;
 		info.tooltipText = txt;
 		info.colorCode = color;
 		info.justifyH = self:GetAttribute("justify") or "RIGHT";
@@ -373,15 +383,14 @@ function KRFUI.DropDownWidget_OnLoad(self)
 end
 
 function KRFUI.DropDownWidget_OnEnter(self)
-	local tooltip = self:GetAttribute("tooltip") or "";
-	if (tooltip == "") then return; end;
-	tooltip = l[tooltip] or _G[tooltip] or tooltip;
-
-	GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
-	GameTooltip:SetText(tooltip);
-	GameTooltip:Show();
+	if self.isDisabled then
+		return;
+	end
+	showTooltip(self, self:GetAttribute("text"), self:GetAttribute("tooltip"), "ANCHOR_TOPLEFT")
 end
 
 function KRFUI.DropDownWidget_OnLeave(self)
 	GameTooltip:Hide();
 end
+-- #endregion DropDown Widget
+

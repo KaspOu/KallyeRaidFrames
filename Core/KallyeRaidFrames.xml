@@ -367,13 +367,6 @@
 								</Anchors>
 							</Slider>
 							<Frame parentKey="Options1" inherits="KRFOptionsNameplatesColor">
-								<Layers>
-									<Layer level="BACKGROUND">
-										<Texture setAllPoints="true">
-											<Color r=".8" a=".1"/>
-										</Texture>
-									</Layer>
-								</Layers>				
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>

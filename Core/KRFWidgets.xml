@@ -49,7 +49,7 @@
 			<OnClick>KRFUI.HeadingWidget_OnClick(self)</OnClick>
 		</Scripts>
 	</CheckButton>
-	<Frame name="KRFUI_DropDownWidget" type="DropDown" inherits="UIDropDownMenuTemplate" virtual="true">
+	<Frame name="KRFUI_DropDownWidget" inherits="UIDropDownMenuTemplate" virtual="true">
 		<Size x="100" y="40" />
 		<Scripts>
 			<OnLoad> KRFUI.DropDownWidget_OnLoad(self)</OnLoad>

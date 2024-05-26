@@ -5,6 +5,17 @@ function ns.SetDefaultOptions(DefaultOptions, reset)
 	if reset or KallyeRaidFramesOptions == nil then
 		KallyeRaidFramesOptions = CopyTable(DefaultOptions)
 	else
+		-- TODO: REMOVE Since 10.206 OLD KEYS
+		if KallyeRaidFramesOptions.FriendsClassColor_Nameplates then
+			KallyeRaidFramesOptions.FriendsNameplates_Txt_UseColor = "1"
+			KallyeRaidFramesOptions.FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
+			KallyeRaidFramesOptions.FriendsClassColor_Nameplates = nil
+		end
+		if KallyeRaidFramesOptions.EnemiesClassColor_Nameplates then
+			KallyeRaidFramesOptions.EnemiesNameplates_Txt_UseColor = "1"
+			KallyeRaidFramesOptions.EnemiesNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
+			KallyeRaidFramesOptions.EnemiesClassColor_Nameplates = nil
+		end
 		foreach(DefaultOptions,
 			function (k, v)
 				if KallyeRaidFramesOptions[k] == nil then
@@ -271,26 +282,23 @@ end
 - Call to ns.UpdateNameColor (only inside hook)
 ]]
 function ns.Hook_UpdateName(frame, calledOutsideHook)
-	if not frame:IsForbidden() then
-		if UnitPlayerControlled(frame.displayedUnit) then
-			if (not calledOutsideHook) then
-				ns.UpdateNameColor(frame);
-			end
+	if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) then
+		return
+	end
 
-			local name = frame.name;
-			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or "";
+	if not calledOutsideHook then
+		ns.UpdateNameColor(frame)
+	end
 
-			if KallyeRaidFramesOptions.HideRealm then
-				local playerName, realm = UnitName(frame.displayedUnit);
-				if realm and realm ~= "" then
-					name:SetText(dead..playerName..FOREIGN_SERVER_LABEL); -- " (*)"
-				else
-					name:SetText(dead..playerName);
-				end
-			elseif KallyeRaidFramesOptions.IconOnDeath then
-				name:SetText(dead..GetUnitName(frame.displayedUnit, true));
-			end
-		end
+	local name = frame.name
+	local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or ""
+
+	if KallyeRaidFramesOptions.HideRealm then
+		local playerName, realm = UnitName(frame.displayedUnit)
+		realm = realm or ""
+		name:SetText(dead .. playerName .. (realm ~= "" and FOREIGN_SERVER_LABEL or "")) -- (*)
+	elseif KallyeRaidFramesOptions.IconOnDeath then
+		name:SetText(dead .. GetUnitName(frame.displayedUnit, true))
 	end
 end
 
@@ -299,47 +307,99 @@ end
 - Class Color for Nameplates or Frames (inc. Dead / Disconnected)
 ]]
 function ns.UpdateNameColor(frame)
-	if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) then
-		local name = frame.name;
-		local r, g, b, a = UnitSelectionColor(frame.displayedUnit);
-		-- pet default color, or player class color
-		local c = not UnitIsPlayer(frame.displayedUnit) and {r= r, g= g, b=b, a=a} or KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))];
-		if not FrameIsCompact(frame) then
-			-- Nameplates: change color (works outside instances)
-			if c and KallyeRaidFramesOptions.FriendsClassColor_Nameplates and (KallyeRaidFramesOptions.EnemiesClassColor_Nameplates or UnitIsFriend(frame.displayedUnit,"player")) then
-				if UnitIsPlayer(frame.displayedUnit) then
-					-- change nameplate text color only for players, not pets
-					name:SetVertexColor(c.r, c.g, c.b);
-					name:SetShadowColor(c.r, c.g, c.b, 0.2);
-				end
-				-- colorNameBySelection: nameplates already colored, Since BfA (7)
-				if (not ns.HAS_colorNameBySelection) then
-					-- on every refresh, it will avoid misscolorations on updates
-					local healthBar = frame.healthBar;
-					healthBar:SetStatusBarColor(c.r, c.g, c.b);
-				end
-			end
-		else
-			-- Party / Raid Frames
-			if KallyeRaidFramesOptions.FriendsClassColor then
-				if KRF_UnitIsDeadOrGhost(frame) then
-					local lowColor = (not KallyeRaidFramesOptions.RevertBar) and KallyeRaidFramesOptions.BGColorLow or KallyeRaidFramesOptions.RevertColorLow;
-					name:SetVertexColor(lowColor.r, lowColor.g, lowColor.b, lowColor.a or 1);
-					name:SetShadowColor(lowColor.r, lowColor.g, lowColor.b, 0.2);
-				else
-					if c then
-						local r, g, b = c.r, c.g, c.b;
-						if (not KallyeRaidFramesOptions.RevertBar) then
-							r, g, b = lighten(r, g, b, 0.20);
-						end
-						name:SetVertexColor(r, g, b);
-						name:SetShadowColor(r, g, b, 0.2);
-					end
-					name:SetAlpha(KRF_UnitIsConnected(frame) and 1 or 0.5);
-				end
-			end
-		end
+    if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) then
+        if not FrameIsCompact(frame) then
+            ns.UpdateNameplateColor(frame)
+        else
+            ns.UpdatePartyRaidFrameColor(frame)
+        end
+    end
+end
+
+
+--- Filter nameplates bar option, restricted depending on Wow version
+--- ? colorNameBySelection: nameplates already colored, Since BfA (7)
+---@param option string Option to check
+---@return string option As is, or "0" if the bars are already colored by the game
+local function filterNameplateBarOption(option)
+	if (ns.HAS_colorNameBySelection) then
+		return "0"
 	end
+	return option
+end
+
+
+local function applyTextColor(name, useColorOption, color, customColor)
+    if useColorOption == "1" and color then
+        name:SetVertexColor(color.r, color.g, color.b, color.a)
+        name:SetShadowColor(color.r, color.g, color.b, 0.2)
+    elseif useColorOption == "2" then
+        name:SetVertexColor(customColor.r, customColor.g, customColor.b, customColor.a)
+        name:SetShadowColor(customColor.r, customColor.g, customColor.b, 0.2)
+    end
+end
+
+local function applyBarColor(healthBar, useColorOption, color, customColor)
+    if useColorOption == "1" then
+        healthBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
+    elseif useColorOption == "2" then
+        healthBar:SetStatusBarColor(customColor.r, customColor.g, customColor.b, customColor.a)
+    end
+end
+
+--[[
+! Update Nameplate Colors Based on Unit Status and Settings
+- Works outside instances (frame forbidden)
+- Applies color settings for both friends and enemies, and both names and nameplates (depending on wow version).
+- Handles custom colors and default class colors.
+]]
+function ns.UpdateNameplateColor(frame)
+    if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) or FrameIsCompact(frame) then
+        return
+    end
+
+    local r, g, b, a = UnitSelectionColor(frame.displayedUnit)
+	-- pet default color, or player class color
+    local c = not UnitIsPlayer(frame.displayedUnit) and {r= r, g= g, b=b, a=a} or KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))]
+
+    -- Friend Nameplate
+    if UnitIsFriend(frame.displayedUnit, "player") then
+        applyTextColor(frame.name, KallyeRaidFramesOptions.FriendsNameplates_Txt_UseColor, c, KallyeRaidFramesOptions.FriendsNameplates_Txt_Color)
+        local optionBarUseColor = filterNameplateBarOption(KallyeRaidFramesOptions.FriendsNameplates_Bar_UseColor)
+        applyBarColor(frame.healthBar, optionBarUseColor, c, KallyeRaidFramesOptions.FriendsNameplates_Bar_Color)
+    end
+
+    -- Enemy Nameplate
+    if not UnitIsFriend(frame.displayedUnit, "player") then
+        applyTextColor(frame.name, KallyeRaidFramesOptions.EnemiesNameplates_Txt_UseColor, c, KallyeRaidFramesOptions.EnemiesNameplates_Txt_Color)
+        local optionBarUseColor = filterNameplateBarOption(KallyeRaidFramesOptions.EnemiesNameplates_Bar_UseColor)
+        applyBarColor(frame.healthBar, optionBarUseColor, c, KallyeRaidFramesOptions.EnemiesNameplates_Bar_Color)
+    end
+end
+
+function ns.UpdatePartyRaidFrameColor(frame)
+    if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) and FrameIsCompact(frame) then
+        local name = frame.name;
+        local c = KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))];
+        -- Party / Raid Frames
+        if KallyeRaidFramesOptions.FriendsClassColor then
+            if KRF_UnitIsDeadOrGhost(frame) then
+                local lowColor = (not KallyeRaidFramesOptions.RevertBar) and KallyeRaidFramesOptions.BGColorLow or KallyeRaidFramesOptions.RevertColorLow;
+                name:SetVertexColor(lowColor.r, lowColor.g, lowColor.b, lowColor.a or 1);
+                name:SetShadowColor(lowColor.r, lowColor.g, lowColor.b, 0.2);
+            else
+                if c then
+                    local r, g, b = c.r, c.g, c.b;
+                    if (not KallyeRaidFramesOptions.RevertBar) then
+                        r, g, b = lighten(r, g, b, 0.20);
+                    end
+                    name:SetVertexColor(r, g, b);
+                    name:SetShadowColor(r, g, b, 0.2);
+                end
+                name:SetAlpha(KRF_UnitIsConnected(frame) and 1 or 0.5);
+            end
+        end
+    end
 end
 
 function GetHPSeverity(percent, revert)

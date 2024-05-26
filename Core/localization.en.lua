@@ -78,18 +78,15 @@ l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Blizzard default colors";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS ="Use class color";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM ="Your color choice: ";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Allied names coloration";
-l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of allied nameplates (outside instances)";
+l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above allied nameplates (outside instances)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Allied bars coloration"..l.GYL.." (Classic)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of allied nameplates (outside instances)";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Enemy names coloration";
-l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of enemy nameplates (outside instances)";
+l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above enemy nameplates (outside instances)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Enemy bars coloration"..l.GYL.." (Classic)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of enemy nameplates (outside instances)";
-
-l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES = "Players nameplates colored by class (outside instances)";
-l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP = "Change player nameplate (on the head) color according to class (doesn't work inside instances)";
-l.OPTION_ENEMIESCLASSCOLOR_NAMEPLATES = "Activate for enemies nameplates";
-l.OPTION_ENEMIESCLASSCOLOR_NAMEPLATES_TOOLTIP = l.OPTION_FRIENDSCLASSCOLOR_NAMEPLATES_TOOLTIP;
+l.OPTION_SHOWPVPICONS = "Show PvP icons";
+l.OPTION_SHOWPVPICONS_TOOLTIP = "Displays PvP icons on info bars, both friendly and enemy.";
 
 l.OPTION_RESET_OPTIONS = "Reset options";
 l.OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..l.YL.."/reload|r )";

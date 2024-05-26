@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsNameplatesColor.lua" />
 	<Frame name="KRFOptionsNameplatesColor" virtual="true">
-		<Size x="550" y="180" />
+		<Size x="550" y="190" />
 		<Frames>
 			<CheckButton parentKey="LabelOthers" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -19,7 +19,7 @@
 					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR" />
 					<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP" />
 					<Attribute name="justify" value="RIGHT" />
-					<Attribute name="width" value="150" />
+					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
 					<Attribute name="color1" value="RDL" />
@@ -30,7 +30,7 @@
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOP" relativeKey="$parent.LabelOthers" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
-					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" /></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent"><Offset x="0" /></Anchor>
 				</Anchors>
 				<Scripts>
 					<OnEvent>
@@ -40,10 +40,11 @@
 			</Frame>
 				<Button parentKey="FriendsNameplates_Txt_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
-						<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_TXT_COLOR" />
+						<Attribute name="title" value="OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR" />
+						<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP" />
 					</Attributes>
 					<Anchors>
-						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Txt_UseColor" relativePoint="TOPRIGHT"><Offset x="0" /></Anchor>
+						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Txt_UseColor" relativePoint="TOPRIGHT"><Offset x="-10" /></Anchor>
 					</Anchors>
 				</Button>
 
@@ -53,7 +54,7 @@
 					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR" />
 					<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP" />
 					<Attribute name="justify" value="RIGHT" />
-					<Attribute name="width" value="150" />
+					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
 					<Attribute name="color1" value="RDL" />
@@ -74,10 +75,11 @@
 			</Frame>
 				<Button parentKey="FriendsNameplates_Bar_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
-						<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_BAR_COLOR" />
+						<Attribute name="title" value="OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR" />
+						<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP" />
 					</Attributes>
 					<Anchors>
-						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="TOPRIGHT"><Offset x="0" y="-0"/></Anchor>
+						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="TOPRIGHT"><Offset x="-10" y="-0"/></Anchor>
 					</Anchors>
 				</Button>
 
@@ -87,7 +89,7 @@
 					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR" />
 					<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP" />
 					<Attribute name="justify" value="RIGHT" />
-					<Attribute name="width" value="150" />
+					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
 					<Attribute name="color1" value="RDL" />
@@ -108,10 +110,11 @@
 			</Frame>
 				<Button parentKey="EnemiesNameplates_Txt_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
-						<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_TXT_COLOR" />
+						<Attribute name="title" value="OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR" />
+						<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP" />
 					</Attributes>
 					<Anchors>
-						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Txt_UseColor" relativePoint="TOPRIGHT"><Offset x="0" /></Anchor>
+						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Txt_UseColor" relativePoint="TOPRIGHT"><Offset x="-10" /></Anchor>
 					</Anchors>
 				</Button>
 
@@ -121,7 +124,7 @@
 					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR" />
 					<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP" />
 					<Attribute name="justify" value="RIGHT" />
-					<Attribute name="width" value="150" />
+					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
 					<Attribute name="color1" value="RDL" />
@@ -142,12 +145,24 @@
 			</Frame>
 				<Button parentKey="EnemiesNameplates_Bar_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
-						<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_BAR_COLOR" />
+						<Attribute name="title" value="OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR" />
+						<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP" />
 					</Attributes>
 					<Anchors>
-						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor" relativePoint="TOPRIGHT"><Offset x="0" y="-0"/></Anchor>
+						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor" relativePoint="TOPRIGHT"><Offset x="-10" y="-0"/></Anchor>
 					</Anchors>
 				</Button>
+
+			<CheckButton parentKey="ShowPvpIcons" inherits="KRFUI_CheckboxWidget" hidden="true">
+				<Attributes>
+					<Attribute name="text" value="OPTION_SHOWPVPICONS" />
+					<Attribute name="tooltip" value="OPTION_SHOWPVPICONS_TOOLTIP" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-10"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent"><Offset x="20" /></Anchor>
+				</Anchors>
+			</CheckButton>
 		</Frames>
 		<Scripts>
 			<OnShow>
