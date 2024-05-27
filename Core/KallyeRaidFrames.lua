@@ -72,8 +72,8 @@ local function SLASH_KRF_command(msgIn)
 	elseif msgIn == "edit" then
 		ns.ShowEditMode("PartyFrame");
 	elseif msgIn == "debug" then
-		KallyeRaidFramesOptions.DebugMode = not KallyeRaidFramesOptions.DebugMode;
-		ns.AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and l.GR.."true" or l.RD.."false"), true);
+		_G[ns.OPTIONS_NAME].DebugMode = not _G[ns.OPTIONS_NAME].DebugMode;
+		ns.AddMsgWarn("Debug mode: "..(_G[ns.OPTIONS_NAME].DebugMode and l.GR.."true" or l.RD.."false"), true);
 		SLASH_KRF_command();
 	elseif msgIn == "reset" then
 		StaticPopup_Show(ns.ADDON_NAME.."_CONFIRM_RESET")
@@ -111,30 +111,30 @@ local function OnEvent(self, event, ...)
 			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth);
 		end
 		
-		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
+		if _G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100 then
 			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
 			hooksecurefunc("CompactUnitFrame_UpdateInRange", ns.Hook_UpdateInRange);
 			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateInRange);
 		end
-		if KallyeRaidFramesOptions.BuffsScale ~= 1 or KallyeRaidFramesOptions.DebuffsScale ~= 1 then
+		if _G[ns.OPTIONS_NAME].BuffsScale ~= 1 or _G[ns.OPTIONS_NAME].DebuffsScale ~= 1 then
 			hooksecurefunc("CompactUnitFrame_SetMaxBuffs", ns.Hook_ManageBuffs);
 		end
 
 		-- Load Modules
 		foreach(ns.MODULES,
-			function(k, v)
-				ns.MODULES[k]:Init(KallyeRaidFramesOptions);
+			function(_, module)
+				module:Init(_G[ns.OPTIONS_NAME]);
 			end
         );
 
 		-- ! Addon Loaded ^^
-		if (KallyeRaidFramesOptions.Version ~= defaultOptions.Version) then
-			KallyeRaidFramesOptions.Version = defaultOptions.Version;
+		if (_G[ns.OPTIONS_NAME].Version ~= defaultOptions.Version) then
+			_G[ns.OPTIONS_NAME].Version = defaultOptions.Version;
 			if (l.WHATSNEW ~= "") then
 				ns.AddMsg(l.WHATSNEW);
 			end
 		end
-		if (KallyeRaidFramesOptions.DebugMode) then
+		if (_G[ns.OPTIONS_NAME].DebugMode) then
 			SLASH_KRF_command()
 		end
 	end
@@ -173,99 +173,14 @@ end
 
 
 local function OptionsWReloadValues()
-	return tostring(KallyeRaidFramesOptions.SoloRaidFrame)
-		..tostring(KallyeRaidFramesOptions.RevertBar)
-		..tostring(KallyeRaidFramesOptions.UpdateHealthColor)
-		..tostring(KallyeRaidFramesOptions.BuffsScale)
-		..tostring(KallyeRaidFramesOptions.DebuffsScale)
-		..tostring(KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100);
+	return tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
+		..tostring(_G[ns.OPTIONS_NAME].RevertBar)
+		..tostring(_G[ns.OPTIONS_NAME].UpdateHealthColor)
+		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
+		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
+		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end
 
-local function SaveOptions()
-	local PreviousOptionsWReload = OptionsWReloadValues();
-	-- Auto detect options controls and save them
-	foreach(defaultOptions,
-		function (k, v)
-			local optionsObject = ns.FindControl(k);
-			if (optionsObject ~= nil) then
-				local control = optionsObject;
-				local previousValue = KallyeRaidFramesOptions[k] or v;
-				local value = nil;
-
-				if control.type == "color" then
-					value = control:GetColor();
-				elseif control.type == "dropdown" then
-					value = control:GetValue();
-				elseif control.type == CONTROLTYPE_SLIDER then
-					value = control:GetValue();
-				elseif type(previousValue) == "boolean" then
-					value = control:GetChecked();
-				end
-				if value == nil then
-					ns.AddMsgErr(format("Incorrect field value, loading default value for %s...", k));
-					value = v;
-				end;
-				KallyeRaidFramesOptions[k] = value;
-			end
-		end
-	);
-	-- Secure limits (low <= warn <= ok)
-	if KallyeRaidFramesOptions.LimitWarn < KallyeRaidFramesOptions.LimitLow then
-		KallyeRaidFramesOptions.LimitWarn = KallyeRaidFramesOptions.LimitLow
-	end
-	if KallyeRaidFramesOptions.LimitOk < KallyeRaidFramesOptions.LimitWarn then
-		KallyeRaidFramesOptions.LimitOk = KallyeRaidFramesOptions.LimitWarn
-	end
-	-- Reset party health as soon as possible
-	ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
-
-	if OptionsWReloadValues() ~= PreviousOptionsWReload then
-		ns.AddMsgWarn(l.OPTION_RELOAD_REQUIRED, true);
-	end
-	
-	-- OnSave: Modules
-	foreach(ns.MODULES,
-		function(k, v)
-			ns.MODULES[k]:OnSaveOptions(KallyeRaidFramesOptions);
-		end
-	);
-	if ns.optionsFrame ~= nil and ns.optionsFrame.HandleVis ~= nil then
-		ns.optionsFrame:Hide();
-	end
-end
-
-local function RefreshOptions()
-	if ns.optionsFrame ~= nil then
-		ns.optionsFrame:Show();
-		ns.optionsFrame.HandleVis = true;
-	end
-	-- Auto detect options controls and load them
-	foreach(defaultOptions,
-		function (k, v)
-			local optionsObject = ns.FindControl(k);
-			if (optionsObject ~= nil) then
-				local control = optionsObject;
-				local value = KallyeRaidFramesOptions[k];
-				if value == nil then
-					value = v;
-					ns.AddMsgErr(format("Option not found ("..l.YLD.."%s|r), loading default value...", k));
-				end;
-
-				if control.type == "color" then
-					control:SetColor(value);
-				elseif control.type == "dropdown" then
-					control:SetValue(value);
-				elseif control.type == CONTROLTYPE_SLIDER then
-					control:SetValue(value);
-				elseif type(value) == "boolean" then
-					control:SetChecked(value);
-				else
-					ns.AddMsgDebug(format("Type non prevu pour %s - %s, type de valeur: %s", k, control.type or "unknown", type(value)));
-				end
-			end
-		end
-	);
-end
 
 function KRFUI.ManageOptionsVisibility()
 	local HealthOption,
@@ -298,20 +213,6 @@ function KRFUI.ManageOptionsVisibility()
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
 end
 
-function ns.FindControl(ControlName)
-	if ns.optionsFrame[ControlName] then
-		return ns.optionsFrame[ControlName];
-	else
-		local i = 1
-		while(ns.optionsFrame["Options"..i])
-		do
-			if (ns.optionsFrame["Options"..i][ControlName]) then
-				return ns.optionsFrame["Options"..i][ControlName];
-			end
-			i=i+1;
-		end
-	end
-end
 
 StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 	showAlert = true,
@@ -341,6 +242,25 @@ function KRFUI.ShowEditMode(window)
 	ns.ShowEditMode(window);
 end
 
+local refreshOptions = function()
+	ns.RefreshOptions(defaultOptions);
+end
+local saveOptions = function()
+	ns.SaveOptions(defaultOptions, OptionsWReloadValues);
+	-- Specific stuff
+
+    -- Secure limits (low <= warn <= ok)
+    if _G[ns.OPTIONS_NAME].LimitWarn < _G[ns.OPTIONS_NAME].LimitLow then
+        _G[ns.OPTIONS_NAME].LimitWarn = _G[ns.OPTIONS_NAME].LimitLow
+    end
+    if _G[ns.OPTIONS_NAME].LimitOk < _G[ns.OPTIONS_NAME].LimitWarn then
+        _G[ns.OPTIONS_NAME].LimitOk = _G[ns.OPTIONS_NAME].LimitWarn
+    end
+    -- Reset party health as soon as possible
+    ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
+
+    SetCVar("raidFramesDisplayClassColor", ns.optionsFrame.BlizzFriendsClassColor:GetChecked());
+end
 function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	if ns.CONFLICT then
 		return;
@@ -348,10 +268,10 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	ns.containerFrame = self;
 	ns.scrollFrame = scrollFrame;
 	ns.optionsFrame = optionsFrame;
-	RefreshOptions();
+	refreshOptions();
 	self.name = ns.TITLE;
-	self.okay = SaveOptions;
-	self.refresh = RefreshOptions;
+	self.okay = saveOptions;
+	self.refresh = refreshOptions;
 	InterfaceOptions_AddCategory(self);
 	if (ns.scrollFrame ~= nil) then
 		local BACKDROP_TOOLTIP = {
@@ -373,8 +293,7 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 
 	-- Localize FontStrings
 	foreach(self,
-		function (k, v)
-			local child = self[k];
+		function (_, child)
 			if type(child) == "table" and child:GetObjectType() == "FontString" then
 				child:SetText(l[child:GetText()]);
 			end

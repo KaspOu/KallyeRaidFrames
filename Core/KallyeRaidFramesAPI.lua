@@ -1,28 +1,17 @@
 local _, ns = ...
 local l = ns.I18N;
 
-function ns.SetDefaultOptions(DefaultOptions, reset)
-	if reset or KallyeRaidFramesOptions == nil then
-		KallyeRaidFramesOptions = CopyTable(DefaultOptions)
-	else
-		-- TODO: REMOVE Since 10.206 OLD KEYS
-		if KallyeRaidFramesOptions.FriendsClassColor_Nameplates then
-			KallyeRaidFramesOptions.FriendsNameplates_Txt_UseColor = "1"
-			KallyeRaidFramesOptions.FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
-			KallyeRaidFramesOptions.FriendsClassColor_Nameplates = nil
-		end
-		if KallyeRaidFramesOptions.EnemiesClassColor_Nameplates then
-			KallyeRaidFramesOptions.EnemiesNameplates_Txt_UseColor = "1"
-			KallyeRaidFramesOptions.EnemiesNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
-			KallyeRaidFramesOptions.EnemiesClassColor_Nameplates = nil
-		end
-		foreach(DefaultOptions,
-			function (k, v)
-				if KallyeRaidFramesOptions[k] == nil then
-					KallyeRaidFramesOptions[k] = v;
-				end
-			end
-		);
+function ns.RemoveOldOptions(options)
+	-- TODO: REMOVE Since 10.206 OLD KEYS
+	if  options.FriendsClassColor_Nameplates then
+		options.FriendsNameplates_Txt_UseColor = "1"
+		options.FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
+		options.FriendsClassColor_Nameplates = nil
+	end
+	if  options.EnemiesClassColor_Nameplates then
+		options.EnemiesNameplates_Txt_UseColor = "1"
+		options.EnemiesNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
+		options.EnemiesClassColor_Nameplates = nil
 	end
 end
 
@@ -74,21 +63,6 @@ local function KRF_GetClassColors()
 	return CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS;
 end
 
-
---[[
-! Managing Health & Alpha
-- Normal or revert, depending on option
-]]
-function ns.Hook_UpdateHealth(frame, health)
-	if KallyeRaidFramesOptions.UpdateHealthColor and not frame:IsForbidden() then
-		if not KallyeRaidFramesOptions.RevertBar then
-			UpdateHealth_Regular(frame, health)
-		else
-			UpdateHealth_Reverted(frame, health)
-		end
-	end
-end
-
 --[[
 ! Managing Alpha depending on range
 - Alpha not in range
@@ -99,10 +73,10 @@ function ns.Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then		
 		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
 		local newAlpha = 1;
-		if KallyeRaidFramesOptions.AlphaNotInRange < 100 and hasCheckedRange and not isInRange then
-			newAlpha = KallyeRaidFramesOptions.AlphaNotInRange/100;
-		elseif not InCombatLockdown() and KallyeRaidFramesOptions.AlphaNotInCombat < 100 then
-			newAlpha = KallyeRaidFramesOptions.AlphaNotInCombat/100;
+		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and hasCheckedRange and not isInRange then
+			newAlpha = _G[ns.OPTIONS_NAME].AlphaNotInRange/100;
+		elseif not InCombatLockdown() and _G[ns.OPTIONS_NAME].AlphaNotInCombat < 100 then
+			newAlpha = _G[ns.OPTIONS_NAME].AlphaNotInCombat/100;
 		end
 		if (floor(frame:GetAlpha()*100) ~= floor(newAlpha*100)) then
 			frame:SetAlpha(newAlpha);
@@ -110,10 +84,31 @@ function ns.Hook_UpdateInRange(frame)
 		end
 	end
 end
+
+
+local function GetHPSeverity(percent, revert)
+	local BGColorOK=revert and _G[ns.OPTIONS_NAME].RevertColorOK or _G[ns.OPTIONS_NAME].BGColorOK;
+	local BGColorWarn=revert and _G[ns.OPTIONS_NAME].RevertColorWarn or _G[ns.OPTIONS_NAME].BGColorWarn;
+	local BGColorLow=revert and _G[ns.OPTIONS_NAME].RevertColorLow or _G[ns.OPTIONS_NAME].BGColorLow;
+	local pLimitLow = _G[ns.OPTIONS_NAME].LimitLow / 100;
+	local pLimitWarn = _G[ns.OPTIONS_NAME].LimitWarn / 100;
+	local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
+
+	if percent > pLimitOk then
+		return BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1;
+	elseif percent > pLimitWarn then
+		return mergeColors(BGColorWarn, BGColorOK, (percent - pLimitWarn)/ (pLimitOk - pLimitWarn));
+	elseif percent > pLimitLow then
+		return mergeColors(BGColorLow, BGColorWarn, (percent - pLimitLow) / (pLimitWarn - pLimitLow));
+	else
+		return BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1;
+	end
+end
+
 --[[
 ! Managing Health color: background
 ]]
-function UpdateHealth_Regular(frame, health)
+local function UpdateHealth_Regular(frame, health)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
 		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
 		if c and frame.optionTable.useClassColors then
@@ -122,14 +117,14 @@ function UpdateHealth_Regular(frame, health)
 		if not KRF_UnitIsConnected(frame) then
 			-- Disconnected
 			frame.healthBar:SetValue(0);
-			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .6, .4));
+			frame.background:SetColorTexture(darken(_G[ns.OPTIONS_NAME].BGColorLow.r, _G[ns.OPTIONS_NAME].BGColorLow.g, _G[ns.OPTIONS_NAME].BGColorLow.b, .6, .4));
 			ns.Hook_UpdateName(frame, true);
 			ns.UpdateNameRaidColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
 			frame._wasDead = true;
-			if (KallyeRaidFramesOptions.IconOnDeath) then
+			if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 				ns.Hook_UpdateName(frame, true);
 			end
 			ns.UpdateNameRaidColor(frame);
@@ -141,7 +136,7 @@ function UpdateHealth_Regular(frame, health)
 			local healthPercentage = ceil((health / unitHealthMax * 100));
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false));
 			if frame._wasDead then
-				if (KallyeRaidFramesOptions.IconOnDeath) then
+				if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 					ns.Hook_UpdateName(frame, true);
 				end
 				ns.UpdateNameRaidColor(frame);
@@ -154,7 +149,7 @@ end
 --[[
 ! Managing Health color: reverted bar
 ]]
-function UpdateHealth_Reverted(frame, health)
+local function UpdateHealth_Reverted(frame, health)
 	if not frame:IsForbidden() and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
 		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
 
@@ -166,14 +161,14 @@ function UpdateHealth_Reverted(frame, health)
 		if not KRF_UnitIsConnected(frame) then
 			-- Disconnected
 			frame.healthBar:SetValue(0);
-			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .6, .4));
+			frame.background:SetColorTexture(darken(_G[ns.OPTIONS_NAME].RevertColorLow.r, _G[ns.OPTIONS_NAME].RevertColorLow.g, _G[ns.OPTIONS_NAME].RevertColorLow.b, .6, .4));
 			ns.Hook_UpdateName(frame, true);
 			ns.UpdateNameRaidColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
 			frame._wasDead = true;
-			if (KallyeRaidFramesOptions.IconOnDeath) then
+			if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 				ns.Hook_UpdateName(frame, true);
 			end
 			ns.UpdateNameRaidColor(frame);
@@ -185,7 +180,7 @@ function UpdateHealth_Reverted(frame, health)
 			local healthLost = unitHealthMax - health;
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame._wasDead then
-				if (KallyeRaidFramesOptions.IconOnDeath) then
+				if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 					ns.Hook_UpdateName(frame, true);
 				end
 				ns.UpdateNameRaidColor(frame);
@@ -221,13 +216,27 @@ function UpdateHealth_Reverted(frame, health)
 end
 
 --[[
+! Managing Health & Alpha
+- Normal or revert, depending on option
+]]
+function ns.Hook_UpdateHealth(frame, health)
+	if _G[ns.OPTIONS_NAME].UpdateHealthColor and not frame:IsForbidden() then
+		if not _G[ns.OPTIONS_NAME].RevertBar then
+			UpdateHealth_Regular(frame, health)
+		else
+			UpdateHealth_Reverted(frame, health)
+		end
+	end
+end
+
+--[[
 ! UpdateRoleIcon
 - Role icon on top left
 - Role icon visible only for tanks / heals
 - Reposition name accordingly
 ]]
 function ns.Hook_UpdateRoleIcon(frame)
-	if not frame:IsForbidden() and (KallyeRaidFramesOptions.HideDamageIcons or KallyeRaidFramesOptions.MoveRoleIcons) then
+	if not frame:IsForbidden() and (_G[ns.OPTIONS_NAME].HideDamageIcons or _G[ns.OPTIONS_NAME].MoveRoleIcons) then
 		local icon = frame.roleIcon;
 		if not icon then
 			return;
@@ -235,14 +244,14 @@ function ns.Hook_UpdateRoleIcon(frame)
 
 		local offset = icon:GetWidth() / 4;
 
-		if KallyeRaidFramesOptions.MoveRoleIcons then
+		if _G[ns.OPTIONS_NAME].MoveRoleIcons then
 			icon:ClearAllPoints();
 			icon:SetPoint("TOPLEFT", -offset, offset);
 			frame.name:SetPoint("TOPLEFT", 5, -5);
 		end
 
 		local role = UnitGroupRolesAssigned(frame.unit);
-		if KallyeRaidFramesOptions.HideDamageIcons and role == "DAMAGER" then
+		if _G[ns.OPTIONS_NAME].HideDamageIcons and role == "DAMAGER" then
 			icon:Hide();
 		end
 	end
@@ -253,24 +262,24 @@ end
 - Scale buffs / debuffs
 ]]
 function ns.Hook_ManageBuffs(frame,numbuffs)
-	if KallyeRaidFramesOptions.BuffsScale ~= 1 then
+	if _G[ns.OPTIONS_NAME].BuffsScale ~= 1 then
 		for i=1, #frame.buffFrames do
-			frame.buffFrames[i]:SetScale(KallyeRaidFramesOptions.BuffsScale);
+			frame.buffFrames[i]:SetScale(_G[ns.OPTIONS_NAME].BuffsScale);
 		end
 	end
 
-	if KallyeRaidFramesOptions.DebuffsScale ~= 1 then
+	if _G[ns.OPTIONS_NAME].DebuffsScale ~= 1 then
 		for i=1, #frame.debuffFrames do
-			frame.debuffFrames[i]:SetScale(KallyeRaidFramesOptions.DebuffsScale);
+			frame.debuffFrames[i]:SetScale(_G[ns.OPTIONS_NAME].DebuffsScale);
 		end
 		for i=1, #frame.dispelDebuffFrames do
-			frame.dispelDebuffFrames[i]:SetScale(KallyeRaidFramesOptions.DebuffsScale);
+			frame.dispelDebuffFrames[i]:SetScale(_G[ns.OPTIONS_NAME].DebuffsScale);
 		end
 	end
 
 	-- ! MaxBuffs Deprecated
-	-- if KallyeRaidFramesOptions.MaxBuffs > 0 then
-	-- 	frame.maxBuffs = KallyeRaidFramesOptions.MaxBuffs;
+	-- if _G[ns.OPTIONS_NAME].MaxBuffs > 0 then
+	-- 	frame.maxBuffs = _G[ns.OPTIONS_NAME].MaxBuffs;
 	-- end
 end
 
@@ -291,13 +300,13 @@ function ns.Hook_UpdateName(frame, calledOutsideHook)
 	end
 
 	local name = frame.name
-	local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or ""
+	local dead = (_G[ns.OPTIONS_NAME].IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or ""
 
-	if KallyeRaidFramesOptions.HideRealm then
+	if _G[ns.OPTIONS_NAME].HideRealm then
 		local playerName, realm = UnitName(frame.displayedUnit)
 		realm = realm or ""
 		name:SetText(dead .. playerName .. (realm ~= "" and FOREIGN_SERVER_LABEL or "")) -- (*)
-	elseif KallyeRaidFramesOptions.IconOnDeath then
+	elseif _G[ns.OPTIONS_NAME].IconOnDeath then
 		name:SetText(dead .. GetUnitName(frame.displayedUnit, true))
 	end
 end
@@ -310,15 +319,15 @@ function ns.UpdateNameRaidColor(frame)
         local name = frame.name;
         local c = KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))];
         -- Party / Raid Frames
-        if KallyeRaidFramesOptions.FriendsClassColor then
+        if _G[ns.OPTIONS_NAME].FriendsClassColor then
             if KRF_UnitIsDeadOrGhost(frame) then
-                local lowColor = (not KallyeRaidFramesOptions.RevertBar) and KallyeRaidFramesOptions.BGColorLow or KallyeRaidFramesOptions.RevertColorLow;
+                local lowColor = (not _G[ns.OPTIONS_NAME].RevertBar) and _G[ns.OPTIONS_NAME].BGColorLow or _G[ns.OPTIONS_NAME].RevertColorLow;
                 name:SetVertexColor(lowColor.r, lowColor.g, lowColor.b, lowColor.a or 1);
                 name:SetShadowColor(lowColor.r, lowColor.g, lowColor.b, 0.2);
             else
                 if c then
                     local r, g, b = c.r, c.g, c.b;
-                    if (not KallyeRaidFramesOptions.RevertBar) then
+                    if (not _G[ns.OPTIONS_NAME].RevertBar) then
                         r, g, b = lighten(r, g, b, 0.20);
                     end
                     name:SetVertexColor(r, g, b);
@@ -328,41 +337,6 @@ function ns.UpdateNameRaidColor(frame)
             end
         end
     end
-end
-
-function GetHPSeverity(percent, revert)
-	local BGColorOK=revert and KallyeRaidFramesOptions.RevertColorOK or KallyeRaidFramesOptions.BGColorOK;
-	local BGColorWarn=revert and KallyeRaidFramesOptions.RevertColorWarn or KallyeRaidFramesOptions.BGColorWarn;
-	local BGColorLow=revert and KallyeRaidFramesOptions.RevertColorLow or KallyeRaidFramesOptions.BGColorLow;
-	local pLimitLow = KallyeRaidFramesOptions.LimitLow / 100;
-	local pLimitWarn = KallyeRaidFramesOptions.LimitWarn / 100;
-	local pLimitOk = KallyeRaidFramesOptions.LimitOk / 100;
-
-	if percent > pLimitOk then
-		return BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1;
-	elseif percent > pLimitWarn then
-		return mergeColors(BGColorWarn, BGColorOK, (percent - pLimitWarn)/ (pLimitOk - pLimitWarn));
-	elseif percent > pLimitLow then
-		return mergeColors(BGColorLow, BGColorWarn, (percent - pLimitLow) / (pLimitWarn - pLimitLow));
-	else
-		return BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1;
-	end
-end
-
-function ns.OptionsEnable(FrameObject, isEnabled, disabledAlpha)
-	if isEnabled then
-		FrameObject:Enable();
-		FrameObject:SetAlpha(1);
-	else
-		FrameObject:Disable();
-		FrameObject:SetAlpha(disabledAlpha or .6);
-	end
-end
-function ns.OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled)
-	FrameObject:SetShown(isShowned);
-	if (isShowned) then
-		ns.OptionsEnable(FrameObject, isEnabled);
-	end
 end
 
 function ns.ApplyFuncToRaidFrames(func, ...)
@@ -442,16 +416,6 @@ function ns.LoopDebug()
 	end
 end
 
-function ns.ShowEditMode(window)
-	ShowUIPanel(EditModeManagerFrame);
-	if window == "PartyFrame" then
-		C_EditMode.SetAccountSetting(Enum.EditModeAccountSetting.ShowPartyFrames, 1);
-		--EditModeManagerFrame:SelectSystem(PartyFrame);
-		PartyFrame:SelectSystem();
-		PartyFrame:HighlightSystem();
-		ns.AddMsgWarn(l.OPTION_EDITMODE_PARTY_NOTE);
-	end
-end
 
 --@do-not-package@
 --[[

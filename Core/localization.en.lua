@@ -10,10 +10,11 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = " What's new:\n"
-    .."- Added enemy colored nameplates option.\n"
-    .."- UI enhancements (info button, gradient background).\n"
-    .."- |cffff1111Wow Classic|r & |cffc16600Cata|r versions!\n"
-  ;
+    .."- More Nameplate options:\n"
+    .."   : default / class color / custom color.\n"
+    .."   : separation between names & nameplates.\n"
+    .."- Wow Key shortcut added\n"
+
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
 l.SUBTITLE      = "Raid frames support";

@@ -105,7 +105,8 @@
         "UIDROPDOWNMENU_MENU_LEVEL",
         "UIDropDownMenu_DisableDropDown",
         "UIDropDownMenu_EnableDropDown",
-        "UIDropDownMenu_GetSelectedID"
+        "UIDropDownMenu_GetSelectedID",
+        "class"
     ],
     "cSpell.words": [
         "prepatch"

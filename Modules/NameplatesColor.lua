@@ -1,6 +1,9 @@
 local _, ns = ...
 local l = ns.I18N;
 
+-- * avoid conflict override
+if ns.CONFLICT then return; end
+
 -- Fallback if not set in globals
 if ns.HAS_colorNameBySelection == nil then
     -- colorNameBySelection, Since BfA (7)
@@ -88,3 +91,8 @@ end
 local module = ns.Module:new(onInit, "NameplatesColor");
 module:SetOnSaveOptions(onSaveOptions);
 module:SetGetInfo(getInfo);
+
+--@do-not-package@
+-- hooksecurefunc(NamePlateDriverFrame,"OnNamePlateCreated", ??
+-- Blizzard nameplates color test: local allowClassColor = frame.optionTable.allowClassColorsForNPCs or UnitIsPlayer(frame.unit) or (UnitTreatAsPlayerForDisplay and UnitTreatAsPlayerForDisplay(frame.unit));
+--@end-do-not-package@

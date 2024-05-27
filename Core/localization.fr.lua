@@ -12,10 +12,11 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = " Nouveaut\195\169s :\n"
-    .."- Ajout de l'option de coloration des barres de noms ennemies.\n"
-    .."- Am\195\169liorations UI (bouton info, fond d\195\169grad\195\169).\n"
-    .."- Versions |cffff1111Wow Classic|r & |cffc16600Cata|r !\n"
-    ;
+    .."- Plus d'options pour les barres d'info :\n"
+    .."   : par d\195\169faut / couleur de classe / couleur personnalis\195\169e\n"
+    .."   : s\195\169paration entre les noms et les barres d'info\n"
+    .."- Raccourci clavier Wow ajout\195\169\n"
+
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
 l.SUBTITLE      = "Assistance cadres de raid";

@@ -1,6 +1,10 @@
 local _, ns = ...
 local l = ns.I18N
 
+-- * avoid conflict override
+if ns.CONFLICT then return; end
+
+K_SHARED_UI = K_SHARED_UI or {};
 
 --- Function to display a tooltip
 --- @param frame frame The frame to which the tooltip is attached
@@ -10,7 +14,7 @@ local l = ns.I18N
 --- @return nil
 local function showTooltip(frame, title, text, anchor)
 	title = l[title] or _G[title] or title;
-	text = l[text] or _G[text] or text;
+	text = l[text] or _G[text] or text or "";
 	text = text ~= title and text or "";
 
 	GameTooltip:SetOwner(frame, anchor or "ANCHOR_RIGHT");
@@ -28,14 +32,14 @@ end
 ! Checkbox Widget
 Simple checkbutton widget with text
 ]]
-function KRFUI.CheckboxWidget_OnClick(self)
+function K_SHARED_UI.CheckboxWidget_OnClick(self)
 	if ( self:GetChecked() ) then
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON, "Master")
 	else
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF, "Master")
 	end
 end
-function KRFUI.CheckboxWidget_OnLoad(self)
+function K_SHARED_UI.CheckboxWidget_OnLoad(self)
 	self.type = "checkbox";
 
 	local text = self:GetAttribute("text");
@@ -43,23 +47,23 @@ function KRFUI.CheckboxWidget_OnLoad(self)
 
 	self.Text:SetText(text);
 end
-function KRFUI.CheckboxWidget_OnEnter(self)
+function K_SHARED_UI.CheckboxWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
 	local tooltip = self:GetAttribute("tooltip") or "";
 	showTooltip(self, text, tooltip, "ANCHOR_RIGHT")
 end
-function KRFUI.CheckboxWidget_OnLeave(self)
-	-- GameTooltip:Hide();
+function K_SHARED_UI.CheckboxWidget_OnLeave(self)
+	-- GameTooltip:Hide(); -- intended, UI too sensitive
 end
 -- #endregion Checkbox Widget
 
 -- #region Heading Widget
 --[[
 ! Heading Widget
-Using a checkbutton widget and hide checkbox
+Title with left & right border
 ]]
-function KRFUI.HeadingWidget_OnLoad (self)
+function K_SHARED_UI.HeadingWidget_OnLoad (self)
 	local transparent = self:CreateTexture(nil, "BACKGROUND")
 	self:SetNormalTexture(transparent);
 	self:SetHighlightTexture(transparent);
@@ -89,7 +93,7 @@ function KRFUI.HeadingWidget_OnLoad (self)
 	right:SetTexCoord(0.81, 0.94, 0.5, 1);
 end
 -- disable checked state
-function KRFUI.HeadingWidget_OnClick(self)
+function K_SHARED_UI.HeadingWidget_OnClick(self)
 	self:SetChecked(false);
 end
 -- #endregion Heading Widget
@@ -120,15 +124,16 @@ end
 local function ColorWidget_ColorPickedCallback()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
 	local newA = ColorPickerFrame:GetColorAlpha();
-	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
+	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA })
 end
 local function ColorWidget_ColorCancelledCallback()
 	local newR, newG, newB, newA = ColorPickerFrame:GetPreviousValues();
-	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
+	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
 end
 
 --[[
 ! Color Widget Classic
+Autodetect if alpha is set: opacity available
 ]]
 local function ColorWidget_ShowColorPicker_Classic(pickedCallback, cancelledCallback, self)
 	ColorPickerFrame.Self = self;
@@ -144,11 +149,11 @@ end
 local function ColorWidget_ColorPickedCallback_Classic()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
 	local newA = 1 - OpacitySliderFrame:GetValue();
-	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
+	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
 end
 local function ColorWidget_ColorCancelledCallback_Classic()
 	local newR, newG, newB, newA = unpack(ColorPickerFrame._previousValues);
-	ColorPickerFrame.Self.SetColor(ColorPickerFrame.Self, { r = newR , g = newG, b = newB, a = newA });
+	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
 end
 
 local function ColorWidget_SetColor(self, RGBA)
@@ -159,7 +164,7 @@ local function ColorWidget_GetColor(self)
 	return self._RGBA;
 end
 
-function KRFUI.ColorWidget_OnLoad (self)
+function K_SHARED_UI.ColorWidget_OnLoad (self)
 	self.type = "color";
 
 	local text = self:GetAttribute("text");
@@ -202,7 +207,7 @@ function KRFUI.ColorWidget_OnLoad (self)
 
 	self.Text:SetText(text);
 end
-function KRFUI.ColorWidget_OnClick(self)
+function K_SHARED_UI.ColorWidget_OnClick(self)
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION, "Master")
 	if (not OpacitySliderFrame) then
 		-- Removed OpacitySliderFrame, Since Dragonflight (10)
@@ -213,13 +218,13 @@ function KRFUI.ColorWidget_OnClick(self)
 end
 
 
-function KRFUI.ColorWidget_OnEnter(self)
+function K_SHARED_UI.ColorWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or "";
 	local tooltip = self:GetAttribute("tooltip") or "";
 	showTooltip(self, text, tooltip, "ANCHOR_RIGHT")
 end
-function KRFUI.ColorWidget_OnLeave(self)
+function K_SHARED_UI.ColorWidget_OnLeave(self)
 	GameTooltip:Hide();
 end
 -- #endregion Color Widget
@@ -235,7 +240,7 @@ end
 local function SliderWidget_GetValue(self)
 	return self._Value;
 end
-function KRFUI.SliderWidget_OnLoad (self)
+function K_SHARED_UI.SliderWidget_OnLoad (self)
 	self.type = CONTROLTYPE_SLIDER;
 	-- Since Shadowlands (9)
 	if (BackdropTemplateMixin) then
@@ -258,7 +263,7 @@ function KRFUI.SliderWidget_OnLoad (self)
 	self.Label:ClearAllPoints();
 	self.Label:SetPoint("LEFT", self, "RIGHT", 3.5, 1);
 end
-function KRFUI.SliderWidget_OnValueChanged(self, value)
+function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 	local format = self:GetAttribute("format") or nil;
 	format = l[format] or _G[format] or format;
 	self.Label =self.Low;
@@ -270,13 +275,13 @@ function KRFUI.SliderWidget_OnValueChanged(self, value)
 	end
 	self:SetValue(value);
 end
-function KRFUI.SliderWidget_OnEnter(self)
+function K_SHARED_UI.SliderWidget_OnEnter(self)
 	if (not self:IsEnabled()) then return end;
 	local text = self:GetAttribute("text") or self:GetAttribute("title") or ""
 	local tooltip = self:GetAttribute("tooltip") or ""
 	showTooltip(self, text, tooltip, "ANCHOR_TOP")
 end
-function KRFUI.SliderWidget_OnLeave(self)
+function K_SHARED_UI.SliderWidget_OnLeave(self)
 	GameTooltip:Hide();
 end
 -- #endregion Slider Widget
@@ -284,6 +289,9 @@ end
 -- #region DropDown Widget
 --[[
 ! DropDown Widget
+Main attributes: text, tooltip, width, justify
+Items attributes: text1, value1, color1, ...
+* Warning: name has to be set if you want to enable/disable widget
 ]]
 local function DropDownWidget_OnSelect(dropdown, value, text)
 	dropdown:GetScript("OnEvent")(dropdown, "select")
@@ -371,7 +379,7 @@ local function DropDownWidget_Enable(self)
 	end;
 	UIDropDownMenu_EnableDropDown(self)
 end
-function KRFUI.DropDownWidget_OnLoad(self)
+function K_SHARED_UI.DropDownWidget_OnLoad(self)
 	self.type = "dropdown";
 	self.Disable = DropDownWidget_Disable;
 	self.Enable = DropDownWidget_Enable;
@@ -382,14 +390,14 @@ function KRFUI.DropDownWidget_OnLoad(self)
 	UIDropDownMenu_Initialize(self, DropDownWidget_Initialize);
 end
 
-function KRFUI.DropDownWidget_OnEnter(self)
+function K_SHARED_UI.DropDownWidget_OnEnter(self)
 	if self.isDisabled then
 		return;
 	end
 	showTooltip(self, self:GetAttribute("text"), self:GetAttribute("tooltip"), "ANCHOR_TOPLEFT")
 end
 
-function KRFUI.DropDownWidget_OnLeave(self)
+function K_SHARED_UI.DropDownWidget_OnLeave(self)
 	GameTooltip:Hide();
 end
 -- #endregion DropDown Widget

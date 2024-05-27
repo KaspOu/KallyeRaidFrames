@@ -1,7 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
+	<Include file="..\Shared\OptionsAPI.lua"/>
+	<Include file="..\Shared\OptionsNameplatesColorKRF.xml" />
 	<Include file="KallyeRaidFrames.lua"/>
-	<Include file="OptionsNameplatesColor.xml" />
 	<Frame name="KRFUI_OptionsContainer">
 		<Layers>
 			<Layer level="ARTWORK">
@@ -30,7 +31,7 @@
 			</Button>
 			<ScrollFrame name="KRFUI_OptionsScrollFrame" inherits="ScrollFrameTemplate" Framelevel="0" enablemouse="true" setAllPoints="true">				
 				<KeyValues>
-					<KeyValue key="scrollBarHideIfUnscrollable" value="false" type="boolean"/>
+					<KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean"/>
 					<KeyValue key="scrollBarX" value="KRFUI.scrollBarX" type="global"/>
 					<KeyValue key="scrollBarTopY" value="0" type="number"/>
 					<KeyValue key="scrollBarBottomY" value="-0" type="number"/>

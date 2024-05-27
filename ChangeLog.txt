@@ -5,7 +5,7 @@ v10.2.706
 - More Nameplate options:
     > default / class color / custom color
     > separation between text & nameplates
-- Key shortcut support added
+- Wow Key shortcut support added
 - Isolated and Modulable Code (Solo Raid is now a module)
 
 v10.2.705

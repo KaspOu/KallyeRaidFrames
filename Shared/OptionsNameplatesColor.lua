@@ -1,9 +1,12 @@
 local _, ns = ...
 local l = ns.I18N;
-function KRFUI.ManageNameplatesOptions()
-	if ns.CONFLICT then
-		return;
-	end
+
+-- * avoid conflict override
+if ns.CONFLICT then return; end
+
+K_SHARED_UI = K_SHARED_UI or {};
+
+function K_SHARED_UI.ManageNameplatesOptions()
     local frameNames = {
         ["FriendsNameplates_Txt_UseColor"] = { "FriendsNameplates_Txt_Color", true },
         ["FriendsNameplates_Bar_UseColor"] = { "FriendsNameplates_Bar_Color", not ns.HAS_colorNameBySelection },

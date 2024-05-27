@@ -2,6 +2,11 @@
 local _, ns = ...
 local l = ns.I18N;
 
+-- * avoid conflict override
+if ns.CONFLICT then return; end
+
+ns.MODULES = {};
+
 local function noop() end;
 ns.Module = {};
 ns.Module.__index = ns.Module;
@@ -9,12 +14,13 @@ ns.Module.cacheOptions = {};
 
 -- Constructeur pour les modules
 function ns.Module:new(onInit, name)
-	local instance = setmetatable({}, ns.Module);
-	instance.onInit = onInit or noop;
-	instance.name = name or "Unnamed";
-	instance.onSaveOptions = noop;
-	instance.getInfo = noop;
-	instance.isLoaded = false;
+	local instance = setmetatable({
+		onInit = onInit or noop,
+		name = name or "Unnamed",
+		onSaveOptions = noop,
+		getInfo = noop,
+		isLoaded = false
+	}, ns.Module);
 
 	table.insert(ns.MODULES, instance);
 	return instance;

@@ -1,6 +1,8 @@
 local _, ns = ...
 local l = ns.I18N;
 
+-- * avoid conflict override
+if ns.CONFLICT then return; end
 
 local Hook_CompactPartyFrame_UpdateVisibility = function() end;
 local SoloRaid_GetDisplayedAllyFrames = function() end;
@@ -14,6 +16,19 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
     Hook_CompactPartyFrame_UpdateVisibility = function()
         if (not IsInGroup() and not IsInRaid()) then
             CompactPartyFrame:SetShown(true);
+        end
+    end
+
+    function ns.ShowEditMode(window)
+        if (not EditModeManagerFrame.UseRaidStylePartyFrames) then
+            return;
+        end
+        ShowUIPanel(EditModeManagerFrame);
+        if window == "PartyFrame" then
+            C_EditMode.SetAccountSetting(Enum.EditModeAccountSetting.ShowPartyFrames, 1);
+            --EditModeManagerFrame:SelectSystem(PartyFrame);
+            PartyFrame:SelectSystem();
+            PartyFrame:HighlightSystem();
         end
     end
 

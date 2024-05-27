@@ -23,7 +23,7 @@ All features are optional.
 
 3._**Changes to both CompactRaidFrames and Nameplates**
 - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
-- Change player nameplate (on the head) color according to class
+- Change player nameplate (on the head) color according to your preference (class color, custom color)
 
 
 ## Slash Commands
