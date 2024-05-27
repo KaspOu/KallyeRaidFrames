@@ -8,6 +8,8 @@ ns.MODULES = {};
 BINDING_HEADER_KRaidFrames = ns.ADDON_NAME;
 BINDING_NAME_KRaidFrames =  ns.ADDON_NAME.." options";
 
+-- HANDLE CONFLICT -- ns.CONFLICT_WITH, ns.CONFLICT = "Addon Name", true;
+
 ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 
 ns.HAS_colorNameBySelection = ns.IS_RETAIL; -- colorNameBySelection, Since BfA (7)
@@ -75,7 +77,7 @@ function ns.AddMsgDebug(msg, force)
 	end
 end
 
-KRF_TITLE = ns.TITLE; -- only global variable, for conflict detection
+KRF_TITLE = ns.TITLE; -- global variable, for conflict detection
 
 KRFUI = {
 	l = l,

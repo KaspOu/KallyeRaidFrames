@@ -124,7 +124,7 @@ function UpdateHealth_Regular(frame, health)
 			frame.healthBar:SetValue(0);
 			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.BGColorLow.r, KallyeRaidFramesOptions.BGColorLow.g, KallyeRaidFramesOptions.BGColorLow.b, .6, .4));
 			ns.Hook_UpdateName(frame, true);
-			ns.UpdateNameColor(frame);
+			ns.UpdateNameRaidColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
@@ -132,7 +132,7 @@ function UpdateHealth_Regular(frame, health)
 			if (KallyeRaidFramesOptions.IconOnDeath) then
 				ns.Hook_UpdateName(frame, true);
 			end
-			ns.UpdateNameColor(frame);
+			ns.UpdateNameRaidColor(frame);
 			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
 		else
 			-- Alive
@@ -144,7 +144,7 @@ function UpdateHealth_Regular(frame, health)
 				if (KallyeRaidFramesOptions.IconOnDeath) then
 					ns.Hook_UpdateName(frame, true);
 				end
-				ns.UpdateNameColor(frame);
+				ns.UpdateNameRaidColor(frame);
 				frame._wasDead = false;
 			end
 		end
@@ -168,7 +168,7 @@ function UpdateHealth_Reverted(frame, health)
 			frame.healthBar:SetValue(0);
 			frame.background:SetColorTexture(darken(KallyeRaidFramesOptions.RevertColorLow.r, KallyeRaidFramesOptions.RevertColorLow.g, KallyeRaidFramesOptions.RevertColorLow.b, .6, .4));
 			ns.Hook_UpdateName(frame, true);
-			ns.UpdateNameColor(frame);
+			ns.UpdateNameRaidColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
@@ -176,7 +176,7 @@ function UpdateHealth_Reverted(frame, health)
 			if (KallyeRaidFramesOptions.IconOnDeath) then
 				ns.Hook_UpdateName(frame, true);
 			end
-			ns.UpdateNameColor(frame);
+			ns.UpdateNameRaidColor(frame);
 		else
 			-- Alive
 			health = health or UnitHealth(frame.displayedUnit);
@@ -188,7 +188,7 @@ function UpdateHealth_Reverted(frame, health)
 				if (KallyeRaidFramesOptions.IconOnDeath) then
 					ns.Hook_UpdateName(frame, true);
 				end
-				ns.UpdateNameColor(frame);
+				ns.UpdateNameRaidColor(frame);
 				frame._wasDead = false;
 			end
 
@@ -279,7 +279,7 @@ end
 ! Manage player names (partyframes & nameplates)
 - Hide realm
 - Add death icon (option)
-- Call to ns.UpdateNameColor (only inside hook)
+- Call to ns.UpdateNameRaidColor (only inside hook)
 ]]
 function ns.Hook_UpdateName(frame, calledOutsideHook)
 	if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) then
@@ -287,7 +287,7 @@ function ns.Hook_UpdateName(frame, calledOutsideHook)
 	end
 
 	if not calledOutsideHook then
-		ns.UpdateNameColor(frame)
+		ns.UpdateNameRaidColor(frame)
 	end
 
 	local name = frame.name
@@ -303,81 +303,9 @@ function ns.Hook_UpdateName(frame, calledOutsideHook)
 end
 
 --[[
-! Manage player name colors (partyframes & nameplates)
-- Class Color for Nameplates or Frames (inc. Dead / Disconnected)
+! Update Raid/Party frames color
 ]]
-function ns.UpdateNameColor(frame)
-    if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) then
-        if not FrameIsCompact(frame) then
-            ns.UpdateNameplateColor(frame)
-        else
-            ns.UpdatePartyRaidFrameColor(frame)
-        end
-    end
-end
-
-
---- Filter nameplates bar option, restricted depending on Wow version
---- ? colorNameBySelection: nameplates already colored, Since BfA (7)
----@param option string Option to check
----@return string option As is, or "0" if the bars are already colored by the game
-local function filterNameplateBarOption(option)
-	if (ns.HAS_colorNameBySelection) then
-		return "0"
-	end
-	return option
-end
-
-
-local function applyTextColor(name, useColorOption, color, customColor)
-    if useColorOption == "1" and color then
-        name:SetVertexColor(color.r, color.g, color.b, color.a)
-        name:SetShadowColor(color.r, color.g, color.b, 0.2)
-    elseif useColorOption == "2" then
-        name:SetVertexColor(customColor.r, customColor.g, customColor.b, customColor.a)
-        name:SetShadowColor(customColor.r, customColor.g, customColor.b, 0.2)
-    end
-end
-
-local function applyBarColor(healthBar, useColorOption, color, customColor)
-    if useColorOption == "1" then
-        healthBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
-    elseif useColorOption == "2" then
-        healthBar:SetStatusBarColor(customColor.r, customColor.g, customColor.b, customColor.a)
-    end
-end
-
---[[
-! Update Nameplate Colors Based on Unit Status and Settings
-- Works outside instances (frame forbidden)
-- Applies color settings for both friends and enemies, and both names and nameplates (depending on wow version).
-- Handles custom colors and default class colors.
-]]
-function ns.UpdateNameplateColor(frame)
-    if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) or FrameIsCompact(frame) then
-        return
-    end
-
-    local r, g, b, a = UnitSelectionColor(frame.displayedUnit)
-	-- pet default color, or player class color
-    local c = not UnitIsPlayer(frame.displayedUnit) and {r= r, g= g, b=b, a=a} or KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))]
-
-    -- Friend Nameplate
-    if UnitIsFriend(frame.displayedUnit, "player") then
-        applyTextColor(frame.name, KallyeRaidFramesOptions.FriendsNameplates_Txt_UseColor, c, KallyeRaidFramesOptions.FriendsNameplates_Txt_Color)
-        local optionBarUseColor = filterNameplateBarOption(KallyeRaidFramesOptions.FriendsNameplates_Bar_UseColor)
-        applyBarColor(frame.healthBar, optionBarUseColor, c, KallyeRaidFramesOptions.FriendsNameplates_Bar_Color)
-    end
-
-    -- Enemy Nameplate
-    if not UnitIsFriend(frame.displayedUnit, "player") then
-        applyTextColor(frame.name, KallyeRaidFramesOptions.EnemiesNameplates_Txt_UseColor, c, KallyeRaidFramesOptions.EnemiesNameplates_Txt_Color)
-        local optionBarUseColor = filterNameplateBarOption(KallyeRaidFramesOptions.EnemiesNameplates_Bar_UseColor)
-        applyBarColor(frame.healthBar, optionBarUseColor, c, KallyeRaidFramesOptions.EnemiesNameplates_Bar_Color)
-    end
-end
-
-function ns.UpdatePartyRaidFrameColor(frame)
+function ns.UpdateNameRaidColor(frame)
     if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) and FrameIsCompact(frame) then
         local name = frame.name;
         local c = KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))];

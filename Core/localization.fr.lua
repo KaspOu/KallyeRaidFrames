@@ -8,6 +8,8 @@ local l = ns.I18N;
 
 l.VERS_TITLE    = format("%s %s", ns.TITLE, ns.VERSION);
 
+l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
+
 -- Whats new info
 l.WHATSNEW = " Nouveaut\195\169s :\n"
     .."- Ajout de l'option de coloration des barres de noms ennemies.\n"
@@ -41,7 +43,7 @@ l.OPTION_HEALTH_WARN_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."\195
     .."ex : Jaune \195\160 50%";
 l.OPTION_HEALTH_OK = "Bonne sant\195\169";
 l.OPTION_HEALTH_OK_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."AU-DESSUS|r DE cette limite\n\n"
-    .."ex : Vert apr\195\170s 75%";
+    .."ex : Vert apr\195\168s 75%";
 l.OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut \195\160 gauche";
 l.OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne de r\195\180le 'd\195\169g\195\160ts'";
 l.OPTION_HIDEREALM = "Masquer le royaume des joueurs";

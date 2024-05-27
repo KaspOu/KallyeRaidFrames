@@ -6,6 +6,8 @@ local l = ns.I18N;
 
 l.VERS_TITLE    = format("%s %s", ns.TITLE, ns.VERSION);
 
+l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
+
 -- Whats new info
 l.WHATSNEW = " What's new:\n"
     .."- Added enemy colored nameplates option.\n"

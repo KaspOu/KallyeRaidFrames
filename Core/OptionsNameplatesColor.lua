@@ -1,6 +1,9 @@
 local _, ns = ...
 local l = ns.I18N;
 function KRFUI.ManageNameplatesOptions()
+	if ns.CONFLICT then
+		return;
+	end
     local frameNames = {
         ["FriendsNameplates_Txt_UseColor"] = { "FriendsNameplates_Txt_Color", true },
         ["FriendsNameplates_Bar_UseColor"] = { "FriendsNameplates_Bar_Color", not ns.HAS_colorNameBySelection },

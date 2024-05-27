@@ -8,7 +8,7 @@ local isInit = false;
 local isLoaded = false;
 
 
-local KRF_DefaultOptions = {
+local defaultOptions = {
 	Version = ns.VERSION,
 
 	UpdateHealthColor = true,
@@ -45,13 +45,18 @@ local KRF_DefaultOptions = {
 	EnemiesNameplates_Bar_UseColor = "0",
 	EnemiesNameplates_Bar_Color = { r= .87, g= 0, b= .05, a = 1 },
 
+	Nameplates_ShowJcJ = false,
+
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
 	ShowMsgError = false,
 
 	DebugMode = false,
 };
-ns.SetDefaultOptions(KRF_DefaultOptions);
+
+if not ns.CONFLICT then
+	ns.SetDefaultOptions(defaultOptions);
+end
 
 
 
@@ -92,7 +97,7 @@ local function OnEvent(self, event, ...)
 		self:UnregisterEvent("ADDON_LOADED");
 		isLoaded = true;
 
-		ns.SetDefaultOptions(KRF_DefaultOptions);
+		ns.SetDefaultOptions(defaultOptions);
 
 		-- ! Hooks
 		hooksecurefunc("CompactUnitFrame_UpdateName", ns.Hook_UpdateName);
@@ -123,8 +128,8 @@ local function OnEvent(self, event, ...)
         );
 
 		-- ! Addon Loaded ^^
-		if (KallyeRaidFramesOptions.Version ~= KRF_DefaultOptions.Version) then
-			KallyeRaidFramesOptions.Version = KRF_DefaultOptions.Version;
+		if (KallyeRaidFramesOptions.Version ~= defaultOptions.Version) then
+			KallyeRaidFramesOptions.Version = defaultOptions.Version;
 			if (l.WHATSNEW ~= "") then
 				ns.AddMsg(l.WHATSNEW);
 			end
@@ -141,6 +146,11 @@ local function InitAddon(frame)
 	SLASH_KRF1 = "/krf";
 	SLASH_KRF2 = "/kallye";
 	SLASH_KRF3 = "/kallyeraidframes";
+
+	if (ns.CONFLICT) then
+		ns.AddMsgErr(format(l.CONFLICT_MESSAGE, ns.CONFLICT_WITH));
+		return;
+	end
 
 	SlashCmdList["CLEAR"] = SLASH_CLEAR_command;
 	SLASH_CLEAR1 = "/clear";
@@ -171,10 +181,10 @@ local function OptionsWReloadValues()
 		..tostring(KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100);
 end
 
-local function SaveKRFOptions()
+local function SaveOptions()
 	local PreviousOptionsWReload = OptionsWReloadValues();
 	-- Auto detect options controls and save them
-	foreach(KRF_DefaultOptions,
+	foreach(defaultOptions,
 		function (k, v)
 			local optionsObject = ns.FindControl(k);
 			if (optionsObject ~= nil) then
@@ -224,13 +234,13 @@ local function SaveKRFOptions()
 	end
 end
 
-local function RefreshKRFOptions()
+local function RefreshOptions()
 	if ns.optionsFrame ~= nil then
 		ns.optionsFrame:Show();
 		ns.optionsFrame.HandleVis = true;
 	end
 	-- Auto detect options controls and load them
-	foreach(KRF_DefaultOptions,
+	foreach(defaultOptions,
 		function (k, v)
 			local optionsObject = ns.FindControl(k);
 			if (optionsObject ~= nil) then
@@ -310,7 +320,7 @@ StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 	-- button3 = CURRENT_SETTINGS,
 	button2 = CANCEL,
 	OnAccept = function()												
-		ns.SetDefaultOptions(KRF_DefaultOptions, true);
+		ns.SetDefaultOptions(defaultOptions, true);
 		ReloadUI();
 	end,
 	-- OnAlt  = function()	end,
@@ -332,13 +342,16 @@ function KRFUI.ShowEditMode(window)
 end
 
 function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
+	if ns.CONFLICT then
+		return;
+	end
 	ns.containerFrame = self;
 	ns.scrollFrame = scrollFrame;
 	ns.optionsFrame = optionsFrame;
-	RefreshKRFOptions();
+	RefreshOptions();
 	self.name = ns.TITLE;
-	self.okay = SaveKRFOptions;
-	self.refresh = RefreshKRFOptions;
+	self.okay = SaveOptions;
+	self.refresh = RefreshOptions;
 	InterfaceOptions_AddCategory(self);
 	if (ns.scrollFrame ~= nil) then
 		local BACKDROP_TOOLTIP = {
