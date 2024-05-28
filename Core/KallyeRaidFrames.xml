@@ -2,6 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="..\Shared\OptionsAPI.lua"/>
 	<Include file="..\Shared\OptionsNameplatesColorKRF.xml" />
+	<Include file="..\Shared\OptionsUnitDebuffsKRF.xml" />
 	<Include file="KallyeRaidFrames.lua"/>
 	<Frame name="KRFUI_OptionsContainer">
 		<Layers>
@@ -323,60 +324,22 @@
 									</OnClick>
 								</Scripts>
 							</Button>
-							<CheckButton parentKey="LabelMaxBuffs" inherits="KRFUI_HeadingWidget">
+							
+							<Frame parentKey="Options1" inherits="KRFOptionsUnitDebuffs">
 								<Anchors>
-									<Anchor point="TOP" relativeKey="$parent.EditMode" relativePoint="BOTTOM"><Offset x="0" y="-15" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.EditMode" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
-								<Attributes>
-									<Attribute name="text" value="OPTION_BUFFS_HEADER" />
-								</Attributes>
-							</CheckButton>
-							<Slider parentKey="BuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
-								<Size x="200" y="15" />
-								<Attributes>
-									<Attribute name="text" value="OPTION_BUFFSSCALE" />
-									<Attribute name="tooltip" value="OPTION_BUFFSSCALE_TOOLTIP" />
-									<Attribute name="format" value="x %.2f" />
-								</Attributes>
+							</Frame>
+							<Frame parentKey="Options2" inherits="KRFOptionsNameplatesColor">
 								<Anchors>
-									<Anchor point="TOP" relativeKey="$parent.LabelMaxBuffs" relativePoint="BOTTOM"><Offset x="0" y="-15"/></Anchor>
-									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
-								</Anchors>
-							</Slider>
-							<Slider parentKey="MaxBuffs" inherits="KRFUI_SliderWidget" minValue="1" maxValue="3" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
-								<Size x="200" y="15" />
-								<Attributes>
-									<Attribute name="text" value="OPTION_MAXBUFFS" />
-									<Attribute name="tooltip" value="OPTION_MAXBUFFS_TOOLTIP" />
-									<Attribute name="format" value="OPTION_MAXBUFFS_FORMAT" />
-								</Attributes>
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="TOPLEFT">
-										<Offset x="270" y="0"/>
-									</Anchor>
-								</Anchors>
-							</Slider>
-							<Slider parentKey="DebuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
-								<Size x="200" y="15" />
-								<Attributes>
-									<Attribute name="text" value="OPTION_DEBUFFSSCALE" />
-									<Attribute name="tooltip" value="OPTION_DEBUFFSSCALE_TOOLTIP" />
-									<Attribute name="format" value="x %.2f" />
-								</Attributes>
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
-								</Anchors>
-							</Slider>
-							<Frame parentKey="Options1" inherits="KRFOptionsNameplatesColor">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Options1" relativePoint="BOTTOMLEFT"><Offset x="0" y="0" /></Anchor>
 								</Anchors>
 							</Frame>
 							
 							<Button parentKey="WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.Options1" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.Options2" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-40"/>
 									</Anchor>
 								</Anchors>

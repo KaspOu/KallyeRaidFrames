@@ -257,32 +257,6 @@ function ns.Hook_UpdateRoleIcon(frame)
 	end
 end
 
---[[
-! Manage buffs
-- Scale buffs / debuffs
-]]
-function ns.Hook_ManageBuffs(frame,numbuffs)
-	if _G[ns.OPTIONS_NAME].BuffsScale ~= 1 then
-		for i=1, #frame.buffFrames do
-			frame.buffFrames[i]:SetScale(_G[ns.OPTIONS_NAME].BuffsScale);
-		end
-	end
-
-	if _G[ns.OPTIONS_NAME].DebuffsScale ~= 1 then
-		for i=1, #frame.debuffFrames do
-			frame.debuffFrames[i]:SetScale(_G[ns.OPTIONS_NAME].DebuffsScale);
-		end
-		for i=1, #frame.dispelDebuffFrames do
-			frame.dispelDebuffFrames[i]:SetScale(_G[ns.OPTIONS_NAME].DebuffsScale);
-		end
-	end
-
-	-- ! MaxBuffs Deprecated
-	-- if _G[ns.OPTIONS_NAME].MaxBuffs > 0 then
-	-- 	frame.maxBuffs = _G[ns.OPTIONS_NAME].MaxBuffs;
-	-- end
-end
-
 
 --[[
 ! Manage player names (partyframes & nameplates)

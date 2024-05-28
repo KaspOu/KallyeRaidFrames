@@ -106,7 +106,13 @@
         "UIDropDownMenu_DisableDropDown",
         "UIDropDownMenu_EnableDropDown",
         "UIDropDownMenu_GetSelectedID",
-        "class"
+        "class",
+        "CreateFrame",
+        "UIParent",
+        "hooksecurefunc",
+        "UnitSelectionColor",
+        "UnitPlayerControlled",
+        "CreateColor"
     ],
     "cSpell.words": [
         "prepatch"

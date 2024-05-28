@@ -15,6 +15,7 @@ ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 
 ns.HAS_colorNameBySelection = ns.IS_RETAIL; -- colorNameBySelection, Since BfA (7)
 ns.IsDebugFramesTimerActive = false;
+ns.DEFAULT_MAXBUFFS = 3;
 
 -- Prepare I18N, with chat colors
 ns.I18N = {};

@@ -1,3 +1,9 @@
+v10.2.708
+- New options to Units Buffs & Debuffs
+    > Increase Max icons displayed
+    > Multiline display
+- UnitDebuff is now a module
+
 v10.2.707
 - Nameplate Color is now a module
 

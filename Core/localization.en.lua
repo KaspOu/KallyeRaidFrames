@@ -13,7 +13,7 @@ l.WHATSNEW = " What's new:\n"
     .."- More Nameplate options:\n"
     .."   : default / class color / custom color.\n"
     .."   : separation between names & nameplates.\n"
-    .."- Wow Key shortcut added\n"
+    .."- Max Buffs / Debuffs to display added\n"
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -21,7 +21,11 @@ l.SUBTITLE      = "Raid frames support";
 l.DESC          = "Enhance raid frames and nameplates on friendly units\n\n"
 .." - Highlight raid frames background on low health\n\n"
 .." - Inverted frames will use your choice of colors\n\n"
-.." - Transparency when unit out of range";
+.." - Transparency when unit out of range\n\n"
+.." - Raid always visible\n\n"
+.."\n"
+.."Enhance Buffs / debuffs management (size, max displayed)\n\n"
+.."Colorize Nameplates (class or choosen color)\n\n"
 l.OPTIONS_TITLE = format("%s - Options", l.VERS_TITLE);
 
 -- Messages
@@ -31,9 +35,10 @@ l.MSG_SDB            = "Kallye options frame";
 l.INIT_FAILED = format("%s not initialized correctly!", l.VERS_TITLE);
 
 
+local required = l.YL.."*";
 l.OPTION_RAID_HEADER = "Party / Raid";
 l.OPTION_HIGHLIGHTLOWHP = "Highlight players HP loss (dynamic colors)";
-l.OPTION_REVERTBAR = l.YL.."Revert|r HP bars (less life = bigger bar !) "..l.YL.."*";
+l.OPTION_REVERTBAR = l.YL.."Revert|r HP bars (less life = bigger bar !) "..required;
 l.OPTION_HEALTH_LOW = "Almost dead!";
 l.OPTION_HEALTH_LOW_TOOLTIP = "Low health color applied "..l.YLL.."BELOW|r this limit\n\n"
   .."i.e.: Red below 25%";
@@ -56,7 +61,7 @@ l.OPTION_NOTINRANGE = "Transparency when out of range";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
 l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
-l.OPTION_SOLORAID = l.CY.."Display raid frames while solo "..l.YL.."*";
+l.OPTION_SOLORAID = l.CY.."Display raid frames while solo "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames";
 
 l.OPTION_EDITMODE_PARTY = "#";
@@ -68,25 +73,38 @@ l.OPTION_DEBUG_OFF = "! STOP Test !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
-l.OPTION_BUFFSSCALE = "Buffs relative size"..l.YL.."*";
+l.OPTION_BUFFSSCALE = "Buffs relative size"..required;
 l.OPTION_BUFFSSCALE_TOOLTIP = l.CY.."Set to 1 if you experience some addon conflict";
-l.OPTION_DEBUFFSSCALE = "Debuffs relative size"..l.YL.."*";
-l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Set to 1 if you experience some addon conflict";
-l.OPTION_MAXBUFFS = "Max buffs";
-l.OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display";
+l.OPTION_MAXBUFFS = "Max buffs"..required;
+l.OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display\n"..l.CY.."Set to "..ns.DEFAULT_MAXBUFFS.." if you experience some addon conflict";
 l.OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
+l.OPTION_BUFFSPERLINE = "Buffs per line";
+l.OPTION_BUFFSPERLINE_TOOLTIP = "Number of buff icons per line\n"..l.CY.."Set to max value if you experience some addon conflict";
+l.OPTION_BUFFSPERLINE_FORMAT = "%d per line"..required;
+l.OPTION_DEBUFFSSCALE = "Debuffs relative size"..required;
+l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Set to 1 if you experience some addon conflict";
+l.OPTION_MAXDEBUFFS = "Max debuffs"..required;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "Max debuffs to display\n"..l.CY.."Set to "..ns.DEFAULT_MAXBUFFS.." if you experience some addon conflict";
+l.OPTION_MAXDEBUFFS_FORMAT = "%d |4debuff:debuffs";
+l.OPTION_DEBUFFSPERLINE = "Debuffs per line"..required;
+l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Number of debuff icons per line\n"..l.CY.."Set to max value if you experience some addon conflict";
+l.OPTION_DEBUFFSPERLINE_FORMAT = "%d per line";
+l.OPTION_SAVEUNITDEBUFFS = "Avoid conflicts";
+l.OPTION_SAVEUNITDEBUFFS_TOOLTIP = "Set safe values\ndisable buff management";
+
+
 
 l.OPTION_OTHERS_HEADER = "Nameplates";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Blizzard default colors";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS ="Use class color";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM ="Your color choice: ";
-l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Allied names coloration";
+l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Allied names";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above allied nameplates (outside instances)";
-l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Allied bars coloration"..l.GYL.." (Classic)";
+l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Allied bars";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of allied nameplates (outside instances)";
-l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Enemy names coloration";
+l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Enemy names";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above enemy nameplates (outside instances)";
-l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Enemy bars coloration"..l.GYL.." (Classic)";
+l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Enemy bars";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of enemy nameplates (outside instances)";
 l.OPTION_SHOWPVPICONS = "Show PvP icons";
 l.OPTION_SHOWPVPICONS_TOOLTIP = "Displays PvP icons on info bars, both friendly and enemy.";

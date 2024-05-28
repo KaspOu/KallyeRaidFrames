@@ -33,18 +33,21 @@ local defaultOptions = {
 	SoloRaidFrame = false,		 -- Show solo raid (useful for testing)
 
 	BuffsScale = 0.75,
+	MaxBuffs = 8,
+	BuffsPerLine = 4,
 	DebuffsScale = 1.25,
-	MaxBuffs = 3,
+	MaxDebuffs = 3,
+	DebuffsPerLine = 9,
+
 	FriendsNameplates_Txt_UseColor = "1",
 	FriendsNameplates_Txt_Color = { r= .235, g= .941, b= 1, a = 1 },
 	FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1",
 	FriendsNameplates_Bar_Color = { r= .235, g= .941, b= 1, a = 1 },
-	
+
 	EnemiesNameplates_Txt_UseColor = "1",
 	EnemiesNameplates_Txt_Color = { r= .87, g= 0, b= .05, a = 1 },
 	EnemiesNameplates_Bar_UseColor = "0",
 	EnemiesNameplates_Bar_Color = { r= .87, g= 0, b= .05, a = 1 },
-
 	Nameplates_ShowJcJ = false,
 
 	ShowMsgNormal = true,
@@ -53,10 +56,6 @@ local defaultOptions = {
 
 	DebugMode = false,
 };
-
-if not ns.CONFLICT then
-	ns.SetDefaultOptions(defaultOptions);
-end
 
 
 
@@ -98,6 +97,7 @@ local function OnEvent(self, event, ...)
 		isLoaded = true;
 
 		ns.SetDefaultOptions(defaultOptions);
+		ns.RefreshOptions(defaultOptions);
 
 		-- ! Hooks
 		hooksecurefunc("CompactUnitFrame_UpdateName", ns.Hook_UpdateName);
@@ -116,9 +116,6 @@ local function OnEvent(self, event, ...)
 			hooksecurefunc("CompactUnitFrame_UpdateInRange", ns.Hook_UpdateInRange);
 			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateInRange);
 		end
-		if _G[ns.OPTIONS_NAME].BuffsScale ~= 1 or _G[ns.OPTIONS_NAME].DebuffsScale ~= 1 then
-			hooksecurefunc("CompactUnitFrame_SetMaxBuffs", ns.Hook_ManageBuffs);
-		end
 
 		-- Load Modules
 		foreach(ns.MODULES,
@@ -136,7 +133,15 @@ local function OnEvent(self, event, ...)
 		end
 		if (_G[ns.OPTIONS_NAME].DebugMode) then
 			SLASH_KRF_command()
+
+			local i = 1
+			while(ns.optionsFrame["Options"..i])
+			do
+				ns.SetGradientBg(ns.optionsFrame["Options"..i], {r= .8, g=0, b=0, a = .3})
+				i=i+1;
+			end
 		end
+
 	end
 end -- END KRF_OnEvent
 
@@ -172,12 +177,16 @@ do
 end
 
 
-local function OptionsWReloadValues()
+local function RequiredReloadOptionsString()
 	return tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
 		..tostring(_G[ns.OPTIONS_NAME].RevertBar)
 		..tostring(_G[ns.OPTIONS_NAME].UpdateHealthColor)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
+		..tostring(_G[ns.OPTIONS_NAME].MaxBuffs)
+		..tostring(_G[ns.OPTIONS_NAME].BuffsPerLine)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
+		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
+		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end
 
@@ -197,8 +206,6 @@ function KRFUI.ManageOptionsVisibility()
 		ns.OptionsEnable(ns.optionsFrame.BlizzFriendsClassColor, false, .2);
 	end
 
-	ns.OptionsEnable(ns.optionsFrame.MaxBuffs, false, .2);
-
 	ns.OptionsEnable(ns.optionsFrame.RevertBar, HealthOption)
 	ns.OptionsEnable(ns.optionsFrame.LimitLow , HealthOption);
 	ns.OptionsEnable(ns.optionsFrame.LimitWarn, HealthOption);
@@ -216,11 +223,11 @@ end
 
 StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 	showAlert = true,
-	text = CONFIRM_RESET_SETTINGS,
+	text = format("%s%s|r\n%s", l.YL, ns.TITLE, CONFIRM_RESET_SETTINGS),
 	button1 = ALL_SETTINGS,
 	-- button3 = CURRENT_SETTINGS,
 	button2 = CANCEL,
-	OnAccept = function()												
+	OnAccept = function()											
 		ns.SetDefaultOptions(defaultOptions, true);
 		ReloadUI();
 	end,
@@ -243,10 +250,10 @@ function KRFUI.ShowEditMode(window)
 end
 
 local refreshOptions = function()
-	ns.RefreshOptions(defaultOptions);
+	ns.RefreshOptions(defaultOptions, true);
 end
 local saveOptions = function()
-	ns.SaveOptions(defaultOptions, OptionsWReloadValues);
+	ns.SaveOptions(defaultOptions, RequiredReloadOptionsString);
 	-- Specific stuff
 
     -- Secure limits (low <= warn <= ok)
@@ -258,8 +265,6 @@ local saveOptions = function()
     end
     -- Reset party health as soon as possible
     ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
-
-    SetCVar("raidFramesDisplayClassColor", ns.optionsFrame.BlizzFriendsClassColor:GetChecked());
 end
 function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	if ns.CONFLICT then
@@ -268,7 +273,6 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	ns.containerFrame = self;
 	ns.scrollFrame = scrollFrame;
 	ns.optionsFrame = optionsFrame;
-	refreshOptions();
 	self.name = ns.TITLE;
 	self.okay = saveOptions;
 	self.refresh = refreshOptions;
@@ -287,9 +291,6 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 		if (BackdropTemplateMixin) then Mixin(ns.scrollFrame, BackdropTemplateMixin) end
 		ns.scrollFrame:SetBackdrop(BACKDROP_TOOLTIP)
 	end
-	if ns.optionsFrame ~= nil and ns.optionsFrame.HandleVis ~= nil then
-		ns.optionsFrame:Hide();
-	end
 
 	-- Localize FontStrings
 	foreach(self,
@@ -299,4 +300,5 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 			end
 		end
 	);
+
 end

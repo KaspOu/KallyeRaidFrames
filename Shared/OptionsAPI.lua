@@ -4,7 +4,15 @@ local l = ns.I18N;
 -- * avoid conflict override
 if ns.CONFLICT then return; end
 
--- SHARED API options management (default, load, save)
+function ns.SetGradientBg(frame, color)
+    local texture = frame:CreateTexture()
+    texture:SetAllPoints(true)
+    texture:SetColorTexture(color.r, color.g, color.b, color.a)
+    texture:SetGradient("VERTICAL", CreateColor(color.r, color.g, color.b, color.a), CreateColor(color.r*.5, color.g*.5, color.b*.5, color.a*.5))
+end
+
+--- SHARED API options management (default, load, save)
+--- ! Useable only after ADDON_LOADED
 function ns.SetDefaultOptions(DefaultOptions, reset)
 	if reset or _G[ns.OPTIONS_NAME] == nil then
 		_G[ns.OPTIONS_NAME] = CopyTable(DefaultOptions)
@@ -38,10 +46,11 @@ function ns.FindControl(ControlName)
 end
 
 --- Save the current options state, automatically matching the UI controls
+--- ! Useable only after ADDON_LOADED
 --- @param defaultOptions table Table containing the default options
 --- @param ComputedReloadOptions function? Function that computes and returns the options (requiring reload) state as a string
 function ns.SaveOptions(defaultOptions, ComputedReloadOptions)
-    local PreviousOptionsWReload = ComputedReloadOptions and ComputedReloadOptions() or nil;
+    local LastComputedReloadOptions = ComputedReloadOptions ~= nil and ComputedReloadOptions() or nil;
 
     -- Auto detect options controls and save them
     foreach(defaultOptions,
@@ -70,8 +79,8 @@ function ns.SaveOptions(defaultOptions, ComputedReloadOptions)
         end
     );
 
-    if ComputedReloadOptions and ComputedReloadOptions() ~= PreviousOptionsWReload then
-        ns.AddMsgWarn(l.OPTION_RELOAD_REQUIRED, true);
+    if ComputedReloadOptions ~= nil and ComputedReloadOptions() ~= LastComputedReloadOptions then
+        ns.AddMsgWarn(format("%s: %s", ns.TITLE, l.OPTION_RELOAD_REQUIRED or ""), true);
     end
     
     -- OnSave: Modules
@@ -85,11 +94,20 @@ function ns.SaveOptions(defaultOptions, ComputedReloadOptions)
     end
 end
 
-function ns.RefreshOptions(defaultOptions)
-    if ns.optionsFrame ~= nil then
-        ns.optionsFrame:Show();
-        ns.optionsFrame.HandleVis = true;
-    end
+function K_SHARED_UI.AddRefreshOptions(func)
+    K_SHARED_UI.optionsRefreshFuncs = K_SHARED_UI.optionsRefreshFuncs or {}
+    table.insert(K_SHARED_UI.optionsRefreshFuncs, func)
+end
+function K_SHARED_UI.RefreshOptions()
+    foreach(K_SHARED_UI.optionsRefreshFuncs,
+        function (_, func)
+            func()
+        end
+    );
+end
+--- ! Useable only after ADDON_LOADED
+function ns.RefreshOptions(defaultOptions, showOptionsFrame)
+    ns.optionsFrame:SetShown(showOptionsFrame);
     -- Auto detect options controls and load them
     foreach(defaultOptions,
         function (optionName, defaultValue)
@@ -116,6 +134,7 @@ function ns.RefreshOptions(defaultOptions)
             end
         end
     );
+    K_SHARED_UI.RefreshOptions()
 end
 
 

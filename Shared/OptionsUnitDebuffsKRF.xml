@@ -1,0 +1,111 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Include file="OptionsUnitDebuffs.lua" />
+	<Frame name="KRFOptionsUnitDebuffs" virtual="true">
+		<Size x="550" y="190" />
+		<Frames>
+			<CheckButton parentKey="LabelMaxBuffs" inherits="KRFUI_HeadingWidget">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent" relativePoint="TOP"><Offset x="0" y="0" /></Anchor>
+				</Anchors>
+				<Attributes>
+					<Attribute name="text" value="OPTION_BUFFS_HEADER" />
+				</Attributes>
+			</CheckButton>
+			<!-- Buffs -->
+			<Slider parentKey="BuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_BUFFSSCALE" />
+					<Attribute name="tooltip" value="OPTION_BUFFSSCALE_TOOLTIP" />
+					<Attribute name="format" value="x %.2f" />
+					<Attribute name="decimals" value="2" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.LabelMaxBuffs" relativePoint="BOTTOM"><Offset x="0" y="-15"/></Anchor>
+					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
+				</Anchors>
+			</Slider>
+			<Slider parentKey="MaxBuffs" inherits="KRFUI_SliderWidget" minValue="0" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_MAXBUFFS" />
+					<Attribute name="tooltip" value="OPTION_MAXBUFFS_TOOLTIP" />
+					<Attribute name="format" value="OPTION_MAXBUFFS_FORMAT" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+				</Anchors>
+			</Slider>
+			<Slider parentKey="BuffsPerLine" inherits="KRFUI_SliderWidget" minValue="1" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_BUFFSPERLINE" />
+					<Attribute name="tooltip" value="OPTION_BUFFSPERLINE_TOOLTIP" />
+					<Attribute name="format" value="OPTION_BUFFSPERLINE_FORMAT" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.MaxBuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+				</Anchors>
+			</Slider>
+			<!-- Debuffs -->
+			<Slider parentKey="DebuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_DEBUFFSSCALE" />
+					<Attribute name="tooltip" value="OPTION_DEBUFFSSCALE_TOOLTIP" />
+					<Attribute name="format" value="x %.2f" />
+					<Attribute name="decimals" value="2" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="TOPLEFT">
+						<Offset x="270" y="0"/>
+					</Anchor>
+				</Anchors>
+			</Slider>
+			<Slider parentKey="MaxDebuffs" inherits="KRFUI_SliderWidget" minValue="0" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_MAXDEBUFFS" />
+					<Attribute name="tooltip" value="OPTION_MAXDEBUFFS_TOOLTIP" />
+					<Attribute name="format" value="OPTION_MAXDEBUFFS_FORMAT" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+				</Anchors>
+			</Slider>
+			<Slider parentKey="DebuffsPerLine" inherits="KRFUI_SliderWidget" minValue="1" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_DEBUFFSPERLINE" />
+					<Attribute name="tooltip" value="OPTION_DEBUFFSPERLINE_TOOLTIP" />
+					<Attribute name="format" value="OPTION_DEBUFFSPERLINE_FORMAT" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.MaxDebuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+				</Anchors>
+			</Slider>
+			
+			<Button parentKey="AvoidConflicts" inherits="UIPanelButtonTemplate">
+				<Size x="150" y="20" />
+				<Scripts>
+					<OnLoad>
+						self.Text:SetText(KRFUI.l.OPTION_SAVEUNITDEBUFFS);
+					</OnLoad>
+					<OnClick>
+						K_SHARED_UI.SafeUnitDebuffs(self)
+					</OnClick>
+					<OnEnter>										
+						GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
+						GameTooltip:SetText(KRFUI.l.OPTION_SAVEUNITDEBUFFS_TOOLTIP);
+					</OnEnter>
+				</Scripts>
+				<Anchors>
+					<!-- <Anchor point="TOPLEFT" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor> -->
+					<Anchor point="TOP" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOM"><Offset y="-20" /></Anchor>
+					<Anchor point="RIGHT" relativeKey="$parent" relativePoint="RIGHT"><Offset x="-20" /></Anchor>
+				</Anchors>
+			</Button>
+		</Frames>
+	</Frame>
+</Ui>

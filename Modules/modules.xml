@@ -3,4 +3,5 @@
     <Include file="..\Shared\Module.lua"/>
     <Script file="NameplatesColor.lua"/>
     <Script file="SoloRaidFrames.lua"/>
+    <Script file="UnitDebuffs.lua"/>
 </Ui>

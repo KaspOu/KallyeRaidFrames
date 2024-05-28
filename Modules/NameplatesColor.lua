@@ -38,13 +38,17 @@ local function applyBarColor(healthBar, useColorOption, color, customColor)
 end
 
 local function filterNameplateBarOption(option)
-    if (ns.HAS_colorNameBySelection) then
+    if (ns.HAS_colorNameBySelection and option == "1") then
         return "0"
     end
     return option
 end
 
-function ns.UpdateNameplateColor(frame)
+
+--- Updates the nameplate colors based on user settings.
+--- Hook CompactUnitFrame_UpdateName
+--- @param frame any The nameplate frame to update.
+local function Hook_CUF_UpdateName(frame)
     if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) or FrameIsCompact(frame) then
         return
     end
@@ -81,7 +85,7 @@ end
 local function onSaveOptions(self, options)
     if not ns._NameplatesHooked and isEnabled(options) then
         ns._NameplatesHooked = true
-        hooksecurefunc("CompactUnitFrame_UpdateName", ns.UpdateNameplateColor);
+        hooksecurefunc("CompactUnitFrame_UpdateName", Hook_CUF_UpdateName);
     end
 end
 

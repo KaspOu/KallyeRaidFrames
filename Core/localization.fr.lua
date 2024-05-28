@@ -15,7 +15,7 @@ l.WHATSNEW = " Nouveaut\195\169s :\n"
     .."- Plus d'options pour les barres d'info :\n"
     .."   : par d\195\169faut / couleur de classe / couleur personnalis\195\169e\n"
     .."   : s\195\169paration entre les noms et les barres d'info\n"
-    .."- Raccourci clavier Wow ajout\195\169\n"
+    .."- Nb max de buffs / debuffs param\195\169trable\n"
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -23,7 +23,11 @@ l.SUBTITLE      = "Assistance cadres de raid";
 l.DESC          = "Am\195\169liore les cadres de raid.\n\n"
 .." - Met en \195\169vidence le fond des joueurs en manque de vie\n\n"
 .." - Les barres invers\195\169es utiliseront votre choix de couleurs\n\n"
-.." - Transparence des unit\195\169s hors de port\195\169e";
+.." - Transparence des unit\195\169s hors de port\195\169e\n\n"
+.." - Raid toujours visible\n\n"
+.."\n"
+.."Am\195\169liore les buffs / d\195\169buffs (taille, max affich\195\169s)\n\n"
+.."Colorise les barres d'info\n\n"
 l.OPTIONS_TITLE = format("%s - Options", l.VERS_TITLE);
 
 -- Messages
@@ -32,9 +36,9 @@ l.MSG_SDB            = "Kallye menu d\'Options";
 
 l.INIT_FAILED = format("%s pas charg\195\169 correctement !", l.VERS_TITLE);
 
-
+local required = l.YL.."*";
 l.OPTION_RAID_HEADER = "Groupe / Raid";
-l.OPTION_HIGHLIGHTLOWHP = "Mettre en \195\169vidence le manque de vie (couleurs dynamiques)"..l.YL.."*";
+l.OPTION_HIGHLIGHTLOWHP = "Mettre en \195\169vidence le manque de vie (couleurs dynamiques)"..required;
 l.OPTION_REVERTBAR = "Barres de "..l.YL.."vies invers\195\169es|r (moins on a de vie, plus la barre grandit !) ";
 l.OPTION_HEALTH_LOW = "Presque mort !";
 l.OPTION_HEALTH_LOW_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."SOUS|r cette limite\n\n"
@@ -58,7 +62,7 @@ l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 l.OPTION_NOTINRANGE_TOOLTIP = "Par d\195\169faut dans Wow : 55%";
 l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = "Par d\195\169faut dans Wow : 100%";
-l.OPTION_SOLORAID = l.CY.."Affiche les cadres de raid en mode solo "..l.YL.."*";
+l.OPTION_SOLORAID = l.CY.."Affiche les cadres de raid en mode solo "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Cadres de groupe/raid toujours visibles";
 
 l.OPTION_EDITMODE_PARTY = "#";
@@ -70,25 +74,38 @@ l.OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
 
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
-l.OPTION_BUFFSSCALE = "Taille des buffs "..l.YL.."*";
-l.OPTION_BUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
-l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..l.YL.."*";
-l.OPTION_DEBUFFSSCALE_TOOLTIP = "Laissez \195\160 1 en cas de conflit d'addon";
-l.OPTION_MAXBUFFS = "Afficher maximum";
-l.OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher";
+l.OPTION_BUFFSSCALE = "Taille des buffs "..required;
+l.OPTION_BUFFSSCALE_TOOLTIP = l.CY.."Laissez \195\160 1 en cas de conflit d'addon";
+l.OPTION_MAXBUFFS = "Limite de buffs"..required;
+l.OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher\n"..l.CY.."Laissez \195\160 "..ns.DEFAULT_MAXBUFFS.." en cas de conflit d'addon";
 l.OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
+l.OPTION_BUFFSPERLINE = "Buffs par ligne"..required;
+l.OPTION_BUFFSPERLINE_TOOLTIP = "Nombre d'ic\195\180nes de buff par ligne\n"..l.CY.."Laissez la valeur max en cas de conflit d'addon";
+l.OPTION_BUFFSPERLINE_FORMAT = "%d par ligne";
+l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..required;
+l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Laissez \195\160 1 en cas de conflit d'addon";
+l.OPTION_MAXDEBUFFS = "Limite de d\195\169buffs"..required;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "Nombre maximum de d\195\169buffs \195\160 afficher\n"..l.CY.."Laissez \195\160 "..ns.DEFAULT_MAXBUFFS.." en cas de conflit d'addon";
+l.OPTION_MAXDEBUFFS_FORMAT = "%d |4d\195\169buff:d\195\169buffs";
+l.OPTION_DEBUFFSPERLINE = "D\195\169buffs par ligne"..required;
+l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Nombre d'ic\195\180nes de d\195\169buff par ligne\n"..l.CY.."Laissez la valeur max en cas de conflit d'addon";
+l.OPTION_DEBUFFSPERLINE_FORMAT = "%d par ligne";
+l.OPTION_SAVEUNITDEBUFFS = "Eviter les conflits";
+l.OPTION_SAVEUNITDEBUFFS_TOOLTIP = "D\195\169finir des valeurs de s\195\169curit\195\169\nd\195\169sactive la gestion des buffs";
+
+
 
 l.OPTION_OTHERS_HEADER = "Barres d'infos";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Par d\195\169faut";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS = "Couleurs de classe";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM = "Votre choix de couleur : ";
-l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Coloration des noms alli\195\169s";
+l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Noms alli\195\169s";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info alli\195\169es (hors instances)";
-l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Coloration des barres alli\195\169es"..l.GYL.." (Classic)";
+l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Barres alli\195\169es";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info alli\195\169es (hors instances)";
-l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Coloration des noms ennemis";
+l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Noms ennemis";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info ennemies (hors instances)";
-l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Coloration des barres ennemies"..l.GYL.." (Classic)";
+l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Barres ennemies";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info ennemies (hors instances)";
 l.OPTION_SHOWPVPICONS = "Afficher les ic\195\180nes JcJ";
 l.OPTION_SHOWPVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les barres d'info, amies comme ennemies.";
