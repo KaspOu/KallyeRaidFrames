@@ -55,6 +55,7 @@ end
 -- Will be used in standalone addon
 local function getInfo(self)
     if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
+        -- Edit Mode - Since DragonFlight (10)
         ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_SOLORAID_TOOLTIP);
         ns.ShowEditMode("PartyFrame");
     else
@@ -64,8 +65,8 @@ end
 
 local function onSaveOptions(self, options)
     if (options.SoloRaidFrame) then
-        -- Edit Mode - Since DragonFlight (10)
         if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
+			-- Edit Mode - Since DragonFlight (10)
             ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_SOLORAID_TOOLTIP);
         end
     end
@@ -85,7 +86,8 @@ local function onInit(self, options)
             GetDisplayedAllyFrames = SoloRaid_GetDisplayedAllyFrames;
             CompactRaidFrameContainer_OnEvent = SoloRaid_CompactRaidFrameContainer_OnEvent;
         end
-        onSaveOptions(self, options);
+		-- Delay to let EditMode to be loaded
+		C_Timer.After(0, function() onSaveOptions(self, options) end)
     end
 
 end
