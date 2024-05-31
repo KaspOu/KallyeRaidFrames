@@ -410,6 +410,22 @@
 									</Anchor>
 								</Anchors>
 							</CheckButton>
+							<CheckButton parentKey="HideDisabledModules" inherits="KRFUI_CheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="OPTION_HIDEDISABLED" />
+									<Attribute name="tooltip" value="OPTION_HIDEDISABLED" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.ShowMsgNormal" relativePoint="TOPLEFT">
+										<Offset x="0" y="-20"/>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										K_SHARED_UI.RefreshOptions()
+									</OnClick>
+								</Scripts>
+							</CheckButton>
 						</Frames>
 					</Frame>
 				</ScrollChild>

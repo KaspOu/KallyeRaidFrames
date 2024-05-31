@@ -40,7 +40,7 @@ end
 --- @param frameChilds table Table containing child frames (buffs/debuffs).
 --- @param frameType string Type of frames to manage ('Buff', 'Debuff', 'DispelDebuff').
 --- @param defaultMax number Blizzard max default.
---- @param maxCount Maximum number of buffs/debuffs to display.
+--- @param maxCount number Maximum number of buffs/debuffs to display.
 --- @param scale number Scale factor for the buffs/debuffs.
 --- @param lineSize number Number of slots per line
 local function ManageUnitFrames(frame, frameChilds, frameType, defaultMax, maxCount, scale, lineSize)

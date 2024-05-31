@@ -6,7 +6,8 @@ if ns.CONFLICT then return; end
 local function ManageNameplatesOptions()
     local activeCheckbox = ns.FindControl("ActiveNameplatesColor")
     local headingLabel = ns.FindControl("LabelNameplatesColor")
-    local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveNameplatesColor, _G[ns.OPTIONS_NAME].HideDisabledModules)
+    local hideDisabledModules = ns.FindControl("HideDisabledModules")
+    local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveNameplatesColor, hideDisabledModules and hideDisabledModules:GetChecked())
 
     local frameData = {
         ["FriendsNameplates_Txt_UseColor"] = { link = "FriendsNameplates_Txt_Color", classEnabled = true },

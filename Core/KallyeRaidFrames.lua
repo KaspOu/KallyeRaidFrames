@@ -191,7 +191,6 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
-		..tostring(_G[ns.OPTIONS_NAME].ActiveNameplatesColor)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end
 

@@ -21,7 +21,7 @@
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOP" relativeKey="$parent.LabelNameplatesColor" relativePoint="TOP">
-						<Offset x="60" y="-8"/>
+						<Offset x="55" y="-8"/>
 					</Anchor>
 				</Anchors>
 				<Scripts>

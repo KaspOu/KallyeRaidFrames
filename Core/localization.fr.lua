@@ -74,6 +74,7 @@ l.OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
 
 l.OPTION_ACTIVATE_MODULE = "Activer / D\195\169sactiver le module"
+l.OPTION_HIDEDISABLED = l.GYL.."Masquer les modules d\195\169sactiv\195\169s"
 
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
 l.OPTION_BUFFSSCALE = "Taille des buffs "..required;

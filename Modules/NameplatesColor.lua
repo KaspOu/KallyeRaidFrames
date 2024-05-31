@@ -49,7 +49,7 @@ end
 --- Hook CompactUnitFrame_UpdateName
 --- @param frame any The nameplate frame to update.
 local function Hook_CUF_UpdateName(frame)
-    if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) or FrameIsCompact(frame) then
+    if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) or FrameIsCompact(frame) or _G[ns.OPTIONS_NAME].ActiveNameplatesColor == false then
         return
     end
 

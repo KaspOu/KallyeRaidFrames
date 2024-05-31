@@ -170,6 +170,8 @@ function ns.IsModuleEnabled(activeCheckbox, headingLabel, option, resize)
         parent._initialHeight = parent._initialHeight or parent:GetHeight()
         parent:SetClipsChildren(true)
         parent:SetHeight(isEnabled and parent._initialHeight or 40 , 5)
+    elseif parent._initialHeight then
+        parent:SetHeight(parent._initialHeight)
     end
     return isEnabled
 end

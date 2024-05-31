@@ -73,6 +73,7 @@ l.OPTION_DEBUG_OFF = "! STOP Test !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
+l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
 
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
 l.OPTION_BUFFSSCALE = "Buffs relative size"..required;
