@@ -98,12 +98,15 @@ local function getInfo(self)
 end
 
 local function isEnabled(options)
-    return options.BuffsScale ~= 1
-        or options.MaxBuffs   ~= DEFAULT_MAXBUFFS
-        or options.BuffsPerLine < DEFAULT_MAXBUFFS
-        or options.DebuffsScale ~= 1
-        or options.MaxDebuffs   ~= DEFAULT_MAXDEBUFFS
-		or options.DebuffsPerLine < DEFAULT_MAXDEBUFFS
+    return options.ActiveUnitDebuffs ~= false
+		and (
+			options.BuffsScale ~= 1
+			or options.MaxBuffs   ~= DEFAULT_MAXBUFFS
+			or options.BuffsPerLine < DEFAULT_MAXBUFFS
+			or options.DebuffsScale ~= 1
+			or options.MaxDebuffs   ~= DEFAULT_MAXDEBUFFS
+			or options.DebuffsPerLine < DEFAULT_MAXDEBUFFS
+		)
 end
 
 local function onSaveOptions(self, options)

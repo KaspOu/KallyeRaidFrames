@@ -148,9 +148,28 @@ function ns.OptionsEnable(FrameObject, isEnabled, disabledAlpha)
 		FrameObject:SetAlpha(disabledAlpha or .6);
 	end
 end
-function ns.OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled)
+function ns.OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled, disabledAlpha)
 	FrameObject:SetShown(isShowned);
 	if (isShowned) then
-		ns.OptionsEnable(FrameObject, isEnabled);
+		ns.OptionsEnable(FrameObject, isEnabled, disabledAlpha);
 	end
+end
+
+function ns.IsModuleEnabled(activeCheckbox, headingLabel, option, resize)
+    if not activeCheckbox or not headingLabel then
+        return true
+    end
+    if option == nil then
+        activeCheckbox:Hide()
+        K_SHARED_UI.HeadingWidget_SetPaddings(headingLabel, 5, 5)
+        return true
+    end
+    local isEnabled = activeCheckbox:GetChecked()
+    local parent = activeCheckbox:GetParent()
+    if resize then
+        parent._initialHeight = parent._initialHeight or parent:GetHeight()
+        parent:SetClipsChildren(true)
+        parent:SetHeight(isEnabled and parent._initialHeight or 40 , 5)
+    end
+    return isEnabled
 end

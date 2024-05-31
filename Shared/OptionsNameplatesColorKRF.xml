@@ -4,13 +4,31 @@
 	<Frame name="KRFOptionsNameplatesColor" virtual="true">
 		<Size x="550" y="190" />
 		<Frames>
-			<CheckButton parentKey="LabelOthers" inherits="KRFUI_HeadingWidget">
+			<CheckButton parentKey="LabelNameplatesColor" inherits="KRFUI_HeadingWidget">
 				<Anchors>
 					<Anchor point="TOP" relativeKey="$parent" relativePoint="TOP"><Offset x="0" y="0" /></Anchor>
 				</Anchors>
 				<Attributes>
 					<Attribute name="text" value="OPTION_OTHERS_HEADER" />
+					<Attribute name="paddingRight" value="30" />
 				</Attributes>
+			</CheckButton>
+			
+			<CheckButton parentKey="ActiveNameplatesColor" FrameLevel="6" inherits="KRFUI_CheckboxWidget">
+				<Attributes>
+					<Attribute name="text" value="" />
+					<Attribute name="tooltip" value="OPTION_ACTIVATE_MODULE" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.LabelNameplatesColor" relativePoint="TOP">
+						<Offset x="60" y="-8"/>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						K_SHARED_UI.RefreshOptions()
+					</OnClick>
+				</Scripts>
 			</CheckButton>
 			
 			<!-- Friends Names -->
@@ -29,7 +47,7 @@
 					<Attribute name="value3" value="2" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.LabelOthers" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
+					<Anchor point="TOP" relativeKey="$parent.LabelNameplatesColor" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent"><Offset x="0" /></Anchor>
 				</Anchors>
 				<Scripts>
@@ -99,7 +117,7 @@
 					<Attribute name="value3" value="2" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.LabelOthers" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
+					<Anchor point="TOP" relativeKey="$parent.LabelNameplatesColor" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="RIGHT"><Offset x="50" /></Anchor>
 				</Anchors>
 				<Scripts>

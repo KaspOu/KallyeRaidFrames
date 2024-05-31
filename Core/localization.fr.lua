@@ -73,6 +73,8 @@ l.OPTION_DEBUG_ON_MESSAGE = "Test des cadres de raid activ\195\169, recliquez po
 l.OPTION_DEBUG_OFF = "! ARR\195\138TER LE TEST !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre une activit\195\169 normale";
 
+l.OPTION_ACTIVATE_MODULE = "Activer / D\195\169sactiver le module"
+
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
 l.OPTION_BUFFSSCALE = "Taille des buffs "..required;
 l.OPTION_BUFFSSCALE_TOOLTIP = l.CY.."Laissez \195\160 1 en cas de conflit d'addon";

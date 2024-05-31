@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsUnitDebuffs.lua" />
 	<Frame name="KRFOptionsUnitDebuffs" virtual="true">
-		<Size x="550" y="190" />
+		<Size x="550" y="160" />
 		<Frames>
 			<CheckButton parentKey="LabelMaxBuffs" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -10,7 +10,25 @@
 				</Anchors>
 				<Attributes>
 					<Attribute name="text" value="OPTION_BUFFS_HEADER" />
+					<Attribute name="paddingRight" value="30" />
 				</Attributes>
+			</CheckButton>
+			
+			<CheckButton parentKey="ActiveUnitDebuffs" FrameLevel="6" inherits="KRFUI_CheckboxWidget">
+				<Attributes>
+					<Attribute name="text" value="" />
+					<Attribute name="tooltip" value="OPTION_ACTIVATE_MODULE" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.LabelMaxBuffs" relativePoint="TOP">
+						<Offset x="60" y="-8"/>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						K_SHARED_UI.RefreshOptions()
+					</OnClick>
+				</Scripts>
 			</CheckButton>
 			<!-- Buffs -->
 			<Slider parentKey="BuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
@@ -85,27 +103,6 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxDebuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
 			</Slider>
-			
-			<Button parentKey="AvoidConflicts" inherits="UIPanelButtonTemplate">
-				<Size x="150" y="20" />
-				<Scripts>
-					<OnLoad>
-						self.Text:SetText(KRFUI.l.OPTION_SAVEUNITDEBUFFS);
-					</OnLoad>
-					<OnClick>
-						K_SHARED_UI.SafeUnitDebuffs(self)
-					</OnClick>
-					<OnEnter>										
-						GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
-						GameTooltip:SetText(KRFUI.l.OPTION_SAVEUNITDEBUFFS_TOOLTIP);
-					</OnEnter>
-				</Scripts>
-				<Anchors>
-					<!-- <Anchor point="TOPLEFT" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor> -->
-					<Anchor point="TOP" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOM"><Offset y="-20" /></Anchor>
-					<Anchor point="RIGHT" relativeKey="$parent" relativePoint="RIGHT"><Offset x="-20" /></Anchor>
-				</Anchors>
-			</Button>
 		</Frames>
 	</Frame>
 </Ui>

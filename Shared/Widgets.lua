@@ -84,29 +84,35 @@ function K_SHARED_UI.HeadingWidget_OnLoad (self)
 	local text = self:GetAttribute("text");
 	text = l(text) or _G[text] or text;
 
-	local label = self:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
-	label:SetPoint("TOP")
-	label:SetPoint("BOTTOM")
-	label:SetJustifyH("CENTER")
-	label:SetText(text);
+	self.label = self:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
+	self.label:SetPoint("TOP")
+	self.label:SetPoint("BOTTOM")
+	self.label:SetJustifyH("CENTER")
+	self.label:SetText(text);
 	
-	local left = self:CreateTexture(nil, "BACKGROUND")
-	left:SetHeight(8)
-	left:SetPoint("LEFT", 3, 0)
-	left:SetPoint("RIGHT", label, "LEFT", text ~= "" and -5 or 1, 0)
-	left:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
-	left:SetTexCoord(0.81, 0.94, 0.5, 1)
+	self.leftRule = self:CreateTexture(nil, "BACKGROUND")
+	local paddingLeft = tonumber(self:GetAttribute("paddingLeft")) or 5
+	self.leftRule:SetHeight(8)
+	self.leftRule:SetPoint("LEFT", 3, 0)
+	self.leftRule:SetPoint("RIGHT", self.label, "LEFT", text ~= "" and -paddingLeft or 1, 0)
+	self.leftRule:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
+	self.leftRule:SetTexCoord(0.81, 0.94, 0.5, 1)
 
-	local right = self:CreateTexture(nil, "BACKGROUND")
-	right:SetHeight(8)
-	right:SetPoint("RIGHT", -3, 0)
-	right:SetPoint("LEFT", label, "RIGHT", text ~= "" and 5 or -1, 0)
-	right:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
-	right:SetTexCoord(0.81, 0.94, 0.5, 1);
+	self.rightRule = self:CreateTexture(nil, "BACKGROUND")
+	local paddingRight = tonumber(self:GetAttribute("paddingRight")) or 5
+	self.rightRule:SetHeight(8)
+	self.rightRule:SetPoint("RIGHT", -3, 0)
+	self.rightRule:SetPoint("LEFT", self.label, "RIGHT", text ~= "" and paddingRight or -1, 0)
+	self.rightRule:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
+	self.rightRule:SetTexCoord(0.81, 0.94, 0.5, 1);
 end
 -- disable checked state
 function K_SHARED_UI.HeadingWidget_OnClick(self)
 	self:SetChecked(false);
+end
+function K_SHARED_UI.HeadingWidget_SetPaddings(self, paddingLeft, paddingRight)
+	self.leftRule:SetPoint("RIGHT", self.label, "LEFT", -paddingLeft, 0)
+	self.rightRule:SetPoint("LEFT", self.label, "RIGHT", paddingRight, 0)
 end
 -- #endregion Heading Widget
 

@@ -1,3 +1,6 @@
+v10.2.709
+- Modules can be disabled (Buffs & Debuffs, Nameplates)
+
 v10.2.708
 - New options to Units Buffs & Debuffs
     > Increase Max icons displayed

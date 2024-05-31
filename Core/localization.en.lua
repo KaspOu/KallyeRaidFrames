@@ -72,6 +72,8 @@ l.OPTION_DEBUG_ON_MESSAGE = "Testing party / raid frames, reclick to stop it!";
 l.OPTION_DEBUG_OFF = "! STOP Test !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
+l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
+
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
 l.OPTION_BUFFSSCALE = "Buffs relative size"..required;
 l.OPTION_BUFFSSCALE_TOOLTIP = l.CY.."Set to 1 if you experience some addon conflict";

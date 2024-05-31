@@ -32,6 +32,7 @@ local defaultOptions = {
 	AlphaNotInCombat = 100, -- 70
 	SoloRaidFrame = false,		 -- Show solo raid (useful for testing)
 
+	ActiveUnitDebuffs = true,
 	BuffsScale = 0.75,
 	MaxBuffs = 8,
 	BuffsPerLine = 4,
@@ -39,6 +40,7 @@ local defaultOptions = {
 	MaxDebuffs = 3,
 	DebuffsPerLine = 9,
 
+	ActiveNameplatesColor = true,
 	FriendsNameplates_Txt_UseColor = "1",
 	FriendsNameplates_Txt_Color = { r= .235, g= .941, b= 1, a = 1 },
 	FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1",
@@ -53,6 +55,7 @@ local defaultOptions = {
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
 	ShowMsgError = false,
+	HideDisabledModules = true,
 
 	DebugMode = false,
 };
@@ -181,12 +184,14 @@ local function RequiredReloadOptionsString()
 	return tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
 		..tostring(_G[ns.OPTIONS_NAME].RevertBar)
 		..tostring(_G[ns.OPTIONS_NAME].UpdateHealthColor)
+		..tostring(_G[ns.OPTIONS_NAME].ActiveUnitDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxBuffs)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsPerLine)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
+		..tostring(_G[ns.OPTIONS_NAME].ActiveNameplatesColor)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end
 

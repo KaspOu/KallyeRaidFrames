@@ -4,16 +4,17 @@ local _, ns = ...
 if ns.CONFLICT then return; end
 
 
-function K_SHARED_UI.SafeUnitDebuffs(self)
-    local parent = self:GetParent()
-    parent.BuffsScale:SetValue(1)
-    parent.MaxBuffs:SetValue(3)
-    parent.BuffsPerLine:SetValue(9)
-    parent.DebuffsScale:SetValue(1)
-    parent.MaxDebuffs:SetValue(3)
-    parent.DebuffsPerLine:SetValue(9)
-end
 local function ManageUnitDebuffsOptions()
-    -- ns.OptionsEnable(ns.FindControl("MaxBuffs"), false,  .2)
+    local activeCheckbox = ns.FindControl("ActiveUnitDebuffs")
+    local headingLabel = ns.FindControl("LabelMaxBuffs")
+    local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveUnitDebuffs, _G[ns.OPTIONS_NAME].HideDisabledModules)
+
+    ns.OptionsEnable(ns.FindControl("BuffsScale"), isEnabled,  .2)
+    ns.OptionsEnable(ns.FindControl("MaxBuffs"), isEnabled, .2)
+    ns.OptionsEnable(ns.FindControl("BuffsPerLine"), isEnabled, .2)
+    ns.OptionsEnable(ns.FindControl("DebuffsScale"), isEnabled, .2)
+    ns.OptionsEnable(ns.FindControl("MaxDebuffs"), isEnabled, .2)
+    ns.OptionsEnable(ns.FindControl("DebuffsPerLine"), isEnabled, .2)
+
 end
 K_SHARED_UI.AddRefreshOptions(ManageUnitDebuffsOptions)

@@ -76,10 +76,13 @@ local function getInfo(self)
 end
 
 local function isEnabled(options)
-    return (options.FriendsNameplates_Txt_UseColor or "0") ~= "0"
-        or (options.FriendsNameplates_Bar_UseColor or "0") ~= "0"
-        or (options.EnemiesNameplates_Txt_UseColor or "0") ~= "0"
-        or (options.EnemiesNameplates_Bar_UseColor or "0") ~= "0"
+    return options.ActiveNameplatesColor ~= false
+		and (
+            (options.FriendsNameplates_Txt_UseColor or "0") ~= "0"
+            or (options.FriendsNameplates_Bar_UseColor or "0") ~= "0"
+            or (options.EnemiesNameplates_Txt_UseColor or "0") ~= "0"
+            or (options.EnemiesNameplates_Bar_UseColor or "0") ~= "0"
+        )
 end
 
 local function onSaveOptions(self, options)
