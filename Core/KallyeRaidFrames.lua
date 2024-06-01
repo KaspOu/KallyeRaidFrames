@@ -200,8 +200,6 @@ function SaveKRFOptions()
 	-- Reset party health as soon as possible
 	KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, false);
 
-	SetCVar("raidFramesDisplayClassColor", KRFOptionsFrame.BlizzFriendsClassColor:GetChecked());
-
 	if OptionsWReloadValues() ~= PreviousOptionsWReload then
 		KRF_AddMsgWarn(KRF_OPTION_RELOAD_REQUIRED, true);
 	end

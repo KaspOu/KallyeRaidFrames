@@ -244,6 +244,9 @@
 									<OnShow>
 										self:SetChecked(GetCVarBool("raidFramesDisplayClassColor"));
 									</OnShow>
+									<OnClick>
+										SetCVar("raidFramesDisplayClassColor", self:GetChecked());
+									</OnClick>
 								</Scripts>
 							</CheckButton>
 							<CheckButton parentKey="IconOnDeath" inherits="KRFCheckboxWidget">
