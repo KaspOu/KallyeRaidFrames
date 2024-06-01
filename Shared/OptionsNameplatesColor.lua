@@ -1,4 +1,5 @@
 local _, ns = ...
+local l = ns.I18N;
 
 -- ! avoid conflict override
 if ns.CONFLICT then return; end
@@ -26,6 +27,29 @@ local function ManageNameplatesOptions()
 
         ns.OptionsEnable(dropDownWidget, isEnabled, .2)
         ns.OptionsSetShownAndEnable(colorWidget, isEnabled and dropDownWidget:GetValue() == "2",  isEnabled)
+    end
+
+    local frameData = {
+        ["FriendsNameplates_PvpIcon"] = "",
+        ["EnemiesNameplates_PvpIcon"] = "",
+    }
+    for frameName, data in pairs(frameData) do        
+        local dropDownWidget = ns.FindControl(frameName)
+        if not dropDownWidget._iconsSet and ns.pvpIcons then
+            dropDownWidget._iconsSet = true
+            
+            local i = 1
+            while(dropDownWidget:GetAttribute("text"..i))
+            do
+                local key, val = dropDownWidget:GetAttribute("value"..i), dropDownWidget:GetAttribute("text"..i);
+                if ns.pvpIcons[key] then
+                    val = l[val] or _G[val] or val
+                    dropDownWidget:SetAttribute("text"..i, val..ns.pvpIcons[key])
+                end
+                i=i+1;
+            end
+        end
+        ns.OptionsEnable(dropDownWidget, isEnabled, .2)
     end
 end
 K_SHARED_UI.AddRefreshOptions(ManageNameplatesOptions)

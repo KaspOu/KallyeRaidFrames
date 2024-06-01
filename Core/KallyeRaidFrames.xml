@@ -30,7 +30,7 @@
 					</OnEnter>
 				</Scripts>
 			</Button>
-			<ScrollFrame name="KRFUI_OptionsScrollFrame" inherits="ScrollFrameTemplate" Framelevel="0" enablemouse="true" setAllPoints="true">				
+			<ScrollFrame name="KRFUI_OptionsScrollFrame" inherits="ScrollFrameTemplate" Framelevel="0" enablemouse="true" setAllPoints="true">
 				<KeyValues>
 					<KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean"/>
 					<KeyValue key="scrollBarX" value="KRFUI.scrollBarX" type="global"/>
@@ -74,9 +74,9 @@
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
-									<OnUpdate>
-										KRFUI.ManageOptionsVisibility();
-									</OnUpdate>
+									<OnClick>
+										K_SHARED_UI.RefreshOptions()
+									</OnClick>
 								</Scripts>
 							</CheckButton>
 							<CheckButton parentKey="RevertBar" inherits="KRFUI_CheckboxWidget">
@@ -89,9 +89,9 @@
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
 								</Anchors>
 								<Scripts>
-									<OnUpdate>
-										KRFUI.ManageOptionsVisibility();
-									</OnUpdate>
+									<OnClick>
+										K_SHARED_UI.RefreshOptions()
+									</OnClick>
 								</Scripts>
 							</CheckButton>
 							<Button parentKey="BGColorLow" inherits="KRFUI_ColorWidget">
@@ -234,7 +234,7 @@
 										<Offset x="270" y="0"/>
 									</Anchor>
 								</Anchors>
-							</CheckButton>							
+							</CheckButton>
 							<CheckButton parentKey="BlizzFriendsClassColor" inherits="KRFUI_CheckboxWidget">
 								<Attributes>
 									<Attribute name="text" value="OPTION_BLIZZARDFRIENDSCLASSCOLOR" />
@@ -324,7 +324,7 @@
 									</OnClick>
 								</Scripts>
 							</Button>
-							
+
 							<Frame parentKey="Options1" inherits="KRFOptionsUnitDebuffs">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.EditMode" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
@@ -335,7 +335,7 @@
 									<Anchor point="TOPLEFT" relativeKey="$parent.Options1" relativePoint="BOTTOMLEFT"><Offset x="0" y="0" /></Anchor>
 								</Anchors>
 							</Frame>
-							
+
 							<Button parentKey="WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
@@ -350,7 +350,7 @@
 									<OnClick>
 										SlashCmdList["KRF"]("new");
 									</OnClick>
-									<OnEnter>										
+									<OnEnter>
 										GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
 										GameTooltip:SetText(KRFUI.l.WHATSNEW);
 									</OnEnter>

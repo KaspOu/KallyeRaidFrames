@@ -1,3 +1,8 @@
+v10.2.710
+- Nameplates: PvP Icons
+    > Allies / Enemies
+    > None / Faction Icon / User Choice
+
 v10.2.709
 - Modules can be disabled (Buffs & Debuffs, Nameplates)
 - Option to hide disabled modules

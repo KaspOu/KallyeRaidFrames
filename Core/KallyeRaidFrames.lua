@@ -45,12 +45,13 @@ local defaultOptions = {
 	FriendsNameplates_Txt_Color = { r= .235, g= .941, b= 1, a = 1 },
 	FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1",
 	FriendsNameplates_Bar_Color = { r= .235, g= .941, b= 1, a = 1 },
+	FriendsNameplates_PvpIcon = "faction",
 
 	EnemiesNameplates_Txt_UseColor = "1",
 	EnemiesNameplates_Txt_Color = { r= .87, g= 0, b= .05, a = 1 },
 	EnemiesNameplates_Bar_UseColor = "0",
 	EnemiesNameplates_Bar_Color = { r= .87, g= 0, b= .05, a = 1 },
-	Nameplates_ShowJcJ = false,
+	EnemiesNameplates_PvpIcon = "faction",
 
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
@@ -195,35 +196,6 @@ local function RequiredReloadOptionsString()
 end
 
 
-function KRFUI.ManageOptionsVisibility()
-	local HealthOption,
-		RevertBarOption
-			= 
-			ns.optionsFrame.UpdateHealthColor:GetChecked(),
-			ns.optionsFrame.RevertBar:GetChecked();
-
-	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
-		-- Edit Mode - Since DragonFlight (10)		
-		ns.optionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
-	else
-		ns.OptionsEnable(ns.optionsFrame.EditMode, false, .2);
-		ns.OptionsEnable(ns.optionsFrame.BlizzFriendsClassColor, false, .2);
-	end
-
-	ns.OptionsEnable(ns.optionsFrame.RevertBar, HealthOption)
-	ns.OptionsEnable(ns.optionsFrame.LimitLow , HealthOption);
-	ns.OptionsEnable(ns.optionsFrame.LimitWarn, HealthOption);
-	ns.OptionsEnable(ns.optionsFrame.LimitOk  , HealthOption);
-
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorLow , not RevertBarOption, HealthOption);
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorWarn, not RevertBarOption, HealthOption);
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorOK  , not RevertBarOption, HealthOption);
-
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorLow , RevertBarOption, HealthOption);
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
-end
-
 
 StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 	showAlert = true,
@@ -306,3 +278,34 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	);
 
 end
+
+local function ManageOptionsVisibility()
+	local HealthOption,
+		RevertBarOption
+			= 
+			ns.optionsFrame.UpdateHealthColor:GetChecked(),
+			ns.optionsFrame.RevertBar:GetChecked();
+
+	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
+		-- Edit Mode - Since DragonFlight (10)		
+		ns.optionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
+	else
+		ns.OptionsEnable(ns.optionsFrame.EditMode, false, .2);
+		ns.OptionsEnable(ns.optionsFrame.BlizzFriendsClassColor, false, .2);
+	end
+
+	ns.OptionsEnable(ns.optionsFrame.RevertBar, HealthOption)
+	ns.OptionsEnable(ns.optionsFrame.LimitLow , HealthOption);
+	ns.OptionsEnable(ns.optionsFrame.LimitWarn, HealthOption);
+	ns.OptionsEnable(ns.optionsFrame.LimitOk  , HealthOption);
+
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorLow , not RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorWarn, not RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorOK  , not RevertBarOption, HealthOption);
+
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorLow , RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
+end
+
+K_SHARED_UI.AddRefreshOptions(ManageOptionsVisibility)

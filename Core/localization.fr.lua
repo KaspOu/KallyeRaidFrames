@@ -12,9 +12,7 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = " Nouveaut\195\169s :\n"
-    .."- Plus d'options pour les barres d'info :\n"
-    .."   : par d\195\169faut / couleur de classe / couleur personnalis\195\169e\n"
-    .."   : s\195\169paration entre les noms et les barres d'info\n"
+    .."- Ic\195\180nes JcJ |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t sur les Barres d'info\n"
     .."- Nb max de buffs / debuffs param\195\169trable\n"
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -102,16 +100,20 @@ l.OPTION_OTHERS_HEADER = "Barres d'infos";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Par d\195\169faut";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS = "Couleurs de classe";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM = "Votre choix de couleur : ";
+l.OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD = l.RDL.."Pas d'ic\195\180ne";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Noms alli\195\169s";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info alli\195\169es (hors instances)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Barres alli\195\169es";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info alli\195\169es (hors instances)";
+l.OPTION_FRIENDSNAMEPLATES_PVPICONS = "Ic\195\180nes JcJ alli\195\169es";
+l.OPTION_FRIENDSNAMEPLATES_PVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les noms alli\195\169s.";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Noms ennemis";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info ennemies (hors instances)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Barres ennemies";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info ennemies (hors instances)";
-l.OPTION_SHOWPVPICONS = "Afficher les ic\195\180nes JcJ";
-l.OPTION_SHOWPVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les barres d'info, amies comme ennemies.";
+l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Ic\195\180nes JcJ ennemies";
+l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les noms ennemis.";
+l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Ic\195\180ne de faction |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
 
 l.OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 l.OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..l.YL.."/reload|r )";

@@ -29,6 +29,32 @@ local function applyTextColor(name, useColorOption, color, customColor)
     end
 end
 
+ns.pvpIcons = {
+    gemred = "|TInterface/PVPFrame/Icons/prestige-icon-8-1:16|t",
+    gemblue = "|TInterface/PVPFrame/Icons/prestige-icon-8-2:16|t",
+    gemgreen = "|TInterface/PVPFrame/Icons/prestige-icon-8-3:16|t",
+    wolf = "|TInterface/PVPFrame/Icons/prestige-icon-3-3-small:20|t",
+    lion = "|TInterface/PVPFrame/Icons/prestige-icon-3-4-small:20|t",
+    sword = "|TInterface/PVPFrame/Icons/prestige-icon-1:20|t",
+    shield = "|TInterface/PVPFrame/Icons/prestige-icon-2:20|t",
+    swords = "|TInterface/PVPFrame/Icons/prestige-icon-3:20|t",
+    Alliance = "|TInterface/PVPFrame/PVP-Currency-Alliance:16|t",
+    Horde = "|TInterface/PVPFrame/PVP-Currency-Horde:16|t",
+}
+local function applyPvpIcon(unit, name, pvpIconOption)
+    if UnitIsPVP(unit) and pvpIconOption ~= "0" then
+        local icon = ns.pvpIcons[pvpIconOption] or ""
+        if pvpIconOption == "faction" then
+            local faction = UnitFactionGroup(unit)
+            icon = ns.pvpIcons[faction] or ""
+        end
+        if icon ~= "" then
+            local playerName = GetUnitName(unit)
+            name:SetText(icon..playerName)
+        end
+    end
+end
+
 local function applyBarColor(healthBar, useColorOption, color, customColor)
     if useColorOption == "1" then
         healthBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
@@ -59,12 +85,14 @@ local function Hook_CUF_UpdateName(frame)
 
     if UnitIsFriend(frame.displayedUnit, "player") then
         applyTextColor(frame.name, cacheOptions.FriendsNameplates_Txt_UseColor, c, cacheOptions.FriendsNameplates_Txt_Color)
+        applyPvpIcon(frame.displayedUnit, frame.name, cacheOptions.FriendsNameplates_PvpIcon)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.FriendsNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.FriendsNameplates_Bar_Color)
     end
 
     if not UnitIsFriend(frame.displayedUnit, "player") then
         applyTextColor(frame.name, cacheOptions.EnemiesNameplates_Txt_UseColor, c, cacheOptions.EnemiesNameplates_Txt_Color)
+        applyPvpIcon(frame.displayedUnit, frame.name, cacheOptions.EnemiesNameplates_PvpIcon)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.EnemiesNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.EnemiesNameplates_Bar_Color)
     end
@@ -80,8 +108,10 @@ local function isEnabled(options)
 		and (
             (options.FriendsNameplates_Txt_UseColor or "0") ~= "0"
             or (options.FriendsNameplates_Bar_UseColor or "0") ~= "0"
+            or (options.FriendsNameplates_PvpIcon or "0") ~= "0"
             or (options.EnemiesNameplates_Txt_UseColor or "0") ~= "0"
             or (options.EnemiesNameplates_Bar_UseColor or "0") ~= "0"
+            or (options.EnemiesNameplates_PvpIcon or "0") ~= "0"
         )
 end
 
@@ -100,6 +130,10 @@ module:SetOnSaveOptions(onSaveOptions);
 module:SetGetInfo(getInfo);
 
 --@do-not-package@
--- hooksecurefunc(NamePlateDriverFrame,"OnNamePlateCreated", ??
--- Blizzard nameplates color test: local allowClassColor = frame.optionTable.allowClassColorsForNPCs or UnitIsPlayer(frame.unit) or (UnitTreatAsPlayerForDisplay and UnitTreatAsPlayerForDisplay(frame.unit));
+--[[
+hooksecurefunc(NamePlateDriverFrame,"OnNamePlateCreated", ??
+Blizzard nameplates color test: local allowClassColor = frame.optionTable.allowClassColorsForNPCs or UnitIsPlayer(frame.unit) or (UnitTreatAsPlayerForDisplay and UnitTreatAsPlayerForDisplay(frame.unit));
+Textures: 
+https://github.com/Gethe/wow-ui-textures/tree/live/PVPFrame
+--]]
 --@end-do-not-package@

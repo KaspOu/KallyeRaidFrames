@@ -10,10 +10,8 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = " What's new:\n"
-    .."- More Nameplate options:\n"
-    .."   : default / class color / custom color.\n"
-    .."   : separation between names & nameplates.\n"
-    .."- Max Buffs / Debuffs to display added\n"
+    .."- Nameplate PvP icons |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t added.\n"
+    .."- Max Buffs / Debuffs to display option\n"
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -101,16 +99,20 @@ l.OPTION_OTHERS_HEADER = "Nameplates";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Blizzard default colors";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS ="Use class color";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM ="Your color choice: ";
+l.OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD = l.RDL.."No icon";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Allied names";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above allied nameplates (outside instances)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Allied bars";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of allied nameplates (outside instances)";
+l.OPTION_FRIENDSNAMEPLATES_PVPICONS = "Allied PvP icons";
+l.OPTION_FRIENDSNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on allied names.";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Enemy names";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above enemy nameplates (outside instances)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Enemy bars";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of enemy nameplates (outside instances)";
-l.OPTION_SHOWPVPICONS = "Show PvP icons";
-l.OPTION_SHOWPVPICONS_TOOLTIP = "Displays PvP icons on info bars, both friendly and enemy.";
+l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Enemy PvP icons";
+l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on enemy names.";
+l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Faction icon |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
 
 l.OPTION_RESET_OPTIONS = "Reset options";
 l.OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..l.YL.."/reload|r )";

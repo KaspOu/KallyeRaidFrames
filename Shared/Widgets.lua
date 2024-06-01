@@ -324,7 +324,10 @@ Items attributes: text1, value1, color1, ...
 * Warning: name has to be set if you want to enable/disable widget
 ]]
 local function DropDownWidget_OnSelect(dropdown, value, text)
-	dropdown:GetScript("OnEvent")(dropdown, "select")
+	local onEventScript = dropdown:GetScript("OnEvent")
+	if onEventScript then
+		onEventScript(dropdown, "select")
+	end
 end
 local function DropDownWidget_Func(self, b)
 	local val, txt = b.menuList, b.value
