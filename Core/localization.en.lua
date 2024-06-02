@@ -10,8 +10,8 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = " What's new:\n"
+    .."- Buffs & debuffs can be aligned vertically.\n"
     .."- Nameplate PvP icons |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t added.\n"
-    .."- Max Buffs / Debuffs to display option\n"
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -82,6 +82,8 @@ l.OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 l.OPTION_BUFFSPERLINE = "Buffs per line";
 l.OPTION_BUFFSPERLINE_TOOLTIP = "Number of buff icons per line\n"..l.CY.."Set to max value if you experience some addon conflict";
 l.OPTION_BUFFSPERLINE_FORMAT = "%d per line"..required;
+l.OPTION_BUFFSVERTICAL = "Buffs aligned vertically"..required;
+l.OPTION_BUFFSVERTICAL_TOOLTIP = "Buffs will be vertically aligned,\nin columns\n"..l.CY.."Disable if you experience some addon conflict";
 l.OPTION_DEBUFFSSCALE = "Debuffs relative size"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Set to 1 if you experience some addon conflict";
 l.OPTION_MAXDEBUFFS = "Max debuffs"..required;
@@ -90,10 +92,8 @@ l.OPTION_MAXDEBUFFS_FORMAT = "%d |4debuff:debuffs";
 l.OPTION_DEBUFFSPERLINE = "Debuffs per line"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Number of debuff icons per line\n"..l.CY.."Set to max value if you experience some addon conflict";
 l.OPTION_DEBUFFSPERLINE_FORMAT = "%d per line";
-l.OPTION_SAVEUNITDEBUFFS = "Avoid conflicts";
-l.OPTION_SAVEUNITDEBUFFS_TOOLTIP = "Set safe values\ndisable buff management";
-
-
+l.OPTION_DEBUFFSVERTICAL = "Debuffs aligned vertically"..required;
+l.OPTION_DEBUFFSVERTICAL_TOOLTIP = "Debuffs will be vertically aligned,\nin columns\n"..l.CY.."Disable if you experience some addon conflict";
 
 l.OPTION_OTHERS_HEADER = "Nameplates";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Blizzard default colors";

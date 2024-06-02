@@ -1,3 +1,6 @@
+v10.2.711
+- Buffs & Debuffs can be aligned vertically
+
 v10.2.710
 - Nameplates: PvP Icons
     > Allies / Enemies

@@ -36,9 +36,11 @@ local defaultOptions = {
 	BuffsScale = 0.75,
 	MaxBuffs = 8,
 	BuffsPerLine = 4,
+	BuffsVertical = false,
 	DebuffsScale = 1.25,
 	MaxDebuffs = 3,
 	DebuffsPerLine = 9,
+	DebuffsVertical = false,
 
 	ActiveNameplatesColor = true,
 	FriendsNameplates_Txt_UseColor = "1",
@@ -189,9 +191,11 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxBuffs)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsPerLine)
+		..tostring(_G[ns.OPTIONS_NAME].BuffsVertical)		
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
+		..tostring(_G[ns.OPTIONS_NAME].DebuffsVertical)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end
 

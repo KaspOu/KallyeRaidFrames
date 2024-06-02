@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsUnitDebuffs.lua" />
 	<Frame name="KRFOptionsUnitDebuffs" virtual="true">
-		<Size x="550" y="160" />
+		<Size x="550" y="180" />
 		<Frames>
 			<CheckButton parentKey="LabelMaxBuffs" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -66,6 +66,15 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxBuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
 			</Slider>
+			<CheckButton parentKey="BuffsVertical" inherits="KRFUI_CheckboxWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_BUFFSVERTICAL" />
+					<Attribute name="tooltip" value="OPTION_BUFFSVERTICAL_TOOLTIP" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-10" /></Anchor>
+				</Anchors>
+			</CheckButton>
 			<!-- Debuffs -->
 			<Slider parentKey="DebuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
 				<Size x="200" y="15" />
@@ -103,6 +112,15 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxDebuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
 			</Slider>
+			<CheckButton parentKey="DebuffsVertical" inherits="KRFUI_CheckboxWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_DEBUFFSVERTICAL" />
+					<Attribute name="tooltip" value="OPTION_DEBUFFSVERTICAL_TOOLTIP" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-10" /></Anchor>
+				</Anchors>
+			</CheckButton>
 		</Frames>
 	</Frame>
 </Ui>

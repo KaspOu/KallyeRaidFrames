@@ -12,8 +12,8 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = " Nouveaut\195\169s :\n"
+    .."- Alignement vertical des Buffs & D\195\169buffs.\n"
     .."- Ic\195\180nes JcJ |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t sur les Barres d'info\n"
-    .."- Nb max de buffs / debuffs param\195\169trable\n"
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -83,6 +83,8 @@ l.OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
 l.OPTION_BUFFSPERLINE = "Buffs par ligne"..required;
 l.OPTION_BUFFSPERLINE_TOOLTIP = "Nombre d'ic\195\180nes de buff par ligne\n"..l.CY.."Laissez la valeur max en cas de conflit d'addon";
 l.OPTION_BUFFSPERLINE_FORMAT = "%d par ligne";
+l.OPTION_BUFFSVERTICAL = "Aligner les buffs verticalement"..required;
+l.OPTION_BUFFSVERTICAL_TOOLTIP = "Les buffs seront align\195\169s verticalement, en colonnes\n"..l.CY.."D\195\169cochez en cas de conflit d'addon";
 l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Laissez \195\160 1 en cas de conflit d'addon";
 l.OPTION_MAXDEBUFFS = "Limite de d\195\169buffs"..required;
@@ -91,10 +93,8 @@ l.OPTION_MAXDEBUFFS_FORMAT = "%d |4d\195\169buff:d\195\169buffs";
 l.OPTION_DEBUFFSPERLINE = "D\195\169buffs par ligne"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Nombre d'ic\195\180nes de d\195\169buff par ligne\n"..l.CY.."Laissez la valeur max en cas de conflit d'addon";
 l.OPTION_DEBUFFSPERLINE_FORMAT = "%d par ligne";
-l.OPTION_SAVEUNITDEBUFFS = "Eviter les conflits";
-l.OPTION_SAVEUNITDEBUFFS_TOOLTIP = "D\195\169finir des valeurs de s\195\169curit\195\169\nd\195\169sactive la gestion des buffs";
-
-
+l.OPTION_DEBUFFSVERTICAL = "Aligner les d\195\169buffs verticalement"..required;
+l.OPTION_DEBUFFSVERTICAL_TOOLTIP = "Les d\195\169buffs seront align\195\169s verticalement, en colonnes\n"..l.CY.."D\195\169cochez en cas de conflit d'addon";
 
 l.OPTION_OTHERS_HEADER = "Barres d'infos";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Par d\195\169faut";

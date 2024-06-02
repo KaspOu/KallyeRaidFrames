@@ -18,21 +18,30 @@ local function FrameIsCompact(frame)
 end
 
 
-local function anchorPoints(type, frameIdx, lineSize)
+local OrientationEnum = {
+    LeftThenUp = "LeftThenUp",
+    UpThenLeft = "UpThenLeft",
+    RightThenUp = "RightThenUp",
+    UpThenRight = "UpThenRight"
+}
+
+local function anchorPoints(frameIdx, lineSize, orientation)
 	local newLine = (lineSize ~= nil) and (math.fmod(frameIdx-1, lineSize) == 0)
-	if type == "Buff" then
-		if not newLine then
-			return false, "BOTTOMRIGHT", frameIdx-1, "BOTTOMLEFT"
-		else
-			return true, "BOTTOMRIGHT", frameIdx-lineSize, "TOPRIGHT"
-		end
-	else
-		if not newLine then
-			return false, "BOTTOMLEFT", frameIdx-1, "BOTTOMRIGHT"
-		else
-			return true, "BOTTOMLEFT", frameIdx-lineSize, "TOPLEFT"
-		end
-	end
+	local relatedIdx = newLine and (frameIdx-lineSize) or (frameIdx-1)
+
+	local alignments = {
+		-- orientation =  point, relatedPoint, newLineRelatedPoint
+		[OrientationEnum.LeftThenUp] = { "BOTTOMRIGHT", "BOTTOMLEFT", "TOPRIGHT" },
+		[OrientationEnum.UpThenLeft] = { "BOTTOMRIGHT", "TOPRIGHT", "BOTTOMLEFT" },
+		[OrientationEnum.RightThenUp]= { "BOTTOMLEFT", "BOTTOMRIGHT", "TOPLEFT" },
+		[OrientationEnum.UpThenRight]= { "BOTTOMLEFT", "TOPLEFT", "BOTTOMRIGHT" },
+	}
+	local selectedAlignment = alignments[orientation] or alignments[OrientationEnum.LeftThenUp]
+
+	local point, relatedPoint =
+		selectedAlignment[1],
+		(not newLine) and selectedAlignment[2] or selectedAlignment[3];
+	return newLine, point, relatedIdx, relatedPoint
 end
 
 --- Manage the display and scaling of buffs & debuffs on group frames.
@@ -43,7 +52,9 @@ end
 --- @param maxCount number Maximum number of buffs/debuffs to display.
 --- @param scale number Scale factor for the buffs/debuffs.
 --- @param lineSize number Number of slots per line
-local function ManageUnitFrames(frame, frameChilds, frameType, defaultMax, maxCount, scale, lineSize)
+--- @param orientation string OrientationEnum: Determines the alignment.
+--- @param blizzardOrientation string OrientationEnum: Blizzard original alignment
+local function ManageUnitFrames(frame, frameChilds, frameType, defaultMax, maxCount, scale, lineSize, orientation, blizzardOrientation)
 	if InCombatLockdown() or frame:IsForbidden() or not FrameIsCompact(frame) then
 		return
 	end
@@ -53,15 +64,19 @@ local function ManageUnitFrames(frame, frameChilds, frameType, defaultMax, maxCo
 
 	-- addSlots and setPoints
 	if maxCount ~= frame[maxProp] then
+		-- start loop at first icon not matching blizz positioning
 		local loopStart = math.min(defaultMax + 1, lineSize + 1)
+		if orientation ~= blizzardOrientation then
+			loopStart = 2
+		end
 		for fId = loopStart, maxCount do
 			local child = _G[frameName .. fId]
 			if not _G[frameName .. fId] then
 				child = CreateFrame("Button", frameName .. fId, frame, "Compact" .. frameType .. "Template")
 				child:SetScale(scale)
 			end
-			local newLine, point, relativeId, relativePoint = anchorPoints(frameType, fId, lineSize)
-			if newLine then
+			local newLine, point, relativeId, relativePoint = anchorPoints(fId, lineSize, orientation)
+			if newLine or orientation ~= blizzardOrientation then
 				child:ClearAllPoints()
 			end
 			child:SetPoint(point, _G[frameName .. relativeId], relativePoint)
@@ -82,14 +97,16 @@ function ns.Hook_ManageBuffs(frame)
     local max = _G[ns.OPTIONS_NAME].MaxBuffs
     local scale = _G[ns.OPTIONS_NAME].BuffsScale
 	local slotsPerLine = _G[ns.OPTIONS_NAME].BuffsPerLine
-	ManageUnitFrames(frame, frame.buffFrames, "Buff", DEFAULT_MAXBUFFS, max, scale, slotsPerLine)
+	local orientation = not _G[ns.OPTIONS_NAME].BuffsVertical and OrientationEnum.LeftThenUp or OrientationEnum.UpThenLeft
+	ManageUnitFrames(frame, frame.buffFrames, "Buff", DEFAULT_MAXBUFFS, max, scale, slotsPerLine, orientation, OrientationEnum.LeftThenUp)
 end
 
 function ns.Hook_ManageDebuffs(frame)
     local max = _G[ns.OPTIONS_NAME].MaxDebuffs
     local scale = _G[ns.OPTIONS_NAME].DebuffsScale
 	local slotsPerLine = _G[ns.OPTIONS_NAME].DebuffsPerLine
-	ManageUnitFrames(frame, frame.debuffFrames, "Debuff", DEFAULT_MAXDEBUFFS, max, scale, slotsPerLine)
+	local orientation = not _G[ns.OPTIONS_NAME].DebuffsVertical and OrientationEnum.RightThenUp or OrientationEnum.UpThenRight
+	ManageUnitFrames(frame, frame.debuffFrames, "Debuff", DEFAULT_MAXDEBUFFS, max, scale, slotsPerLine, orientation, OrientationEnum.RightThenUp)
 end
 
 -- Will be used in standalone addon
@@ -103,17 +120,27 @@ local function isEnabled(options)
 			options.BuffsScale ~= 1
 			or options.MaxBuffs   ~= DEFAULT_MAXBUFFS
 			or options.BuffsPerLine < DEFAULT_MAXBUFFS
+			or options.BuffsVertical
 			or options.DebuffsScale ~= 1
 			or options.MaxDebuffs   ~= DEFAULT_MAXDEBUFFS
 			or options.DebuffsPerLine < DEFAULT_MAXDEBUFFS
+			or options.DebuffsVertical
 		)
 end
 
+local function determineAppropriateHook(hookName, lineSize, maxIcons, verticalAlign)
+	if verticalAlign or lineSize < maxIcons then
+		return "CompactUnitFrame_UpdateAll"
+	end
+	return hookName;
+end
 local function onSaveOptions(self, options)
     if not ns._UnitDebuffsHooked and isEnabled(options) then
         ns._UnitDebuffsHooked = true
-        hooksecurefunc(options.BuffsPerLine < options.MaxBuffs     and "CompactUnitFrame_UpdateAll" or "CompactUnitFrame_SetMaxBuffs", ns.Hook_ManageBuffs);
-        hooksecurefunc(options.DebuffsPerLine < options.MaxDebuffs and "CompactUnitFrame_UpdateAll" or "CompactUnitFrame_SetMaxDebuffs", ns.Hook_ManageDebuffs);
+		local buffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxBuffs", options.BuffsPerLine, options.MaxBuffs, options.BuffsVertical)
+		local debuffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxDebuffs", options.DebuffsPerLine, options.MaxDebuffs, options.DebuffsVertical)
+        hooksecurefunc(buffsHook, ns.Hook_ManageBuffs);
+        hooksecurefunc(debuffsHook, ns.Hook_ManageDebuffs);
     end
 end
 
