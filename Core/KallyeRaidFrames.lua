@@ -55,6 +55,9 @@ local defaultOptions = {
 	EnemiesNameplates_Bar_Color = { r= .87, g= 0, b= .05, a = 1 },
 	EnemiesNameplates_PvpIcon = "faction",
 
+	ActiveRaidIcons = true,
+	RaidsIcons_Anchor = "CENTER",
+
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
 	ShowMsgError = false,
@@ -196,6 +199,7 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsVertical)
+		..tostring(_G[ns.OPTIONS_NAME].ActiveRaidIcons)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end
 

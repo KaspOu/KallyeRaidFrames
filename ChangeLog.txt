@@ -1,3 +1,6 @@
+v10.2.712
+- Raid Icons module added (Target icon on raid frames)
+
 v10.2.711
 - Buffs & Debuffs can be aligned vertically
 

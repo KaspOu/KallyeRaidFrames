@@ -112,7 +112,8 @@
         "hooksecurefunc",
         "UnitSelectionColor",
         "UnitPlayerControlled",
-        "CreateColor"
+        "CreateColor",
+        "NUM_RAID_ICONS"
     ],
     "cSpell.words": [
         "prepatch"

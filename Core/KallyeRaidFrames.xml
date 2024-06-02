@@ -3,6 +3,7 @@
 	<Include file="..\Shared\OptionsAPI.lua"/>
 	<Include file="..\Shared\OptionsNameplatesColorKRF.xml" />
 	<Include file="..\Shared\OptionsUnitDebuffsKRF.xml" />
+	<Include file="..\Shared\OptionsRaidIconsKRF.xml" />
 	<Include file="KallyeRaidFrames.lua"/>
 	<Frame name="KRFUI_OptionsContainer">
 		<Layers>
@@ -335,11 +336,16 @@
 									<Anchor point="TOPLEFT" relativeKey="$parent.Options1" relativePoint="BOTTOMLEFT"><Offset x="0" y="0" /></Anchor>
 								</Anchors>
 							</Frame>
-
+							<Frame parentKey="Options3" inherits="KRFOptionsRaidIcons">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Options2" relativePoint="BOTTOMLEFT"><Offset x="0" y="0" /></Anchor>
+								</Anchors>
+							</Frame>
+							
 							<Button parentKey="WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.Options2" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeKey="$parent.Options3" relativePoint="BOTTOMLEFT">
 										<Offset x="0" y="-40"/>
 									</Anchor>
 								</Anchors>
