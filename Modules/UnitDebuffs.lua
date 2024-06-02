@@ -58,9 +58,13 @@ local function ManageUnitFrames(frame, frameChilds, frameType, defaultMax, maxCo
 	if InCombatLockdown() or frame:IsForbidden() or not FrameIsCompact(frame) then
 		return
 	end
-
     local frameName = frame:GetName() .. frameType
 	local maxProp = "max"..frameType.."s"
+	-- Edit mode: try safe value before exit (do not work well :/)
+	if EditModeManagerFrame and EditModeManagerFrame:IsEditModeActive() then
+		frame[maxProp] = 0
+		return;
+	end
 
 	-- addSlots and setPoints
 	if maxCount ~= frame[maxProp] then

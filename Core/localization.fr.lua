@@ -12,6 +12,7 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = " Nouveaut\195\169s :\n"
+    .."- Ic\195\180nes de cible (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid\n"
     .."- Alignement vertical des Buffs & D\195\169buffs.\n"
     .."- Ic\195\180nes JcJ |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t sur les Barres d'info\n"
 
@@ -25,7 +26,8 @@ l.DESC          = "Am\195\169liore les cadres de raid.\n\n"
 .." - Raid toujours visible\n\n"
 .."\n"
 .."Am\195\169liore les buffs / d\195\169buffs (taille, max affich\195\169s)\n\n"
-.."Colorise les barres d'info\n\n"
+.."Colorise les noms en barre d'info, avec ic\195\180nes JcJ |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t\n\n"
+.."Affiche les ic\195\180nes de cible (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid\n\n"
 l.OPTIONS_TITLE = format("%s - Options", l.VERS_TITLE);
 
 -- Messages
@@ -114,6 +116,17 @@ l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info enn
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Ic\195\180nes JcJ ennemies";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les noms ennemis.";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Ic\195\180ne de faction |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
+
+l.OPTION_ACTIVATE_MODULE_RAIDICONS = l.OPTION_ACTIVATE_MODULE .. "\n"
+    ..l.WH.."Affiche les ic\195\180nes de cible (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid"
+l.OPTION_RAIDICONS_HEADER = "Ic\195\180nes de raid";
+l.OPTION_RAIDICONS_ANCHOR = "Alignement des ic\195\180nes";
+l.OPTION_RAIDICONS_ANCHOR_TOOLTIP = "Position de l'ic\195\180ne cible dans le cadre de raid";
+l.OPTION_CENTER = "Centre"
+l.OPTION_TOPLEFT = "Haut Gauche";
+l.OPTION_TOPRIGHT = "Haut Droit";
+l.OPTION_BOTTOMLEFT = "Bas Gauche";
+l.OPTION_BOTTOMRIGHT = "Bas Droit";
 
 l.OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 l.OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..l.YL.."/reload|r )";
