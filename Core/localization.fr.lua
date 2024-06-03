@@ -127,6 +127,12 @@ l.OPTION_TOPLEFT = "Haut Gauche";
 l.OPTION_TOPRIGHT = "Haut Droit";
 l.OPTION_BOTTOMLEFT = "Bas Gauche";
 l.OPTION_BOTTOMRIGHT = "Bas Droit";
+l.OPTION_RAIDICONS_SIZE = "Taille des ic\195\180nes";
+l.OPTION_RAIDICONS_SIZE_TOOLTIP = "Ajustez la taille des ic\195\180nes de raid";
+l.OPTION_RAIDICONS_RELATIVE_X = "Position horizontale";
+l.OPTION_RAIDICONS_RELATIVE_X_TOOLTIP = "Ajustez la position horizontale relative des ic\195\180nes de raid";
+l.OPTION_RAIDICONS_RELATIVE_Y = "Position verticale";
+l.OPTION_RAIDICONS_RELATIVE_Y_TOOLTIP = "Ajustez la position verticale relative des ic\195\180nes de raid";
 
 l.OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 l.OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..l.YL.."/reload|r )";

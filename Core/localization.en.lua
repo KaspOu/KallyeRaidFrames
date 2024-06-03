@@ -126,6 +126,13 @@ l.OPTION_TOPLEFT = "Top Left";
 l.OPTION_TOPRIGHT = "Top Right";
 l.OPTION_BOTTOMLEFT = "Bottom Left";
 l.OPTION_BOTTOMRIGHT = "Bottom Right";
+l.OPTION_RAIDICONS_SIZE = "Raid icon size";
+l.OPTION_RAIDICONS_SIZE_TOOLTIP = "Adjust the size of the raid icons";
+l.OPTION_RAIDICONS_RELATIVE_X = "Horizontal position";
+l.OPTION_RAIDICONS_RELATIVE_X_TOOLTIP = "Adjust the relative horizontal position of the raid icons";
+l.OPTION_RAIDICONS_RELATIVE_Y = "Vertical position";
+l.OPTION_RAIDICONS_RELATIVE_Y_TOOLTIP = "Adjust the relative vertical position of the raid icons";
+
 
 l.OPTION_RESET_OPTIONS = "Reset options";
 l.OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..l.YL.."/reload|r )";
