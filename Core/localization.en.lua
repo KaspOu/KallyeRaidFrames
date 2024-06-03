@@ -136,11 +136,17 @@ l.OPTION_SHOWMSGWARNING = l.GYL.."Display warnings";
 l.OPTION_SHOWMSGERR = l.GYL.."Display errors";
 l.OPTION_WHATSNEW = "What's new";
 
+l.UpdateLocales = nil
 -- Edit Mode - Since DragonFlight (10)
 if (EditModeManagerFrame.UseRaidStylePartyFrames) then
-  if (not EditModeManagerFrame:UseRaidStylePartyFrames()) then
-    l.OPTION_SOLORAID_TOOLTIP = "I suggest you to activate option "..l.YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
-    l.DESC = l.DESC.."\n\n - "..l.OPTION_SOLORAID_TOOLTIP;
+  -- Edit mode takes a while...
+  l.UpdateLocales = function ()
+    C_Timer.After(1, function()
+        if (not EditModeManagerFrame:UseRaidStylePartyFrames()) then
+          l.OPTION_SOLORAID_TOOLTIP = "I suggest you to activate option "..l.YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
+          l.DESC = l.DESC.."\n"..l.CY..l.OPTION_SOLORAID_TOOLTIP.."|r\n\n";
+        end
+      end)
   end
   l.OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
   l.OPTION_EDITMODE_PARTY_NOTE = "Note: Use "..l.YL.."/reload|r after "..HUD_EDIT_MODE_MENU..", to avoid possibles errors";

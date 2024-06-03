@@ -429,5 +429,7 @@ end
 ? print (tostring(checked))
 ? /run print(select(4, GetBuildInfo()))  
 ? wowversion, wowbuild, wowdate, wowtocversion = GetBuildInfo()
+
+EditModeManagerFrame:IsEditModeActive()
 ]]
 --@end-do-not-package@

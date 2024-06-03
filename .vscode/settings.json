@@ -113,7 +113,35 @@
         "UnitSelectionColor",
         "UnitPlayerControlled",
         "CreateColor",
-        "NUM_RAID_ICONS"
+        "NUM_RAID_ICONS",
+        "EditModeSettingDisplayInfoManager",
+        "EditModePresetLayoutManager",
+        "AddonList",
+        "DropDownList1",
+        "MainMenuBar",
+        "USE_RAID_STYLE_PARTY_FRAMES",
+        "ACTIVATE",
+        "DISABLE",
+        "ENABLE",
+        "AddonCompartmentFrame",
+        "Mixin",
+        "UnitIsPVP",
+        "UnitFactionGroup",
+        "pairs",
+        "GetRaidTargetIndex",
+        "SetCVar",
+        "GetCVarBool",
+        "IsInGroup",
+        "assert",
+        "tAppendAll",
+        "HideUIPanel",
+        "table",
+        "ipairs",
+        "issecurevariable",
+        "error",
+        "setmetatable",
+        "strmatch",
+        "unpack"
     ],
     "cSpell.words": [
         "prepatch"
@@ -139,5 +167,19 @@
         "statusBarItem.remoteForeground": "#e7e7e7",
         "titleBar.activeForeground": "#e7e7e7",
         "titleBar.inactiveForeground": "#e7e7e799"
-    }
+    },
+    "Lua.runtime.builtin": {
+        "basic": "disable",
+        "debug": "disable",
+        "io": "disable",
+        "math": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string": "disable",
+        "table": "disable",
+        "utf8": "disable"
+    },
+    "Lua.workspace.library": [
+        "~\\c:\\Users\\kaspo\\.cursor\\extensions\\ketho.wow-api-0.16.6\\Annotations"
+    ]
 }

@@ -105,6 +105,7 @@ local function OnEvent(self, event, ...)
 		self:UnregisterEvent("ADDON_LOADED");
 		isLoaded = true;
 
+		if l.UpdateLocales then l.UpdateLocales() end
 		ns.SetDefaultOptions(defaultOptions);
 		ns.RefreshOptions(defaultOptions);
 
