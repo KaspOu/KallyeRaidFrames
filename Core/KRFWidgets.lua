@@ -27,7 +27,7 @@ function KRFCheckboxWidget_OnEnter(self)
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:SetText(WH..text);
+	GameTooltip:SetText(KRF_Globals.WH..text);
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end
@@ -53,18 +53,18 @@ function KRFHeadingWidget_OnLoad (self)
 	label:SetPoint("BOTTOM")
 	label:SetJustifyH("CENTER")
 	label:SetText(text);
-
+	
 	local left = self:CreateTexture(nil, "BACKGROUND")
 	left:SetHeight(8)
 	left:SetPoint("LEFT", 3, 0)
-	left:SetPoint("RIGHT", label, "LEFT", -5, 0)
+	left:SetPoint("RIGHT", label, "LEFT", text ~= "" and -5 or 1, 0)
 	left:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
 	left:SetTexCoord(0.81, 0.94, 0.5, 1)
 
 	local right = self:CreateTexture(nil, "BACKGROUND")
 	right:SetHeight(8)
 	right:SetPoint("RIGHT", -3, 0)
-	right:SetPoint("LEFT", label, "RIGHT", 5, 0)
+	right:SetPoint("LEFT", label, "RIGHT", text ~= "" and 5 or -1, 0)
 	right:SetTexture(137057) -- Interface\\Tooltips\\UI-Tooltip-Border
 	right:SetTexCoord(0.81, 0.94, 0.5, 1);
 end
@@ -197,7 +197,7 @@ function KRFColorWidget_OnEnter(self)
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:SetText(WH..text);
+	GameTooltip:SetText(KRF_Globals.WH..text);
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end
@@ -222,7 +222,6 @@ function KRFSliderWidget_OnLoad (self)
 		BackdropTemplateMixin.OnBackdropLoaded(self);
 	end
 
-	local name = self:GetName();
 	local text = self:GetAttribute("text") or "";
 	text = _G[text] or text;
 
@@ -231,19 +230,18 @@ function KRFSliderWidget_OnLoad (self)
 	self.SetDisplayValue = self.SetValue;
 	self.SetValue = KRFSliderWidget_SetValue
 	self.GetCurrentValue = KRFSliderWidget_GetValue
-	_G[name.."Text"]:SetFontObject("OptionsFontSmall");
-	_G[name.."Text"]:SetText(text);
-	_G[name.."High"]:Hide();
+	self.Text:SetFontObject("OptionsFontSmall");
+	self.Text:SetText(text);
+	self.High:Hide();
 
-	self.Label = _G[name.."Low"];
+	self.Label = self.Low;
 	self.Label:ClearAllPoints();
 	self.Label:SetPoint("LEFT", self, "RIGHT", 3.5, 1);
 end
 function KRFSliderWidget_OnValueChanged(self, value)
-	local name = self:GetName();
 	local format = self:GetAttribute("format") or nil;
 	format = _G[format] or format;
-	self.Label = _G[name.."Low"];
+	self.Label =self.Low;
 	local formatRatio = self:GetAttribute("formatRatio") or 1;
 	if format ~= nil then
 		self.Label:SetFormattedText(format, value * tonumber(formatRatio));
@@ -262,7 +260,7 @@ function KRFSliderWidget_OnEnter(self)
 	tooltip = tooltip ~= text and tooltip or "";
 
 	GameTooltip:SetOwner(self, "ANCHOR_TOP");
-	GameTooltip:SetText(WH..text);
+	GameTooltip:SetText(KRF_Globals.WH..text);
 	GameTooltip:AddLine(tooltip, 1, 0.82, 0, 1);
 	GameTooltip:AppendText("");
 end

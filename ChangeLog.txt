@@ -1,3 +1,13 @@
+v10.2.705
+- Added Blizzard raid class colors option (CVar)
+- Enhancements, Code cleaning
+
+v10.2.704
+- UI enhancements
+
+v10.2.703
+- Finally found main issue: packager bug, thanks to foxlit and Tsxy
+
 v10.2.702
 - Added to Wow Add-ons list (AddOn Compartment Filter)
 - UI: Summary moved to an Info button

@@ -12,6 +12,24 @@ function KRF_SetDefaultOptions(DefaultOptions, reset)
 	end
 end
 
+StaticPopupDialogs["KRF_CONFIRM_RESET"] = {
+	showAlert = true,
+	text = CONFIRM_RESET_SETTINGS,
+	button1 = ALL_SETTINGS,
+	-- button3 = CURRENT_SETTINGS,
+	button2 = CANCEL,
+	OnAccept = function()												
+		KRF_SetDefaultOptions(KRF_DefaultOptions, true);
+		ReloadUI();
+	end,
+	-- OnAlt  = function()	end,
+	timeout = STATICPOPUP_TIMEOUT,
+	timeoutInformationalOnly = false,
+	whileDead = true,
+	hideOnEscape = true,
+	preferredIndex = 3,  -- avoid some UI taint
+};
+
 local startsWith = {
 	play = true, -- player
 	part = true, -- party
@@ -23,14 +41,14 @@ local function UnitInPartyOrRaid(frame)
 end
 
 local function KRF_UnitIsConnected(frame)
-	if _G.KRF_IsDebugFramesTimerActive then
+	if KRF_Globals.IsDebugFramesTimerActive then
 		return not frame._testUnitDisconnected;
 	end
 	return UnitIsConnected(frame.unit);
 end
 
 local function KRF_UnitIsDeadOrGhost(frame)
-	if _G.KRF_IsDebugFramesTimerActive then
+	if KRF_Globals.IsDebugFramesTimerActive then
 		return (frame._testHealthPercentage == 0 and not frame._testUnitDisconnected);
 	end
 	return UnitIsDeadOrGhost(frame.unit);
@@ -276,7 +294,7 @@ function KRF_Hook_UpdateName(frame, calledOutsideHook)
 			end
 
 			local name = frame.name;
-			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and RT8 or "";
+			local dead = (KallyeRaidFramesOptions.IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and KRF_Globals.RT8 or "";
 
 			if KallyeRaidFramesOptions.HideRealm then
 				local playerName, realm = UnitName(frame.displayedUnit);
@@ -312,7 +330,7 @@ function KRF_UpdateNameColor(frame)
 				end
 				-- colorNameBySelection: nameplates already colored, Since BfA (7)
 				if (not KRF_HAS_colorNameBySelection) then
-					-- on every refresh, not only player, it will avoid misscolorations on updates
+					-- on every refresh, it will avoid misscolorations on updates
 					local healthBar = frame.healthBar;
 					healthBar:SetStatusBarColor(c.r, c.g, c.b);
 				end
@@ -406,7 +424,7 @@ end
 ]]
 function KRF_AddMsg(msg, force)
 	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgNormal)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", YLL, msg or ""));
+		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", KRF_Globals.YLL, msg or ""));
 	end
 end
 --[[
@@ -414,7 +432,7 @@ end
 ]]
 function KRF_AddMsgWarn(msg, force)
 	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgWarning)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", CY, msg or ""));
+		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s|r", KRF_Globals.CY, msg or ""));
 	end
 end
 --[[
@@ -422,7 +440,7 @@ end
 ]]
 function KRF_AddMsgErr(msg, force)
 	if (DEFAULT_CHAT_FRAME and (force or KallyeRaidFramesOptions.ShowMsgError)) then
-		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s: %s|r", RDL, KRF_TITLE, msg or ""));
+		DEFAULT_CHAT_FRAME:AddMessage(format("%s%s: %s|r", KRF_Globals.RDL, KRF_TITLE, msg or ""));
 	end
 end
 
@@ -496,22 +514,22 @@ function KRF_RaidFrames_ResetHealth(frame, testMode)
 end
 
 function KRF_DebugFrames()
-	_G.KRF_IsDebugFramesTimerActive = not _G.KRF_IsDebugFramesTimerActive;
-	if _G.KRF_IsDebugFramesTimerActive then
+	KRF_Globals.IsDebugFramesTimerActive = not KRF_Globals.IsDebugFramesTimerActive;
+	if KRF_Globals.IsDebugFramesTimerActive then
 		KRF_AddMsgWarn(KRF_OPTION_DEBUG_ON_MESSAGE);
-		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_OFF);
-		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_OFF;
-		_G.PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
+		KRFOptionsFrame.Debug.Text:SetText(KRF_OPTION_DEBUG_OFF);
+		KRFOptionsFrame.Debug.tooltipText = KRF_OPTION_DEBUG_OFF;
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
 		KRF_LoopDebug();
 	else
 		KRF_AddMsgWarn(KRF_OPTION_DEBUG_OFF_MESSAGE);
-		KRFOptionsFrame_Debug.Text:SetText(KRF_OPTION_DEBUG_ON);
-		KRFOptionsFrame_Debug.tooltipText = KRF_OPTION_DEBUG_ON;
-		_G.PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE, "Master")
+		KRFOptionsFrame.Debug.Text:SetText(KRF_OPTION_DEBUG_ON);
+		KRFOptionsFrame.Debug.tooltipText = KRF_OPTION_DEBUG_ON;
+		PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE, "Master")
 	end
 end
 function KRF_LoopDebug()
-	if _G.KRF_IsDebugFramesTimerActive then
+	if KRF_Globals.IsDebugFramesTimerActive then
 		KRF_ApplyFuncToRaidFrames(KRF_RaidFrames_ResetHealth, true);
 		C_Timer.After(.5, KRF_LoopDebug);
 	else

@@ -77,40 +77,40 @@ function KRF_OnEvent(self, event, ...)
 		KRF_SetDefaultOptions(KRF_DefaultOptions);
 
 		-- ! Hooks
-		_G.hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
-		_G.hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateHealth);
+		hooksecurefunc("CompactUnitFrame_UpdateName", KRF_Hook_UpdateName);
+		hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", KRF_Hook_UpdateRoleIcon);
+		hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateHealth);
 		if (CompactUnitFrame_UpdateHealPrediction) then
 			-- Since DragonFlight (10)
-			_G.hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
+			hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", KRF_Hook_UpdateHealth);
 		else
 			-- Classic
-			_G.hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
+			hooksecurefunc("CompactUnitFrame_UpdateHealth", KRF_Hook_UpdateHealth);
 		end
 		
 		if KallyeRaidFramesOptions.AlphaNotInRange ~= 55 or KallyeRaidFramesOptions.AlphaNotInCombat ~= 100 then
 			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
-			_G.hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
-			_G.hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateInRange);
+			hooksecurefunc("CompactUnitFrame_UpdateInRange", KRF_Hook_UpdateInRange);
+			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", KRF_Hook_UpdateInRange);
 		end
 		if KallyeRaidFramesOptions.BuffsScale ~= 1 or KallyeRaidFramesOptions.DebuffsScale ~= 1 then
-			_G.hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
+			hooksecurefunc("CompactUnitFrame_SetMaxBuffs", KRF_Hook_ManageBuffs);
 		end
 
 		-- ! SoloRaid Frames
 		if (KallyeRaidFramesOptions.SoloRaidFrame) then
 			if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 				-- Edit Mode - Since DragonFlight (10)
-				_G.hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
+				hooksecurefunc(CompactPartyFrame, "UpdateVisibility", KRF_Hook_CompactPartyFrame_UpdateVisibility);
 			else
 				-- Classic
-				_G.CompactRaidFrameManager:Show()
-				_G.CompactRaidFrameManager.Hide = function() end
-				_G.CompactRaidFrameContainer:Show()
-				_G.CompactRaidFrameContainer.Hide = function() end
+				CompactRaidFrameManager:Show()
+				CompactRaidFrameManager.Hide = function() end
+				CompactRaidFrameContainer:Show()
+				CompactRaidFrameContainer.Hide = function() end
 
-				_G.GetDisplayedAllyFrames = KRF_SoloRaid_GetDisplayedAllyFrames;
-				_G.CompactRaidFrameContainer_OnEvent = KRF_SoloRaid_CompactRaidFrameContainer_OnEvent;
+				GetDisplayedAllyFrames = KRF_SoloRaid_GetDisplayedAllyFrames;
+				CompactRaidFrameContainer_OnEvent = KRF_SoloRaid_CompactRaidFrameContainer_OnEvent;
 			end
 		end
 
@@ -140,7 +140,7 @@ function SLASH_KRF_command(msgIn)
 		KRF_ShowEditMode("PartyFrame");
 	elseif msgIn == "debug" then
 		KallyeRaidFramesOptions.DebugMode = not KallyeRaidFramesOptions.DebugMode;
-		KRF_AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and GR.."true" or RD.."false"), true);
+		KRF_AddMsgWarn("Debug mode: "..(KallyeRaidFramesOptions.DebugMode and KRF_Globals.GR.."true" or KRF_Globals.RD.."false"), true);
 		SLASH_KRF_command();
 	else
 		if Settings then
@@ -166,13 +166,12 @@ function OptionsWReloadValues()
 end
 
 function SaveKRFOptions()
-	local FramePrefix = "KRFOptionsFrame_";
 	local PreviousOptionsWReload = OptionsWReloadValues();
 	-- Auto detect options controls and save them
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (_G[FramePrefix..k] ~= nil) then
-				local control = _G[FramePrefix..k];
+			if (KRFOptionsFrame[k] ~= nil) then
+				local control = KRFOptionsFrame[k];
 				local previousValue = KallyeRaidFramesOptions[k] or v;
 				local value = nil;
 
@@ -219,15 +218,14 @@ function RefreshKRFOptions()
 		KRFOptionsFrame.HandleVis = true;
 	end
 	-- Auto detect options controls and load them
-	local FramePrefix = "KRFOptionsFrame_";
 	foreach(KRF_DefaultOptions,
 		function (k, v)
-			if (_G[FramePrefix..k] ~= nil) then
-				local control = _G[FramePrefix..k];
+			if (KRFOptionsFrame[k] ~= nil) then
+				local control = KRFOptionsFrame[k];
 				local value = KallyeRaidFramesOptions[k];
 				if value == nil then
 					value = v;
-					KRF_AddMsgErr(format("Option not found ("..YLD.."%s|r), loading default value...", k));
+					KRF_AddMsgErr(format("Option not found ("..KRF_Globals.YLD.."%s|r), loading default value...", k));
 				end;
 
 				if control.type == "color" then
@@ -247,31 +245,32 @@ function ManageKRFOptionsVisibility()
 		RevertBarOption,
 		NameplatesOption
 			= 
-			KRFOptionsFrame_UpdateHealthColor:GetChecked(),
-			KRFOptionsFrame_RevertBar:GetChecked(),
-			KRFOptionsFrame_FriendsClassColor_Nameplates:GetChecked();
+			KRFOptionsFrame.UpdateHealthColor:GetChecked(),
+			KRFOptionsFrame.RevertBar:GetChecked(),
+			KRFOptionsFrame.FriendsClassColor_Nameplates:GetChecked();
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		-- Edit Mode - Since DragonFlight (10)		
-		KRFOptionsFrame_EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
+		KRFOptionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
 	else
-		KRF_OptionsEnable(KRFOptionsFrame_EditMode, false, .2);
+		KRF_OptionsEnable(KRFOptionsFrame.EditMode, false, .2);
+		KRF_OptionsEnable(KRFOptionsFrame.BlizzFriendsClassColor, false, .2);
 	end
 
-	KRF_OptionsEnable(KRFOptionsFrame_MaxBuffs, false, .2);
+	KRF_OptionsEnable(KRFOptionsFrame.MaxBuffs, false, .2);
 
-	KRF_OptionsEnable(KRFOptionsFrame_RevertBar, HealthOption)
-	KRF_OptionsEnable(KRFOptionsFrame_LimitLow , HealthOption);
-	KRF_OptionsEnable(KRFOptionsFrame_LimitWarn, HealthOption);
-	KRF_OptionsEnable(KRFOptionsFrame_LimitOk  , HealthOption);
+	KRF_OptionsEnable(KRFOptionsFrame.RevertBar, HealthOption)
+	KRF_OptionsEnable(KRFOptionsFrame.LimitLow , HealthOption);
+	KRF_OptionsEnable(KRFOptionsFrame.LimitWarn, HealthOption);
+	KRF_OptionsEnable(KRFOptionsFrame.LimitOk  , HealthOption);
 
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_BGColorLow , not RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_BGColorWarn, not RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_BGColorOK  , not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorLow , not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorWarn, not RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.BGColorOK  , not RevertBarOption, HealthOption);
 
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorLow , RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorWarn, RevertBarOption, HealthOption);
-	KRF_OptionsSetShownAndEnable(KRFOptionsFrame_RevertColorOK  , RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorLow , RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
+	KRF_OptionsSetShownAndEnable(KRFOptionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
 
-	KRF_OptionsEnable(KRFOptionsFrame_EnemiesClassColor_Nameplates, NameplatesOption);
+	KRF_OptionsEnable(KRFOptionsFrame.EnemiesClassColor_Nameplates, NameplatesOption);
 end

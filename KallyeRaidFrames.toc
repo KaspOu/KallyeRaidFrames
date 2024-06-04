@@ -3,7 +3,7 @@
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Raid toujours visible
-## Version: 10.2.702
+## Version: 10.2.705
 ## Author: Kallye of Elune (EU)
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
@@ -15,10 +15,9 @@
 ## X-Website: https://bitbucket.org/KaspOu/kallyeraidframes/
 ## X-Curse-Project-ID: 410566
 
-KallyeRaidFrames.globals.lua
-localization.en.lua
-localization.fr.lua
-KRFWidgets.xml
-KallyeRaidFramesAPI.lua
-KallyeRaidFrames.lua
-KallyeRaidFrames.xml
+Core\KallyeRaidFrames.globals.lua
+Core\locales.xml
+Core\KRFWidgets.xml
+Core\KallyeRaidFramesAPI.lua
+Core\KallyeRaidFrames.lua
+Core\KallyeRaidFrames.xml
