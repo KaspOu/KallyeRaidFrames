@@ -113,7 +113,16 @@
         "UnitSelectionColor",
         "UnitPlayerControlled",
         "CreateColor",
-        "NUM_RAID_ICONS"
+        "NUM_RAID_ICONS",
+        "EditModeSettingDisplayInfoManager",
+        "EditModePresetLayoutManager",
+        "AddonList",
+        "DropDownList1",
+        "MainMenuBar",
+        "USE_RAID_STYLE_PARTY_FRAMES",
+        "ACTIVATE",
+        "DISABLE",
+        "ENABLE"
     ],
     "cSpell.words": [
         "prepatch"
