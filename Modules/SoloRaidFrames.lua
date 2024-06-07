@@ -108,7 +108,7 @@ end
 -- Will be used in standalone addon
 local function getInfo(self)
     if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
-        -- Edit Mode - Since DragonFlight (10)
+        --? Edit Mode - Since DragonFlight (10)
         if l.OPTION_RAIDSTYLE_ACTION then
             ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_RAIDSTYLE_ACTION, true);
         end
@@ -121,21 +121,22 @@ end
 local function onSaveOptions(self, options)
     if (options.SoloRaidFrame) then
         if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
-			-- Edit Mode - Since DragonFlight (10)
+			--? Edit Mode - Since DragonFlight (10)
             if l.OPTION_RAIDSTYLE_WARNING then
                 ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_RAIDSTYLE_WARNING, true);
             end
             ns.SetUseRaidStylePartyFrames(1)
         end
+        -- ? Classic > SRF works in every case (doesn't need to set useCompactPartyFrames cvar)
     end
 end
 local function onInit(self, options)
     if (options.SoloRaidFrame) then
         if (EditModeManagerFrame.UseRaidStylePartyFrames) then
-            -- Edit Mode - Since DragonFlight (10)
+            --? Edit Mode - Since DragonFlight (10)
             hooksecurefunc(CompactPartyFrame, "UpdateVisibility", Hook_CompactPartyFrame_UpdateVisibility);
         else
-            -- Classic
+            --? Classic
             CompactRaidFrameManager:Show()
             CompactRaidFrameManager.Hide = function() end
             CompactRaidFrameContainer:Show()

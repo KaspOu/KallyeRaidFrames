@@ -142,7 +142,7 @@ l.OPTION_SHOWMSGWARNING = l.GYL.."Afficher les alertes";
 l.OPTION_SHOWMSGERR = l.GYL.."Afficher les erreurs";
 l.OPTION_WHATSNEW = "Nouveaut\195\169s";
 
--- Edit Mode - Since DragonFlight (10)
+--? Edit Mode - Since DragonFlight (10)
 if (EditModeManagerFrame.UseRaidStylePartyFrames) then
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s l'option %s|r des %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_DEBUG_ON_MESSAGE = "Test des cadres de raid activ\195\169 (testable en "..HUD_EDIT_MODE_MENU..")\n"
