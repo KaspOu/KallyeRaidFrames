@@ -19,6 +19,8 @@
 
 Core\KallyeRaidFrames.globals.lua
 Core\locales.xml
+Libs\LibEditModeOverride-1.0\LibStub\LibStub.lua
+Libs\LibEditModeOverride-1.0\LibEditModeOverride.lua
 Shared\WidgetsKRF.xml
 Core\KallyeRaidFramesAPI.lua
 Modules\modules.xml
