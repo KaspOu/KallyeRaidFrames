@@ -292,6 +292,11 @@
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaNotInCombat" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
+								<Scripts>
+									<OnClick>
+										K_SHARED_UI.RefreshOptions()
+									</OnClick>
+								</Scripts>
 							</CheckButton>
 							<Button parentKey="Debug" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
