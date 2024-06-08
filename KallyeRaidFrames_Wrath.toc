@@ -12,8 +12,10 @@
 
 ## X-Category: Raid Frames, Interface Enhancements
 ## X-License: MIT
-## X-Website: https://bitbucket.org/KaspOu/kallyeraidframes/
+## X-Website: https://github.com/KaspOu/KallyeRaidFrames/
 ## X-Curse-Project-ID: 410566
+## X-WoWI-ID: 26755
+## X-Wago-ID: bGoMQr60
 
 Core\KallyeRaidFrames.globals.lua
 Core\locales.xml
