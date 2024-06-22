@@ -1,5 +1,7 @@
 v10.2.709
 - Modules can be disabled (Buffs & Debuffs, Nameplates)
+- Option to hide disabled modules
+- The War Within PTR: options fixed
 
 v10.2.708
 - New options to Units Buffs & Debuffs

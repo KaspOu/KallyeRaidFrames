@@ -280,7 +280,7 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	self.name = ns.TITLE;
 	self.okay = saveOptions;
 	self.refresh = refreshOptions;
-	InterfaceOptions_AddCategory(self);
+	ns.InterfaceOptions_AddCategory(self);
 	if (ns.scrollFrame ~= nil) then
 		local BACKDROP_TOOLTIP = {
 			bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",

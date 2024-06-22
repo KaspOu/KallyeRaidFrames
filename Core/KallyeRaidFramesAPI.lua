@@ -1,6 +1,28 @@
 local _, ns = ...
 local l = ns.I18N;
 
+function ns.InterfaceOptions_AddCategory(frame, addOn, position)
+	if not Settings or not Settings.RegisterCanvasLayoutSubcategory then
+		return InterfaceOptions_AddCategory(frame, addOn, position)
+	end
+    -- cancel is no longer a default option. May add menu extension for this.
+    frame.OnCommit = frame.okay;
+    frame.OnDefault = frame.default;
+    frame.OnRefresh = frame.refresh;
+
+    if frame.parent then -- for subcategories
+        local category = Settings.GetCategory(frame.parent);
+        local subcategory, layout = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
+        subcategory.ID = frame.name;
+        return subcategory, category;
+    else
+        local category, layout = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
+        category.ID = frame.name;
+        Settings.RegisterAddOnCategory(category);
+        return category;
+    end
+end
+
 function ns.RemoveOldOptions(options)
 	-- TODO: REMOVE Since 10.206 OLD KEYS
 	if  options.FriendsClassColor_Nameplates then
