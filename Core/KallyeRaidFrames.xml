@@ -328,7 +328,23 @@
 									</OnClick>
 								</Scripts>
 							</CheckButton>
-							
+							<Button parentKey="EditModeBtn" inherits="UIPanelButtonTemplate" hidden="true">
+								<Size x="300" y="20" />
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										self.Text:SetText(KRFUI.l.OPTION_EDITMODE_BTN_PARTY);
+										self.tooltipText = KRFUI.l.OPTION_EDITMODE_BTN_PARTY_TOOLTIP;
+									</OnLoad>
+									<OnClick>
+										KRFUI.ShowEditMode("PartyFrame");
+										PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
+									</OnClick>
+								</Scripts>
+							</Button>
+
 							<Frame parentKey="Options1" inherits="KRFOptionsUnitDebuffs">
 								<Anchors>
 									<Anchor point="TOP" relativeKey="$parent.EditMode" relativePoint="BOTTOM"><Offset x="0" y="-10" /></Anchor>
