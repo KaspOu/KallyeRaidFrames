@@ -8,7 +8,6 @@
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
 ## IconTexture: Interface\AddOns\KallyeRaidFrames\Logo32
-## AddonCompartmentFunc: SLASH_KRF_command
 
 ## X-Category: Raid Frames, Interface Enhancements
 ## X-License: MIT
