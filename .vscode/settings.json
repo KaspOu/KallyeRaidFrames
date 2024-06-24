@@ -122,7 +122,8 @@
         "USE_RAID_STYLE_PARTY_FRAMES",
         "ACTIVATE",
         "DISABLE",
-        "ENABLE"
+        "ENABLE",
+        "AddonCompartmentFrame"
     ],
     "cSpell.words": [
         "prepatch"

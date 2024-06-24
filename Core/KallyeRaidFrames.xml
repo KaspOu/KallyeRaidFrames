@@ -361,7 +361,7 @@
 									<Anchor point="TOPLEFT" relativeKey="$parent.Options2" relativePoint="BOTTOMLEFT"><Offset x="0" y="0" /></Anchor>
 								</Anchors>
 							</Frame>
-							
+
 							<Button parentKey="WhatsNew" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
 								<Anchors>
@@ -451,6 +451,17 @@
 										K_SHARED_UI.RefreshOptions()
 									</OnClick>
 								</Scripts>
+							</CheckButton>
+							<CheckButton parentKey="AddonCompartmentFilter" inherits="KRFUI_CheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="OPTION_COMPARTMENT_FILTER" />
+									<Attribute name="tooltip" value="OPTION_COMPARTMENT_FILTER_TOOLTIP" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.HideDisabledModules" relativePoint="TOPLEFT">
+										<Offset x="340" y="0"/>
+									</Anchor>
+								</Anchors>
 							</CheckButton>
 						</Frames>
 					</Frame>
