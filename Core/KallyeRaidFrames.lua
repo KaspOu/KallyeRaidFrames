@@ -347,7 +347,7 @@ local function ManageOptionsVisibility()
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
 
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.AddonCompartmentFilter,	true, not not AddonCompartmentFrame, .2);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.AddonCompartmentFilter,	true, not not AddonCompartmentFrame, .1);
 end
 
 K_SHARED_UI.AddRefreshOptions(ManageOptionsVisibility)
