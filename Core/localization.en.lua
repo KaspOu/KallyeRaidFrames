@@ -10,6 +10,7 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = " What's new:\n"
+    .."- Target icons (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) on raid frames\n"
     .."- Buffs & debuffs can be aligned vertically.\n"
     .."- Nameplate PvP icons |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t added.\n"
 
@@ -23,7 +24,8 @@ l.DESC          = "Enhance raid frames and nameplates on friendly units\n\n"
 .." - Raid always visible\n\n"
 .."\n"
 .."Enhance Buffs / debuffs management (size, max displayed)\n\n"
-.."Colorize Nameplates (class or choosen color)\n\n"
+.."Colorize Nameplates, with PvP icons |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t\n\n"
+.."Shows target icons (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) on raid frames\n\n"
 l.OPTIONS_TITLE = format("%s - Options", l.VERS_TITLE);
 
 -- Messages
@@ -113,6 +115,17 @@ l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of enemy nameplates (ou
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Enemy PvP icons";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on enemy names.";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Faction icon |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
+
+l.OPTION_ACTIVATE_MODULE_RAIDICONS = l.OPTION_ACTIVATE_MODULE .. "\n"
+  ..l.WH.."Shows target icons (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) on raid frames"
+l.OPTION_RAIDICONS_HEADER = "Raid icons |TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t";
+l.OPTION_RAIDICONS_ANCHOR = "Icon alignement";
+l.OPTION_RAIDICONS_ANCHOR_TOOLTIP = "Position of the target icon in the raid frame";
+l.OPTION_CENTER = "Center"
+l.OPTION_TOPLEFT = "Top Left";
+l.OPTION_TOPRIGHT = "Top Right";
+l.OPTION_BOTTOMLEFT = "Bottom Left";
+l.OPTION_BOTTOMRIGHT = "Bottom Right";
 
 l.OPTION_RESET_OPTIONS = "Reset options";
 l.OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..l.YL.."/reload|r )";
