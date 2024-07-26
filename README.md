@@ -17,17 +17,19 @@ All features are optional.
 - Roles icons
    - Move role icons on top left
    - Hides DPS role icons
-- Buffs/Debuffs
-   - Larger Debuffs
-   - Smaller buffs
+- Buffs / Debuffs Size
+- Buffs / Debuffs Max display limit & Multiline
+- Buffs & Debuffs alignment
+- Target icons (💀❌🔴...) on raid frames
 
 3._**Changes to both CompactRaidFrames and Nameplates**
 - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
-- Change player nameplate (on the head) color according to your preference (class color, custom color)
+- Change players nameplate (on the head) color according to your preference (class color, custom color)
+- Pvp Icons
 
 
 ## Slash Commands
-**/krf** - shows options  
+**/krf** - shows options
 **/krf test** - toggle test mode
 
 

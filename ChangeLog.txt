@@ -1,3 +1,6 @@
+v11.0.001
+- The War Within Prepatch
+
 v10.2.712
 - Raid Icons module added (Target icon on raid frames)
 
