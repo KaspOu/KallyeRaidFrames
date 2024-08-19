@@ -6,7 +6,7 @@ if ns.CONFLICT then return; end
 
 -- Fallback if not set in globals
 if ns.HAS_colorNameBySelection == nil then
-    -- colorNameBySelection, Since BfA (7)
+    --? colorNameBySelection, Since BfA (7)
     ns.HAS_colorNameBySelection = ns.IS_RETAIL or (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 end
 

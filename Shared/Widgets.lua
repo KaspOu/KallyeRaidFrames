@@ -271,7 +271,7 @@ local function SliderWidget_GetValue(self)
 end
 function K_SHARED_UI.SliderWidget_OnLoad (self)
 	self.type = CONTROLTYPE_SLIDER;
-	-- Since Shadowlands (9)
+	--? Since Shadowlands (9)
 	if (BackdropTemplateMixin) then
 		BackdropTemplateMixin.OnBackdropLoaded(self);
 	end
