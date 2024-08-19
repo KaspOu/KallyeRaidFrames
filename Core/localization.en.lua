@@ -161,7 +161,7 @@ l.OPTION_COMPARTMENT_FILTER = "Display in the Compartment Filter";
 l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "In addons list on top right";
 l.OPTION_WHATSNEW = "What's new";
 
--- Edit Mode - Since DragonFlight (10)
+--? Edit Mode - Since DragonFlight (10)
 if (EditModeManagerFrame.UseRaidStylePartyFrames) then
   -- Edit mode takes a while...
   l.UpdateLocales = function ()
