@@ -155,6 +155,17 @@ function ns.OptionsSetShownAndEnable(FrameObject, isShowned, isEnabled, disabled
 	end
 end
 
+function ns.OptionsSiblingsEnable(options, sibling, isEnabled, alpha)
+    local parent = sibling:GetParent()
+    foreach(options,
+        function (optionName, _)
+            if parent[optionName] and parent[optionName] ~= sibling then
+                ns.OptionsEnable(parent[optionName], isEnabled,  alpha)
+            end
+        end
+    );
+end
+
 function ns.IsModuleEnabled(activeCheckbox, headingLabel, option, resize)
     if not activeCheckbox or not headingLabel then
         return true

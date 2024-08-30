@@ -10,30 +10,30 @@ local function ManageNameplatesOptions()
     local hideDisabledModules = ns.FindControl("HideDisabledModules")
     local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveNameplatesColor, hideDisabledModules and hideDisabledModules:GetChecked())
 
+    ns.OptionsSiblingsEnable(_G[ns.OPTIONS_NAME], activeCheckbox, isEnabled, .2)
+
+    -- Dynamic colorWidget display
     local frameData = {
         ["FriendsNameplates_Txt_UseColor"] = { link = "FriendsNameplates_Txt_Color", classEnabled = true },
         ["FriendsNameplates_Bar_UseColor"] = { link = "FriendsNameplates_Bar_Color", classEnabled = not ns.HAS_colorNameBySelection },
         ["EnemiesNameplates_Txt_UseColor"] = { link = "EnemiesNameplates_Txt_Color", classEnabled = true },
         ["EnemiesNameplates_Bar_UseColor"] = { link = "EnemiesNameplates_Bar_Color", classEnabled = not ns.HAS_colorNameBySelection }
     }
-
     for frameName, data in pairs(frameData) do
         local dropDownWidget = ns.FindControl(frameName)
         local colorWidget = ns.FindControl(data.link)
-
         if not data.classEnabled then
             dropDownWidget:SetAttribute("disabled2", "true")
         end
-
-        ns.OptionsEnable(dropDownWidget, isEnabled, .2)
         ns.OptionsSetShownAndEnable(colorWidget, isEnabled and dropDownWidget:GetValue() == "2",  isEnabled)
     end
 
-    local frameData = {
+    -- Add icons on texts (pvpIcons[value])
+    frameData = {
         ["FriendsNameplates_PvpIcon"] = "",
         ["EnemiesNameplates_PvpIcon"] = "",
     }
-    for frameName, data in pairs(frameData) do        
+    for frameName, _ in pairs(frameData) do        
         local dropDownWidget = ns.FindControl(frameName)
         if not dropDownWidget._iconsSet and ns.pvpIcons then
             dropDownWidget._iconsSet = true
@@ -49,7 +49,7 @@ local function ManageNameplatesOptions()
                 i=i+1;
             end
         end
-        ns.OptionsEnable(dropDownWidget, isEnabled, .2)
     end
+    ns.OptionsSiblingsEnable(_G[ns.OPTIONS_NAME], activeCheckbox, isEnabled, .2)
 end
 K_SHARED_UI.AddRefreshOptions(ManageNameplatesOptions)

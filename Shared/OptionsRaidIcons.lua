@@ -10,7 +10,7 @@ local function ManageRaidIconsOptions()
     local hideDisabledModules = ns.FindControl("HideDisabledModules")
     local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveRaidIcons, hideDisabledModules and hideDisabledModules:GetChecked())
 
-    ns.OptionsEnable(ns.FindControl("RaidsIcons_Anchor"), isEnabled,  .2)
+    ns.OptionsSiblingsEnable(_G[ns.OPTIONS_NAME], activeCheckbox, isEnabled, .2)
 
 end
 K_SHARED_UI.AddRefreshOptions(ManageRaidIconsOptions)

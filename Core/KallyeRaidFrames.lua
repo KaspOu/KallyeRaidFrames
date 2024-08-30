@@ -56,7 +56,10 @@ local defaultOptions = {
 	EnemiesNameplates_PvpIcon = "faction",
 
 	ActiveRaidIcons = true,
-	RaidsIcons_Anchor = "CENTER",
+	RaidsIcons_Anchor = "TOPRIGHT",
+	RaidsIcons_Size = 12,
+	RaidsIcons_PosX = -4,
+	RaidsIcons_PosY = -4,
 
 	ShowMsgNormal = true,
 	ShowMsgWarning = true,
@@ -195,7 +198,7 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxBuffs)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsPerLine)
-		..tostring(_G[ns.OPTIONS_NAME].BuffsVertical)		
+		..tostring(_G[ns.OPTIONS_NAME].BuffsVertical)	
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)

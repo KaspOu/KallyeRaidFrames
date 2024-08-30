@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsRaidIcons.lua" />
 	<Frame name="KRFOptionsRaidIcons" virtual="true">
-		<Size x="550" y="100" />
+		<Size x="550" y="180" />
 		<Frames>
 			<CheckButton parentKey="LabelRaidIcons" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -32,7 +32,6 @@
 			</CheckButton>
 			
 			
-			<!-- Friends Names -->
 			<Frame parentKey="RaidsIcons_Anchor" name="$parent_RaidsIcons_Anchor" inherits="KRFUI_DropDownWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_RAIDICONS_ANCHOR" />
@@ -60,6 +59,40 @@
 					</OnEvent>
 				</Scripts>
 			</Frame>
+			<Slider parentKey="RaidsIcons_Size" inherits="KRFUI_SliderWidget" minValue="6" maxValue="20" valueStep="1" stepsPerPage="2" obeyStepOnDrag="false">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_RAIDICONS_SIZE" />
+					<Attribute name="tooltip" value="OPTION_RAIDICONS_SIZE_TOOLTIP" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.RaidsIcons_Anchor" relativePoint="TOPLEFT">
+						<Offset x="270" y="0"/>
+					</Anchor>
+				</Anchors>
+			</Slider>
+			<Slider parentKey="RaidsIcons_PosX" inherits="KRFUI_SliderWidget" minValue="-20" maxValue="20" valueStep="2" stepsPerPage="4" obeyStepOnDrag="false">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_RAIDICONS_RELATIVE_X" />
+					<Attribute name="tooltip" value="OPTION_RAIDICONS_RELATIVE_X_TOOLTIP" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.RaidsIcons_Anchor" relativePoint="BOTTOM"><Offset x="0" y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
+				</Anchors>
+			</Slider>
+			<Slider parentKey="RaidsIcons_PosY" inherits="KRFUI_SliderWidget" minValue="-20" maxValue="20" valueStep="2" stepsPerPage="4" obeyStepOnDrag="false">
+				<Size x="200" y="15" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_RAIDICONS_RELATIVE_Y" />
+					<Attribute name="tooltip" value="OPTION_RAIDICONS_RELATIVE_Y_TOOLTIP" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.RaidsIcons_PosX" relativePoint="BOTTOM"><Offset x="0" y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
+				</Anchors>
+			</Slider>
 		</Frames>
 	</Frame>
 </Ui>

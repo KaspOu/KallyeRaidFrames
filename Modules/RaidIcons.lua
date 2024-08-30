@@ -34,15 +34,20 @@ local function InitRaidIconsTextures(f, size)
 		raidIcons[i] = { texture = iconTexture, visible = false }
 	end
 end
+local function ResizeRaidIconsTextures(size)
+	for i = 1, NUM_RAID_ICONS do
+		raidIcons[i].texture:SetSize(size, size)
+	end
+end
 local function GetPositions()
-	local anchor, left, right =
+	local anchor, left, top =
 		_G[ns.OPTIONS_NAME].RaidsIcons_Anchor or nil,
-		tonumber(_G[ns.OPTIONS_NAME].RaidsIcons_Left) or 0,
-		tonumber(_G[ns.OPTIONS_NAME].RaidsIcons_Right) or 0
+		tonumber(_G[ns.OPTIONS_NAME].RaidsIcons_PosX) or 0,
+		tonumber(_G[ns.OPTIONS_NAME].RaidsIcons_PosY) or 0
 	if not AnchorsEnum[anchor] then
 		anchor = AnchorsEnum.CENTER
 	end
-	return anchor, left, right
+	return anchor, left, top
 end
 local function GetUnitFrame(type, group, member)
 	if type == "raid" then
@@ -57,7 +62,7 @@ local function SetRaidIcons(dontResetPositions)
 	foreach (raidIcons,
 		function (_, raidIcon)
 			raidIcon.visible = false
-			raidIcon._previous = not dontResetPositions and raidIcon._previous or nil
+			raidIcon._previous = dontResetPositions and raidIcon._previous or nil
 		end
 	)
 
@@ -92,8 +97,8 @@ local function SetRaidIcons(dontResetPositions)
 				if raidIcon._previous ~= raidIcon.frame then
 					raidIcon._previous = raidIcon.frame
 					raidIcon.texture:ClearAllPoints();
-					local anchor, left, right = GetPositions()
-					raidIcon.texture:SetPoint(anchor, raidIcon.frame, anchor, left, right);
+					local anchor, left, top = GetPositions()
+					raidIcon.texture:SetPoint(anchor, raidIcon.frame, anchor, left, top);
 					raidIcon.texture:Show();
 				end
 			elseif raidIcon.frame ~= nil then
@@ -117,15 +122,20 @@ local function OnEvent(self, event, ...)
 	end
 end
 local function onSaveOptions(self, options)
-    if not ns._RaidIconsHooked and isEnabled(options) then
-        ns._RaidIconsHooked = true
-		local f = CreateFrame("Frame", nil, UIParent);
-		InitRaidIconsTextures(f, DEFAULT_RAIDICON_SIZE)
-		f:RegisterEvent("RAID_TARGET_UPDATE");
-		f:RegisterEvent("GROUP_ROSTER_UPDATE");
-		f:RegisterEvent("PLAYER_LOGIN");
-		f:SetScript("OnEvent", OnEvent);
-    end
+	if isEnabled(options) then
+		if not ns._RaidIconsHooked then
+			ns._RaidIconsHooked = true
+			local f = CreateFrame("Frame", nil, UIParent);
+			InitRaidIconsTextures(f, _G[ns.OPTIONS_NAME].RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
+			f:RegisterEvent("RAID_TARGET_UPDATE");
+			f:RegisterEvent("GROUP_ROSTER_UPDATE");
+			f:RegisterEvent("PLAYER_LOGIN");
+			f:SetScript("OnEvent", OnEvent);
+		else
+			ResizeRaidIconsTextures(_G[ns.OPTIONS_NAME].RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
+			SetRaidIcons()
+		end
+	end
 end
 
 local function onInit(self, options)
