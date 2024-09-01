@@ -10,9 +10,9 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Raid icons dynamic preview
 - Display players level on nameplates
 - Working with Addon Compartment
-- SoloRaid autoactivates Raid Style Party frames
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
