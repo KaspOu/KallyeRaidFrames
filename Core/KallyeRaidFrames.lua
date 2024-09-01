@@ -285,6 +285,7 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	self.name = ns.TITLE;
 	self.okay = saveOptions;
 	self.refresh = refreshOptions;
+	-- self.cancel = K_SHARED_UI.RefreshOptions; -- disabled
 	ns.InterfaceOptions_AddCategory(self);
 	if (ns.scrollFrame ~= nil) then
 		local BACKDROP_TOOLTIP = {
