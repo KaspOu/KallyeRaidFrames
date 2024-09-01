@@ -12,9 +12,9 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
+- Icônes de raid : prévisualisation en direct
 - Affichage du niveau des joueurs
 - Fonctionne avec l'Addon Compartment
-- Solo Raid: utilise automatiquement l'interface de type raid
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;

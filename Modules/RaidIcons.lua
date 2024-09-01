@@ -39,11 +39,11 @@ local function ResizeRaidIconsTextures(size)
 		raidIcons[i].texture:SetSize(size, size)
 	end
 end
-local function GetPositions()
+local function GetPositions(options)
 	local anchor, left, top =
-		_G[ns.OPTIONS_NAME].RaidsIcons_Anchor or nil,
-		tonumber(_G[ns.OPTIONS_NAME].RaidsIcons_PosX) or 0,
-		tonumber(_G[ns.OPTIONS_NAME].RaidsIcons_PosY) or 0
+		options.RaidsIcons_Anchor or nil,
+		tonumber(options.RaidsIcons_PosX) or 0,
+		tonumber(options.RaidsIcons_PosY) or 0
 	if not AnchorsEnum[anchor] then
 		anchor = AnchorsEnum.CENTER
 	end
@@ -58,7 +58,8 @@ local function GetUnitFrame(type, group, member)
 		return _G["CompactRaidGroup"..group.."Member"..member]
 	end
 end
-local function SetRaidIcons(dontResetPositions)
+local function SetRaidIcons(dontResetPositions, overrideOptions)
+	local options = overrideOptions or _G[ns.OPTIONS_NAME];
 	foreach (raidIcons,
 		function (_, raidIcon)
 			raidIcon.visible = false
@@ -97,7 +98,7 @@ local function SetRaidIcons(dontResetPositions)
 				if raidIcon._previous ~= raidIcon.frame then
 					raidIcon._previous = raidIcon.frame
 					raidIcon.texture:ClearAllPoints();
-					local anchor, left, top = GetPositions()
+					local anchor, left, top = GetPositions(options)
 					raidIcon.texture:SetPoint(anchor, raidIcon.frame, anchor, left, top);
 					raidIcon.texture:Show();
 				end
@@ -109,6 +110,7 @@ local function SetRaidIcons(dontResetPositions)
 		end
 	)
 end
+
 
 local function OnEvent(self, event, ...)
 	if (event == "PLAYER_LOGIN") then
@@ -126,13 +128,23 @@ local function onSaveOptions(self, options)
 		if not ns._RaidIconsHooked then
 			ns._RaidIconsHooked = true
 			local f = CreateFrame("Frame", nil, UIParent);
-			InitRaidIconsTextures(f, _G[ns.OPTIONS_NAME].RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
+			InitRaidIconsTextures(f, options.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
 			f:RegisterEvent("RAID_TARGET_UPDATE");
 			f:RegisterEvent("GROUP_ROSTER_UPDATE");
 			f:RegisterEvent("PLAYER_LOGIN");
 			f:SetScript("OnEvent", OnEvent);
+
+			-- Direct preview options
+			K_SHARED_UI.AddRefreshOptions(
+				function(previewOptions)
+					if (previewOptions) then
+						ResizeRaidIconsTextures(previewOptions.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
+						SetRaidIcons(false, previewOptions);
+					end
+				end
+			)
 		else
-			ResizeRaidIconsTextures(_G[ns.OPTIONS_NAME].RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
+			ResizeRaidIconsTextures(options.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
 			SetRaidIcons()
 		end
 	end
