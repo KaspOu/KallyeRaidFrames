@@ -3,7 +3,7 @@
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid. Buffs / debuffs size, max limit...
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Raid toujours visible. Buffs et debuffs: taille, limite, ...
-## Version: 11.0.202
+## Version: 11.0.203
 ## Author: Kallye of Elune (EU)
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
@@ -19,6 +19,8 @@
 
 Core\KallyeRaidFrames.globals.lua
 Core\locales.xml
+Libs\LibEditModeOverride-1.0\LibStub\LibStub.lua
+Libs\LibEditModeOverride-1.0\LibEditModeOverride.lua
 Shared\WidgetsKRF.xml
 Core\KallyeRaidFramesAPI.lua
 Modules\modules.xml

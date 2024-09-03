@@ -10,9 +10,9 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = " What's new:\n"
+    .."- SoloRaid autoactivates Raid Style Party frames\n"
     .."- Target icons (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) on raid frames\n"
-    .."- Buffs & debuffs can be aligned vertically.\n"
-    .."- Nameplate PvP icons |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t added.\n"
+    .."- Buffs & debuffs can be aligned vertically\n"
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -62,11 +62,10 @@ l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
 l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
 l.OPTION_SOLORAID = l.CY.."Display raid frames while solo "..required;
-l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames";
+l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames,\nwill active "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES
 
-l.OPTION_EDITMODE_PARTY = "#";
-l.OPTION_EDITMODE_PARTY_NOTE = "#";
-l.OPTION_EDITMODE_PARTY_TOOLTIP = "#";
+l.OPTION_EDITMODE_PARTY = format("Blizzard: %s", USE_RAID_STYLE_PARTY_FRAMES)
+l.OPTION_EDITMODE_PARTY_TOOLTIP = "";
 l.OPTION_DEBUG_ON = "! Test raid frames !";
 l.OPTION_DEBUG_ON_MESSAGE = "Testing party / raid frames, reclick to stop it!";
 l.OPTION_DEBUG_OFF = "! STOP Test !";
@@ -143,21 +142,9 @@ l.OPTION_SHOWMSGWARNING = l.GYL.."Display warnings";
 l.OPTION_SHOWMSGERR = l.GYL.."Display errors";
 l.OPTION_WHATSNEW = "What's new";
 
-l.UpdateLocales = nil
 -- Edit Mode - Since DragonFlight (10)
 if (EditModeManagerFrame.UseRaidStylePartyFrames) then
-  -- Edit mode takes a while...
-  l.UpdateLocales = function ()
-    C_Timer.After(1, function()
-        if (not EditModeManagerFrame:UseRaidStylePartyFrames()) then
-          l.OPTION_SOLORAID_TOOLTIP = "I suggest you to activate option "..l.YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")";
-          l.DESC = l.DESC.."\n"..l.CY..l.OPTION_SOLORAID_TOOLTIP.."|r\n\n";
-        end
-      end)
-  end
-  l.OPTION_EDITMODE_PARTY = HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
-  l.OPTION_EDITMODE_PARTY_NOTE = "Note: Use "..l.YL.."/reload|r after "..HUD_EDIT_MODE_MENU..", to avoid possibles errors";
-  l.OPTION_EDITMODE_PARTY_TOOLTIP = "Enter "..l.YL..HUD_EDIT_MODE_MENU.."|r, and open "..l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r options window.\n\n"..l.CY..l.OPTION_EDITMODE_PARTY_NOTE.."|r";
+  l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s option %s|r of %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
   l.OPTION_DEBUG_ON_MESSAGE = "Testing party / raid frames (you can test in "..HUD_EDIT_MODE_MENU..")\n"
                     .."Reclick to stop it!";
 end

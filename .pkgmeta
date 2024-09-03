@@ -20,5 +20,6 @@ ignore:
     - Libs\*\README.*
     - Libs\*\tests
     - Libs\*\.pkgmeta
+    - .git*
     - .vscode
     - .release*

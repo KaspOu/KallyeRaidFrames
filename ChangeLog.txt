@@ -1,3 +1,6 @@
+v11.0.203
+- SoloRaid now autoactivates Blizzard Raid Style Party frames
+
 v11.0.202
 - RaidIcons more options
     > Size, Relative positions X, Y

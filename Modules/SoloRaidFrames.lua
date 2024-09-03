@@ -25,11 +25,42 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         ShowUIPanel(EditModeManagerFrame);
         if window == "PartyFrame" then
+            -- Works but can throw an error...
             C_EditMode.SetAccountSetting(Enum.EditModeAccountSetting.ShowPartyFrames, 1);
             --EditModeManagerFrame:SelectSystem(PartyFrame);
             PartyFrame:SelectSystem();
             PartyFrame:HighlightSystem();
         end
+    end
+
+    function ns.GetUseRaidStylePartyFrames()
+        local LibEditModeOverride = LibStub("LibEditModeOverride-1.0")
+        if not LibEditModeOverride:IsReady() then return nil end
+        LibEditModeOverride:LoadLayouts()
+        return LibEditModeOverride:GetFrameSetting(PartyFrame, Enum.EditModeUnitFrameSetting.UseRaidStylePartyFrames)
+    end
+
+    local MAX_RETRIES, SECS_BETWEEN = 3, 2
+    function ns.SetUseRaidStylePartyFrames(setting, retryCount)
+        if setting == nil then return end
+        local LibEditModeOverride = LibStub("LibEditModeOverride-1.0")
+        -- if edit mode not ready: retry
+        if not LibEditModeOverride:IsReady() then
+            retryCount = retryCount or 0
+            if retryCount > MAX_RETRIES then return end
+            C_Timer.After(SECS_BETWEEN, function() ns.SetUseRaidStylePartyFrames(setting, retryCount+1) end)
+            return
+        end
+        if type(setting) == "boolean" then
+            setting = setting and 1 or 0
+        end
+        LibEditModeOverride:LoadLayouts()
+        LibEditModeOverride:SetFrameSetting(PartyFrame, Enum.EditModeUnitFrameSetting.UseRaidStylePartyFrames, setting)
+        if InCombatLockdown() then
+            LibEditModeOverride:SaveOnly()
+            return
+        end
+        LibEditModeOverride:ApplyChanges()
     end
 
 else
@@ -65,13 +96,22 @@ else
         end
     end
 
+    function ns.GetUseRaidStylePartyFrames()
+        return GetCVarBool("useCompactPartyFrames")
+    end
+    function ns.SetUseRaidStylePartyFrames(setting)
+        SetCVar("useCompactPartyFrames", setting);
+    end
+
 end
 
 -- Will be used in standalone addon
 local function getInfo(self)
     if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
         -- Edit Mode - Since DragonFlight (10)
-        ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_SOLORAID_TOOLTIP);
+        if l.OPTION_RAIDSTYLE_ACTION then
+            ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_RAIDSTYLE_ACTION, true);
+        end
         ns.ShowEditMode("PartyFrame");
     else
         ns.AddMsg(l.MSG_LOADED);
@@ -82,7 +122,10 @@ local function onSaveOptions(self, options)
     if (options.SoloRaidFrame) then
         if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
 			-- Edit Mode - Since DragonFlight (10)
-            ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_SOLORAID_TOOLTIP);
+            if l.OPTION_RAIDSTYLE_WARNING then
+                ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_RAIDSTYLE_WARNING, true);
+            end
+            ns.SetUseRaidStylePartyFrames(1)
         end
     end
 end

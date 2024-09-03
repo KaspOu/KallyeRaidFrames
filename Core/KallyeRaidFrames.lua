@@ -108,7 +108,6 @@ local function OnEvent(self, event, ...)
 		self:UnregisterEvent("ADDON_LOADED");
 		isLoaded = true;
 
-		if l.UpdateLocales then l.UpdateLocales() end
 		ns.SetDefaultOptions(defaultOptions);
 		ns.RefreshOptions(defaultOptions);
 
@@ -230,6 +229,20 @@ StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 function KRFUI.ConfirmReset()
 	StaticPopup_Show(ns.ADDON_NAME.."_CONFIRM_RESET")
 end
+
+
+function KRFUI.SetUseRaidStylePartyFrames(checked)
+	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
+		--? EditModeManagerFrame.UseRaidStylePartyFrames, since DragonFlight (10)
+		--* > Save options before applying EditMode (hides options), and reload options after
+		ns.containerFrame.okay()
+		ns.SetUseRaidStylePartyFrames(checked)
+		C_Timer.After(1, SlashCmdList["KRF"])
+	else
+		--? Classic CVar
+		ns.SetUseRaidStylePartyFrames(checked)
+	end
+end
 function KRFUI.DebugFrames()
 	ns.DebugFrames();
 end
@@ -293,16 +306,20 @@ end
 
 local function ManageOptionsVisibility()
 	local HealthOption,
-		RevertBarOption
-			= 
+		RevertBarOption,
+		SoloRaidOption
+			=
 			ns.optionsFrame.UpdateHealthColor:GetChecked(),
-			ns.optionsFrame.RevertBar:GetChecked();
+			ns.optionsFrame.RevertBar:GetChecked(),
+			ns.optionsFrame.SoloRaidFrame:GetChecked()
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
-		-- Edit Mode - Since DragonFlight (10)		
-		ns.optionsFrame.EditMode:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
+		-- Edit Mode - Since DragonFlight (10)
+		ns.optionsFrame.EditMode:SetChecked(ns.GetUseRaidStylePartyFrames() == 1)
+		ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .2);
 	else
-		ns.OptionsEnable(ns.optionsFrame.EditMode, false, .2);
+		ns.optionsFrame.EditMode:SetChecked(SoloRaidOption or ns.GetUseRaidStylePartyFrames())
+		ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .2);
 		ns.OptionsEnable(ns.optionsFrame.BlizzFriendsClassColor, false, .2);
 	end
 

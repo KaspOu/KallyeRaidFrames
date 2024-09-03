@@ -141,7 +141,8 @@
         "error",
         "setmetatable",
         "strmatch",
-        "unpack"
+        "unpack",
+        "Raid"
     ],
     "cSpell.words": [
         "prepatch"

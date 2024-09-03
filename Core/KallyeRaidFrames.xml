@@ -309,26 +309,25 @@
 									</OnClick>
 								</Scripts>
 							</Button>
-							<Button parentKey="EditMode" inherits="UIPanelButtonTemplate">
-								<Size x="300" y="20" />
+							<CheckButton parentKey="EditMode" inherits="KRFUI_CheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="OPTION_EDITMODE_PARTY" />
+									<Attribute name="tooltip" value="OPTION_EDITMODE_PARTY_TOOLTIP" />
+								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="20" y="-5" /></Anchor>
 								</Anchors>
 								<Scripts>
-									<OnLoad>
-										self.Text:SetText(KRFUI.l.OPTION_EDITMODE_PARTY);
-										self.tooltipText = KRFUI.l.OPTION_EDITMODE_PARTY_TOOLTIP;
-									</OnLoad>
 									<OnClick>
-										KRFUI.ShowEditMode("PartyFrame");
-										PlaySound(SOUNDKIT.IG_MAINMENU_OPEN, "Master")
+										KRFUI.SetUseRaidStylePartyFrames(self:GetChecked())
 									</OnClick>
 								</Scripts>
-							</Button>
-
+							</CheckButton>
+							
 							<Frame parentKey="Options1" inherits="KRFOptionsUnitDebuffs">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.EditMode" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOP" relativeKey="$parent.EditMode" relativePoint="BOTTOM"><Offset x="0" y="-10" /></Anchor>
+									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" /></Anchor>
 								</Anchors>
 							</Frame>
 							<Frame parentKey="Options2" inherits="KRFOptionsNameplatesColor">
