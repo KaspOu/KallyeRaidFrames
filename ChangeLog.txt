@@ -1,3 +1,6 @@
+v11.0.204
+- More Nameplates PvP icons
+
 v11.0.203
 - SoloRaid now autoactivates Blizzard Raid Style Party frames
 
