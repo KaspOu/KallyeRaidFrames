@@ -32,6 +32,12 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
             PartyFrame:HighlightSystem();
         end
     end
+    function ns.CanEditActiveLayout()
+        local LibEditModeOverride = LibStub("LibEditModeOverride-1.0")
+        if not LibEditModeOverride:IsReady() then return nil end
+        LibEditModeOverride:LoadLayouts()
+        return LibEditModeOverride:CanEditActiveLayout();
+    end
 
     function ns.GetUseRaidStylePartyFrames()
         local LibEditModeOverride = LibStub("LibEditModeOverride-1.0")
@@ -55,12 +61,14 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
             setting = setting and 1 or 0
         end
         LibEditModeOverride:LoadLayouts()
-        LibEditModeOverride:SetFrameSetting(PartyFrame, Enum.EditModeUnitFrameSetting.UseRaidStylePartyFrames, setting)
-        if InCombatLockdown() then
-            LibEditModeOverride:SaveOnly()
-            return
+        if LibEditModeOverride:CanEditActiveLayout() then
+            LibEditModeOverride:SetFrameSetting(PartyFrame, Enum.EditModeUnitFrameSetting.UseRaidStylePartyFrames, setting)
+            if InCombatLockdown() then
+                LibEditModeOverride:SaveOnly()
+                return
+            end
+            LibEditModeOverride:ApplyChanges()
         end
-        LibEditModeOverride:ApplyChanges()
     end
 
 else
@@ -121,7 +129,15 @@ end
 local function onSaveOptions(self, options)
     if (options.SoloRaidFrame) then
         if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
-			-- Edit Mode - Since DragonFlight (10)
+			--? Edit Mode - Since DragonFlight (10)
+            if not ns.CanEditActiveLayout() then
+                -- Can't Edit Active Layout: display manual action
+                if l.OPTION_RAIDSTYLE_ACTION then
+                    ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_RAIDSTYLE_ACTION, true);
+                end
+                return
+            end
+
             if l.OPTION_RAIDSTYLE_WARNING then
                 ns.AddMsgWarn(ns.TITLE.." - "..l.OPTION_RAIDSTYLE_WARNING, true);
             end

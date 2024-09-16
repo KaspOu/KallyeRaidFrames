@@ -108,6 +108,7 @@ local function OnEvent(self, event, ...)
 		self:UnregisterEvent("ADDON_LOADED");
 		isLoaded = true;
 
+		if l.UpdateLocales then l.UpdateLocales() end
 		ns.SetDefaultOptions(defaultOptions);
 		ns.RefreshOptions(defaultOptions);
 
@@ -122,7 +123,7 @@ local function OnEvent(self, event, ...)
 			-- Classic
 			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth);
 		end
-		
+
 		if _G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100 then
 			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
 			hooksecurefunc("CompactUnitFrame_UpdateInRange", ns.Hook_UpdateInRange);
@@ -197,7 +198,7 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxBuffs)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsPerLine)
-		..tostring(_G[ns.OPTIONS_NAME].BuffsVertical)	
+		..tostring(_G[ns.OPTIONS_NAME].BuffsVertical)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
@@ -214,7 +215,7 @@ StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 	button1 = ALL_SETTINGS,
 	-- button3 = CURRENT_SETTINGS,
 	button2 = CANCEL,
-	OnAccept = function()											
+	OnAccept = function()
 		ns.SetDefaultOptions(defaultOptions, true);
 		ReloadUI();
 	end,
@@ -307,17 +308,26 @@ end
 local function ManageOptionsVisibility()
 	local HealthOption,
 		RevertBarOption,
-		SoloRaidOption
+		SoloRaidOption,
+		EditableLayout
 			=
 			ns.optionsFrame.UpdateHealthColor:GetChecked(),
 			ns.optionsFrame.RevertBar:GetChecked(),
-			ns.optionsFrame.SoloRaidFrame:GetChecked()
+			ns.optionsFrame.SoloRaidFrame:GetChecked(),
+			ns.CanEditActiveLayout and ns.CanEditActiveLayout()
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		-- Edit Mode - Since DragonFlight (10)
-		ns.optionsFrame.EditMode:SetChecked(ns.GetUseRaidStylePartyFrames() == 1)
-		ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .2);
+		ns.optionsFrame.EditMode:SetShown(EditableLayout)
+		ns.optionsFrame.EditModeBtn:SetShown(not EditableLayout)
+		if not EditableLayout then
+			ns.optionsFrame.EditModeBtn:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
+		else
+			ns.optionsFrame.EditMode:SetChecked(ns.GetUseRaidStylePartyFrames() == 1)
+			ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .2);
+		end
 	else
+		ns.optionsFrame.EditModeBtn:SetShown(false)
 		ns.optionsFrame.EditMode:SetChecked(SoloRaidOption or ns.GetUseRaidStylePartyFrames())
 		ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .2);
 		ns.OptionsEnable(ns.optionsFrame.BlizzFriendsClassColor, false, .2);
