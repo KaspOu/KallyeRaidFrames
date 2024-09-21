@@ -3,12 +3,11 @@
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid. Buffs / debuffs size, max limit...
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Raid toujours visible. Buffs et debuffs: taille, limite, ...
-## Version: 11.0.204
+## Version: 11.0.205
 ## Author: Kallye of Elune (EU)
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
 ## IconTexture: Interface\AddOns\KallyeRaidFrames\Logo32
-## AddonCompartmentFunc: SLASH_KRF_command
 
 ## X-Category: Raid Frames, Interface Enhancements
 ## X-License: MIT

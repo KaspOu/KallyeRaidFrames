@@ -1,3 +1,6 @@
+11.0.205
+- AddOn Compartment Filter (topright addons list)
+
 v11.0.204
 - More Nameplates PvP icons
 
