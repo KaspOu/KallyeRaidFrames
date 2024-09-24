@@ -8,6 +8,10 @@ ns.OPTIONS_NAME = "KallyeRaidFramesOptions"
 ns.SLASHCMD = "KRF"
 
 
+--@do-not-package@
+ns.TITLE = format("%s|TInterface/PVPFrame/Icons/prestige-icon-8-3:16|t", ns.TITLE)
+--@end-do-not-package@
+
 BINDING_HEADER_KRaidFrames = ns.ADDON_NAME;
 BINDING_NAME_KRaidFrames =  ns.ADDON_NAME.." options";
 

@@ -2,7 +2,7 @@
 -- French localization
 -------------------------------------------------------------------------------
 
-if (GetLocale() == "frFR") then
+if (GetLocale() ~= "frFR") then return; end
 local _, ns = ...
 local l = ns.I18N;
 
@@ -167,4 +167,3 @@ end
 -- https://code.google.com/archive/p/mangadmin/wikis/SpecialCharacters.wiki
 -- https://wowwiki.fandom.com/wiki/Localizing_an_addon
 --@end-do-not-package@
-end
