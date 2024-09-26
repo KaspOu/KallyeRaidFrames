@@ -1,4 +1,7 @@
-11.0.205
+v11.0.206
+- Fixed sliders (Retail & Wow Classic)
+
+v11.0.205
 - AddOn Compartment Filter (topright addons list)
 
 v11.0.204

@@ -4,6 +4,8 @@ local l = ns.I18N;
 -- * avoid conflict override
 if ns.CONFLICT then return; end
 
+CONTROLTYPE_SLIDER = CONTROLTYPE_SLIDER or "slider"; -- removed since TWW (11)
+
 function ns.SetGradientBg(frame, color)
     local texture = frame:CreateTexture()
     texture:SetAllPoints(true)

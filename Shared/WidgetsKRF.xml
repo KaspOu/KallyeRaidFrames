@@ -30,7 +30,30 @@
 			<OnLeave>K_SHARED_UI.ColorWidget_OnLeave(self)</OnLeave>
 		</Scripts>
 	</CheckButton>
-	<Slider name="KRFUI_SliderWidget" inherits="OptionsSliderTemplate" virtual="true">
+	<!-- Replace buggy OptionsSliderTemplate -->
+	<Slider name="KRFUI_OptionsSliderTemplate" inherits="UISliderTemplate" virtual="true">
+		<Size x="144" y="17"/>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name="$parentText" parentKey="Text" inherits="GameFontHighlight">
+					<Anchors>
+						<Anchor point="BOTTOM" relativePoint="TOP"/>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentLow" parentKey="Low" inherits="GameFontHighlightSmall" text="LOW">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="-4" y="3"/>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentHigh" parentKey="High" inherits="GameFontHighlightSmall" text="HIGH">
+					<Anchors>
+						<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="4" y="3"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Slider>
+	<Slider name="KRFUI_SliderWidget" inherits="KRFUI_OptionsSliderTemplate" virtual="true">
 		<Scripts>
 			<OnLoad> K_SHARED_UI.SliderWidget_OnLoad(self)</OnLoad>
 			<OnEnter>K_SHARED_UI.SliderWidget_OnEnter(self)</OnEnter>
