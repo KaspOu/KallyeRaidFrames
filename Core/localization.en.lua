@@ -9,10 +9,11 @@ l.VERS_TITLE    = format("%s %s", ns.TITLE, ns.VERSION);
 l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
-l.WHATSNEW = " What's new:\n"
-    .."- SoloRaid autoactivates Raid Style Party frames\n"
-    .."- Target icons (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) on raid frames\n"
-    .."- Buffs & debuffs can be aligned vertically\n"
+l.WHATSNEW = [[ What's new:
+- SoloRaid autoactivates Raid Style Party frames
+- Target icons (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) on raid frames
+- Buffs & debuffs can be aligned vertically.
+]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -23,9 +24,9 @@ l.DESC          = "Enhance raid frames and nameplates on friendly units\n\n"
 .." - Transparency when unit out of range\n\n"
 .." - Raid always visible\n\n"
 .."\n"
-.."Enhance Buffs / debuffs management (size, max displayed)\n\n"
+.."Enhance Buffs / debuffs management (size, max displayed, ...)\n\n"
 .."Colorize Nameplates, with PvP icons |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t\n\n"
-.."Shows target icons (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) on raid frames\n\n"
+.."Shows target icons (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) on raid frames\n\n"
 l.OPTIONS_TITLE = format("%s - Options", l.VERS_TITLE);
 
 -- Messages
@@ -116,8 +117,8 @@ l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on enemy names
 l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Faction icon |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
 
 l.OPTION_ACTIVATE_MODULE_RAIDICONS = l.OPTION_ACTIVATE_MODULE .. "\n"
-  ..l.WH.."Shows target icons (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) on raid frames"
-l.OPTION_RAIDICONS_HEADER = "Raid icons |TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t";
+  ..l.WH.."Shows target icons (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) on raid frames"
+l.OPTION_RAIDICONS_HEADER = "Raid icons |TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t";
 l.OPTION_RAIDICONS_ANCHOR = "Icon alignement";
 l.OPTION_RAIDICONS_ANCHOR_TOOLTIP = "Position of the target icon in the raid frame";
 l.OPTION_CENTER = "Center"

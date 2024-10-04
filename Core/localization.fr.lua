@@ -11,10 +11,11 @@ l.VERS_TITLE    = format("%s %s", ns.TITLE, ns.VERSION);
 l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
-l.WHATSNEW = " Nouveaut\195\169s :\n"
-    .."- Solo Raid: utilise automatiquement l'interface de type raid\n"
-    .."- Ic\195\180nes de cible (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid\n"
-    .."- Alignement vertical des Buffs & D\195\169buffs\n"
+l.WHATSNEW = [[ Nouveautés :
+- Solo Raid: utilise automatiquement l'interface de type raid
+- Icônes de cible (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid
+- Alignement vertical des Buffs & Débuffs.
+]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
 
@@ -25,9 +26,9 @@ l.DESC          = "Am\195\169liore les cadres de raid.\n\n"
 .." - Transparence des unit\195\169s hors de port\195\169e\n\n"
 .." - Raid toujours visible\n\n"
 .."\n"
-.."Am\195\169liore les buffs / d\195\169buffs (taille, max affich\195\169s)\n\n"
+.."Am\195\169liore les buffs / d\195\169buffs (taille, max affich\195\169s, ...)\n\n"
 .."Colorise les noms en barre d'info, avec ic\195\180nes JcJ |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t\n\n"
-.."Affiche les ic\195\180nes de cible (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid\n\n"
+.."Affiche les ic\195\180nes de cible (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid\n\n"
 l.OPTIONS_TITLE = format("%s - Options", l.VERS_TITLE);
 
 -- Messages
@@ -117,7 +118,7 @@ l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur
 l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Ic\195\180ne de faction |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
 
 l.OPTION_ACTIVATE_MODULE_RAIDICONS = l.OPTION_ACTIVATE_MODULE .. "\n"
-    ..l.WH.."Affiche les ic\195\180nes de cible (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid"
+    ..l.WH.."Affiche les ic\195\180nes de cible (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid"
 l.OPTION_RAIDICONS_HEADER = "Ic\195\180nes de raid";
 l.OPTION_RAIDICONS_ANCHOR = "Alignement des ic\195\180nes";
 l.OPTION_RAIDICONS_ANCHOR_TOOLTIP = "Position de l'ic\195\180ne cible dans le cadre de raid";
