@@ -48,12 +48,18 @@ local defaultOptions = {
 	FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1",
 	FriendsNameplates_Bar_Color = { r= .235, g= .941, b= 1, a = 1 },
 	FriendsNameplates_PvpIcon = "faction",
+	FriendsNameplates_Txt_ShowLevel = "0",
+	FriendsNameplates_Txt_Level_Color_Under = { r= .251, g= .753, b= .251 },
+	FriendsNameplates_Txt_Level_Color_Over = { r= .800, g= .098, b= .098 },
 
 	EnemiesNameplates_Txt_UseColor = "1",
 	EnemiesNameplates_Txt_Color = { r= .87, g= 0, b= .05, a = 1 },
 	EnemiesNameplates_Bar_UseColor = "0",
 	EnemiesNameplates_Bar_Color = { r= .87, g= 0, b= .05, a = 1 },
 	EnemiesNameplates_PvpIcon = "faction",
+	EnemiesNameplates_Txt_ShowLevel = "0",
+	EnemiesNameplates_Txt_Level_Color_Under = { r= .251, g= .753, b= .251 },
+	EnemiesNameplates_Txt_Level_Color_Over = { r= .800, g= .098, b= .098 },
 
 	ActiveRaidIcons = true,
 	RaidsIcons_Anchor = "TOPRIGHT",

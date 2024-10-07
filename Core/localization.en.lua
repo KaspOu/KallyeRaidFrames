@@ -10,9 +10,9 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Display players level on nameplates
+- Working with Addon Compartment
 - SoloRaid autoactivates Raid Style Party frames
-- Target icons (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) on raid frames
-- Buffs & debuffs can be aligned vertically.
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -102,19 +102,35 @@ l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Blizzard default colors";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS ="Use class color";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM ="Your color choice: ";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD = l.RDL.."No icon";
+l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Faction icon |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
+l.OPTION_NAMEPLATES_COLOR_UNDER = "Color if lower";
+l.OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP = "Select the color of the level if it is lower than yours";
+l.OPTION_NAMEPLATES_COLOR_OVER = "Color if higher";
+l.OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP = "Select the color of the level if it is higher than yours";
+l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER = l.RDL.."Never";
+l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER_TOOLTIP = "Never show the level on the info bars.";
+l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT = "If different from yours";
+l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED = "If different from yours, colored";
+l.OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS = "Always";
+l.OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS_COLORED = "Always, colored";
+
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Allied names";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above allied nameplates (outside instances)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Allied bars";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of allied nameplates (outside instances)";
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS = "Allied PvP icons";
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on allied names.";
+l.OPTION_FRIENDSNAMEPLATES_TXT_SHOWLEVEL = "Allied level";
+l.OPTION_FRIENDSNAMEPLATES_TXT_SHOWLEVEL_TOOLTIP = "Displays the level on allied info bars.";
+
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Enemy names";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above enemy nameplates (outside instances)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Enemy bars";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of enemy nameplates (outside instances)";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Enemy PvP icons";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on enemy names.";
-l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Faction icon |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
+l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL = "Enemy level";
+l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL_TOOLTIP = "Displays the level on enemy info bars.";
 
 l.OPTION_ACTIVATE_MODULE_RAIDICONS = l.OPTION_ACTIVATE_MODULE .. "\n"
   ..l.WH.."Shows target icons (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) on raid frames"

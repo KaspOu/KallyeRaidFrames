@@ -141,7 +141,7 @@ local function ColorWidget_ShowColorPicker(pickedCallback, cancelledCallback, se
 end
 local function ColorWidget_ColorPickedCallback()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
-	local newA = ColorPickerFrame:GetColorAlpha();
+	local newA = ColorPickerFrame.hasOpacity and ColorPickerFrame:GetColorAlpha() or nil;
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA })
 end
 local function ColorWidget_ColorCancelledCallback()
@@ -157,7 +157,7 @@ local function ColorWidget_ShowColorPicker_Classic(pickedCallback, cancelledCall
 	ColorPickerFrame.Self = self;
 	local r,g,b,o = self._RGBA.r, self._RGBA.g, self._RGBA.b, self._RGBA.a or nil;
 	ColorPickerFrame:SetColorRGB(r,g,b);
-	ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (o ~= nil), 1 - o;
+	ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (o ~= nil), o and (1 - o) or nil;
 	ColorPickerFrame._previousValues = {r, g, b, o};
 	ColorPickerFrame.func, ColorPickerFrame.swatchFunc, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc =
 		pickedCallback, pickedCallback, pickedCallback, cancelledCallback;
@@ -166,7 +166,7 @@ local function ColorWidget_ShowColorPicker_Classic(pickedCallback, cancelledCall
 end
 local function ColorWidget_ColorPickedCallback_Classic()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
-	local newA = 1 - OpacitySliderFrame:GetValue();
+	local newA = ColorPickerFrame.hasOpacity and (1 - OpacitySliderFrame:GetValue()) or nil;
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
 end
 local function ColorWidget_ColorCancelledCallback_Classic()

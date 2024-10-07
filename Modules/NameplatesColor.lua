@@ -28,6 +28,9 @@ local function applyTextColor(name, useColorOption, color, customColor)
         name:SetShadowColor(customColor.r, customColor.g, customColor.b, 0.2)
     end
 end
+local function BCC(color)
+    return string.format("ff%02x%02x%02x", (color.r*255), (color.g*255), (color.b*255));
+end
 
 ns.pvpIcons = {
     gemred = "|TInterface/PVPFrame/Icons/prestige-icon-8-1:16|t",
@@ -41,7 +44,26 @@ ns.pvpIcons = {
     Alliance = "|TInterface/PVPFrame/PVP-Currency-Alliance:16|t",
     Horde = "|TInterface/PVPFrame/PVP-Currency-Horde:16|t",
 }
-local function applyPvpIcon(unit, name, pvpIconOption)
+local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, underLevelColor, overLevelColor)
+    local playerName = GetUnitName(unit);
+    local newName = playerName;
+    if showLevelOption ~= "0" then
+        local unitLevel = UnitLevel(unit);
+        local levelShowed = "";
+        if (showLevelOption == "22" or ns._PlayerLevel ~= unitLevel) then
+            levelShowed = unitLevel.." ";
+        end
+        if (levelShowed ~= "") then
+            if (showLevelOption == "12" or showLevelOption == "22") then
+                if (unitLevel < ns._PlayerLevel) then
+                    levelShowed = WrapTextInColorCode(levelShowed, BCC(underLevelColor));
+                elseif (unitLevel > ns._PlayerLevel) then
+                    levelShowed = WrapTextInColorCode(levelShowed, BCC(overLevelColor));
+                end
+            end
+            newName = levelShowed..newName;
+        end
+    end
     if UnitIsPVP(unit) and pvpIconOption ~= "0" then
         local icon = ns.pvpIcons[pvpIconOption] or ""
         if pvpIconOption == "faction" then
@@ -49,9 +71,11 @@ local function applyPvpIcon(unit, name, pvpIconOption)
             icon = ns.pvpIcons[faction] or ""
         end
         if icon ~= "" then
-            local playerName = GetUnitName(unit)
-            name:SetText(icon..playerName)
+            newName = icon..newName;
         end
+    end
+    if newName ~= playerName then
+        name:SetText(newName)
     end
 end
 
@@ -85,17 +109,32 @@ local function Hook_CUF_UpdateName(frame)
 
     if UnitIsFriend(frame.displayedUnit, "player") then
         applyTextColor(frame.name, cacheOptions.FriendsNameplates_Txt_UseColor, c, cacheOptions.FriendsNameplates_Txt_Color)
-        applyPvpIcon(frame.displayedUnit, frame.name, cacheOptions.FriendsNameplates_PvpIcon)
+        applyIconAndText(frame.displayedUnit, frame.name,
+            cacheOptions.FriendsNameplates_PvpIcon,
+            cacheOptions.FriendsNameplates_Txt_ShowLevel,
+            cacheOptions.FriendsNameplates_Txt_Level_Color_Under,
+            cacheOptions.FriendsNameplates_Txt_Level_Color_Over)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.FriendsNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.FriendsNameplates_Bar_Color)
     end
 
     if not UnitIsFriend(frame.displayedUnit, "player") then
         applyTextColor(frame.name, cacheOptions.EnemiesNameplates_Txt_UseColor, c, cacheOptions.EnemiesNameplates_Txt_Color)
-        applyPvpIcon(frame.displayedUnit, frame.name, cacheOptions.EnemiesNameplates_PvpIcon)
+        applyIconAndText(frame.displayedUnit, frame.name,
+            cacheOptions.EnemiesNameplates_PvpIcon,
+            cacheOptions.EnemiesNameplates_Txt_ShowLevel,
+            cacheOptions.EnemiesNameplates_Txt_Level_Color_Under,
+            cacheOptions.EnemiesNameplates_Txt_Level_Color_Over)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.EnemiesNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.EnemiesNameplates_Bar_Color)
     end
+end
+
+local function OnEvent(self, event, ...)
+	local arg1 = select(1, ...);
+	if (event == "PLAYER_LEVEL_UP") then
+        ns._PlayerLevel = arg1;
+	end
 end
 
 -- Will be used in standalone addon
@@ -109,16 +148,24 @@ local function isEnabled(options)
             (options.FriendsNameplates_Txt_UseColor or "0") ~= "0"
             or (options.FriendsNameplates_Bar_UseColor or "0") ~= "0"
             or (options.FriendsNameplates_PvpIcon or "0") ~= "0"
+            or (options.FriendsNameplates_Txt_ShowLevel or "0") ~= "0"
+
             or (options.EnemiesNameplates_Txt_UseColor or "0") ~= "0"
             or (options.EnemiesNameplates_Bar_UseColor or "0") ~= "0"
             or (options.EnemiesNameplates_PvpIcon or "0") ~= "0"
+            or (options.EnemiesNameplates_Txt_ShowLevel or "0") ~= "0"
         )
 end
 
 local function onSaveOptions(self, options)
     if not ns._NameplatesHooked and isEnabled(options) then
-        ns._NameplatesHooked = true
+        ns._NameplatesHooked = true;
         hooksecurefunc("CompactUnitFrame_UpdateName", Hook_CUF_UpdateName);
+
+        ns._PlayerLevel = UnitLevel("player");
+        local f = CreateFrame("Frame", nil, UIParent);
+        f:RegisterEvent("PLAYER_LEVEL_UP");
+        f:SetScript("OnEvent", OnEvent);
     end
 end
 

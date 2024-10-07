@@ -93,7 +93,15 @@
         "GetCVarBool",
         "tAppendAll",
         "HideUIPanel",
-        "Raid"
+        "table",
+        "ipairs",
+        "issecurevariable",
+        "error",
+        "setmetatable",
+        "strmatch",
+        "unpack",
+        "Raid",
+        "WrapTextInColorCode"
     ],
     "cSpell.words": [
         "prepatch"

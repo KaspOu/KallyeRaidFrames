@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsNameplatesColor.lua" />
 	<Frame name="KRFOptionsNameplatesColor" virtual="true">
-		<Size x="550" y="210" />
+		<Size x="550" y="270" />
 		<Frames>
 			<CheckButton parentKey="LabelNameplatesColor" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -13,7 +13,7 @@
 					<Attribute name="paddingRight" value="30" />
 				</Attributes>
 			</CheckButton>
-			
+
 			<CheckButton parentKey="ActiveNameplatesColor" FrameLevel="6" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
 					<Attribute name="text" value="" />
@@ -30,7 +30,7 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			
+
 			<!-- Friends Names -->
 			<Frame parentKey="FriendsNameplates_Txt_UseColor" name="$parent_FriendsNameplates_Txt_UseColor" inherits="KRFUI_DropDownWidget">
 				<Attributes>
@@ -135,6 +135,58 @@
 				</Anchors>
 			</Frame>
 
+			<!-- Friends Levels -->
+			<Frame parentKey="FriendsNameplates_Txt_ShowLevel" name="$parent_FriendsNameplates_Txt_ShowLevel" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_TXT_SHOWLEVEL" />
+					<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_TXT_SHOWLEVEL_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="160" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_SHOWLEVEL_NEVER" />
+					<Attribute name="value1" value="0" />
+					<Attribute name="color1" value="RDL" />
+					<Attribute name="text2" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT" />
+					<Attribute name="value2" value="11" />
+					<Attribute name="text3" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED" />
+					<Attribute name="value3" value="12" />
+					<Attribute name="text4" value="OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS" />
+					<Attribute name="value4" value="21" />
+					<Attribute name="text5" value="OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS_COLORED" />
+					<Attribute name="value5" value="22" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_PvpIcon" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent"><Offset x="0" /></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEvent>
+						K_SHARED_UI.RefreshOptions()
+					</OnEvent>
+				</Scripts>
+			</Frame>
+				<Button parentKey="FriendsNameplates_Txt_Level_Color_Under" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Size x="20" y="30" />
+					<Attributes>
+						<Attribute name="title" value="OPTION_NAMEPLATES_COLOR_UNDER" />
+						<Attribute name="tooltip" value="OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Txt_ShowLevel" relativePoint="TOPRIGHT"><Offset x="-10" y="-10" /></Anchor>
+					</Anchors>
+				</Button>
+				<Button parentKey="FriendsNameplates_Txt_Level_Color_Over" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Size x="20" y="30" />
+					<Attributes>
+						<Attribute name="title" value="OPTION_NAMEPLATES_COLOR_OVER" />
+						<Attribute name="tooltip" value="OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.FriendsNameplates_Txt_ShowLevel" relativePoint="TOPRIGHT"><Offset x="-10" y="10" /></Anchor>
+					</Anchors>
+				</Button>
+
+			<!-- ###### ENEMIES ###### -->
+
 			<!-- Enemies Names -->
 			<Frame parentKey="EnemiesNameplates_Txt_UseColor" name="$parent_EnemiesNameplates_Txt_UseColor" inherits="KRFUI_DropDownWidget">
 				<Attributes>
@@ -237,6 +289,53 @@
 					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
 				</Anchors>
 			</Frame>
+			<!-- Enemies Level -->
+			<Frame parentKey="EnemiesNameplates_Txt_ShowLevel" name="$parent_EnemiesNameplates_Txt_ShowLevel" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL" />
+					<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="160" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_SHOWLEVEL_NEVER" />
+					<Attribute name="value1" value="0" />
+					<Attribute name="color1" value="RDL" />
+					<Attribute name="text2" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT" />
+					<Attribute name="value2" value="11" />
+					<Attribute name="text3" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED" />
+					<Attribute name="value3" value="12" />
+					<Attribute name="text4" value="OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS" />
+					<Attribute name="value4" value="21" />
+					<Attribute name="text5" value="OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS_COLORED" />
+					<Attribute name="value5" value="22" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_PvpIcon" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_PvpIcon"><Offset x="0" /></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEvent>
+						K_SHARED_UI.RefreshOptions()
+					</OnEvent>
+				</Scripts>
+			</Frame>
+				<Button parentKey="EnemiesNameplates_Txt_Level_Color_Under" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Attributes>
+						<Attribute name="title" value="OPTION_NAMEPLATES_COLOR_UNDER" />
+						<Attribute name="tooltip" value="OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Txt_ShowLevel" relativePoint="TOPRIGHT"><Offset x="-10" y="-10" /></Anchor>
+					</Anchors>
+				</Button>
+				<Button parentKey="EnemiesNameplates_Txt_Level_Color_Over" Framelevel="2" inherits="KRFUI_ColorWidget">
+					<Attributes>
+						<Attribute name="title" value="OPTION_NAMEPLATES_COLOR_OVER" />
+						<Attribute name="tooltip" value="OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.EnemiesNameplates_Txt_ShowLevel" relativePoint="TOPRIGHT"><Offset x="-10" y="10" /></Anchor>
+					</Anchors>
+				</Button>
 		</Frames>
 	</Frame>
 </Ui>

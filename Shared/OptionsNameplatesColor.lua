@@ -16,16 +16,21 @@ local function ManageNameplatesOptions()
     local frameData = {
         ["FriendsNameplates_Txt_UseColor"] = { link = "FriendsNameplates_Txt_Color", classEnabled = true },
         ["FriendsNameplates_Bar_UseColor"] = { link = "FriendsNameplates_Bar_Color", classEnabled = not ns.HAS_colorNameBySelection },
+        ["FriendsNameplates_Txt_ShowLevel"] = { link = "FriendsNameplates_Txt_Level_Color_Under", classEnabled = true },
+        ["FriendsNameplates_Txt_ShowLevel "] = { link = "FriendsNameplates_Txt_Level_Color_Over", classEnabled = true },
+        -- ["EnemiesNameplates_Txt_ShowLevel"] = { link = "EnemiesNameplates_Txt_Level_Color_Over", classEnabled = true },
         ["EnemiesNameplates_Txt_UseColor"] = { link = "EnemiesNameplates_Txt_Color", classEnabled = true },
-        ["EnemiesNameplates_Bar_UseColor"] = { link = "EnemiesNameplates_Bar_Color", classEnabled = not ns.HAS_colorNameBySelection }
+        ["EnemiesNameplates_Bar_UseColor"] = { link = "EnemiesNameplates_Bar_Color", classEnabled = not ns.HAS_colorNameBySelection },
+        ["EnemiesNameplates_Txt_ShowLevel"] = { link = "EnemiesNameplates_Txt_Level_Color_Under", classEnabled = true },
+        ["EnemiesNameplates_Txt_ShowLevel "] = { link = "EnemiesNameplates_Txt_Level_Color_Over", classEnabled = true },
     }
     for frameName, data in pairs(frameData) do
-        local dropDownWidget = ns.FindControl(frameName)
+        local dropDownWidget = ns.FindControl(gsub(frameName, " ", ""))
         local colorWidget = ns.FindControl(data.link)
         if not data.classEnabled then
             dropDownWidget:SetAttribute("disabled2", "true")
         end
-        ns.OptionsSetShownAndEnable(colorWidget, isEnabled and dropDownWidget:GetValue() == "2",  isEnabled)
+        ns.OptionsSetShownAndEnable(colorWidget, isEnabled and (dropDownWidget:GetValue()%10 == 2),  isEnabled)
     end
 
     -- Add icons on texts (pvpIcons[value])
@@ -33,11 +38,11 @@ local function ManageNameplatesOptions()
         ["FriendsNameplates_PvpIcon"] = "",
         ["EnemiesNameplates_PvpIcon"] = "",
     }
-    for frameName, _ in pairs(frameData) do        
+    for frameName, _ in pairs(frameData) do
         local dropDownWidget = ns.FindControl(frameName)
         if not dropDownWidget._iconsSet and ns.pvpIcons then
             dropDownWidget._iconsSet = true
-            
+
             local i = 1
             while(dropDownWidget:GetAttribute("text"..i))
             do

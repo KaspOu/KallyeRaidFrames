@@ -1,3 +1,8 @@
+v11.0.207
+- Nameplates levels display
+    > Allies / Enemies
+    > Always / If different than player / Never
+
 v11.0.206
 - Fixed sliders (Retail & Wow Classic)
 
