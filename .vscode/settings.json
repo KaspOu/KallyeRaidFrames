@@ -93,13 +93,6 @@
         "GetCVarBool",
         "tAppendAll",
         "HideUIPanel",
-        "table",
-        "ipairs",
-        "issecurevariable",
-        "error",
-        "setmetatable",
-        "strmatch",
-        "unpack",
         "Raid",
         "WrapTextInColorCode"
     ],
