@@ -1,9 +1,9 @@
-## Interface: 110005, 40401, 11504, 11505
+## Interface: 110005, 110007, 40401, 11504, 11505
 ## Title: |cff00ff00Kallye|r RaidFrames
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid. Buffs / debuffs size, max limit...
 ## Notes-frFR: Met en évidence les barres de raids lorsque la vie chute. Raid toujours visible. Buffs et debuffs: taille, limite, ...
-## Version: 11.0.501
+## Version: 11.0.701
 ## Author: Kallye of Elune (EU)
 ## SavedVariables: KallyeRaidFramesOptions
 ## - SavedVariablesPerCharacter: characterSettings
