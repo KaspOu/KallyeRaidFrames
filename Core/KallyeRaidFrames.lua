@@ -124,10 +124,10 @@ local function OnEvent(self, event, ...)
 		hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", ns.Hook_UpdateRoleIcon);
 		hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateHealth);
 		if (CompactUnitFrame_UpdateHealPrediction) then
-			-- Since DragonFlight (10)
+			--? Since DragonFlight (10)
 			hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", ns.Hook_UpdateHealth);
 		else
-			-- Classic
+			--? Classic
 			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth);
 		end
 
