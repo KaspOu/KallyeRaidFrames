@@ -1,3 +1,6 @@
+v11.0.703
+- Raid icons dynamic preview
+
 v11.0.702
 - Russian localization for Raid Icons, thanks to ZamestoTV
 
