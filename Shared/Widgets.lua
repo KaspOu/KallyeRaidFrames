@@ -304,6 +304,11 @@ function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 		self.Label:SetText(value * tonumber(formatRatio));
 	end
 	self:SetValue(value);
+
+	local onEventScript = self:GetScript("OnEvent")
+	if onEventScript then
+		onEventScript(self, "change")
+	end
 end
 function K_SHARED_UI.SliderWidget_OnEnter(self,...)
 	if (not self:IsEnabled()) then return end;
