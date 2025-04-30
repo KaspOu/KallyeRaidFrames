@@ -13,7 +13,7 @@
 					<Attribute name="paddingRight" value="30" />
 				</Attributes>
 			</CheckButton>
-			
+
 			<CheckButton parentKey="ActiveRaidIcons" FrameLevel="6" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
 					<Attribute name="text" value="" />
@@ -30,8 +30,8 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			
-			
+
+
 			<Frame parentKey="RaidsIcons_Anchor" name="$parent_RaidsIcons_Anchor" inherits="KRFUI_DropDownWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_RAIDICONS_ANCHOR" />

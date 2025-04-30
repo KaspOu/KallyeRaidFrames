@@ -122,6 +122,15 @@ end
 
 --- Manage the display and scaling of buffs & debuffs on group frames.
 --- @param param table Object containing all parameters
+--- @meta param.frame frame Frame on which buffs and debuffs are displayed
+--- @meta param.frameType string Frame type (e.g., "Buffs" or "Debuffs")
+--- @meta param.maxCount number Maximum number of icons to display
+--- @meta param.lineSize number Number of icons per line
+--- @meta param.orientation string Icon orientation (e.g., "LeftThenUp")
+--- @meta param.posX number Position X relative to the first icon
+--- @meta param.posY number Position Y relative to the first icon
+--- @meta param.blizzardOrientation string Blizzard's default orientation for buffs or debuffs
+--- @meta param.defaultMax number Default maximum number of icons to display
 local function ManageUnitFrames(param)
 	if not FrameIsCompact(param.frame) or FrameIsPet(param.frame) or param.frame:IsForbidden() then
 		return
@@ -136,12 +145,36 @@ local function ManageUnitFrames(param)
 	local defaultMaxProp = "defaultMax"..param.frameType.."s" -- save BLizzard MAX first time
 	param.frame[defaultMaxProp] = param.frame[defaultMaxProp] or param.frame[BLIZZARD_MAX_PROP]
 
+	-- Reposition first icon if necessary
+	if param.posX ~= 0 or param.posY ~= 0 then
+		local firstChild = param.frameChilds[1]
+		local attr = firstChild:GetAttribute("_firstPoint")
+		if attr == nil then
+			local point, relativeTo, relativePoint, xOfs, yOfs = firstChild:GetPoint()
+			firstChild:SetAttribute("_firstPoint", {
+				point = point,
+				relativeTo = relativeTo,
+				relativePoint = relativePoint,
+				xOfs = xOfs,
+				yOfs = yOfs
+			})
+			attr = firstChild:GetAttribute("_firstPoint")
+		end
+		firstChild:ClearAllPoints()
+		firstChild:SetPoint(
+			attr.point,
+			attr.relativeTo,
+			attr.relativePoint,
+			attr.xOfs + param.posX,
+			attr.yOfs + param.posY
+		)
+	end
+
 	if param.maxCount > param.frame[defaultMaxProp] or param.lineSize < param.maxCount or param.orientation ~= param.blizzardOrientation then
 		-- add missing icons and re-SetPoints
-		-- TODO reposition first icon
 		-- start loop at first icon not matching blizz positioning
 		local loopStart = math.min(param.defaultMax + 1, param.lineSize + 1)
-		if param.orientation ~= param.blizzardOrientation then
+		if param.orientation ~= param.blizzardOrientation or param.posX ~= 0 or param.posY ~= 0 then
 			loopStart = 2
 		end
 		for childIdx = loopStart, param.maxCount do
@@ -157,11 +190,12 @@ local function ManageUnitFrames(param)
 			end
 			local isNewLine, point, relativeIdx, relativePoint = anchorPoints(childIdx, param.lineSize, param.orientation)
 			if isNewChild or isNewLine or param.orientation ~= param.blizzardOrientation then
-				-- child:ClearAllPoints();
+				child:ClearAllPoints();
 				child:SetPoint(point, _G[frameName .. relativeIdx], relativePoint)
 			end
 		end
 	end
+
 	if param.useTaintMethod and param.maxCount ~= param.frame[BLIZZARD_MAX_PROP] then
 		param.frame[BLIZZARD_MAX_PROP] = param.maxCount -- ! Taints frame
 	end
@@ -188,8 +222,10 @@ function ns.Hook_ManageBuffs(frame)
     local max = _G[ns.OPTIONS_NAME].MaxBuffs
     local scale = _G[ns.OPTIONS_NAME].BuffsScale
 	local slotsPerLine = _G[ns.OPTIONS_NAME].BuffsPerLine
-	local orientation = not _G[ns.OPTIONS_NAME].BuffsVertical and OrientationEnum.LeftThenUp or OrientationEnum.UpThenLeft
 	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
+	local orientation = _G[ns.OPTIONS_NAME].BuffsOrientation or OrientationEnum.LeftThenUp
+	local posX = _G[ns.OPTIONS_NAME].BuffsPosX or 0
+	local posY = _G[ns.OPTIONS_NAME].BuffsPosY or 0
 
 	ManageUnitFrames({
 		frame = frame,
@@ -199,9 +235,11 @@ function ns.Hook_ManageBuffs(frame)
 		maxCount = max,
 		scale = scale,
 		lineSize = slotsPerLine,
-		orientation = orientation,
-		blizzardOrientation = OrientationEnum.LeftThenUp,
 		useTaintMethod = useTaintMethod,
+		blizzardOrientation = OrientationEnum.LeftThenUp,
+		orientation = orientation,
+		posX = posX,
+		posY = posY,
 		retries = 0
 	})
 end
@@ -210,8 +248,10 @@ function ns.Hook_ManageDebuffs(frame)
     local max = _G[ns.OPTIONS_NAME].MaxDebuffs
     local scale = _G[ns.OPTIONS_NAME].DebuffsScale
 	local slotsPerLine = _G[ns.OPTIONS_NAME].DebuffsPerLine
-	local orientation = not _G[ns.OPTIONS_NAME].DebuffsVertical and OrientationEnum.RightThenUp or OrientationEnum.UpThenRight
 	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
+	local orientation = _G[ns.OPTIONS_NAME].DebuffsOrientation or OrientationEnum.RightThenUp
+	local posX = _G[ns.OPTIONS_NAME].DebuffsPosX or 0
+	local posY = _G[ns.OPTIONS_NAME].DebuffsPosY or 0
 
 	ManageUnitFrames({
 		frame = frame,
@@ -221,9 +261,11 @@ function ns.Hook_ManageDebuffs(frame)
 		maxCount = max,
 		scale = scale,
 		lineSize = slotsPerLine,
-		orientation = orientation,
-		blizzardOrientation = OrientationEnum.RightThenUp,
 		useTaintMethod = useTaintMethod,
+		blizzardOrientation = OrientationEnum.RightThenUp,
+		orientation = orientation,
+		posX = posX,
+		posY = posY,
 		retries = 0
 	})
 end
@@ -239,33 +281,37 @@ local function isEnabled(options)
 			options.BuffsScale ~= 1
 			or options.MaxBuffs   ~= DEFAULT_MAXBUFFS
 			or options.BuffsPerLine < DEFAULT_MAXBUFFS
-			or options.BuffsVertical
+			or options.BuffsOrientation
+			or options.BuffsPosX
+			or options.BuffsPosY
 			or options.DebuffsScale ~= 1
 			or options.MaxDebuffs   ~= DEFAULT_MAXDEBUFFS
 			or options.DebuffsPerLine < DEFAULT_MAXDEBUFFS
-			or options.DebuffsVertical
+			or options.DebuffsOrientation
+			or options.DebuffsPosX
+			or options.DebuffsPosY
 		)
 end
 
 -- Determine appropriate hook
 -- If positions are modified, we have to hook reposition method instead
-local function determineAppropriateHook(setMaxHookName, lineSize, maxIcons, defaultMaxIcons, verticalAlign)
-	if verticalAlign or lineSize < maxIcons or lineSize < defaultMaxIcons then
+local function determineAppropriateHook(setMaxHookName, lineSize, maxIcons, defaultMaxIcons, notDefaultAlign, posX, posY)
+	if notDefaultAlign or lineSize < maxIcons or lineSize < defaultMaxIcons or posX ~= 0 or posY ~= 0 then
 		return "DefaultCompactUnitFrameSetup"
 	end
 	return setMaxHookName
 end
 
 function ns.isFlickerWarningShowed(options)
-	local buffsHook = determineAppropriateHook("", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsVertical)
-	local debuffsHook = determineAppropriateHook("", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsVertical)
+	local buffsHook = determineAppropriateHook("", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsOrientation ~= "LeftThenUp", options.BuffsPosX, options.BuffsPosY)
+	local debuffsHook = determineAppropriateHook("", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsOrientation ~= "RightThenUp", options.DebuffsPosX, options.DebuffsPosY)
 	return buffsHook..debuffsHook ~= ""
 end
 local function onSaveOptions(self, options)
     if not ns._UnitDebuffsHooked and isEnabled(options) then
         ns._UnitDebuffsHooked = true
-		local buffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxBuffs", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsVertical)
-		local debuffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxDebuffs", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsVertical)
+		local buffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxBuffs", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsOrientation ~= "LeftThenUp", options.BuffsPosX, options.BuffsPosY)
+		local debuffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxDebuffs", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsOrientation ~= "RightThenUp", options.DebuffsPosX, options.DebuffsPosY)
 		local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
         hooksecurefunc(buffsHook, ns.Hook_ManageBuffs)
         hooksecurefunc(debuffsHook, ns.Hook_ManageDebuffs)
@@ -303,6 +349,7 @@ DefaultCompactUnitFrameSetup si repositionnement (multiligne, etc...)
 /dump KallyeRaidFramesOptions.MaxBuffs
 
 /dump CompactPartyFrameMember1.maxBuffs
+/dump issecurevariable(CompactPartyFrameMember1, "maxBuffs")
 /dump CompactPartyFrameMember1.buffFrames
 /dump CompactPartyFrameMember1Buff1
 

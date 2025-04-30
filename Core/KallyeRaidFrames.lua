@@ -37,11 +37,15 @@ local defaultOptions = {
 	BuffsScale = 0.75,
 	MaxBuffs = CompactUnitFrame_GetOptionDisplayOnlyDispellableDebuffs and 8 or ns.DEFAULT_MAXBUFFS,
 	BuffsPerLine = 4,
-	BuffsVertical = false,
+	BuffsOrientation = "LeftThenUp",
+	BuffsPosX = 0,
+	BuffsPosY = 0,
 	DebuffsScale = 1.25,
 	MaxDebuffs = ns.DEFAULT_MAXBUFFS,
-	DebuffsPerLine = 9,
-	DebuffsVertical = false,
+	DebuffsPerLine = ns.DEFAULT_MAXBUFFS,
+	DebuffsOrientation = "RightThenUp",
+	DebuffsPosX = 0,
+	DebuffsPosY = 0,
 	UseTaintMethod = false,
 
 	ActiveNameplatesColor = true,
@@ -77,6 +81,18 @@ local defaultOptions = {
 
 	DebugMode = false,
 };
+
+--@do-not-package@
+	-- Dev: Kallye Defaults values
+	defaultOptions.RevertBar = true
+	defaultOptions.SoloRaidFrame = true
+	defaultOptions.FriendsClassColor = true
+	defaultOptions.FriendsNameplates_PvpIcon = "lion"
+	defaultOptions.AlphaNotInRange = 30
+	defaultOptions.AlphaNotInCombat = 70
+	defaultOptions.ShowMsgError = true
+	defaultOptions.HealthAlpha = 90
+--@end-do-not-package@
 
 
 
@@ -208,11 +224,15 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxBuffs)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsPerLine)
-		..tostring(_G[ns.OPTIONS_NAME].BuffsVertical)
+		..tostring(_G[ns.OPTIONS_NAME].BuffsOrientation)
+		..tostring(_G[ns.OPTIONS_NAME].BuffsPosX)
+		..tostring(_G[ns.OPTIONS_NAME].BuffsPosY)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
-		..tostring(_G[ns.OPTIONS_NAME].DebuffsVertical)
+		..tostring(_G[ns.OPTIONS_NAME].DebuffsOrientation)
+		..tostring(_G[ns.OPTIONS_NAME].DebuffsPosX)
+		..tostring(_G[ns.OPTIONS_NAME].DebuffsPosY)
 		..tostring(_G[ns.OPTIONS_NAME].UseTaintMethod)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveRaidIcons)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
@@ -240,6 +260,10 @@ StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 
 function KRFUI.ConfirmReset()
 	StaticPopup_Show(ns.ADDON_NAME.."_CONFIRM_RESET")
+end
+
+function KRFUI.ResetOptions(optionNamesToReset, optionsToForce)
+	ns.ResetOptions(optionNamesToReset, defaultOptions, optionsToForce)
 end
 
 
@@ -358,9 +382,12 @@ local function ManageOptionsVisibility()
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
 
-	local useClassColors = (CompactPartyFrameMember1 and CompactPartyFrameMember1.optionTable.useClassColors) or (CompactRaidFrame1 and CompactRaidFrame1.optionTable.useClassColors) or false
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlphaText  , not RevertBarOption and useClassColors, HealthOption);
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlpha  , not RevertBarOption and useClassColors, HealthOption);
+	local raidFramesDisplayClassColor = GetCVarBool("raidFramesDisplayClassColor")
+	if not raidFramesDisplayClassColor and CompactRaidFrame1 then
+		raidFramesDisplayClassColor = (CompactRaidFrame1.optionTable.useClassColors) or false
+	end
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlphaText  , not RevertBarOption and raidFramesDisplayClassColor, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlpha  , not RevertBarOption and raidFramesDisplayClassColor, HealthOption);
 
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.AddonCompartmentFilter,	true, not not AddonCompartmentFrame, .1);
 end

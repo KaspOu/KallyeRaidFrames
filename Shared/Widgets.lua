@@ -295,6 +295,13 @@ local function SliderWidget_GetValue(self)
 	end
 	return self._Value;
 end
+
+local function SliderWidget_GetLabel(self)
+	return self.Label:GetText()
+end
+local function SliderWidget_SetLabel(self, value)
+	self.Label:SetText(value)
+end
 function K_SHARED_UI.SliderWidget_OnLoad (self)
 	self.type = CONTROLTYPE_SLIDER;
 	--? Since Shadowlands (9)
@@ -311,6 +318,8 @@ function K_SHARED_UI.SliderWidget_OnLoad (self)
 	self.GetExactValue = self.GetValue;
 	self.SetValue = SliderWidget_SetValue
 	self.GetValue = SliderWidget_GetValue
+	self.GetLabel = SliderWidget_GetLabel
+	self.SetLabel = SliderWidget_SetLabel
 	self.Text:SetFontObject("OptionsFontSmall");
 	self.Text:SetText(text);
 	self.High:Hide();
@@ -328,6 +337,10 @@ function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 		self.Label:SetFormattedText(format, value * tonumber(formatRatio));
 	else
 		self.Label:SetText(value * tonumber(formatRatio));
+	end
+	local default = self:GetAttribute("default") or nil;
+	if tostring(value) == default then
+		self.Label:SetText(l("DEFAULT")..self.Label:GetText().."|r")
 	end
 	self:SetValue(value);
 

@@ -113,9 +113,9 @@
         "BOSS_DEBUFF_SIZE_INCREASE",
         "CompactUnitFrame_UpdateClassificationIndicator",
         "DefaultCompactNamePlateFriendlyFrameOptions",
+        "OPTION_TOOLTIP_RAID_USE_CLASS_COLORS",
         "RAID_USE_CLASS_COLORS",
-        "INTERFACE_LABEL",
-        "OPTION_TOOLTIP_RAID_USE_CLASS_COLORS"
+        "INTERFACE_LABEL"
     ],
     "cSpell.words": [
         "prepatch"

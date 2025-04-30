@@ -40,7 +40,7 @@
 					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
-					<Attribute name="color1" value="RDL" />
+					<Attribute name="color1" value="DEFAULT" />
 					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
 					<Attribute name="value2" value="1" />
 					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
@@ -75,7 +75,7 @@
 					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
-					<Attribute name="color1" value="RDL" />
+					<Attribute name="color1" value="DEFAULT" />
 					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
 					<Attribute name="value2" value="1" />
 					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
@@ -109,7 +109,7 @@
 					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD" />
 					<Attribute name="value1" value="0" />
-					<Attribute name="color1" value="RDL" />
+					<Attribute name="color1" value="DEFAULT" />
 					<Attribute name="text2" value="OPTION_NAMEPLATES_SHOWPVPICONS_FACTION" />
 					<Attribute name="value2" value="faction" />
 					<Attribute name="text3" value="Red gem" />
@@ -144,7 +144,7 @@
 					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_SHOWLEVEL_NEVER" />
 					<Attribute name="value1" value="0" />
-					<Attribute name="color1" value="RDL" />
+					<Attribute name="color1" value="DEFAULT" />
 					<Attribute name="text2" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT" />
 					<Attribute name="value2" value="11" />
 					<Attribute name="text3" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED" />
@@ -196,7 +196,7 @@
 					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
-					<Attribute name="color1" value="RDL" />
+					<Attribute name="color1" value="DEFAULT" />
 					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
 					<Attribute name="value2" value="1" />
 					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
@@ -231,7 +231,7 @@
 					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
 					<Attribute name="value1" value="0" />
-					<Attribute name="color1" value="RDL" />
+					<Attribute name="color1" value="DEFAULT" />
 					<Attribute name="text2" value="OPTION_NAMEPLATES_USECOLOR_CLASS" />
 					<Attribute name="value2" value="1" />
 					<Attribute name="text3" value="OPTION_NAMEPLATES_USECOLOR_CUSTOM" />
@@ -298,7 +298,7 @@
 					<Attribute name="width" value="160" />
 					<Attribute name="text1" value="OPTION_NAMEPLATES_SHOWLEVEL_NEVER" />
 					<Attribute name="value1" value="0" />
-					<Attribute name="color1" value="RDL" />
+					<Attribute name="color1" value="DEFAULT" />
 					<Attribute name="text2" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT" />
 					<Attribute name="value2" value="11" />
 					<Attribute name="text3" value="OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED" />
