@@ -4,15 +4,17 @@ local l = ns.I18N;
 -- * avoid conflict override
 if ns.CONFLICT then return; end
 
+ns.USE_MAXBUFFS_TAINT_METHOD = (CompactUnitFrame_GetOptionDisplayOnlyDispellableDebuffs == nil) -- maxBuffs only
 
 local DEFAULT_MAXBUFFS = ns.DEFAULT_MAXBUFFS or 3
 local DEFAULT_MAXDEBUFFS = DEFAULT_MAXBUFFS
-local MAX_RETRIES = 5
+
 --[[
 ! Manage buffs
 - Scale buffs / debuffs
 ]]
 		-- ! Blizzard original method modified, from CompactUnitFrame
+		-- * alternative safe method (else maxBuffs taints frame)
 		function ns.CompactUnitFrame_UpdateAurasInternal(frame, unitAuraUpdateInfo)
 			if frame.isLootObject then
 				return;
@@ -79,6 +81,9 @@ local MAX_RETRIES = 5
 			-- modification (remove dispelsChanged)
 		end
 
+-- Store frames waiting for combat end
+local pendingFrames = {}
+
 local function FrameIsCompact(frame)
 	local getName = frame:GetName();
 	return getName ~=nil and strsub(getName, 0, 7) == "Compact"
@@ -115,82 +120,68 @@ local function anchorPoints(frameIdx, lineSize, orientation)
 	return isNewLine, point, relatedIdx, relatedPoint
 end
 
---[[
-! ERREURS !
- *ClearAllPoints
- *frame[BLIZZARD_MAX_PROP] = maxCount
-
-TODO Prévoir un message d'alerte qui s'affiche si on change le count (ns.WillTaint)
-  * Une fois par session vous aurez une erreur à la mort d'un boss, c'est "normal"
---]]
-
 --- Manage the display and scaling of buffs & debuffs on group frames.
---- @param frame frame The parent frame on which buffs or debuffs are displayed.
---- @param frameChilds table Table containing child frames (buffs/debuffs).
---- @param frameType string Type of frames to manage ('Buff', 'Debuff', 'DispelDebuff').
---- @param defaultMax number Blizzard max default.
---- @param maxCount number Maximum number of buffs/debuffs to display.
---- @param scale number Scale factor for the buffs/debuffs.
---- @param lineSize number Number of slots per line
---- @param orientation string OrientationEnum: Determines the alignment.
---- @param blizzardOrientation string OrientationEnum: Blizzard original alignment
---- @param useTaintMethod boolean Allow taints (maxBuffs, maxDebuffs)
---- @param retries number Number of retries (avoid combatlockdown after a boss kill)
-local function ManageUnitFrames(frame, frameChilds, frameType, defaultMax, maxCount, scale, lineSize, orientation, blizzardOrientation, useTaintMethod, retries)
-	if not FrameIsCompact(frame) or FrameIsPet(frame) then
+--- @param param table Object containing all parameters
+local function ManageUnitFrames(param)
+	if not FrameIsCompact(param.frame) or FrameIsPet(param.frame) or param.frame:IsForbidden() then
 		return
 	end
-	if InCombatLockdown() or frame:IsForbidden() then
-		retries = retries or 0
-		if retries <= MAX_RETRIES then
-			local delayInSeconds = retries + 1 -- increases delay after each retry
-			C_Timer.After(delayInSeconds, function()
-				ManageUnitFrames(frame, frameChilds, frameType, defaultMax, maxCount, scale, lineSize, orientation, blizzardOrientation, useTaintMethod, retries + 1)
-			end)
-		end
+    local frameName = param.frame:GetName() .. param.frameType
+	if InCombatLockdown() then
+		pendingFrames[frameName] = param
 		return
 	end
-    local frameName = frame:GetName() .. frameType
 
-	local BLIZZARD_MAX_PROP = "max"..frameType.."s" -- frame.maxBuffs / .maxDebuffs / .maxDispelDebuff
-	local defaultMaxProp = "defaultMax"..frameType.."s" -- save BLizzard MAX first time
-	frame[defaultMaxProp] = frame[defaultMaxProp] or frame[BLIZZARD_MAX_PROP]
+	local BLIZZARD_MAX_PROP = "max"..param.frameType.."s" -- frame.maxBuffs / .maxDebuffs / .maxDispelDebuff
+	local defaultMaxProp = "defaultMax"..param.frameType.."s" -- save BLizzard MAX first time
+	param.frame[defaultMaxProp] = param.frame[defaultMaxProp] or param.frame[BLIZZARD_MAX_PROP]
 
-	if maxCount > frame[defaultMaxProp] or lineSize < maxCount or orientation ~= blizzardOrientation then
+	if param.maxCount > param.frame[defaultMaxProp] or param.lineSize < param.maxCount or param.orientation ~= param.blizzardOrientation then
 		-- add missing icons and re-SetPoints
 		-- TODO reposition first icon
 		-- start loop at first icon not matching blizz positioning
-		local loopStart = math.min(defaultMax + 1, lineSize + 1)
-		if orientation ~= blizzardOrientation then
+		local loopStart = math.min(param.defaultMax + 1, param.lineSize + 1)
+		if param.orientation ~= param.blizzardOrientation then
 			loopStart = 2
 		end
-		for childIdx = loopStart, maxCount do
+		for childIdx = loopStart, param.maxCount do
 			local isNewChild = false
 			local child = _G[frameName .. childIdx]
 			if not _G[frameName .. childIdx] then
-				child = CreateFrame("Button", frameName .. childIdx, frame, "Compact" .. frameType .. "Template")
-				child:SetScale(scale)
+				child = CreateFrame("Button", frameName .. childIdx, param.frame, "Compact" .. param.frameType .. "Template")
+				child:SetScale(param.scale)
+				if param.frameChilds[childIdx] == nil then
+					param.frameChilds[childIdx] = child
+				end
 				isNewChild = true
 			end
-			local isNewLine, point, relativeIdx, relativePoint = anchorPoints(childIdx, lineSize, orientation)
-			if isNewChild or isNewLine or orientation ~= blizzardOrientation then
+			local isNewLine, point, relativeIdx, relativePoint = anchorPoints(childIdx, param.lineSize, param.orientation)
+			if isNewChild or isNewLine or param.orientation ~= param.blizzardOrientation then
 				-- child:ClearAllPoints();
 				child:SetPoint(point, _G[frameName .. relativeIdx], relativePoint)
 			end
 		end
 	end
-	if useTaintMethod and maxCount ~= frame[BLIZZARD_MAX_PROP] then
-		frame[BLIZZARD_MAX_PROP] = maxCount -- ! Taints frame
+	if param.useTaintMethod and param.maxCount ~= param.frame[BLIZZARD_MAX_PROP] then
+		param.frame[BLIZZARD_MAX_PROP] = param.maxCount -- ! Taints frame
 	end
 
 	-- rescaling
-    local lastScale = frame:GetAttribute("_lastScale") or 1
-    if lastScale ~= scale then
-		for _, child in ipairs(frameChilds) do
-			child:SetScale(scale);
+    local lastScale = param.frame:GetAttribute("_lastScale") or 1
+    if lastScale ~= param.scale then
+		for _, child in ipairs(param.frameChilds) do
+			child:SetScale(param.scale);
 		end
-		frame:SetAttribute("_lastScale", scale)
+		param.frame:SetAttribute("_lastScale", param.scale)
     end
+end
+
+-- Event handler for combat end
+function ns.OnCombatEnd()
+	for frameName, param in pairs(pendingFrames) do
+		ManageUnitFrames(param)
+		pendingFrames[frameName] = nil
+	end
 end
 
 function ns.Hook_ManageBuffs(frame)
@@ -198,8 +189,21 @@ function ns.Hook_ManageBuffs(frame)
     local scale = _G[ns.OPTIONS_NAME].BuffsScale
 	local slotsPerLine = _G[ns.OPTIONS_NAME].BuffsPerLine
 	local orientation = not _G[ns.OPTIONS_NAME].BuffsVertical and OrientationEnum.LeftThenUp or OrientationEnum.UpThenLeft
-	local useTaintMethod = _G[ns.OPTIONS_NAME].UseTaintMethod
-	ManageUnitFrames(frame, frame.buffFrames, "Buff", DEFAULT_MAXBUFFS, max, scale, slotsPerLine, orientation, OrientationEnum.LeftThenUp, useTaintMethod, 0)
+	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
+
+	ManageUnitFrames({
+		frame = frame,
+		frameChilds = frame.buffFrames,
+		frameType = "Buff",
+		defaultMax = DEFAULT_MAXBUFFS,
+		maxCount = max,
+		scale = scale,
+		lineSize = slotsPerLine,
+		orientation = orientation,
+		blizzardOrientation = OrientationEnum.LeftThenUp,
+		useTaintMethod = useTaintMethod,
+		retries = 0
+	})
 end
 
 function ns.Hook_ManageDebuffs(frame)
@@ -207,8 +211,21 @@ function ns.Hook_ManageDebuffs(frame)
     local scale = _G[ns.OPTIONS_NAME].DebuffsScale
 	local slotsPerLine = _G[ns.OPTIONS_NAME].DebuffsPerLine
 	local orientation = not _G[ns.OPTIONS_NAME].DebuffsVertical and OrientationEnum.RightThenUp or OrientationEnum.UpThenRight
-	local useTaintMethod = _G[ns.OPTIONS_NAME].UseTaintMethod
-	ManageUnitFrames(frame, frame.debuffFrames, "Debuff", DEFAULT_MAXDEBUFFS, max, scale, slotsPerLine, orientation, OrientationEnum.RightThenUp, useTaintMethod, 0)
+	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
+
+	ManageUnitFrames({
+		frame = frame,
+		frameChilds = frame.debuffFrames,
+		frameType = "Debuff",
+		defaultMax = DEFAULT_MAXDEBUFFS,
+		maxCount = max,
+		scale = scale,
+		lineSize = slotsPerLine,
+		orientation = orientation,
+		blizzardOrientation = OrientationEnum.RightThenUp,
+		useTaintMethod = useTaintMethod,
+		retries = 0
+	})
 end
 
 -- Will be used in standalone addon
@@ -238,17 +255,33 @@ local function determineAppropriateHook(setMaxHookName, lineSize, maxIcons, defa
 	end
 	return setMaxHookName
 end
+
+function ns.isFlickerWarningShowed(options)
+	local buffsHook = determineAppropriateHook("", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsVertical)
+	local debuffsHook = determineAppropriateHook("", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsVertical)
+	return buffsHook..debuffsHook ~= ""
+end
 local function onSaveOptions(self, options)
     if not ns._UnitDebuffsHooked and isEnabled(options) then
         ns._UnitDebuffsHooked = true
 		local buffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxBuffs", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsVertical)
 		local debuffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxDebuffs", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsVertical)
+		local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
         hooksecurefunc(buffsHook, ns.Hook_ManageBuffs)
         hooksecurefunc(debuffsHook, ns.Hook_ManageDebuffs)
-		if not options.UseTaintMethod and (options.MaxBuffs ~= DEFAULT_MAXBUFFS or options.MaxDebuffs ~= DEFAULT_MAXDEBUFFS) then
+		if not useTaintMethod and (options.MaxBuffs ~= DEFAULT_MAXBUFFS or options.MaxDebuffs ~= DEFAULT_MAXDEBUFFS) then
 			-- manage max buffs / debuffs changed, safer but experimental
 			hooksecurefunc("CompactUnitFrame_UpdateAuras", ns.CompactUnitFrame_UpdateAurasInternal)
 		end
+
+		-- Register combat end event, callback out of combat
+		local frame = CreateFrame("Frame")
+		frame:RegisterEvent("PLAYER_REGEN_ENABLED")
+		frame:SetScript("OnEvent", function(self, event)
+			if event == "PLAYER_REGEN_ENABLED" then
+				ns.OnCombatEnd()
+			end
+		end)
     end
 end
 

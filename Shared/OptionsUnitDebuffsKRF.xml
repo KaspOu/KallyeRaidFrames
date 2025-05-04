@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsUnitDebuffs.lua" />
 	<Frame name="KRFOptionsUnitDebuffs" virtual="true">
-		<Size x="550" y="220" />
+		<Size x="550" y="240" />
 		<Frames>
 			<CheckButton parentKey="LabelMaxBuffs" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -69,6 +69,11 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxBuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
+				<Scripts>
+					<OnEvent>
+						K_SHARED_UI.RefreshOptions()
+					</OnEvent>
+				</Scripts>
 			</Slider>
 			<CheckButton parentKey="BuffsVertical" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
@@ -78,15 +83,11 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-10" /></Anchor>
 				</Anchors>
-			</CheckButton>
-			<CheckButton parentKey="UseTaintMethod" inherits="KRFUI_CheckboxWidget">
-				<Attributes>
-					<Attribute name="text" value="OPTION_USETAINTMETHOD" />
-					<Attribute name="tooltip" value="OPTION_USETAINTMETHOD_TOOLTIP" />
-				</Attributes>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsVertical" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
-				</Anchors>
+				<Scripts>
+					<OnClick>
+						K_SHARED_UI.RefreshOptions()
+					</OnClick>
+				</Scripts>
 			</CheckButton>
 			<!-- Debuffs -->
 			<Slider parentKey="DebuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
@@ -129,6 +130,11 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxDebuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
+				<Scripts>
+					<OnEvent>
+						K_SHARED_UI.RefreshOptions()
+					</OnEvent>
+				</Scripts>
 			</Slider>
 			<CheckButton parentKey="DebuffsVertical" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
@@ -137,6 +143,38 @@
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-10" /></Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						K_SHARED_UI.RefreshOptions()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<!-- Taint checkbox (Retail) or Warning-->
+				<CheckButton parentKey="UseTaintMethod" inherits="KRFUI_CheckboxWidget">
+					<Attributes>
+						<Attribute name="text" value="OPTION_USETAINTMETHOD" />
+						<Attribute name="tooltip" value="OPTION_USETAINTMETHOD_TOOLTIP" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.BuffsVertical" relativePoint="BOTTOMLEFT"><Offset x="0" y="0" /></Anchor>
+					</Anchors>
+				</CheckButton>
+				<CheckButton parentKey="TaintWarning" inherits="KRFUI_TextWidget">
+					<Attributes>
+						<Attribute name="text" value="OPTION_BUFFS_TAINTWARNING" />
+					</Attributes>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.BuffsVertical" relativePoint="BOTTOMLEFT"><Offset x="0" y="2" /></Anchor>
+					</Anchors>
+				</CheckButton>
+			<!-- -->
+			<CheckButton parentKey="FlickerWarning" inherits="KRFUI_TextWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_BUFFS_FLICKERWARNING" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsVertical" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
 			</CheckButton>
 			<!--

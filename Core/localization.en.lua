@@ -10,6 +10,7 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Remaining errors fixed (and explicit warning on Classic)
 - Raid icons dynamic preview
 - Display players level on nameplates
 - Working with Addon Compartment
@@ -85,7 +86,7 @@ l.OPTION_BUFFSPERLINE = "Buffs per line";
 l.OPTION_BUFFSPERLINE_TOOLTIP = "Number of buff icons per line\n"..l.CY.."Wow default: max"
 l.OPTION_BUFFSPERLINE_FORMAT = "%d per line"..required;
 l.OPTION_BUFFSVERTICAL = "Buffs aligned vertically"..required;
-l.OPTION_BUFFSVERTICAL_TOOLTIP = "Buffs will be vertically aligned,\nin columns\n"..l.CY.."Disabled for a few seconds after a boss kill"
+l.OPTION_BUFFSVERTICAL_TOOLTIP = "Buffs will be vertically aligned,\nin columns\n"..l.CY.."May be disabled few seconds after a boss kill"
 l.OPTION_DEBUFFSSCALE = "Debuffs relative size"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Wow default: 1"
 l.OPTION_MAXDEBUFFS = "Max debuffs"..required;
@@ -95,9 +96,11 @@ l.OPTION_DEBUFFSPERLINE = "Debuffs per line"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Number of debuff icons per line\n"..l.CY.."Wow default: max"
 l.OPTION_DEBUFFSPERLINE_FORMAT = "%d per line";
 l.OPTION_DEBUFFSVERTICAL = "Debuffs aligned vertically"..required;
-l.OPTION_DEBUFFSVERTICAL_TOOLTIP = "Debuffs will be vertically aligned,\nin columns\n"..l.CY.."Disabled for a few seconds after a boss kill"
-l.OPTION_USETAINTMETHOD = l.CY.."Enhanced max icons limit display"..required.." "..l.ALERT
-l.OPTION_USETAINTMETHOD_TOOLTIP = "Unchecked, you have an experimental display\nChecked, you have a stable display, with one "..l.RDL.."error per session|r, not a big deal..."
+l.OPTION_DEBUFFSVERTICAL_TOOLTIP = "Debuffs will be vertically aligned,\nin columns\n"..l.CY.."May be disabled few seconds after a boss kill"
+l.OPTION_USETAINTMETHOD = l.CY.."Legacy display for Max buffs/debuffs"..required.." "..l.ALERT
+l.OPTION_USETAINTMETHOD_TOOLTIP = "Unchecked, uses an experimental display\nChecked, uses a stable display, but with one "..l.RDL.."error per session|r, not a big deal..."
+l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changing Max buffs/debuffs causes one "..l.RDL.."error per session|r, not a big deal..."
+l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Repositioning may be affected for a few seconds after a boss kill"
 
 l.OPTION_OTHERS_HEADER = "Nameplates";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Blizzard default colors";

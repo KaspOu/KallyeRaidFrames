@@ -110,7 +110,8 @@
         "CompactUnitFrame_UtilSetDispelDebuff",
         "CompactUnitFrame_ProcessAura",
         "CompactUnitFrame_IsAuraInstanceIDBlocked",
-        "BOSS_DEBUFF_SIZE_INCREASE"
+        "BOSS_DEBUFF_SIZE_INCREASE",
+        "CompactUnitFrame_UpdateClassificationIndicator"
     ],
     "cSpell.words": [
         "prepatch"

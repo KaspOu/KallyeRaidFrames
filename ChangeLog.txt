@@ -1,3 +1,9 @@
+v11.1.502
+- Fixed error in Wow: new code for max buffs
+- Buffs UI: Max buffs option to use legacy code (with warning)
+- Buffs UI on Classic: Max buffs warning
+- Buffs UI: reposition (multiline / vertical) notice
+
 v11.1.501
 - TWW 11.1.5
 

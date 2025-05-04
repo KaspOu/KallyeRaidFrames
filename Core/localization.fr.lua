@@ -12,6 +12,7 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
+- Erreurs corrigées (et alerte explicite sur Classic)
 - Icônes de raid : prévisualisation en direct
 - Affichage du niveau des joueurs
 - Fonctionne avec l'Addon Compartment
@@ -86,7 +87,7 @@ l.OPTION_BUFFSPERLINE = "Buffs par ligne"..required;
 l.OPTION_BUFFSPERLINE_TOOLTIP = "Nombre d'ic\195\180nes de buff par ligne\n"..l.CY.."Par d\195\169faut dans Wow : max";
 l.OPTION_BUFFSPERLINE_FORMAT = "%d par ligne";
 l.OPTION_BUFFSVERTICAL = "Aligner les buffs verticalement"..required;
-l.OPTION_BUFFSVERTICAL_TOOLTIP = "Les buffs seront align\195\169s verticalement, en colonnes\n"..l.CY.."D\195\169sactiv\195\169 quelques secondes \195\160 la mort d'un boss";
+l.OPTION_BUFFSVERTICAL_TOOLTIP = "Les buffs seront align\195\169s verticalement, en colonnes\n"..l.CY.."D\195\169sactiv\195\169 \195\160 la mort d'un boss";
 l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 1"
 l.OPTION_MAXDEBUFFS = "Limite de d\195\169buffs"..required;
@@ -97,8 +98,10 @@ l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Nombre d'ic\195\180nes de d\195\169buff par l
 l.OPTION_DEBUFFSPERLINE_FORMAT = "%d par ligne";
 l.OPTION_DEBUFFSVERTICAL = "Aligner les d\195\169buffs verticalement"..required;
 l.OPTION_DEBUFFSVERTICAL_TOOLTIP = "Les d\195\169buffs seront align\195\169s verticalement, en colonnes\n"..l.CY.."D\195\169sactiv\195\169 quelques secondes \195\160 la mort d'un boss";
-l.OPTION_USETAINTMETHOD = l.CY.."Gestion am\195\169lior\195\169e de la limite d'ic\195\180nes"..required.." "..l.ALERT
-l.OPTION_USETAINTMETHOD_TOOLTIP = "D\195\169coch\195\169, vous avez un affichage exp\195\169rimental\nCoch\195\169, vous avez un affichage stable, avec une "..l.RDL.."erreur par session|r, pas si grave..."
+l.OPTION_USETAINTMETHOD = l.CY.."Affichage classique de la Limite de buffs / d\195\169buffs"..required.." "..l.ALERT
+l.OPTION_USETAINTMETHOD_TOOLTIP = "D\195\169coch\195\169, utilise l'affichage exp\195\169rimental\nCoch\195\169, utilise l'affichage stable, mais avec une "..l.RDL.."erreur par session|r, pas si grave..."
+l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changer la Limite provoque une "..l.RDL.."erreur par session|r, pas si grave..."
+l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Le repositionnement peut \195\170tre affect\195\169 quelques secondes \195\160 la mort d'un boss"
 
 l.OPTION_OTHERS_HEADER = "Barres d'infos";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Par d\195\169faut";

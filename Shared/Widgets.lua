@@ -89,7 +89,7 @@ function K_SHARED_UI.HeadingWidget_OnLoad (self)
 	self.label:SetPoint("BOTTOM")
 	self.label:SetJustifyH("CENTER")
 	self.label:SetText(text);
-	
+
 	self.leftRule = self:CreateTexture(nil, "BACKGROUND")
 	local paddingLeft = tonumber(self:GetAttribute("paddingLeft")) or 5
 	self.leftRule:SetHeight(8)
@@ -115,6 +115,32 @@ function K_SHARED_UI.HeadingWidget_SetPaddings(self, paddingLeft, paddingRight)
 	self.rightRule:SetPoint("LEFT", self.label, "RIGHT", paddingRight, 0)
 end
 -- #endregion Heading Widget
+
+-- #region Text Widget
+--[[
+! Text Widget
+Only text
+]]
+function K_SHARED_UI.TextWidget_OnLoad (self)
+	local transparent = self:CreateTexture(nil, "BACKGROUND")
+	self:SetNormalTexture(transparent);
+	self:SetHighlightTexture(transparent);
+	self:SetPushedTexture(transparent);
+
+	local text = self:GetAttribute("text");
+	text = l(text) or _G[text] or text;
+
+	self.label = self:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
+	self.label:SetPoint("LEFT", 5, 0)
+	-- self.label:SetPoint("BOTTOM")
+	--self.label:SetJustifyH("RIGHT")
+	self.label:SetText(text);
+end
+-- disable checked state
+function K_SHARED_UI.TextWidget_OnClick(self)
+	self:SetChecked(false);
+end
+-- #endregion Text Widget
 
 -- #region Color Widget
 --[[

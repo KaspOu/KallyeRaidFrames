@@ -1,7 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Include file="Widgets.lua"/>
-	<CheckButton name="KRFUI_CheckboxWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+	<CheckButton name="KRFUI_CheckboxWidget" inherits="UICheckButtonTemplate" virtual="true">
+		<Size x="26" y="26"/>
 		<Layers>
 			<Layer level="ARTWORK">
 			<FontString inherits="GameFontHighlightLeft" parentKey="Text">
@@ -61,7 +62,7 @@
 			<OnValueChanged>K_SHARED_UI.SliderWidget_OnValueChanged(self, value)</OnValueChanged>
 		</Scripts>
 	</Slider>
-	<CheckButton name="KRFUI_HeadingWidget" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+	<CheckButton name="KRFUI_HeadingWidget" inherits="UICheckButtonTemplate" virtual="true">
 		<Size x="100" y="40" />
 		<Anchors>
 			<Anchor point="LEFT" relativeTo="$parent" relativePoint="LEFT"><Offset x="20" y="0"/></Anchor>
@@ -70,6 +71,16 @@
 		<Scripts>
 			<OnLoad> K_SHARED_UI.HeadingWidget_OnLoad(self)</OnLoad>
 			<OnClick>K_SHARED_UI.HeadingWidget_OnClick(self)</OnClick>
+		</Scripts>
+	</CheckButton>
+	<CheckButton name="KRFUI_TextWidget" inherits="UICheckButtonTemplate" virtual="true">
+		<Size x="100" y="40" />
+		<Anchors>
+			<Anchor point="LEFT" relativeTo="$parent" relativePoint="LEFT"><Offset x="0" y="0"/></Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad> K_SHARED_UI.TextWidget_OnLoad(self)</OnLoad>
+			<OnClick>K_SHARED_UI.TextWidget_OnClick(self)</OnClick>
 		</Scripts>
 	</CheckButton>
 	<Frame name="KRFUI_DropDownWidget" inherits="UIDropDownMenuTemplate" virtual="true">
@@ -92,8 +103,12 @@ https://openclassrooms.com/forum/sujet/code-lua-pour-wow-99378
 https://warcraft.wiki.gg/wiki/XML_schema
 https://eu.forums.blizzard.com/en/wow/t/improving-default-blizzardui/2890
 
-Pour les checkboxes, le composant InterfaceOptionsBaseCheckButtonTemplate plantait ( InterfaceOptionsPanel_CheckButton_OnClick(self); )
-https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/FrameXML/InterfaceOptionsPanels.lua
+Historique checkboxes:
+ InterfaceOptionsBaseCheckButtonTemplate
+ -> OptionsBaseCheckButtonTemplate (l'autre plantait sur  InterfaceOptionsPanel_CheckButton_OnClick(self))
+ -> UICheckButtonTemplate, avec Size 26/26 (l'autre est en deprecated)
+
+https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/AddOns/Blizzard_FrameXML/DeprecatedTemplates.xml
 
 https://wowwiki-archive.fandom.com/wiki/UI_Object_UIDropDownMenu
 
