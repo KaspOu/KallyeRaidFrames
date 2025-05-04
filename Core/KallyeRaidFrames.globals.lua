@@ -29,7 +29,10 @@ ns.I18N = {};
 local l = ns.I18N;
 local function BCC(r, g, b) return string.format("|cff%02x%02x%02x", (r*255), (g*255), (b*255)); end
 
-l.RT8 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t";
+l.RT7 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t" -- Cross
+l.RT8 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t" -- Skull
+l.ALERT = "|TInterface\\DialogFrame\\UI-Dialog-Icon-AlertNew:20|t"
+l.INFO = "|TInterface\\FriendsFrame\\InformationIcon:20|t"
 l.BL  = BCC(0.1, 0.1, 1.0);
 l.BLD = BCC(0.0, 0.0, 0.7);
 l.BLL = BCC(0.5, 0.8, 1.0);

@@ -41,6 +41,7 @@ local defaultOptions = {
 	MaxDebuffs = 3,
 	DebuffsPerLine = 9,
 	DebuffsVertical = false,
+	UseTaintMethod = false,
 
 	ActiveNameplatesColor = true,
 	FriendsNameplates_Txt_UseColor = "1",
@@ -210,6 +211,7 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsVertical)
+		..tostring(_G[ns.OPTIONS_NAME].UseTaintMethod)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveRaidIcons)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end

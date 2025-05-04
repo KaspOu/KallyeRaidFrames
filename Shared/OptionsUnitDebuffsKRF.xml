@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsUnitDebuffs.lua" />
 	<Frame name="KRFOptionsUnitDebuffs" virtual="true">
-		<Size x="550" y="180" />
+		<Size x="550" y="220" />
 		<Frames>
 			<CheckButton parentKey="LabelMaxBuffs" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -13,7 +13,6 @@
 					<Attribute name="paddingRight" value="30" />
 				</Attributes>
 			</CheckButton>
-			
 			<CheckButton parentKey="ActiveUnitDebuffs" FrameLevel="6" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
 					<Attribute name="text" value="" />
@@ -54,6 +53,11 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
+				<Scripts>
+					<OnEvent>
+						K_SHARED_UI.RefreshOptions()
+					</OnEvent>
+				</Scripts>
 			</Slider>
 			<Slider parentKey="BuffsPerLine" inherits="KRFUI_SliderWidget" minValue="1" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -73,6 +77,15 @@
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-10" /></Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton parentKey="UseTaintMethod" inherits="KRFUI_CheckboxWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_USETAINTMETHOD" />
+					<Attribute name="tooltip" value="OPTION_USETAINTMETHOD_TOOLTIP" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsVertical" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
 				</Anchors>
 			</CheckButton>
 			<!-- Debuffs -->
@@ -100,6 +113,11 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
+				<Scripts>
+					<OnEvent>
+						K_SHARED_UI.RefreshOptions()
+					</OnEvent>
+				</Scripts>
 			</Slider>
 			<Slider parentKey="DebuffsPerLine" inherits="KRFUI_SliderWidget" minValue="1" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -121,6 +139,14 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-10" /></Anchor>
 				</Anchors>
 			</CheckButton>
+			<!--
+				Rajouter Anchor: Blizzard default, CENTER, TOPLEFT, TOPRIGHT, ... (RaidsIcons_Anchor)
+				Par défaut :
+				 - Debuffs = BOTTOMLEFT > Right
+				 - Buffs   = BOTTOMRIGHT > Left
+				 Le plus simple : on met juste un delta X / Y, ça garde les sens et il se démerde.
+				 Plus compliqué: Ancre séparée pour Debuffs / Buffs + coche direction (défaut / inversée ?)
+			-->
 		</Frames>
 	</Frame>
 </Ui>

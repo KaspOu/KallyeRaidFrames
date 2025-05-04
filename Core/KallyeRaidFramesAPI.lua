@@ -92,7 +92,7 @@ end
 - Disabled if alpha values are equals to blizzard default (100% / 55%)
 ]]
 function ns.Hook_UpdateInRange(frame)
-	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then		
+	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
 		local isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
 		local newAlpha = 1;
 		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and hasCheckedRange and not isInRange then

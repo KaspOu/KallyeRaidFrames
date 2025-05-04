@@ -94,7 +94,23 @@
         "tAppendAll",
         "HideUIPanel",
         "Raid",
-        "WrapTextInColorCode"
+        "WrapTextInColorCode",
+        "CompactUnitFrame_SetMaxBuffs",
+        "CompactUnitFrame_SetMaxDebuffs",
+        "CompactUnitFrame_SetMaxDispelDebuffs",
+        "CompactUnitFrame_UpdateAuras",
+        "CompactUnitFrame_GetOptionDisplayOnlyDispellableDebuffs",
+        "CompactUnitFrame_GetOptionDisplayDebuffs",
+        "CompactUnitFrame_HideAllDebuffs",
+        "CompactUnitFrame_UpdatePrivateAuras",
+        "CompactUnitFrame_HideAllBuffs",
+        "CompactUnitFrame_HideAllDispelDebuffs",
+        "CompactUnitFrame_UtilSetDebuff",
+        "CompactUnitFrame_UtilSetBuff",
+        "CompactUnitFrame_UtilSetDispelDebuff",
+        "CompactUnitFrame_ProcessAura",
+        "CompactUnitFrame_IsAuraInstanceIDBlocked",
+        "BOSS_DEBUFF_SIZE_INCREASE"
     ],
     "cSpell.words": [
         "prepatch"
@@ -133,6 +149,6 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "c:\\Users\\kaspo\\.cursor\\extensions\\ketho.wow-api-0.18.2\\Annotations"
+        "c:\\Users\\Utilisateur\\.cursor\\extensions\\ketho.wow-api-0.20.6\\Annotations\\Core"
     ]
 }
