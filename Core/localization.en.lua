@@ -76,6 +76,7 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
 l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
 
+-- KBD START
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"
 l.OPTION_ORIENTATION_LeftThenUp = "Left, then Up"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."Left, then Up (default)"
@@ -116,7 +117,9 @@ l.OPTION_USETAINTMETHOD_TOOLTIP = "Unchecked, uses an experimental display\nChec
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changing Max buffs/debuffs causes one "..l.RDL.."error per session|r, not a big deal..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Repositioning may be affected for a few seconds after a boss kill"
 l.OPTION_BUFFS_RESET = "Cancel any repositioning"
+-- KBD END
 
+-- KNC START
 l.OPTION_OTHERS_HEADER = "Nameplates";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.DEFAULT.."Blizzard default colors";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS ="Use class color";
@@ -151,9 +154,11 @@ l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Enemy PvP icons";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on enemy names.";
 l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL = "Enemy level";
 l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL_TOOLTIP = "Displays the level on enemy info bars.";
+-- KNC END
 
 l.OPTION_ACTIVATE_MODULE_RAIDICONS = l.OPTION_ACTIVATE_MODULE .. "\n"
   ..l.WH.."Shows target icons (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) on raid frames"
+-- KRI START
 l.OPTION_RAIDICONS_HEADER = "Raid icons |TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t";
 l.OPTION_RAIDICONS_ANCHOR = "Icon alignement";
 l.OPTION_RAIDICONS_ANCHOR_TOOLTIP = "Position of the target icon in the raid frame";
@@ -168,7 +173,7 @@ l.OPTION_RAIDICONS_RELATIVE_X = "Horizontal position";
 l.OPTION_RAIDICONS_RELATIVE_X_TOOLTIP = "Adjust the relative horizontal position of the raid icons";
 l.OPTION_RAIDICONS_RELATIVE_Y = "Vertical position";
 l.OPTION_RAIDICONS_RELATIVE_Y_TOOLTIP = "Adjust the relative vertical position of the raid icons";
-
+-- KRI END
 
 l.OPTION_RESET_OPTIONS = "Reset options";
 l.OPTION_RELOAD_REQUIRED = "Some changes require reloading (write: "..l.YL.."/reload|r )";
