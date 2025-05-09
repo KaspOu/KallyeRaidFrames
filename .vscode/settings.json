@@ -111,7 +111,11 @@
         "CompactUnitFrame_ProcessAura",
         "CompactUnitFrame_IsAuraInstanceIDBlocked",
         "BOSS_DEBUFF_SIZE_INCREASE",
-        "CompactUnitFrame_UpdateClassificationIndicator"
+        "CompactUnitFrame_UpdateClassificationIndicator",
+        "DefaultCompactNamePlateFriendlyFrameOptions",
+        "RAID_USE_CLASS_COLORS",
+        "INTERFACE_LABEL",
+        "OPTION_TOOLTIP_RAID_USE_CLASS_COLORS"
     ],
     "cSpell.words": [
         "prepatch"

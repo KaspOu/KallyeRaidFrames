@@ -23,19 +23,8 @@ function ns.InterfaceOptions_AddCategory(frame, addOn, position)
     end
 end
 
-function ns.RemoveOldOptions(options)
-	-- TODO: REMOVE Since 10.206 OLD KEYS
-	if  options.FriendsClassColor_Nameplates then
-		options.FriendsNameplates_Txt_UseColor = "1"
-		options.FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
-		options.FriendsClassColor_Nameplates = nil
-	end
-	if  options.EnemiesClassColor_Nameplates then
-		options.EnemiesNameplates_Txt_UseColor = "1"
-		options.EnemiesNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1"
-		options.EnemiesClassColor_Nameplates = nil
-	end
-end
+-- function ns.RemoveOldOptions(options)
+-- end
 
 local startsWith = {
 	play = true, -- player
@@ -134,7 +123,7 @@ local function UpdateHealth_Regular(frame, health)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
 		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
 		if c and frame.optionTable.useClassColors then
-			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, .2, .95))
+			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, 0, _G[ns.OPTIONS_NAME].HealthAlpha / 100))
 		end
 		if not KRF_UnitIsConnected(frame) then
 			-- Disconnected

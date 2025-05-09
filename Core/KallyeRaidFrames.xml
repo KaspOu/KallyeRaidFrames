@@ -111,7 +111,7 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.BGColorLow" relativePoint="TOPLEFT">
-										<Offset x="165" y="0"/>
+										<Offset x="150" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
@@ -122,7 +122,17 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.BGColorLow" relativePoint="TOPLEFT">
-										<Offset x="330" y="0"/>
+										<Offset x="300" y="0"/>
+									</Anchor>
+								</Anchors>
+							</Button>
+							<Button parentKey="HealthAlphaText" inherits="KRFUI_TextWidget">
+								<Attributes>
+									<Attribute name="text" value="OPTION_HEALTH_ALPHA" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.BGColorLow" relativePoint="TOPLEFT">
+										<Offset x="440" y="10"/>
 									</Anchor>
 								</Anchors>
 							</Button>
@@ -142,7 +152,7 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.RevertColorLow" relativePoint="TOPLEFT">
-										<Offset x="165" y="0"/>
+										<Offset x="150" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
@@ -153,7 +163,7 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.RevertColorLow" relativePoint="TOPLEFT">
-										<Offset x="330" y="0"/>
+										<Offset x="300" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Button>
@@ -179,7 +189,7 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.LimitLow" relativePoint="TOPLEFT">
-										<Offset x="165" y="0"/>
+										<Offset x="150" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Slider>
@@ -192,7 +202,20 @@
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.LimitLow" relativePoint="TOPLEFT">
-										<Offset x="330" y="0"/>
+										<Offset x="300" y="0"/>
+									</Anchor>
+								</Anchors>
+							</Slider>
+							<Slider parentKey="HealthAlpha" inherits="KRFUI_SliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+								<Size x="100" y="15" />
+								<Attributes>
+									<Attribute name="title" value="OPTION_HEALTH_ALPHA" />
+									<Attribute name="tooltip" value="OPTION_HEALTH_ALPHA_TOOLTIP" />
+									<Attribute name="format" value="%d %%" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.LimitLow" relativePoint="TOPLEFT">
+										<Offset x="440" y="0"/>
 									</Anchor>
 								</Anchors>
 							</Slider>

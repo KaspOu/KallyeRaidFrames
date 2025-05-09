@@ -50,13 +50,15 @@ l.OPTION_HEALTH_WARN_TOOLTIP = "Warn health color applied "..l.YLL.."AT|r this l
 l.OPTION_HEALTH_OK = "Health ok";
 l.OPTION_HEALTH_OK_TOOLTIP = "OK health color applied "..l.YLL.."AFTER|r this limit\n\n"
   .."i.e.: Green after 75%";
+l.OPTION_HEALTH_ALPHA = l.WH.."Health Alpha";
+l.OPTION_HEALTH_ALPHA_TOOLTIP = "Alpha of the health bar (with class colors)";
 l.OPTION_MOVEROLEICONS = "Adjust role icons on top left";
 l.OPTION_HIDEDAMAGEICONS = "Hide 'dps' role icon";
 l.OPTION_HIDEREALM = "Hide players realm";
 l.OPTION_HIDEREALM_TOOLTIP = "Realm names will be masked, "..l.YLL.."Illidan - Varimathras|r will become "..l.YLL.."Illidan (*)|r";
 l.OPTION_ICONONDEATH = "Add "..l.RT8.." to dead players names";
 l.OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
-l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Enhance player color according to their class (party/raid frames)";
+l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Player names colored by class (party/raid frames)";
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = "Blizzard: "..l.OPTION_FRIENDSCLASSCOLOR;
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = "Base raid class colors option";
 l.OPTION_NOTINRANGE = "Transparency when out of range";

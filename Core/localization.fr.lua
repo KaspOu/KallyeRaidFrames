@@ -51,13 +51,15 @@ l.OPTION_HEALTH_WARN_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."\195
 l.OPTION_HEALTH_OK = "Bonne sant\195\169";
 l.OPTION_HEALTH_OK_TOOLTIP = "La couleur sera appliqu\195\169e "..l.YLL.."AU-DESSUS|r DE cette limite\n\n"
     .."ex : Vert apr\195\168s 75%";
+l.OPTION_HEALTH_ALPHA = l.WH.."Transparence";
+l.OPTION_HEALTH_ALPHA_TOOLTIP = "Transparence de la barre de vie (avec la couleur de classe)";
 l.OPTION_MOVEROLEICONS = "Ic\195\180ne de r\195\180le en haut \195\160 gauche";
 l.OPTION_HIDEDAMAGEICONS = "Masquer l\'ic\195\180ne de r\195\180le 'd\195\169g\195\160ts'";
 l.OPTION_HIDEREALM = "Masquer le royaume des joueurs";
 l.OPTION_HIDEREALM_TOOLTIP = "Les noms de royaumes seront masqu\195\169s, ainsi "..l.YLL.."Illidan - Varimathras|r deviendra "..l.YLL.."Illidan (*)|r";
 l.OPTION_ICONONDEATH = "Ajouter "..l.RT8.." aux noms des morts";
 l.OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
-l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Am\195\169liore la couleur des cadres des joueurs d'apr\195\168s leur classe";
+l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Noms des joueurs color\195\169s par classe (cadres de groupe/raid)";
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = "Blizzard : "..l.OPTION_FRIENDSCLASSCOLOR;
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = "Option de base des couleurs de classe sur les cadres de raid";
 l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";

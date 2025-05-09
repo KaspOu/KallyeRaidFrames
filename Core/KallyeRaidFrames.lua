@@ -22,6 +22,7 @@ local defaultOptions = {
 	LimitLow = 25,
 	LimitWarn = 50,
 	LimitOk = 75,
+	HealthAlpha = 100,
 
 	MoveRoleIcons = true,
 	HideDamageIcons = true,
@@ -202,6 +203,7 @@ local function RequiredReloadOptionsString()
 	return tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
 		..tostring(_G[ns.OPTIONS_NAME].RevertBar)
 		..tostring(_G[ns.OPTIONS_NAME].UpdateHealthColor)
+		..tostring(_G[ns.OPTIONS_NAME].FriendsClassColor)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveUnitDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxBuffs)
@@ -355,6 +357,10 @@ local function ManageOptionsVisibility()
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorLow , RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorWarn, RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.RevertColorOK  , RevertBarOption, HealthOption);
+
+	local useClassColors = (CompactPartyFrameMember1 and CompactPartyFrameMember1.optionTable.useClassColors) or (CompactRaidFrame1 and CompactRaidFrame1.optionTable.useClassColors) or false
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlphaText  , not RevertBarOption and useClassColors, HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlpha  , not RevertBarOption and useClassColors, HealthOption);
 
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.AddonCompartmentFilter,	true, not not AddonCompartmentFrame, .1);
 end

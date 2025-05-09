@@ -30,7 +30,9 @@ local function ManageNameplatesOptions()
         if not data.classEnabled then
             dropDownWidget:SetAttribute("disabled2", "true")
         end
-        ns.OptionsSetShownAndEnable(colorWidget, isEnabled and (dropDownWidget:GetValue()%10 == 2),  isEnabled)
+        if (dropDownWidget:GetValue() ~= nil) then
+            ns.OptionsSetShownAndEnable(colorWidget, isEnabled and (dropDownWidget:GetValue()%10 == 2),  isEnabled)
+        end
     end
 
     -- Add icons on texts (pvpIcons[value])
