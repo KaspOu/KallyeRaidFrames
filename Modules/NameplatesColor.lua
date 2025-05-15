@@ -10,6 +10,8 @@ if ns.HAS_colorNameBySelection == nil then
     ns.HAS_colorNameBySelection = ns.IS_RETAIL or (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 end
 
+local DEFAULT_NAMEPLATES_TEXTURE = 137014
+
 local function getClassColors()
 	return CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS;
 end
@@ -79,6 +81,21 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
     end
 end
 
+local function applyBarTexture(frame, texture, default)
+    if (texture ~= "" and frame._lastTexture == texture) then
+        return
+    end
+    if (texture == "") then
+        if (frame._lastTexture ~= nil) then
+            frame._lastTexture = nil
+            frame:SetStatusBarTexture(default)
+        end
+        return
+    end
+    frame._lastTexture = texture
+    frame:SetStatusBarTexture(texture)
+end
+
 local function applyBarColor(healthBar, useColorOption, color, customColor)
     if useColorOption == "1" then
         healthBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
@@ -116,6 +133,7 @@ local function Hook_CUF_UpdateName(frame)
             cacheOptions.FriendsNameplates_Txt_Level_Color_Over)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.FriendsNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.FriendsNameplates_Bar_Color)
+        applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
     end
 
     if not UnitIsFriend(frame.displayedUnit, "player") then
@@ -127,6 +145,7 @@ local function Hook_CUF_UpdateName(frame)
             cacheOptions.EnemiesNameplates_Txt_Level_Color_Over)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.EnemiesNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.EnemiesNameplates_Bar_Color)
+        applyBarTexture(frame.healthBar, cacheOptions.EnemiesNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
     end
 end
 
@@ -149,11 +168,13 @@ local function isEnabled(options)
             or (options.FriendsNameplates_Bar_UseColor or "0") ~= "0"
             or (options.FriendsNameplates_PvpIcon or "0") ~= "0"
             or (options.FriendsNameplates_Txt_ShowLevel or "0") ~= "0"
+            or (options.FriendsNameplates_Bar_Texture or "0") ~= "0"
 
             or (options.EnemiesNameplates_Txt_UseColor or "0") ~= "0"
             or (options.EnemiesNameplates_Bar_UseColor or "0") ~= "0"
             or (options.EnemiesNameplates_PvpIcon or "0") ~= "0"
             or (options.EnemiesNameplates_Txt_ShowLevel or "0") ~= "0"
+            or (options.EnemiesNameplates_Bar_Texture or "0") ~= "0"
         )
 end
 

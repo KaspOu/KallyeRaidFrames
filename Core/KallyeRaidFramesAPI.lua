@@ -220,12 +220,12 @@ local function UpdateHealth_Reverted(frame, health)
 				frame.myHealPrediction:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
 				frame.otherHealPrediction:ClearAllPoints();
 				frame.otherHealPrediction:SetPoint("TOPRIGHT", frame.myHealPrediction, "TOPLEFT");
-				frame.otherHealPrediction:SetPoint("BOTTOMRIGHT", frame.myHealPrediction, "BOTTOMLEFT");				
+				frame.otherHealPrediction:SetPoint("BOTTOMRIGHT", frame.myHealPrediction, "BOTTOMLEFT");
 				frame.totalAbsorb:ClearAllPoints();
 				-- frame.totalAbsorb:SetPoint("TOPRIGHT", hbS, "TOPRIGHT");
 				-- frame.totalAbsorb:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
 				frame.totalAbsorb:SetPoint("TOPRIGHT", frame.otherHealPrediction, "TOPLEFT");
-				frame.totalAbsorb:SetPoint("BOTTOMRIGHT", frame.otherHealPrediction, "BOTTOMLEFT");	
+				frame.totalAbsorb:SetPoint("BOTTOMRIGHT", frame.otherHealPrediction, "BOTTOMLEFT");
 			else
 				frame.myHealPrediction:Hide();
 				frame.otherHealPrediction:Hide();
@@ -427,7 +427,7 @@ end
 ? /fstack /dump CompactPartyFrameMember1.myHealPrediction
 ? /console scriptErrors 1
 ? print (tostring(checked))
-? /run print(select(4, GetBuildInfo()))  
+? /run print(select(4, GetBuildInfo()))
 ? wowversion, wowbuild, wowdate, wowtocversion = GetBuildInfo()
 
 EditModeManagerFrame:IsEditModeActive()
