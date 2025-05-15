@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsNameplatesColor.lua" />
 	<Frame name="KRFOptionsNameplatesColor" virtual="true">
-		<Size x="550" y="270" />
+		<Size x="550" y="310" />
 		<Frames>
 			<CheckButton parentKey="LabelNameplatesColor" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -101,6 +101,42 @@
 					</Anchors>
 				</Button>
 
+			<Frame parentKey="FriendsNameplates_Bar_Texture" name="$parent_FriendsNameplates_Bar_Texture" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE" />
+					<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="160" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="" />
+					<Attribute name="color1" value="DEFAULT" />
+					<Attribute name="text2" value="2D" />
+					<Attribute name="value2" value="Interface\AddOns\KallyeRaidFrames\Files\2d" />
+					<Attribute name="text3" value="UICastingBar2x" />
+					<Attribute name="value3" value="Interface\CastingBar\UICastingBar2x.BLP" />
+					<Attribute name="text4" value="WHITE8x8" />
+					<Attribute name="value4" value="Interface\Buttons\WHITE8x8" />
+					<Attribute name="text5" value="nameplate_health_texture" />
+					<Attribute name="value5" value="Interface\AddOns\KallyeRaidFrames\Files\nameplate_health_texture" />
+					<Attribute name="text6" value="platetexture" />
+					<Attribute name="value6" value="Interface\AddOns\KallyeRaidFrames\Files\platetexture" />
+					<Attribute name="text7" value="bar_background" />
+					<Attribute name="value7" value="Interface\AddOns\KallyeRaidFrames\Files\bar_background" />
+					<Attribute name="text8" value="bar_serenity" />
+					<Attribute name="value8" value="Interface\AddOns\KallyeRaidFrames\Files\bar_serenity" />
+					<Attribute name="text9" value="bar_skyline" />
+					<Attribute name="value9" value="Interface\AddOns\KallyeRaidFrames\Files\bar_skyline" />
+					<Attribute name="text10" value="bar4" />
+					<Attribute name="value10" value="Interface\AddOns\KallyeRaidFrames\Files\bar4" />
+					<Attribute name="text11" value="bar4_reverse" />
+					<Attribute name="value11" value="Interface\AddOns\KallyeRaidFrames\Files\bar4_reverse" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
+				</Anchors>
+			</Frame>
+
 			<Frame parentKey="FriendsNameplates_PvpIcon" name="$parent_FriendsNameplates_PvpIcon" inherits="KRFUI_DropDownWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_PVPICONS" />
@@ -130,7 +166,7 @@
 					<Attribute name="value10" value="swords" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Bar_Texture" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
 				</Anchors>
 			</Frame>
@@ -257,6 +293,42 @@
 					</Anchors>
 				</Button>
 
+			<Frame parentKey="EnemiesNameplates_Bar_Texture" name="$parent_EnemiesNameplates_Bar_Texture" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE" />
+					<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="160" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="" />
+					<Attribute name="color1" value="DEFAULT" />
+					<Attribute name="text2" value="2D" />
+					<Attribute name="value2" value="Interface\AddOns\KallyeRaidFrames\Files\2d" />
+					<Attribute name="text3" value="UICastingBar2x" />
+					<Attribute name="value3" value="Interface\CastingBar\UICastingBar2x.BLP" />
+					<Attribute name="text4" value="WHITE8x8" />
+					<Attribute name="value4" value="Interface\Buttons\WHITE8x8" />
+					<Attribute name="text5" value="nameplate_health_texture" />
+					<Attribute name="value5" value="Interface\AddOns\KallyeRaidFrames\Files\nameplate_health_texture" />
+					<Attribute name="text6" value="platetexture" />
+					<Attribute name="value6" value="Interface\AddOns\KallyeRaidFrames\Files\platetexture" />
+					<Attribute name="text7" value="bar_background" />
+					<Attribute name="value7" value="Interface\AddOns\KallyeRaidFrames\Files\bar_background" />
+					<Attribute name="text8" value="bar_serenity" />
+					<Attribute name="value8" value="Interface\AddOns\KallyeRaidFrames\Files\bar_serenity" />
+					<Attribute name="text9" value="bar_skyline" />
+					<Attribute name="value9" value="Interface\AddOns\KallyeRaidFrames\Files\bar_skyline" />
+					<Attribute name="text10" value="bar4" />
+					<Attribute name="value10" value="Interface\AddOns\KallyeRaidFrames\Files\bar4" />
+					<Attribute name="text11" value="bar4_reverse" />
+					<Attribute name="value11" value="Interface\AddOns\KallyeRaidFrames\Files\bar4_reverse" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
+				</Anchors>
+			</Frame>
+
 			<Frame parentKey="EnemiesNameplates_PvpIcon" name="$parent_EnemiesNameplates_PvpIcon" inherits="KRFUI_DropDownWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_PVPICONS" />
@@ -285,7 +357,7 @@
 					<Attribute name="value10" value="swords" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Bar_Texture" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
 				</Anchors>
 			</Frame>
