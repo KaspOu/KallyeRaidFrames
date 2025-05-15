@@ -53,6 +53,7 @@ local defaultOptions = {
 	FriendsNameplates_Txt_Color = { r= .235, g= .941, b= 1, a = 1 },
 	FriendsNameplates_Bar_UseColor = ns.HAS_colorNameBySelection and "0" or "1",
 	FriendsNameplates_Bar_Color = { r= .235, g= .941, b= 1, a = 1 },
+	FriendsNameplates_Bar_Texture = "",
 	FriendsNameplates_PvpIcon = "faction",
 	FriendsNameplates_Txt_ShowLevel = "12",
 	FriendsNameplates_Txt_Level_Color_Under = { r= .251, g= .753, b= .251 },
@@ -62,6 +63,7 @@ local defaultOptions = {
 	EnemiesNameplates_Txt_Color = { r= .87, g= 0, b= .05, a = 1 },
 	EnemiesNameplates_Bar_UseColor = "0",
 	EnemiesNameplates_Bar_Color = { r= .87, g= 0, b= .05, a = 1 },
+	EnemiesNameplates_Bar_Texture = "",
 	EnemiesNameplates_PvpIcon = "faction",
 	EnemiesNameplates_Txt_ShowLevel = "12",
 	EnemiesNameplates_Txt_Level_Color_Under = { r= .251, g= .753, b= .251 },
@@ -92,6 +94,8 @@ local defaultOptions = {
 	defaultOptions.AlphaNotInCombat = 70
 	defaultOptions.ShowMsgError = true
 	defaultOptions.HealthAlpha = 90
+	defaultOptions.FriendsNameplates_Bar_Texture = "Interface\\AddOns\\KallyeRaidFrames\\Files\\2d"
+	defaultOptions.EnemiesNameplates_Bar_Texture = "Interface\\AddOns\\KallyeRaidFrames\\Files\\2d"
 --@end-do-not-package@
 
 

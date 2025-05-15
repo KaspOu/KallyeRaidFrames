@@ -27,8 +27,9 @@ local DEFAULT_MAXDEBUFFS = DEFAULT_MAXBUFFS
 			local ignoreDispelDebuffs = ignoreDebuffs or not frame.dispelDebuffFrames or not frame.optionTable.displayDispelDebuffs or frame.maxDispelDebuffs == 0;
 
 			-- modification start
-			local maxBuffs = _G[ns.OPTIONS_NAME].MaxBuffs
-    		local maxDebuffs = _G[ns.OPTIONS_NAME].MaxDebuffs
+			local cacheOptions = ns.Module.cacheOptions
+			local maxBuffs = cacheOptions.MaxBuffs
+    		local maxDebuffs = cacheOptions.MaxDebuffs
 			local debuffsChanged = not ignoreBuffs;
 			local buffsChanged = not ignoreDebuffs;
 			-- modification end
@@ -219,13 +220,14 @@ function ns.OnCombatEnd()
 end
 
 function ns.Hook_ManageBuffs(frame)
-    local max = _G[ns.OPTIONS_NAME].MaxBuffs
-    local scale = _G[ns.OPTIONS_NAME].BuffsScale
-	local slotsPerLine = _G[ns.OPTIONS_NAME].BuffsPerLine
-	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
-	local orientation = _G[ns.OPTIONS_NAME].BuffsOrientation or OrientationEnum.LeftThenUp
-	local posX = _G[ns.OPTIONS_NAME].BuffsPosX or 0
-	local posY = _G[ns.OPTIONS_NAME].BuffsPosY or 0
+    local cacheOptions = ns.Module.cacheOptions
+    local max = cacheOptions.MaxBuffs
+    local scale = cacheOptions.BuffsScale
+	local slotsPerLine = cacheOptions.BuffsPerLine
+	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or cacheOptions.UseTaintMethod
+	local orientation = cacheOptions.BuffsOrientation or OrientationEnum.LeftThenUp
+	local posX = cacheOptions.BuffsPosX or 0
+	local posY = cacheOptions.BuffsPosY or 0
 
 	ManageUnitFrames({
 		frame = frame,
@@ -245,13 +247,14 @@ function ns.Hook_ManageBuffs(frame)
 end
 
 function ns.Hook_ManageDebuffs(frame)
-    local max = _G[ns.OPTIONS_NAME].MaxDebuffs
-    local scale = _G[ns.OPTIONS_NAME].DebuffsScale
-	local slotsPerLine = _G[ns.OPTIONS_NAME].DebuffsPerLine
-	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
-	local orientation = _G[ns.OPTIONS_NAME].DebuffsOrientation or OrientationEnum.RightThenUp
-	local posX = _G[ns.OPTIONS_NAME].DebuffsPosX or 0
-	local posY = _G[ns.OPTIONS_NAME].DebuffsPosY or 0
+    local cacheOptions = ns.Module.cacheOptions
+    local max = cacheOptions.MaxDebuffs
+    local scale = cacheOptions.DebuffsScale
+	local slotsPerLine = cacheOptions.DebuffsPerLine
+	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or cacheOptions.UseTaintMethod
+	local orientation = cacheOptions.DebuffsOrientation or OrientationEnum.RightThenUp
+	local posX = cacheOptions.DebuffsPosX or 0
+	local posY = cacheOptions.DebuffsPosY or 0
 
 	ManageUnitFrames({
 		frame = frame,
@@ -312,7 +315,7 @@ local function onSaveOptions(self, options)
         ns._UnitDebuffsHooked = true
 		local buffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxBuffs", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsOrientation ~= "LeftThenUp", options.BuffsPosX, options.BuffsPosY)
 		local debuffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxDebuffs", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsOrientation ~= "RightThenUp", options.DebuffsPosX, options.DebuffsPosY)
-		local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or _G[ns.OPTIONS_NAME].UseTaintMethod
+		local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or options.UseTaintMethod
         hooksecurefunc(buffsHook, ns.Hook_ManageBuffs)
         hooksecurefunc(debuffsHook, ns.Hook_ManageDebuffs)
 		if not useTaintMethod and (options.MaxBuffs ~= DEFAULT_MAXBUFFS or options.MaxDebuffs ~= DEFAULT_MAXDEBUFFS) then
