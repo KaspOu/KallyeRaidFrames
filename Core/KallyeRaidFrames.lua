@@ -31,6 +31,7 @@ local defaultOptions = {
 	FriendsClassColor = false,
 	AlphaNotInRange = 55, -- 30
 	AlphaNotInCombat = 100, -- 70
+	Bar_Texture = "",
 	SoloRaidFrame = false,		 -- Show solo raid (useful for testing)
 
 	ActiveUnitDebuffs = true,
@@ -92,6 +93,7 @@ local defaultOptions = {
 	defaultOptions.FriendsNameplates_PvpIcon = "lion"
 	defaultOptions.AlphaNotInRange = 30
 	defaultOptions.AlphaNotInCombat = 70
+	defaultOptions.Bar_Texture = "Interface\\AddOns\\KallyeRaidFrames\\Files\\bar_skyline"
 	defaultOptions.ShowMsgError = true
 	defaultOptions.HealthAlpha = 90
 	defaultOptions.FriendsNameplates_Bar_Texture = "Interface\\AddOns\\KallyeRaidFrames\\Files\\2d"

@@ -290,6 +290,43 @@
 									<Anchor point="TOPLEFT" relativeKey="$parent.BlizzFriendsClassColor" relativePoint="BOTTOMLEFT"/>
 								</Anchors>
 							</CheckButton>
+							<Frame parentKey="Bar_Texture" name="$parent_Bar_Texture" inherits="KRFUI_DropDownWidget">
+								<Attributes>
+									<Attribute name="text" value="OPTION_BAR_TEXTURE" />
+									<Attribute name="tooltip" value="OPTION_BAR_TEXTURE_TOOLTIP" />
+									<Attribute name="justify" value="LEFT" />
+									<Attribute name="width" value="160" />
+									<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+									<Attribute name="value1" value="" />
+									<Attribute name="color1" value="DEFAULT" />
+									<Attribute name="text2" value="2D" />
+									<Attribute name="value2" value="Interface\AddOns\KallyeRaidFrames\Files\2d" />
+									<Attribute name="text3" value="UICastingBar2x" />
+									<Attribute name="value3" value="Interface\CastingBar\UICastingBar2x.BLP" />
+									<Attribute name="text4" value="WHITE8x8" />
+									<Attribute name="value4" value="Interface\Buttons\WHITE8x8" />
+									<Attribute name="text5" value="nameplate_health_texture" />
+									<Attribute name="value5" value="Interface\AddOns\KallyeRaidFrames\Files\nameplate_health_texture" />
+									<Attribute name="text6" value="platetexture" />
+									<Attribute name="value6" value="Interface\AddOns\KallyeRaidFrames\Files\platetexture" />
+									<Attribute name="text7" value="bar_background" />
+									<Attribute name="value7" value="Interface\AddOns\KallyeRaidFrames\Files\bar_background" />
+									<Attribute name="text8" value="bar_serenity" />
+									<Attribute name="value8" value="Interface\AddOns\KallyeRaidFrames\Files\bar_serenity" />
+									<Attribute name="text9" value="bar_skyline" />
+									<Attribute name="value9" value="Interface\AddOns\KallyeRaidFrames\Files\bar_skyline" />
+									<Attribute name="text10" value="bar4" />
+									<Attribute name="value10" value="Interface\AddOns\KallyeRaidFrames\Files\bar4" />
+									<Attribute name="text11" value="bar4_reverse" />
+									<Attribute name="value11" value="Interface\AddOns\KallyeRaidFrames\Files\bar4_reverse" />
+									<Attribute name="text12" value="Cylinder" />
+									<Attribute name="value12" value="137014" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOP" relativeKey="$parent.IconOnDeath" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+									<Anchor point="LEFT" relativeKey="$parent.IconOnDeath"><Offset x="-20" /></Anchor>
+								</Anchors>
+							</Frame>
 
 							<Slider parentKey="AlphaNotInRange" inherits="KRFUI_SliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
