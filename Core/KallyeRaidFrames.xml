@@ -212,6 +212,7 @@
 									<Attribute name="title" value="OPTION_HEALTH_ALPHA" />
 									<Attribute name="tooltip" value="OPTION_HEALTH_ALPHA_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
+									<Attribute name="default" value="100" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.LimitLow" relativePoint="TOPLEFT">
@@ -269,10 +270,15 @@
 								</Anchors>
 								<Scripts>
 									<OnShow>
-										self:SetChecked(GetCVarBool("raidFramesDisplayClassColor"));
+										local raidFramesDisplayClassColor = GetCVarBool("raidFramesDisplayClassColor")
+										if not raidFramesDisplayClassColor and CompactRaidFrame1 then
+											raidFramesDisplayClassColor = (CompactRaidFrame1.optionTable.useClassColors) or false
+										end
+										self:SetChecked(raidFramesDisplayClassColor);
 									</OnShow>
 									<OnClick>
 										SetCVar("raidFramesDisplayClassColor", self:GetChecked());
+										K_SHARED_UI.RefreshOptions()
 									</OnClick>
 								</Scripts>
 							</CheckButton>
@@ -291,6 +297,7 @@
 									<Attribute name="text" value="OPTION_NOTINRANGE" />
 									<Attribute name="tooltip" value="OPTION_NOTINRANGE_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
+									<Attribute name="default" value="55" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.HideRealm" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
@@ -302,6 +309,7 @@
 									<Attribute name="text" value="OPTION_NOTINCOMBAT" />
 									<Attribute name="tooltip" value="OPTION_NOTINCOMBAT_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
+									<Attribute name="default" value="100" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaNotInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>

@@ -135,12 +135,20 @@ function K_SHARED_UI.RefreshOptions()
         end
     );
 end
+
+--- Refreshes UI based on the current options state
 --- ! Useable only after ADDON_LOADED
-function ns.RefreshOptions(defaultOptions, showOptionsFrame)
+--- @param defaultOptions table Table containing the default options
+--- @param showOptionsFrame boolean? Optional Whether to show the options frame
+--- @param limitToOptionsNames table? Optional table containing the names of options to limit to
+function ns.RefreshOptions(defaultOptions, showOptionsFrame, limitToOptionsNames)
     ns.optionsFrame:SetShown(showOptionsFrame);
     -- Auto detect options controls and load them
     foreach(defaultOptions,
         function (optionName, defaultValue)
+            if limitToOptionsNames ~= nil and not tContains(limitToOptionsNames, optionName) then
+                return
+            end
             local optionsObject = ns.FindControl(optionName);
             if (optionsObject ~= nil) then
                 local control = optionsObject;
@@ -215,4 +223,24 @@ function ns.IsModuleEnabled(activeCheckbox, headingLabel, option, resize)
         parent:SetHeight(parent._initialHeight)
     end
     return isEnabled
+end
+
+
+--- Resets the specified options to their default values (and refreshes UI only for them)
+--- @param optionNamesToReset table A list of option names to reset.
+--- @param defaultOptions table  A table containing the default options.
+--- @param optionsToForce table? An optional table containing options to force override
+function ns.ResetOptions(optionNamesToReset, defaultOptions, optionsToForce)
+	for _, optionName in ipairs(optionNamesToReset) do
+		_G[ns.OPTIONS_NAME][optionName] = defaultOptions[optionName]
+	end
+	if optionsToForce then
+        foreach(optionsToForce,
+            function (optionName, overrideValue)
+				_G[ns.OPTIONS_NAME][optionName] = overrideValue
+			    table.insert(optionNamesToReset, optionName) -- in case of we forgot
+			end
+		)
+	end
+	ns.RefreshOptions(defaultOptions, true, optionNamesToReset)
 end

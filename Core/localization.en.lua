@@ -10,10 +10,8 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Buffs & debuffs new options (positions)
 - Remaining errors fixed (and explicit warning on Classic)
-- Raid icons dynamic preview
-- Display players level on nameplates
-- Working with Addon Compartment
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -50,8 +48,8 @@ l.OPTION_HEALTH_WARN_TOOLTIP = "Warn health color applied "..l.YLL.."AT|r this l
 l.OPTION_HEALTH_OK = "Health ok";
 l.OPTION_HEALTH_OK_TOOLTIP = "OK health color applied "..l.YLL.."AFTER|r this limit\n\n"
   .."i.e.: Green after 75%";
-l.OPTION_HEALTH_ALPHA = l.WH.."Health Alpha";
-l.OPTION_HEALTH_ALPHA_TOOLTIP = "Alpha of the health bar (with class colors)";
+l.OPTION_HEALTH_ALPHA = l.WH.."Health Alpha"..required;
+l.OPTION_HEALTH_ALPHA_TOOLTIP = "Alpha of the health bar (with class colors)\n"..l.CY.."Wow default: 100%";
 l.OPTION_MOVEROLEICONS = "Adjust role icons on top left";
 l.OPTION_HIDEDAMAGEICONS = "Hide 'dps' role icon";
 l.OPTION_HIDEREALM = "Hide players realm";
@@ -59,8 +57,8 @@ l.OPTION_HIDEREALM_TOOLTIP = "Realm names will be masked, "..l.YLL.."Illidan - V
 l.OPTION_ICONONDEATH = "Add "..l.RT8.." to dead players names";
 l.OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
 l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Player names colored by class (party/raid frames)";
-l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = "Blizzard: "..l.OPTION_FRIENDSCLASSCOLOR;
-l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = "Base raid class colors option";
+l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLORS)
+l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_NOTINRANGE = "Transparency when out of range";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
 l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
@@ -78,43 +76,58 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
 l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
 
-l.OPTION_BUFFS_HEADER = "Buffs / Debuffs";
+l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"
+l.OPTION_ORIENTATION_LeftThenUp = "Left, then Up"
+l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."Left, then Up (default)"
+l.OPTION_ORIENTATION_UpThenLeft = "Up, then Left"
+l.OPTION_ORIENTATION_RightThenUp = "Right, then Up"
+l.OPTION_ORIENTATION_RightThenUp_Default = l.DEFAULT.."Right, then Up (default)"
+l.OPTION_ORIENTATION_UpThenRight = "Up, then Right"
 l.OPTION_BUFFSSCALE = "Buffs relative size"..required;
 l.OPTION_BUFFSSCALE_TOOLTIP = l.CY.."Wow default: 1"
 l.OPTION_MAXBUFFS = "Max buffs"..required;
 l.OPTION_MAXBUFFS_TOOLTIP = "Max buffs to display\n"..l.CY.."Wow default: "..ns.DEFAULT_MAXBUFFS
 l.OPTION_MAXBUFFS_FORMAT = "%d |4buff:buffs";
-l.OPTION_BUFFSPERLINE = "Buffs per line";
-l.OPTION_BUFFSPERLINE_TOOLTIP = "Number of buff icons per line\n"..l.CY.."Wow default: max"
+l.OPTION_BUFFSPERLINE = "Buffs per line"..required;
+l.OPTION_BUFFSPERLINE_TOOLTIP = "Number of buffs per line\n"..l.CY.."Ignored if greater than max buffs";
 l.OPTION_BUFFSPERLINE_FORMAT = "%d per line"..required;
-l.OPTION_BUFFSVERTICAL = "Buffs aligned vertically"..required;
-l.OPTION_BUFFSVERTICAL_TOOLTIP = "Buffs will be vertically aligned,\nin columns\n"..l.CY.."May be disabled few seconds after a boss kill"
+l.OPTION_BUFFSORIENTATION = "Buffs orientation"..required;
+l.OPTION_BUFFSORIENTATION_TOOLTIP = "Choose how buffs are arranged (/w multiline support)\n"..l.CY.."Default: Left to Right, then Up"
+l.OPTION_BUFFS_RELATIVE_X = "Horizontal position"..required;
+l.OPTION_BUFFS_RELATIVE_X_TOOLTIP = "Adjust the relative horizontal position of the buffs";
+l.OPTION_BUFFS_RELATIVE_Y = "Vertical position"..required;
+l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Adjust the relative vertical position of the buffs";
 l.OPTION_DEBUFFSSCALE = "Debuffs relative size"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Wow default: 1"
 l.OPTION_MAXDEBUFFS = "Max debuffs"..required;
 l.OPTION_MAXDEBUFFS_TOOLTIP = "Max debuffs to display\n"..l.CY.."Wow default: "..ns.DEFAULT_MAXBUFFS
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4debuff:debuffs";
 l.OPTION_DEBUFFSPERLINE = "Debuffs per line"..required;
-l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Number of debuff icons per line\n"..l.CY.."Wow default: max"
+l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Number of debuff icons per line\n"..l.CY.."Ignored if greater than max debuffs";
 l.OPTION_DEBUFFSPERLINE_FORMAT = "%d per line";
-l.OPTION_DEBUFFSVERTICAL = "Debuffs aligned vertically"..required;
-l.OPTION_DEBUFFSVERTICAL_TOOLTIP = "Debuffs will be vertically aligned,\nin columns\n"..l.CY.."May be disabled few seconds after a boss kill"
+l.OPTION_DEBUFFSORIENTATION = "Debuffs orientation"..required;
+l.OPTION_DEBUFFSORIENTATION_TOOLTIP = "Choose how debuffs are arranged ((/w multiline support)\n"..l.CY.."Default: Right to Left, then Up"
+l.OPTION_DEBUFFS_RELATIVE_X = "Horizontal position"..required;
+l.OPTION_DEBUFFS_RELATIVE_X_TOOLTIP = "Adjust the relative horizontal position of the debuffs";
+l.OPTION_DEBUFFS_RELATIVE_Y = "Vertical position"..required;
+l.OPTION_DEBUFFS_RELATIVE_Y_TOOLTIP = "Adjust the relative vertical position of the debuffs";
 l.OPTION_USETAINTMETHOD = l.CY.."Legacy display for Max buffs/debuffs"..required.." "..l.ALERT
 l.OPTION_USETAINTMETHOD_TOOLTIP = "Unchecked, uses an experimental display\nChecked, uses a stable display, but with one "..l.RDL.."error per session|r, not a big deal..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changing Max buffs/debuffs causes one "..l.RDL.."error per session|r, not a big deal..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Repositioning may be affected for a few seconds after a boss kill"
+l.OPTION_BUFFS_RESET = "Cancel any repositioning"
 
 l.OPTION_OTHERS_HEADER = "Nameplates";
-l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.RDL.."Blizzard default colors";
+l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.DEFAULT.."Blizzard default colors";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS ="Use class color";
 l.OPTION_NAMEPLATES_USECOLOR_CUSTOM ="Your color choice: ";
-l.OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD = l.RDL.."No icon";
+l.OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD = l.DEFAULT.."No icon";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Faction icon |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t"
 l.OPTION_NAMEPLATES_COLOR_UNDER = "Color if lower";
 l.OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP = "Select the color of the level if it is lower than yours";
 l.OPTION_NAMEPLATES_COLOR_OVER = "Color if higher";
 l.OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP = "Select the color of the level if it is higher than yours";
-l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER = l.RDL.."Never";
+l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER = l.DEFAULT.."Never";
 l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER_TOOLTIP = "Never show the level on the info bars.";
 l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT = "If different from yours";
 l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED = "If different from yours, colored";

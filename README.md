@@ -1,5 +1,5 @@
 # Kallye Raid Frames
-_EN / FR_
+_EN / FR / RU_
 
 Modifications to Blizzards default raid/party frames according to my own preferences.  
 All features are optional.
@@ -18,14 +18,16 @@ All features are optional.
    - Move role icons on top left
    - Hides DPS role icons
 - Buffs / Debuffs Size
-- Buffs / Debuffs Max display limit & Multiline
-- Buffs & Debuffs alignment
+- Buffs / Debuffs Max display limit
+- Buffs / Debuffs relative position (alpha)
+- Buffs / Debuffs alignment / multiline
 - Target icons (💀❌🔴...) on raid frames
 
 3._**Changes to both CompactRaidFrames and Nameplates**
 - Removes servernames from the unitframe ( "Illidan (*)" instead of "Illidan - Varimathras" )
 - Change players nameplate (on the head) color according to your preference (class color, custom color)
 - Pvp Icons
+- Show Players level option
 
 
 ## Slash Commands

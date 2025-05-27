@@ -23,8 +23,17 @@ function ns.InterfaceOptions_AddCategory(frame, addOn, position)
     end
 end
 
--- function ns.RemoveOldOptions(options)
--- end
+function ns.RemoveOldOptions(options)
+	-- Since 11.1.501
+	if  options.BuffsVertical ~= nil then
+		options.BuffsOrientation = options.BuffsVertical and "UpThenLeft" or options.BuffsOrientation
+		options.BuffsVertical = nil
+	end
+	if  options.DebuffsVertical ~= nil then
+		options.DebuffsOrientation = options.DebuffsVertical and "UpThenRight" or options.DebuffsOrientation
+		options.DebuffsVertical = nil
+	end
+end
 
 local startsWith = {
 	play = true, -- player
@@ -412,6 +421,8 @@ end
 ? Hooks: https://wowpedia.fandom.com/wiki/Category:API_functions/restricted
 
 ? https://www.curseforge.com/wow/addons/blizzard-raid-frames-solo-frame
+
+? GlobalStrings: https://www.townlong-yak.com/framexml/live/Helix/GlobalStrings.lua
 
 ? /fstack /dump CompactPartyFrameMember1.myHealPrediction
 ? /console scriptErrors 1

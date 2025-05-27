@@ -1,3 +1,8 @@
+v11.1.504
+- New: Buffs & debuffs new options (x/y positions, directions)
+- Better warnings /w reset button for buffs options only
+- Fixed: Health bar unexpectedly darkened on regular highlight
+
 v11.1.503
 - Health bar Alpha option (regular highlight)
 - Fixed: Health bar unexpectedly darkened on regular highlight
