@@ -77,6 +77,7 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre u
 l.OPTION_ACTIVATE_MODULE = "Activer / D\195\169sactiver le module"
 l.OPTION_HIDEDISABLED = l.GYL.."Masquer les modules d\195\169sactiv\195\169s"
 
+-- KBD START
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"
 l.OPTION_ORIENTATION_LeftThenUp = "\195\128 Gauche, puis en Haut"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."\195\128 Gauche, puis en Haut (par d\195\169faut)"
@@ -117,7 +118,9 @@ l.OPTION_USETAINTMETHOD_TOOLTIP = "D\195\169coch\195\169, utilise l'affichage ex
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changer la Limite provoque une "..l.RDL.."erreur par session|r, pas si grave..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Le repositionnement peut \195\170tre affect\195\169 quelques secondes \195\160 la mort d'un boss"
 l.OPTION_BUFFS_RESET = "Annuler tout repositionnement"
+-- KBD END
 
+-- KNC START
 l.OPTION_OTHERS_HEADER = "Barres d'infos";
 l.OPTION_NAMEPLATES_USECOLOR_BLIZZARD = l.DEFAULT.."Par d\195\169faut";
 l.OPTION_NAMEPLATES_USECOLOR_CLASS = "Couleurs de classe";
@@ -152,9 +155,11 @@ l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Ic\195\180nes JcJ ennemies";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les noms ennemis.";
 l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL = "Niveaux ennemis";
 l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL_TOOLTIP = "Affiche le niveau sur les barres d'info ennemies.";
+-- KNC END
 
 l.OPTION_ACTIVATE_MODULE_RAIDICONS = l.OPTION_ACTIVATE_MODULE .. "\n"
     ..l.WH.."Affiche les ic\195\180nes de cible (|TInterface/TargetingFrame/UI-RaidTargetingIcon_1:0|t|TInterface/TargetingFrame/UI-RaidTargetingIcon_2:0|t...) sur les cadres de raid"
+-- KRI START
 l.OPTION_RAIDICONS_HEADER = "Ic\195\180nes de raid";
 l.OPTION_RAIDICONS_ANCHOR = "Alignement des ic\195\180nes";
 l.OPTION_RAIDICONS_ANCHOR_TOOLTIP = "Position de l'ic\195\180ne cible dans le cadre de raid";
@@ -169,6 +174,7 @@ l.OPTION_RAIDICONS_RELATIVE_X = "Position horizontale";
 l.OPTION_RAIDICONS_RELATIVE_X_TOOLTIP = "Ajustez la position horizontale relative des ic\195\180nes de raid";
 l.OPTION_RAIDICONS_RELATIVE_Y = "Position verticale";
 l.OPTION_RAIDICONS_RELATIVE_Y_TOOLTIP = "Ajustez la position verticale relative des ic\195\180nes de raid";
+-- KRI END
 
 l.OPTION_RESET_OPTIONS = "R\195\169initialiser le profil";
 l.OPTION_RELOAD_REQUIRED = "Certains changements n\195\169cessitent un rechargement (\195\169crivez : "..l.YL.."/reload|r )";
