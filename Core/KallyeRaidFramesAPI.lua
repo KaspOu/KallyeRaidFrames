@@ -128,14 +128,17 @@ local function GetHPSeverity(percent, revert)
 end
 
 local function applyBarTexture(frame, texture, default)
+    if (texture ~= "" and frame:GetAttribute("_hasTexture") == texture) then
+        return
+    end
     if (texture == "") then
-        if (frame._lastTexture ~= nil) then
-            frame._lastTexture = nil
+        if (frame:GetAttribute("_hasTexture") ~= nil) then
+			frame:SetAttribute("_hasTexture", nil)
             frame:SetStatusBarTexture(default)
         end
         return
     end
-    frame._lastTexture = texture
+    frame:SetAttribute("_hasTexture", texture)
     frame:SetStatusBarTexture(tonumber(texture) or texture)
 end
 
