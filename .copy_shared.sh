@@ -8,6 +8,7 @@ sed -i 's/KRF/KBD/g' ../KBigDebuffs/Shared/WidgetsKBD.xml
 cp ./Shared/OptionsNameplatesColorKRF.xml ../KNameplateColor/Shared/OptionsNameplatesColorKNC.xml
 cp ./Shared/WidgetsKRF.xml ../KNameplateColor/Shared/WidgetsKNC.xml
 sed -i 's/KRF/KNC/g' ../KNameplateColor/Shared/OptionsNameplatesColorKNC.xml
+sed -i 's/KallyeRaidFrames/KNameplateColor/g' ../KNameplateColor/Shared/OptionsNameplatesColorKNC.xml
 sed -i 's/KRF/KNC/g' ../KNameplateColor/Shared/WidgetsKNC.xml
 
 cp ./Shared/OptionsRaidIconsKRF.xml ../KRaidIcons/Shared/OptionsRaidIconsKRI.xml

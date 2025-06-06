@@ -12,6 +12,7 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
+- Textures des barres d'info
 - Nouvelles options aux Buffs & débuffs (positions)
 - Erreurs corrigées (et alerte explicite sur Classic)
 ]];
@@ -141,7 +142,9 @@ l.OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS_COLORED = "Toujours, color\195\169";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Noms alli\195\169s";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info alli\195\169es (hors instances)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Barres alli\195\169es";
-l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info alli\195\169es (hors instances)";
+l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info alli\195\169es (hors instances)"
+l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE = "Texture Barres alli\195\169es"
+l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Texture des barres d'info alli\195\169es (hors instances)"
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS = "Ic\195\180nes JcJ alli\195\169es";
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les noms alli\195\169s.";
 l.OPTION_FRIENDSNAMEPLATES_TXT_SHOWLEVEL = "Niveaux alli\195\169s";
@@ -151,6 +154,8 @@ l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Noms ennemis";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Couleur du nom sur les barres d'info ennemies (hors instances)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Barres ennemies";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Couleur des barres d'info ennemies (hors instances)";
+l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE = "Texture Barres ennemies"
+l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Texture des barres d'info ennemies (hors instances)"
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Ic\195\180nes JcJ ennemies";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Affiche les ic\195\180nes JcJ sur les noms ennemis.";
 l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL = "Niveaux ennemis";

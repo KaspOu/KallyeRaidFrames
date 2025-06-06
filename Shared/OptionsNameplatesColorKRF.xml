@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsNameplatesColor.lua" />
 	<Frame name="KRFOptionsNameplatesColor" virtual="true">
-		<Size x="550" y="270" />
+		<Size x="550" y="310" />
 		<Frames>
 			<CheckButton parentKey="LabelNameplatesColor" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -101,6 +101,40 @@
 					</Anchors>
 				</Button>
 
+			<Frame parentKey="FriendsNameplates_Bar_Texture" name="$parent_FriendsNameplates_Bar_Texture" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE" />
+					<Attribute name="tooltip" value="OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="160" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="" />
+					<Attribute name="color1" value="DEFAULT" />
+					<Attribute name="text2" value="2D" />
+					<Attribute name="value2" value="Interface\AddOns\KallyeRaidFrames\Files\2d" />
+					<Attribute name="text3" value="Button" />
+					<Attribute name="value3" value="Interface\AddOns\KallyeRaidFrames\Files\button" />
+					<Attribute name="text4" value="Button Lite" />
+					<Attribute name="value4" value="Interface\AddOns\KallyeRaidFrames\Files\button_lite" />
+					<Attribute name="text5" value="Glow" />
+					<Attribute name="value5" value="Interface\AddOns\KallyeRaidFrames\Files\glow" />
+					<Attribute name="text6" value="Gradient left" />
+					<Attribute name="value6" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_left" />
+					<Attribute name="text7" value="Gradient right" />
+					<Attribute name="value7" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_right" />
+					<Attribute name="text8" value="Gradient down" />
+					<Attribute name="value8" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_down" />
+					<Attribute name="text9" value="Gradient up" />
+					<Attribute name="value9" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_up" />
+					<Attribute name="text10" value="Shadow" />
+					<Attribute name="value10" value="Interface\AddOns\KallyeRaidFrames\Files\shadow" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
+				</Anchors>
+			</Frame>
+
 			<Frame parentKey="FriendsNameplates_PvpIcon" name="$parent_FriendsNameplates_PvpIcon" inherits="KRFUI_DropDownWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_FRIENDSNAMEPLATES_PVPICONS" />
@@ -130,7 +164,7 @@
 					<Attribute name="value10" value="swords" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Bar_Texture" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
 				</Anchors>
 			</Frame>
@@ -257,6 +291,40 @@
 					</Anchors>
 				</Button>
 
+			<Frame parentKey="EnemiesNameplates_Bar_Texture" name="$parent_EnemiesNameplates_Bar_Texture" inherits="KRFUI_DropDownWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE" />
+					<Attribute name="tooltip" value="OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE_TOOLTIP" />
+					<Attribute name="justify" value="RIGHT" />
+					<Attribute name="width" value="160" />
+					<Attribute name="text1" value="OPTION_NAMEPLATES_USECOLOR_BLIZZARD" />
+					<Attribute name="value1" value="" />
+					<Attribute name="color1" value="DEFAULT" />
+					<Attribute name="text2" value="2D" />
+					<Attribute name="value2" value="Interface\AddOns\KallyeRaidFrames\Files\2d" />
+					<Attribute name="text3" value="Button" />
+					<Attribute name="value3" value="Interface\AddOns\KallyeRaidFrames\Files\button" />
+					<Attribute name="text4" value="Button Lite" />
+					<Attribute name="value4" value="Interface\AddOns\KallyeRaidFrames\Files\button_lite" />
+					<Attribute name="text5" value="Glow" />
+					<Attribute name="value5" value="Interface\AddOns\KallyeRaidFrames\Files\glow" />
+					<Attribute name="text6" value="Gradient left" />
+					<Attribute name="value6" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_left" />
+					<Attribute name="text7" value="Gradient right" />
+					<Attribute name="value7" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_right" />
+					<Attribute name="text8" value="Gradient down" />
+					<Attribute name="value8" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_down" />
+					<Attribute name="text9" value="Gradient up" />
+					<Attribute name="value9" value="Interface\AddOns\KallyeRaidFrames\Files\gradient_up" />
+					<Attribute name="text10" value="Shadow" />
+					<Attribute name="value10" value="Interface\AddOns\KallyeRaidFrames\Files\shadow" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
+				</Anchors>
+			</Frame>
+
 			<Frame parentKey="EnemiesNameplates_PvpIcon" name="$parent_EnemiesNameplates_PvpIcon" inherits="KRFUI_DropDownWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_ENEMIESNAMEPLATES_PVPICONS" />
@@ -285,7 +353,7 @@
 					<Attribute name="value10" value="swords" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Bar_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
+					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Bar_Texture" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_Bar_UseColor"><Offset x="0" /></Anchor>
 				</Anchors>
 			</Frame>

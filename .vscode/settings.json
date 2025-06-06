@@ -115,7 +115,8 @@
         "DefaultCompactNamePlateFriendlyFrameOptions",
         "OPTION_TOOLTIP_RAID_USE_CLASS_COLORS",
         "RAID_USE_CLASS_COLORS",
-        "INTERFACE_LABEL"
+        "INTERFACE_LABEL",
+        "tContains"
     ],
     "cSpell.words": [
         "prepatch"
@@ -154,6 +155,6 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "c:\\Users\\Utilisateur\\.cursor\\extensions\\ketho.wow-api-0.20.6\\Annotations\\Core"
+        "c:\\Users\\Utilisateur\\.cursor\\extensions\\ketho.wow-api-0.20.7\\Annotations\\Core"
     ]
 }

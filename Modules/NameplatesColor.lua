@@ -10,12 +10,14 @@ if ns.HAS_colorNameBySelection == nil then
     ns.HAS_colorNameBySelection = ns.IS_RETAIL or (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 end
 
+local DEFAULT_NAMEPLATES_TEXTURE = 137014
+
 local function getClassColors()
 	return CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS;
 end
 
 local function FrameIsCompact(frame)
-	local getName = frame:GetName();
+	local getName = frame:GetName()
 	return getName ~=nil and strsub(getName, 0, 7) == "Compact"
 end
 
@@ -53,7 +55,7 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
         if (showLevelOption == "22" or ns._PlayerLevel ~= unitLevel) then
             levelShowed = unitLevel.." ";
         end
-        if (levelShowed ~= "") then
+        if (unitLevel > 0 and levelShowed ~= "") then
             if (showLevelOption == "12" or showLevelOption == "22") then
                 if (unitLevel < ns._PlayerLevel) then
                     levelShowed = WrapTextInColorCode(levelShowed, BCC(underLevelColor));
@@ -79,6 +81,21 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
     end
 end
 
+local function applyBarTexture(frame, texture, default)
+    if (texture ~= "" and frame._lastTexture == texture) then
+        return
+    end
+    if (texture == "") then
+        if (frame._lastTexture ~= nil) then
+            frame._lastTexture = nil
+            frame:SetStatusBarTexture(default)
+        end
+        return
+    end
+    frame._lastTexture = texture
+    frame:SetStatusBarTexture(texture)
+end
+
 local function applyBarColor(healthBar, useColorOption, color, customColor)
     if useColorOption == "1" then
         healthBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
@@ -99,24 +116,19 @@ end
 --- Hook CompactUnitFrame_UpdateName
 --- @param frame any The nameplate frame to update.
 local function Hook_CUF_UpdateName(frame)
-    if frame:IsForbidden() or not UnitPlayerControlled(frame.displayedUnit) or FrameIsCompact(frame) or _G[ns.OPTIONS_NAME].ActiveNameplatesColor == false then
+    if frame:IsForbidden() or FrameIsCompact(frame) or not UnitExists(frame.displayedUnit) or _G[ns.OPTIONS_NAME].ActiveNameplatesColor == false then
         return
     end
 
     local cacheOptions = ns.Module.cacheOptions
+    if not UnitIsFriend(frame.displayedUnit, "player") then
+        applyBarTexture(frame.healthBar, cacheOptions.EnemiesNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
+    else
+        applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
+    end
+
     local r, g, b, a = UnitSelectionColor(frame.displayedUnit)
     local c = not UnitIsPlayer(frame.displayedUnit) and {r= r, g= g, b=b, a=a} or getClassColors()[select(2,UnitClass(frame.displayedUnit))]
-
-    if UnitIsFriend(frame.displayedUnit, "player") then
-        applyTextColor(frame.name, cacheOptions.FriendsNameplates_Txt_UseColor, c, cacheOptions.FriendsNameplates_Txt_Color)
-        applyIconAndText(frame.displayedUnit, frame.name,
-            cacheOptions.FriendsNameplates_PvpIcon,
-            cacheOptions.FriendsNameplates_Txt_ShowLevel,
-            cacheOptions.FriendsNameplates_Txt_Level_Color_Under,
-            cacheOptions.FriendsNameplates_Txt_Level_Color_Over)
-        local optionBarUseColor = filterNameplateBarOption(cacheOptions.FriendsNameplates_Bar_UseColor)
-        applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.FriendsNameplates_Bar_Color)
-    end
 
     if not UnitIsFriend(frame.displayedUnit, "player") then
         applyTextColor(frame.name, cacheOptions.EnemiesNameplates_Txt_UseColor, c, cacheOptions.EnemiesNameplates_Txt_Color)
@@ -127,6 +139,15 @@ local function Hook_CUF_UpdateName(frame)
             cacheOptions.EnemiesNameplates_Txt_Level_Color_Over)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.EnemiesNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.EnemiesNameplates_Bar_Color)
+    else
+        applyTextColor(frame.name, cacheOptions.FriendsNameplates_Txt_UseColor, c, cacheOptions.FriendsNameplates_Txt_Color)
+        applyIconAndText(frame.displayedUnit, frame.name,
+            cacheOptions.FriendsNameplates_PvpIcon,
+            cacheOptions.FriendsNameplates_Txt_ShowLevel,
+            cacheOptions.FriendsNameplates_Txt_Level_Color_Under,
+            cacheOptions.FriendsNameplates_Txt_Level_Color_Over)
+        local optionBarUseColor = filterNameplateBarOption(cacheOptions.FriendsNameplates_Bar_UseColor)
+        applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.FriendsNameplates_Bar_Color)
     end
 end
 
@@ -149,11 +170,13 @@ local function isEnabled(options)
             or (options.FriendsNameplates_Bar_UseColor or "0") ~= "0"
             or (options.FriendsNameplates_PvpIcon or "0") ~= "0"
             or (options.FriendsNameplates_Txt_ShowLevel or "0") ~= "0"
+            or (options.FriendsNameplates_Bar_Texture or "0") ~= "0"
 
             or (options.EnemiesNameplates_Txt_UseColor or "0") ~= "0"
             or (options.EnemiesNameplates_Bar_UseColor or "0") ~= "0"
             or (options.EnemiesNameplates_PvpIcon or "0") ~= "0"
             or (options.EnemiesNameplates_Txt_ShowLevel or "0") ~= "0"
+            or (options.EnemiesNameplates_Bar_Texture or "0") ~= "0"
         )
 end
 

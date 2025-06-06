@@ -10,6 +10,7 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Nameplates textures
 - Buffs & debuffs new options (positions)
 - Remaining errors fixed (and explicit warning on Classic)
 ]]
@@ -141,6 +142,8 @@ l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Allied names";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above allied nameplates (outside instances)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Allied bars";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of allied nameplates (outside instances)";
+l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE = "Allied bars texture"
+l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Texture of allied nameplates (outside instances)"
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS = "Allied PvP icons";
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on allied names.";
 l.OPTION_FRIENDSNAMEPLATES_TXT_SHOWLEVEL = "Allied level";
@@ -150,6 +153,8 @@ l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Enemy names";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Text color of the name above enemy nameplates (outside instances)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Enemy bars";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Color of enemy nameplates (outside instances)";
+l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE = "Enemy bars texture"
+l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Texture of enemy nameplates (outside instances)"
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "Enemy PvP icons";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Displays PvP icons on enemy names.";
 l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL = "Enemy level";

@@ -1,3 +1,6 @@
+v11.1.505
+- New: Nameplates textures
+
 v11.1.504
 - New: Buffs & debuffs new options (x/y positions, directions)
 - Better warnings /w reset button for buffs options only
