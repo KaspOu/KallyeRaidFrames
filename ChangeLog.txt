@@ -1,3 +1,6 @@
+v11.1.701
+- TWW 11.1.7
+
 v11.1.505
 - New: Nameplates textures
 
