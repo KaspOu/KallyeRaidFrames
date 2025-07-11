@@ -1,6 +1,8 @@
 local _, ns = ...
 local l = ns.I18N;
 
+local DEFAULT_RAIDHEALTHBAR_TEXTURE = 423819
+
 function ns.InterfaceOptions_AddCategory(frame, addOn, position)
 	if not Settings or not Settings.RegisterCanvasLayoutSubcategory then
 		return InterfaceOptions_AddCategory(frame, addOn, position)
@@ -125,6 +127,18 @@ local function GetHPSeverity(percent, revert)
 	end
 end
 
+local function applyBarTexture(frame, texture, default)
+    if (texture == "") then
+        if (frame._lastTexture ~= nil) then
+            frame._lastTexture = nil
+            frame:SetStatusBarTexture(default)
+        end
+        return
+    end
+    frame._lastTexture = texture
+    frame:SetStatusBarTexture(tonumber(texture) or texture)
+end
+
 --[[
 ! Managing Health color: background
 ]]
@@ -154,6 +168,7 @@ local function UpdateHealth_Regular(frame, health)
 			health = health or UnitHealth(frame.displayedUnit);
 			local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 			local healthPercentage = ceil((health / unitHealthMax * 100));
+			applyBarTexture(frame.healthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
 			frame.background:SetColorTexture(GetHPSeverity(healthPercentage/100, false));
 			if frame._wasDead then
 				if (_G[ns.OPTIONS_NAME].IconOnDeath) then
@@ -198,6 +213,7 @@ local function UpdateHealth_Reverted(frame, health)
 			local unitHealthMax = UnitHealthMax(frame.displayedUnit);
 			local healthPercentage = ceil((health / unitHealthMax * 100));
 			local healthLost = unitHealthMax - health;
+			applyBarTexture(frame.healthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
 			frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
 			if frame._wasDead then
 				if (_G[ns.OPTIONS_NAME].IconOnDeath) then

@@ -1,3 +1,6 @@
+v11.1.702
+- New: Raid healthbar texture
+
 v11.1.701
 - TWW 11.1.7
 

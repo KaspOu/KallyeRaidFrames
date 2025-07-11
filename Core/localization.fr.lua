@@ -12,9 +12,9 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
+- Texture des barres de raid
 - Textures des barres d'info
 - Nouvelles options aux Buffs & débuffs (positions)
-- Erreurs corrigées (et alerte explicite sur Classic)
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -61,6 +61,8 @@ l.OPTION_FRIENDSCLASSCOLOR = "Noms color\195\169s par classe";
 l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Noms des joueurs color\195\169s par classe (cadres de groupe/raid)";
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard : %s", RAID_USE_CLASS_COLORS)
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s : %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
+l.OPTION_BAR_TEXTURE = "Texture"
+l.OPTION_BAR_TEXTURE_TOOLTIP = "Texture de la barre de vie"
 l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 55%";
 l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";

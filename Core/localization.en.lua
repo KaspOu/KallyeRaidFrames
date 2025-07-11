@@ -10,9 +10,9 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Raid healthbar texture
 - Nameplates textures
 - Buffs & debuffs new options (positions)
-- Remaining errors fixed (and explicit warning on Classic)
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -60,6 +60,8 @@ l.OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
 l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Player names colored by class (party/raid frames)";
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLORS)
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
+l.OPTION_BAR_TEXTURE = "Texture"
+l.OPTION_BAR_TEXTURE_TOOLTIP = "Texture of the health bar"
 l.OPTION_NOTINRANGE = "Transparency when out of range";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
 l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
