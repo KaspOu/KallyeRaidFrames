@@ -28,11 +28,18 @@ All features are optional.
 - Change players nameplate (on the head) color according to your preference (class color, custom color)
 - Pvp Icons
 - Show Players level option
+- Health bar texture
 
 
 ## Slash Commands
 **/krf** - shows options
 **/krf test** - toggle test mode
+
+
+**Known errors**  
+- Classic / Mists: One error by session while changing Max (De)buffs setting, expected. Explicit warning added  
+- Just after a boss kill, buffs & debuffs positions may flicker (back to Blizzard defaults until out of combat).  
+- With option 'Always show party/raid frames', entering a raid may trigger an error (only once per session).  
 
 
 ## Example
