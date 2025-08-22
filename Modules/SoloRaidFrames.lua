@@ -15,6 +15,10 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
     ]]
     Hook_CompactPartyFrame_UpdateVisibility = function()
         if (not IsInGroup() and not IsInRaid()) then
+            if InCombatLockdown() then
+                C_Timer.After(1, Hook_CompactPartyFrame_UpdateVisibility);
+                return
+            end
             CompactPartyFrame:SetShown(true);
         end
     end

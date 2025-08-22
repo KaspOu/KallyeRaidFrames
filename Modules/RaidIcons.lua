@@ -118,7 +118,10 @@ local function OnEvent(self, event, ...)
 	elseif (event == "RAID_TARGET_UPDATE") then
 		SetRaidIcons(true);
 	elseif (event == "GROUP_ROSTER_UPDATE") then
-		C_Timer.After(1, SetRaidIcons);
+		-- Error while leaving raid/group?
+		if (IsInGroup() or IsInRaid()) then
+			C_Timer.After(1, SetRaidIcons)
+		end
 	--elseif (event == "GROUP_ROSTER_UPDATE") then
 		-- If Raid frames moved: replaceraidIcons()
 	end
