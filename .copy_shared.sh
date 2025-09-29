@@ -21,6 +21,10 @@ sed -n '/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!p}}' Core/local
 sed -i '/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!d}}' ../KBigDebuffs/Core/localization.en.lua
 sed -i '/-- KBD START/r /tmp/temp.en.lua' ../KBigDebuffs/Core/localization.en.lua
 
+sed -n '/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!p}}' Core/localization.es.lua > /tmp/temp.es.lua
+sed -i '/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!d}}' ../KBigDebuffs/Core/localization.es.lua
+sed -i '/-- KBD START/r /tmp/temp.es.lua' ../KBigDebuffs/Core/localization.es.lua
+
 sed -n '/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!p}}' Core/localization.fr.lua > /tmp/temp.fr.lua
 sed -i '/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!d}}' ../KBigDebuffs/Core/localization.fr.lua
 sed -i '/-- KBD START/r /tmp/temp.fr.lua' ../KBigDebuffs/Core/localization.fr.lua
@@ -34,6 +38,10 @@ sed -n '/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!p}}' Core/local
 sed -i '/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!d}}' ../KNameplateColor/Core/localization.en.lua
 sed -i '/-- KNC START/r /tmp/temp.en.lua' ../KNameplateColor/Core/localization.en.lua
 
+sed -n '/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!p}}' Core/localization.es.lua > /tmp/temp.es.lua
+sed -i '/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!d}}' ../KNameplateColor/Core/localization.es.lua
+sed -i '/-- KNC START/r /tmp/temp.es.lua' ../KNameplateColor/Core/localization.es.lua
+
 sed -n '/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!p}}' Core/localization.fr.lua > /tmp/temp.fr.lua
 sed -i '/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!d}}' ../KNameplateColor/Core/localization.fr.lua
 sed -i '/-- KNC START/r /tmp/temp.fr.lua' ../KNameplateColor/Core/localization.fr.lua
@@ -46,6 +54,10 @@ sed -i '/-- KNC START/r /tmp/temp.ru.lua' ../KNameplateColor/Core/localization.r
 sed -n '/-- KRI START/,/-- KRI END/{/-- KRI START/!{/-- KRI END/!p}}' Core/localization.en.lua > /tmp/temp.en.lua
 sed -i '/-- KRI START/,/-- KRI END/{/-- KRI START/!{/-- KRI END/!d}}' ../KRaidIcons/Core/localization.en.lua
 sed -i '/-- KRI START/r /tmp/temp.en.lua' ../KRaidIcons/Core/localization.en.lua
+
+sed -n '/-- KRI START/,/-- KRI END/{/-- KRI START/!{/-- KRI END/!p}}' Core/localization.es.lua > /tmp/temp.es.lua
+sed -i '/-- KRI START/,/-- KRI END/{/-- KRI START/!{/-- KRI END/!d}}' ../KRaidIcons/Core/localization.es.lua
+sed -i '/-- KRI START/r /tmp/temp.es.lua' ../KRaidIcons/Core/localization.es.lua
 
 sed -n '/-- KRI START/,/-- KRI END/{/-- KRI START/!{/-- KRI END/!p}}' Core/localization.fr.lua > /tmp/temp.fr.lua
 sed -i '/-- KRI START/,/-- KRI END/{/-- KRI START/!{/-- KRI END/!d}}' ../KRaidIcons/Core/localization.fr.lua
