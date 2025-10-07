@@ -2,7 +2,7 @@
 -- Spanish localization (ChatGPT)
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "esES") then return; end
+if (GetLocale() ~= "esES" and GetLocale() ~= "esMX") then return end
 local _, ns = ...
 local l = ns.I18N;
 

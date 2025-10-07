@@ -10,7 +10,7 @@
 ## IconTexture: Interface\AddOns\KallyeRaidFrames\Logo32
 
 ## X-Category: Raid Frames, Interface Enhancements
-## X-Localizations: enUS, frFR, ruRU
+## X-Localizations: enUS, frFR, ruRU, esES
 ## X-License: MIT
 ## X-Website: https://github.com/KaspOu/KallyeRaidFrames/
 ## X-Curse-Project-ID: 410566
