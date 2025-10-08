@@ -10,6 +10,7 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Added new localizations
 - Raid healthbar texture
 - Nameplates textures
 - Buffs & debuffs new options (positions)

@@ -10,7 +10,15 @@ l.VERS_TITLE    = format("%s %s", ns.TITLE, ns.VERSION);
 l.CONFLICT_MESSAGE = "Отключено: Конфликт с %s";
 
 l.SUBTITLE      = "Цель рейдовых значков";
-l.DESC          = "Показывает значки целей (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) на рейдовых рамках\n\n"
+l.DESC          = "Улучшает рейдовые рамки.\n\n"
+.." - Выделяет фон игроков с низким уровнем здоровья\n\n"
+.." - Инвертированные полосы будут использовать выбранные вами цвета\n\n"
+.." - Прозрачность юнитов вне зоны действия\n\n"
+.." - Рейд всегда виден\n\n"
+.."\n"
+.."Улучшает баффы / дебаффы (размер, макс. отображаемых, ...)\n\n"
+.."Раскрашивает имена в информационных полосах, с PvP-иконками |TInterface/PVPFrame/PVP-Currency-Alliance:16|t|TInterface/PVPFrame/PVP-Currency-Horde:16|t\n\n" -- ChatGPT
+.."Показывает значки целей (|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t...) на рейдовых рамках\n\n"
 l.OPTIONS_TITLE = format("%s - Параметры", l.VERS_TITLE);
 
 l.MSG_LOADED         = format("%s загружен и активен", l.VERS_TITLE);
@@ -19,54 +27,56 @@ l.INIT_FAILED = format("%s неправильно инициализирован
 
 
 local required = l.YL.."*";
--- l.OPTION_RAID_HEADER = "Party / Raid";
--- l.OPTION_HIGHLIGHTLOWHP = "Highlight players HP loss (dynamic colors)";
--- l.OPTION_REVERTBAR = l.YL.."Revert|r HP bars (less life = bigger bar !) "..required;
--- l.OPTION_HEALTH_LOW = "Almost dead!";
--- l.OPTION_HEALTH_LOW_TOOLTIP = "Low health color applied "..l.YLL.."BELOW|r this limit\n\n"
---   .."i.e.: Red below 25%";
--- l.OPTION_HEALTH_WARN = "Warning";
--- l.OPTION_HEALTH_WARN_TOOLTIP = "Warn health color applied "..l.YLL.."AT|r this limit exactly\n\n"
---   .."i.e.: Yellow at 50%";
--- l.OPTION_HEALTH_OK = "Health ok";
--- l.OPTION_HEALTH_OK_TOOLTIP = "OK health color applied "..l.YLL.."AFTER|r this limit\n\n"
---   .."i.e.: Green after 75%";
--- l.OPTION_HEALTH_ALPHA = l.WH.."Health Alpha"..required;
--- l.OPTION_HEALTH_ALPHA_TOOLTIP = "Alpha of the health bar (with class colors)\n"..l.CY.."Wow default: 100%";
--- l.OPTION_MOVEROLEICONS = "Adjust role icons on top left";
--- l.OPTION_HIDEDAMAGEICONS = "Hide 'dps' role icon";
--- l.OPTION_HIDEREALM = "Hide players realm";
--- l.OPTION_HIDEREALM_TOOLTIP = "Realm names will be masked, "..l.YLL.."Illidan - Varimathras|r will become "..l.YLL.."Illidan (*)|r";
--- l.OPTION_ICONONDEATH = "Add "..l.RT8.." to dead players names";
--- l.OPTION_FRIENDSCLASSCOLOR = "Names colored by class";
--- l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Player names colored by class (party/raid frames)";
--- l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLORS)
--- l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
--- l.OPTION_NOTINRANGE = "Transparency when out of range";
--- l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
--- l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
--- l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
--- l.OPTION_SOLORAID = l.CY.."Display raid frames while solo "..required;
--- l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames,\nwill active "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES
+l.OPTION_RAID_HEADER = "Группа / Рейд"; -- ChatGPT
+l.OPTION_HIGHLIGHTLOWHP = "Выделять игроков с низким уровнем здоровья (динамические цвета)"..required; -- ChatGPT
+l.OPTION_REVERTBAR = "Инвертированные "..l.YL.."полосы здоровья|r (чем меньше здоровья, тем больше полоса!)"; -- ChatGPT
+l.OPTION_HEALTH_LOW = "Почти мертв!"; -- ChatGPT
+l.OPTION_HEALTH_LOW_TOOLTIP = "Цвет будет применен "..l.YLL.."НИЖЕ|r этого предела\n\n"
+    .."Например: Красный ниже 25%"; -- ChatGPT
+l.OPTION_HEALTH_WARN = "Внимание"; -- ChatGPT
+l.OPTION_HEALTH_WARN_TOOLTIP = "Цвет будет применен "..l.YLL.."НА|r этом пределе\n\n"
+    .."Например: Желтый на 50%"; -- ChatGPT
+l.OPTION_HEALTH_OK = "Хорошее здоровье"; -- ChatGPT
+l.OPTION_HEALTH_OK_TOOLTIP = "Цвет будет применен "..l.YLL.."ВЫШЕ|r этого предела\n\n"
+    .."Например: Зеленый после 75%"; -- ChatGPT
+l.OPTION_HEALTH_ALPHA = l.WH.."Прозрачность"..required; -- ChatGPT
+l.OPTION_HEALTH_ALPHA_TOOLTIP = "Прозрачность полосы здоровья (с цветом класса)\n"..l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
+l.OPTION_MOVEROLEICONS = "Иконка роли вверху слева"; -- ChatGPT
+l.OPTION_HIDEDAMAGEICONS = "Скрыть иконку роли 'урон'"; -- ChatGPT
+l.OPTION_HIDEREALM = "Скрыть название игрового мира"; -- ChatGPT
+l.OPTION_HIDEREALM_TOOLTIP = "Названия игровых миров будут скрыты, так "..l.YLL.."Иллидан - Вариматрас|r станет "..l.YLL.."Иллидан (*)|r"; -- ChatGPT
+l.OPTION_ICONONDEATH = "Добавить "..l.RT8.." к именам мертвых"; -- ChatGPT
+l.OPTION_FRIENDSCLASSCOLOR = "Имена, окрашенные по классу"; -- ChatGPT
+l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Имена игроков, окрашенные по классу (рамки группы/рейда)"; -- ChatGPT
+l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLORS) -- ChatGPT
+l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS) -- ChatGPT
+l.OPTION_BAR_TEXTURE = "Текстура" -- ChatGPT
+l.OPTION_BAR_TEXTURE_TOOLTIP = "Текстура полосы здоровья" -- ChatGPT
+l.OPTION_NOTINRANGE = "Прозрачность, если вне зоны действия"; -- ChatGPT
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: 55%"; -- ChatGPT
+l.OPTION_NOTINCOMBAT = "Прозрачность рейда вне боя"; -- ChatGPT
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
+l.OPTION_SOLORAID = l.CY.."Показывать рейдовые рамки в соло-режиме "..required; -- ChatGPT
+l.OPTION_SOLORAID_TOOLTIP = "Рамки группы/рейда всегда видны,\nактивирует "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES; -- ChatGPT
 
--- l.OPTION_EDITMODE_PARTY = format("Blizzard: %s", USE_RAID_STYLE_PARTY_FRAMES)
--- l.OPTION_EDITMODE_PARTY_TOOLTIP = "";
--- l.OPTION_DEBUG_ON = "! Test raid frames !";
--- l.OPTION_DEBUG_ON_MESSAGE = "Testing party / raid frames, reclick to stop it!";
--- l.OPTION_DEBUG_OFF = "! STOP Test !";
--- l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
+l.OPTION_EDITMODE_PARTY = format("Blizzard: %s", USE_RAID_STYLE_PARTY_FRAMES) -- ChatGPT
+l.OPTION_EDITMODE_PARTY_TOOLTIP = "";
+l.OPTION_DEBUG_ON = "! Тестировать рейдовые рамки!"; -- ChatGPT
+l.OPTION_DEBUG_ON_MESSAGE = "Тест рейдовых рамок активирован, нажмите еще раз, чтобы остановить!"; -- ChatGPT
+l.OPTION_DEBUG_OFF = "! ОСТАНОВИТЬ ТЕСТ!"; -- ChatGPT
+l.OPTION_DEBUG_OFF_MESSAGE = "Тест остановлен, вы можете вернуться к обычной деятельности"; -- ChatGPT
 
--- l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
--- l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
+l.OPTION_ACTIVATE_MODULE = "Активировать / Деактивировать модуль" -- ChatGPT
+l.OPTION_HIDEDISABLED = l.GYL.."Скрыть отключенные модули" -- ChatGPT
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Баффы / Дебаффы";
--- l.OPTION_ORIENTATION_LeftThenUp = "Left, then Up"
--- l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."Left, then Up (default)"
--- l.OPTION_ORIENTATION_UpThenLeft = "Up, then Left"
--- l.OPTION_ORIENTATION_RightThenUp = "Right, then Up"
--- l.OPTION_ORIENTATION_RightThenUp_Default = l.DEFAULT.."Right, then Up (default)"
--- l.OPTION_ORIENTATION_UpThenRight = "Up, then Right"
+l.OPTION_ORIENTATION_LeftThenUp = "Влево, затем вверх"; -- ChatGPT
+l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."Влево, затем вверх (по умолчанию)"; -- ChatGPT
+l.OPTION_ORIENTATION_UpThenLeft = "Вверх, затем влево"; -- ChatGPT
+l.OPTION_ORIENTATION_RightThenUp = "Вправо, затем вверх"; -- ChatGPT
+l.OPTION_ORIENTATION_RightThenUp_Default = l.DEFAULT.."Вправо, затем вверх (по умолчанию)"; -- ChatGPT
+l.OPTION_ORIENTATION_UpThenRight = "Вверх, затем вправо"; -- ChatGPT
 l.OPTION_BUFFSSCALE = "Относительный размер баффов"..required;
 l.OPTION_BUFFSSCALE_TOOLTIP = l.CY.."По умолчанию в WoW: 1"
 l.OPTION_MAXBUFFS = "Максимум баффов"..required;
@@ -75,12 +85,12 @@ l.OPTION_MAXBUFFS_FORMAT = "%d |4бафф:баффа:баффов";
 l.OPTION_BUFFSPERLINE = "Баффов в строке";
 l.OPTION_BUFFSPERLINE_TOOLTIP = "Количество иконок баффов в строке\n"..l.CY.."По умолчанию в WoW: максимум"
 l.OPTION_BUFFSPERLINE_FORMAT = "%d в строке"..required;
--- l.OPTION_BUFFSORIENTATION = "Buffs orientation"..required;
--- l.OPTION_BUFFSORIENTATION_TOOLTIP = "Choose how buffs are arranged (/w multiline support)\n"..l.CY.."Default: Left to Right, then Up"
--- l.OPTION_BUFFS_RELATIVE_X = "Horizontal position"..required;
--- l.OPTION_BUFFS_RELATIVE_X_TOOLTIP = "Adjust the relative horizontal position of the buffs";
--- l.OPTION_BUFFS_RELATIVE_Y = "Vertical position"..required;
--- l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Adjust the relative vertical position of the buffs";
+l.OPTION_BUFFSORIENTATION = "Ориентация баффов"..required; -- ChatGPT
+l.OPTION_BUFFSORIENTATION_TOOLTIP = "Выберите расположение баффов (поддерживает несколько строк)\n"..l.CY.."По умолчанию: "..l.OPTION_ORIENTATION_LeftThenUp; -- ChatGPT
+l.OPTION_BUFFS_RELATIVE_X = "Горизонтальное положение"..required; -- ChatGPT
+l.OPTION_BUFFS_RELATIVE_X_TOOLTIP = "Отрегулируйте относительное горизонтальное положение баффов"; -- ChatGPT
+l.OPTION_BUFFS_RELATIVE_Y = "Вертикальное положение"..required; -- ChatGPT
+l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Отрегулируйте относительное вертикальное положение баффов"; -- ChatGPT
 l.OPTION_DEBUFFSSCALE = "Относительный размер дебаффов"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."По умолчанию в WoW: 1"
 l.OPTION_MAXDEBUFFS = "Максимум дебаффов"..required;
@@ -89,17 +99,17 @@ l.OPTION_MAXDEBUFFS_FORMAT = "%d |4дебафф:дебаффа:дебаффов"
 l.OPTION_DEBUFFSPERLINE = "Дебаффов в строке"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Количество иконок дебаффов в строке\n"..l.CY.."По умолчанию в WoW: максимум"
 l.OPTION_DEBUFFSPERLINE_FORMAT = "%d в строке";
--- l.OPTION_DEBUFFSORIENTATION = "Debuffs orientation"..required;
--- l.OPTION_DEBUFFSORIENTATION_TOOLTIP = "Choose how debuffs are arranged ((/w multiline support)\n"..l.CY.."Default: Right to Left, then Up"
--- l.OPTION_DEBUFFS_RELATIVE_X = "Horizontal position"..required;
--- l.OPTION_DEBUFFS_RELATIVE_X_TOOLTIP = "Adjust the relative horizontal position of the debuffs";
--- l.OPTION_DEBUFFS_RELATIVE_Y = "Vertical position"..required;
--- l.OPTION_DEBUFFS_RELATIVE_Y_TOOLTIP = "Adjust the relative vertical position of the debuffs";
+l.OPTION_DEBUFFSORIENTATION = "Ориентация дебаффов"..required; -- ChatGPT
+l.OPTION_DEBUFFSORIENTATION_TOOLTIP = "Выберите расположение дебаффов (поддерживает несколько строк)\n"..l.CY.."По умолчанию: "..l.OPTION_ORIENTATION_RightThenUp; -- ChatGPT
+l.OPTION_DEBUFFS_RELATIVE_X = "Горизонтальное положение"..required; -- ChatGPT
+l.OPTION_DEBUFFS_RELATIVE_X_TOOLTIP = "Отрегулируйте относительное горизонтальное положение дебаффов"; -- ChatGPT
+l.OPTION_DEBUFFS_RELATIVE_Y = "Вертикальное положение"..required; -- ChatGPT
+l.OPTION_DEBUFFS_RELATIVE_Y_TOOLTIP = "Отрегулируйте относительное вертикальное положение дебаффов"; -- ChatGPT
 l.OPTION_USETAINTMETHOD = l.CY.."Устаревший метод отображения для максимума баффов/дебаффов"..required.." "..l.ALERT
 l.OPTION_USETAINTMETHOD_TOOLTIP = "Если не отмечено, используется экспериментальный метод отображения\nЕсли отмечено, используется стабильный метод, но с одной "..l.RDL.."ошибкой за сессию|r, не критично..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Изменение максимума баффов/дебаффов вызывает одну "..l.RDL.."ошибку за сессию|r, не критично..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Перепозиционирование может быть затронуто в течение нескольких секунд после убийства босса"
--- l.OPTION_BUFFS_RESET = "Cancel any repositioning"
+l.OPTION_BUFFS_RESET = "Отменить все изменения положения"; -- ChatGPT
 -- KBD END
 
 -- KNC START
@@ -124,8 +134,8 @@ l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR = "Имена союзников";
 l.OPTION_FRIENDSNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Цвет текста имени над табличками союзников (вне подземелий)";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR = "Полосы союзников";
 l.OPTION_FRIENDSNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Цвет табличек союзников (вне подземелий)";
--- l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE = "Allied bars texture"
--- l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Texture of allied nameplates (outside instances)"
+l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE = "Текстура полос союзников" -- ChatGPT
+l.OPTION_FRIENDSNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Текстура информационных полос союзников (вне подземелий)" -- ChatGPT
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS = "PvP-иконки союзников";
 l.OPTION_FRIENDSNAMEPLATES_PVPICONS_TOOLTIP = "Отображает PvP-иконки на именах союзников.";
 l.OPTION_FRIENDSNAMEPLATES_TXT_SHOWLEVEL = "Уровень союзников";
@@ -135,8 +145,8 @@ l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR = "Имена врагов";
 l.OPTION_ENEMIESNAMEPLATES_TXT_USECOLOR_TOOLTIP = "Цвет текста имени над табличками врагов (вне подземелий)";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR = "Полосы врагов";
 l.OPTION_ENEMIESNAMEPLATES_BAR_USECOLOR_TOOLTIP = "Цвет табличек врагов (вне подземелий)";
--- l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE = "Enemy bars texture"
--- l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Texture of enemy nameplates (outside instances)"
+l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE = "Текстура полос врагов" -- ChatGPT
+l.OPTION_ENEMIESNAMEPLATES_BAR_TEXTURE_TOOLTIP = "Текстура информационных полос врагов (вне подземелий)" -- ChatGPT
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS = "PvP-иконки врагов";
 l.OPTION_ENEMIESNAMEPLATES_PVPICONS_TOOLTIP = "Отображает PvP-иконки на именах врагов.";
 l.OPTION_ENEMIESNAMEPLATES_TXT_SHOWLEVEL = "Уровень врагов";
@@ -169,4 +179,25 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": Настройки, требующие
 l.OPTION_SHOWMSGNORMAL = l.GYL.."Отображать сообщения";
 l.OPTION_SHOWMSGWARNING = l.GYL.."Отображать предупреждения";
 l.OPTION_SHOWMSGERR = l.GYL.."Отображать ошибки";
+l.OPTION_COMPARTMENT_FILTER = "Показывать в фильтре отсеков"; -- ChatGPT
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "В списке дополнений в правом верхнем углу"; -- ChatGPT
 l.OPTION_WHATSNEW = "Что нового";
+
+--? Edit Mode - Since DragonFlight (10)
+if (EditModeManagerFrame.UseRaidStylePartyFrames) then
+    -- Edit mode takes a while...
+    l.UpdateLocales = function ()
+        C_Timer.After(1, function()
+        if (not ns.CanEditActiveLayout()) then
+            l.OPTION_SOLORAID_TOOLTIP = "Подумайте об активации опции "..l.YLL..HUD_EDIT_MODE_SETTING_UNIT_FRAME_RAID_STYLE_PARTY_FRAMES.."|r ("..HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL..")"; -- ChatGPT
+            l.DESC = l.DESC.."\n"..l.CY..l.OPTION_SOLORAID_TOOLTIP.."|r\n\n";
+        end
+        end)
+    end
+    l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s опцию %s|r из %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU); -- ChatGPT
+    l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL; -- ChatGPT
+    l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Примечание: Введите "..l.YL.."/reload|r после "..HUD_EDIT_MODE_MENU..", чтобы избежать ошибок"; -- ChatGPT
+    l.OPTION_EDITMODE_BTN_PARTY_TOOLTIP = "Активирует "..l.YL..HUD_EDIT_MODE_MENU.."|r и напрямую отображает опции "..l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL.."|r.\n\n"..l.CY..l.OPTION_EDITMODE_BTN_PARTY_NOTE.."|r"; -- ChatGPT
+    l.OPTION_DEBUG_ON_MESSAGE = "Тест рейдовых рамок активирован (можно тестировать в "..HUD_EDIT_MODE_MENU..")\n"
+                    .."Нажмите еще раз, чтобы остановить!"; -- ChatGPT
+end
