@@ -19,7 +19,7 @@ cp ./Shared/WidgetsKRF.xml ../KRaidIcons/Shared/WidgetsKRI.xml
 sed -i 's/KRF/KRI/g' ../KRaidIcons/Shared/OptionsRaidIconsKRI.xml
 sed -i 's/KRF/KRI/g' ../KRaidIcons/Shared/WidgetsKRI.xml
 
-LANGS=("en" "fr" "de" "es" "it" "ko" "ru" "zh")
+LANGS=("en" "fr" "de" "es" "it" "ko" "pt" "ru" "zh")
 
 for lang in "${LANGS[@]}"; do
     echo "/KBigDebuffs/Core/localization.${lang}.lua: KBigDebuffs / KNameplateColor / KRaidIcons"
