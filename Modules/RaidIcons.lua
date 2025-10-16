@@ -29,7 +29,12 @@ local function InitRaidIconsTextures(f, size)
 	for i = 1, NUM_RAID_ICONS do
 		local iconTexture = f:CreateTexture(ns.ADDON_NAME.."UI_RaidIcon"..i, "BACKGROUND");
 		iconTexture:Hide();
-		iconTexture:SetTexture("Interface/TargetingFrame/UI-RaidTargetingIcon_"..i);
+		-- Since Midnight (12)
+		if SetRaidTargetIconTexture then
+			iconTexture:SetTexture("Interface/TargetingFrame/UI-RaidTargetingIcons")
+		else
+			iconTexture:SetTexture("Interface/TargetingFrame/UI-RaidTargetingIcon_"..i);
+		end
 		iconTexture:SetSize(size, size);
 		raidIcons[i] = { texture = iconTexture, visible = false }
 	end
@@ -67,26 +72,51 @@ local function SetRaidIcons(dontResetPositions, overrideOptions)
 		end
 	)
 
-	local type, nbGroups = "raidgroups", 8
+	local groupType, nbGroups = "raidgroups", 8
 	local types = { ["raidgroups"] = 8, ["raid"]= 8, ["party"] = 1 }
 	-- detect group type
 	for typeName, groups in pairs(types) do
 		local unit = GetUnitFrame(typeName, 1, 1)
 		if unit and unit:IsShown() then
-			type, nbGroups = typeName, groups
+			groupType, nbGroups = typeName, groups
 			break
 		end
 	end
-	for group = 1, nbGroups do
-		for member = 1, 5 do
-			local unitFrame = GetUnitFrame(type, group, member)
-			if unitFrame and unitFrame:IsShown() then
-				local unit = unitFrame:GetAttribute("unit")
-				if (unit) then
-					local markId = GetRaidTargetIndex(unit)
-					if markId then
-						raidIcons[markId].visible = true
-						raidIcons[markId].frame = unitFrame
+	-- Since Midnight (12)
+	if SetRaidTargetIconTexture then
+		local index = 1
+		for group = 1, nbGroups do
+			for member = 1, 5 do
+				local unitFrame = GetUnitFrame(groupType, group, member)
+				if unitFrame and unitFrame:IsShown() then
+					local unit = unitFrame:GetAttribute("unit")
+					if (unit) then
+						local markId = GetRaidTargetIndex(unit)
+						if type(markId) ~= "nil" then
+							raidIcons[index].visible = true
+							raidIcons[index].frame = unitFrame
+							SetRaidTargetIconTexture(raidIcons[index].texture, markId)
+							index = index + 1
+						end
+					end
+				end
+			end
+		end
+		for idx = index, #raidIcons do
+			raidIcons[idx].visible = false
+		end
+	else
+		for group = 1, nbGroups do
+			for member = 1, 5 do
+				local unitFrame = GetUnitFrame(groupType, group, member)
+				if unitFrame and unitFrame:IsShown() then
+					local unit = unitFrame:GetAttribute("unit")
+					if (unit) then
+						local markId = GetRaidTargetIndex(unit)
+						if type(markId) ~= "nil" then
+							raidIcons[markId].visible = true
+							raidIcons[markId].frame = unitFrame
+						end
 					end
 				end
 			end
