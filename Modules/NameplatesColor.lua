@@ -47,8 +47,7 @@ ns.pvpIcons = {
     Horde = "|TInterface/PVPFrame/PVP-Currency-Horde:16|t",
 }
 local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, underLevelColor, overLevelColor)
-    local playerName = GetUnitName(unit);
-    local newName = playerName;
+    local prefix = ""
     if showLevelOption ~= "0" then
         local unitLevel = UnitLevel(unit);
         local levelShowed = "";
@@ -63,7 +62,7 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
                     levelShowed = WrapTextInColorCode(levelShowed, BCC(overLevelColor));
                 end
             end
-            newName = levelShowed..newName;
+            prefix = levelShowed;
         end
     end
     if UnitIsPVP(unit) and pvpIconOption ~= "0" then
@@ -73,11 +72,12 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
             icon = ns.pvpIcons[faction] or ""
         end
         if icon ~= "" then
-            newName = icon..newName;
+            prefix = icon..prefix;
         end
     end
-    if newName ~= playerName then
-        name:SetText(newName)
+    if prefix ~= "" or prefix ~= name._previousPrefix then
+        name:SetText(string.format("%s%s", prefix, UnitName(unit)))
+        name._previousPrefix = prefix
     end
 end
 
