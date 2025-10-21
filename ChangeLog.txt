@@ -1,3 +1,6 @@
+v11.2.502
+- Midnight fixes
+
 v11.2.501
 - Added DE / IT / KO / ZH locales
 - RU missing translations
