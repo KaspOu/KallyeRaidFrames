@@ -2,7 +2,6 @@
 -- Chinese localization (ChatGPT)
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "zhCN" and GetLocale() ~= "zhTW") then return end
 local _, ns = ...
 local l = ns.I18N;
 

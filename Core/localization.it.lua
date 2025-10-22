@@ -2,7 +2,6 @@
 -- Italian localization (ChatGPT)
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "itIT") then return; end
 local _, ns = ...
 local l = ns.I18N;
 

@@ -2,7 +2,6 @@
 -- Portuguese localization (ChatGPT)
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "ptBR") then return; end
 local _, ns = ...
 local l = ns.I18N;
 
