@@ -95,7 +95,11 @@ end
 function ns.Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
 		-- FIXME: verify
+		local unitInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
 		local isInRange = (frame:GetAlpha() == DEFAULT_RAID_ALPHA_INRANGE)
+		if not issecretvalue or not issecretvalue(unitInRange) then
+			isInRange = unitInRange
+		end
 		local newAlpha = 1;
 		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and not isInRange then
 			newAlpha = _G[ns.OPTIONS_NAME].AlphaNotInRange/100;
@@ -110,7 +114,7 @@ function ns.Hook_UpdateInRange(frame)
 end
 
 
-local function GetHPSeverity(unit, percent, revert)
+local function GetHPSeverity(unit, percent, revert, isTest)
 	local BGColorOK=revert and _G[ns.OPTIONS_NAME].RevertColorOK or _G[ns.OPTIONS_NAME].BGColorOK;
 	local BGColorWarn=revert and _G[ns.OPTIONS_NAME].RevertColorWarn or _G[ns.OPTIONS_NAME].BGColorWarn;
 	local BGColorLow=revert and _G[ns.OPTIONS_NAME].RevertColorLow or _G[ns.OPTIONS_NAME].BGColorLow;
@@ -118,11 +122,8 @@ local function GetHPSeverity(unit, percent, revert)
 	local pLimitWarn = _G[ns.OPTIONS_NAME].LimitWarn / 100;
 	local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
 
-	if issecretvalue and issecretvalue(percent) then
-		return BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1;
-	end
 	-- Since Midnight (12)
-	if C_CurveUtil then
+	if C_CurveUtil and not isTest then
 		local curve = C_CurveUtil.CreateColorCurve();
 		curve:SetType(Enum.LuaCurveType.Step);
 		curve:AddPoint(pLimitLow, CreateColor(BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1));
@@ -130,8 +131,7 @@ local function GetHPSeverity(unit, percent, revert)
 		curve:AddPoint(pLimitOk, CreateColor(BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1));
 
 		local color = UnitHealthPercentColor(unit, curve);
-		-- statusBar:GetStatusBarTexture():SetVertexColor(color:GetRGB());
-		return color:GetRGB()
+		return color:GetRGBA()
 	end
 
 	percent = percent / 100
@@ -186,6 +186,7 @@ end
 ]]
 local function UpdateHealth_Regular(frame, health, isTest)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
+		if frame.overlayHealthBar then frame.overlayHealthBar:SetAlpha(0); frame.healthBar:SetAlpha(1); end
 		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, 0, _G[ns.OPTIONS_NAME].HealthAlpha / 100))
@@ -210,9 +211,7 @@ local function UpdateHealth_Regular(frame, health, isTest)
 			local unitHealthMax, healthPercentage, healthLost
 			health, unitHealthMax, healthPercentage, healthLost = unitHealthValues(frame.displayedUnit, health, isTest)
 			applyBarTexture(frame.healthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
-			-- FIXME: WAIT API
-			-- frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
-			frame.healthBar:SetStatusBarColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true))
+			frame.background:SetColorTexture(GetHPSeverity(frame.displayedUnit, healthPercentage, false, isTest))
 			if frame._wasDead then
 				if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 					ns.Hook_UpdateName(frame, true);
@@ -239,12 +238,14 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 		if not KRF_UnitIsConnected(frame) then
 			-- Disconnected
 			frame.healthBar:SetValue(0);
+			if frame.overlayHealthBar then frame.overlayHealthBar:SetValue(0) end
 			frame.background:SetColorTexture(darken(_G[ns.OPTIONS_NAME].RevertColorLow.r, _G[ns.OPTIONS_NAME].RevertColorLow.g, _G[ns.OPTIONS_NAME].RevertColorLow.b, .6, .4));
 			ns.Hook_UpdateName(frame, true);
 			ns.UpdateNameRaidColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
+			if frame.overlayHealthBar then frame.overlayHealthBar:SetValue(0) end
 			frame._wasDead = true;
 			if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 				ns.Hook_UpdateName(frame, true);
@@ -255,9 +256,10 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			local unitHealthMax, healthPercentage, healthLost
 			health, unitHealthMax, healthPercentage, healthLost = unitHealthValues(frame.displayedUnit, health, isTest)
 			applyBarTexture(frame.healthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
-			-- FIXME: WAIT API
-			-- frame.healthBar:SetStatusBarColor(GetHPSeverity(healthPercentage/100, true));
-			frame.healthBar:SetStatusBarColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true))
+			if (isTest or issecretvalue == nil or not issecretvalue(frame.healthBar:GetStatusBarTexture())) then
+				frame.healthBar:SetStatusBarColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true, isTest))
+			end
+
 			if frame._wasDead then
 				if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 					ns.Hook_UpdateName(frame, true);
@@ -272,8 +274,30 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			else
 				frame.healthBar:SetValue(healthLost);
 			end
+			if not frame.overlayHealthBar and issecretvalue ~= nil and issecretvalue(frame.healthBar:GetStatusBarTexture()) then
+				frame.overlayHealthBar = CreateFrame("StatusBar", nil, frame)
+				frame.overlayHealthBar:SetFrameLevel(3)
+				frame.overlayHealthBar:SetAllPoints(frame.healthBar)
+				-- frame.overlayHealthBar:SetIgnoreParentAlpha(true)
+			end
+
+			if frame.overlayHealthBar then
+				local min, max = frame.healthBar:GetMinMaxValues()
+				frame.overlayHealthBar:SetMinMaxValues(min, max)
+				if (frame.optionTable.smoothHealthUpdates ) then
+					frame.overlayHealthBar:SetSmoothedValue(healthLost)
+				else
+					frame.overlayHealthBar:SetValue(healthLost)
+				end
+				frame.healthBar:SetAlpha(0)
+				frame.overlayHealthBar:SetAlpha(1)
+				applyBarTexture(frame.overlayHealthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
+				frame.overlayHealthBar:GetStatusBarTexture():SetVertexColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true, isTest))
+			end
+			--
+
 			local showPredictions = false
-			if (frame.optionTable.displayHealPrediction) then
+			if (frame.optionTable.displayHealPrediction and (issecretvalue ~= nil or healthLost > 0)) then
 				-- FIXME: WAIT API to hide if hasMaxHealth
 				showPredictions = true
 				local hbS = frame.healthBar:GetStatusBarTexture();
@@ -288,11 +312,11 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 				-- frame.totalAbsorb:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
 				frame.totalAbsorb:SetPoint("TOPRIGHT", frame.otherHealPrediction, "TOPLEFT");
 				frame.totalAbsorb:SetPoint("BOTTOMRIGHT", frame.otherHealPrediction, "BOTTOMLEFT");
+			else
+				frame.myHealPrediction:SetShown(showPredictions)
+				frame.otherHealPrediction:SetShown(showPredictions)
+				frame.totalAbsorb:SetShown(showPredictions)
 			end
-			-- FIXME: WAIT API
-			-- frame.myHealPrediction:SetShown(showPredictions)
-			-- frame.otherHealPrediction:SetShown(showPredictions)
-			-- frame.totalAbsorb:SetShown(showPredictions)
 		end
 	end
 end
@@ -444,7 +468,12 @@ function ns.RaidFrames_ResetHealth(frame, testMode)
 		else
 			frame.statusText:SetText(format("%d%%", frame._testHealthPercentage));
 		end
-		frame.healthBar:SetMinMaxValues(0, unitHealthMax)
+		-- frame.healthBar:SetMinMaxValues(0, unitHealthMax)
+		if ( frame.optionTable.smoothHealthUpdates ) then
+			frame.healthBar:SetMinMaxSmoothedValue(0, unitHealthMax)
+		else
+			frame.healthBar:SetMinMaxValues(0, unitHealthMax)
+		end
 	end
 	frame.healthBar:SetValue(health);
 	ns.Hook_UpdateHealth(frame, health, testMode);
@@ -460,6 +489,9 @@ function ns.DebugFrames()
 		ns.LoopDebug();
 	else
 		ns.AddMsgWarn(l.OPTION_DEBUG_OFF_MESSAGE);
+		if (issecurevalue ~= nil) then
+			ns.AddMsgWarn(l.OPTION_RELOAD_REQUIRED) -- IF OPTION REVERT AND MIDNIGHT
+		end
 		ns.optionsFrame.Debug.Text:SetText(l.OPTION_DEBUG_ON);
 		ns.optionsFrame.Debug.tooltipText = l.OPTION_DEBUG_ON;
 		PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE, "Master")
