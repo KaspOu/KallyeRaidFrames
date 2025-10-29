@@ -39,12 +39,13 @@ function ns.RemoveOldOptions(options)
 end
 
 local startsWith = {
-	play = true, -- player
-	part = true, -- party
-	raid = true,
+	pla = true, -- player
+	par = true, -- party
+	rai = true, -- raid
+	pet = true
 }
 local function UnitInPartyOrRaid(frame)
-	return startsWith[strsub(frame.displayedUnit, 1, 4)];
+	return startsWith[strsub(frame.displayedUnit, 1, 3)];
 	-- return UnitInParty(Unit) or UnitInRaid(Unit) or UnitIsUnit(Unit, "player")
 end
 
@@ -82,10 +83,24 @@ local function lighten(r, g, b, percent, alpha)
 	return mergeRGBA(r, g, b, alpha or 1, 1, 1, 1, alpha or 1, percent)
 end
 
-local function KRF_GetClassColors()
-	return CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS;
+local function KRF_GetClassColor(unit)
+	local unitClass = select(2,UnitClass(unit))
+	local classColors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+	if not unitClass or not classColors[unitClass] then
+		if unit:find("pet") then
+			local ownerUnit = unit:gsub("pet", "")
+			if ownerUnit == "" then ownerUnit = "player" end
+			unitClass = select(2,UnitClass(ownerUnit))
+			if unitClass then
+				return classColors[unitClass]
+			end
+		end
+		return classColors["HUNTER"]
+	end
+	return classColors[unitClass]
 end
 
+local KRF_HasUnitInRange = (issecretvalue == nil)
 --[[
 ! Managing Alpha depending on range
 - Alpha not in range
@@ -94,11 +109,11 @@ end
 ]]
 function ns.Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
-		-- FIXME: verify
-		local unitInRange, hasCheckedRange = UnitInRange(frame.displayedUnit);
-		local isInRange = (frame:GetAlpha() == DEFAULT_RAID_ALPHA_INRANGE)
-		if not issecretvalue or not issecretvalue(unitInRange) then
-			isInRange = unitInRange
+		local isInRange
+		if KRF_HasUnitInRange then
+			isInRange = UnitInRange(frame.displayedUnit) or UnitIsUnit(frame.displayedUnit, "player")
+		else
+			isInRange = (frame:GetAlpha() == DEFAULT_RAID_ALPHA_INRANGE) or UnitIsUnit(frame.displayedUnit, "player")
 		end
 		local newAlpha = 1;
 		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and not isInRange then
@@ -113,6 +128,26 @@ function ns.Hook_UpdateInRange(frame)
 	end
 end
 
+local curveRegular, curveRevert
+-- Since Midnight (12)
+if C_CurveUtil then
+	function initCurve(revert)
+		local BGColorOK=revert and _G[ns.OPTIONS_NAME].RevertColorOK or _G[ns.OPTIONS_NAME].BGColorOK;
+		local BGColorWarn=revert and _G[ns.OPTIONS_NAME].RevertColorWarn or _G[ns.OPTIONS_NAME].BGColorWarn;
+		local BGColorLow=revert and _G[ns.OPTIONS_NAME].RevertColorLow or _G[ns.OPTIONS_NAME].BGColorLow;
+		local pLimitLow = _G[ns.OPTIONS_NAME].LimitLow / 100;
+		local pLimitWarn = _G[ns.OPTIONS_NAME].LimitWarn / 100;
+		local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
+		local curve = C_CurveUtil.CreateColorCurve();
+		curve:SetType(Enum.LuaCurveType.Linear);
+		curve:AddPoint(pLimitLow, CreateColor(BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1));
+		curve:AddPoint(pLimitWarn, CreateColor(BGColorWarn.r, BGColorWarn.g, BGColorWarn.b, BGColorWarn.a or 1));
+		curve:AddPoint(pLimitOk, CreateColor(BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1));
+		return curve
+	end
+	curveRegular = initCurve(false)
+	curveRevert = initCurve(true)
+end
 
 local function GetHPSeverity(unit, percent, revert, isTest)
 	local BGColorOK=revert and _G[ns.OPTIONS_NAME].RevertColorOK or _G[ns.OPTIONS_NAME].BGColorOK;
@@ -122,15 +157,11 @@ local function GetHPSeverity(unit, percent, revert, isTest)
 	local pLimitWarn = _G[ns.OPTIONS_NAME].LimitWarn / 100;
 	local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
 
-	-- Since Midnight (12)
-	if C_CurveUtil and not isTest then
-		local curve = C_CurveUtil.CreateColorCurve();
-		curve:SetType(Enum.LuaCurveType.Step);
-		curve:AddPoint(pLimitLow, CreateColor(BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1));
-		curve:AddPoint(pLimitWarn, CreateColor(BGColorWarn.r, BGColorWarn.g, BGColorWarn.b, BGColorWarn.a or 1));
-		curve:AddPoint(pLimitOk, CreateColor(BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1));
-
-		local color = UnitHealthPercentColor(unit, curve);
+	if curveRegular and not isTest then
+		local color = UnitHealthPercentColor(unit, revert and curveRevert or curveRegular);
+		-- if isTest then -- BUG?
+		-- 	color = revert and curveRevert:Evaluate(percent) or curveRegular:Evaluate(percent)
+		-- end
 		return color:GetRGBA()
 	end
 
@@ -186,8 +217,7 @@ end
 ]]
 local function UpdateHealth_Regular(frame, health, isTest)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
-		if frame.overlayHealthBar then frame.overlayHealthBar:SetAlpha(0); frame.healthBar:SetAlpha(1); end
-		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
+		local c = KRF_GetClassColor(frame.unit);
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, 0, _G[ns.OPTIONS_NAME].HealthAlpha / 100))
 		end
@@ -228,7 +258,7 @@ end
 ]]
 local function UpdateHealth_Reverted(frame, health, isTest)
 	if not frame:IsForbidden() and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
-		local c = KRF_GetClassColors()[select(2,UnitClass(frame.unit))];
+		local c = KRF_GetClassColor(frame.unit);
 
 		if c and frame and frame.background and frame.optionTable.useClassColors then
 			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
@@ -238,14 +268,12 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 		if not KRF_UnitIsConnected(frame) then
 			-- Disconnected
 			frame.healthBar:SetValue(0);
-			if frame.overlayHealthBar then frame.overlayHealthBar:SetValue(0) end
 			frame.background:SetColorTexture(darken(_G[ns.OPTIONS_NAME].RevertColorLow.r, _G[ns.OPTIONS_NAME].RevertColorLow.g, _G[ns.OPTIONS_NAME].RevertColorLow.b, .6, .4));
 			ns.Hook_UpdateName(frame, true);
 			ns.UpdateNameRaidColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
 			frame.healthBar:SetValue(0);
-			if frame.overlayHealthBar then frame.overlayHealthBar:SetValue(0) end
 			frame._wasDead = true;
 			if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 				ns.Hook_UpdateName(frame, true);
@@ -256,9 +284,7 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			local unitHealthMax, healthPercentage, healthLost
 			health, unitHealthMax, healthPercentage, healthLost = unitHealthValues(frame.displayedUnit, health, isTest)
 			applyBarTexture(frame.healthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
-			if (isTest or issecretvalue == nil or not issecretvalue(frame.healthBar:GetStatusBarTexture())) then
-				frame.healthBar:SetStatusBarColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true, isTest))
-			end
+			frame.healthBar:GetStatusBarTexture():SetVertexColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true, isTest))
 
 			if frame._wasDead then
 				if (_G[ns.OPTIONS_NAME].IconOnDeath) then
@@ -274,31 +300,10 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			else
 				frame.healthBar:SetValue(healthLost);
 			end
-			if not frame.overlayHealthBar and issecretvalue ~= nil and issecretvalue(frame.healthBar:GetStatusBarTexture()) then
-				frame.overlayHealthBar = CreateFrame("StatusBar", nil, frame)
-				frame.overlayHealthBar:SetFrameLevel(3)
-				frame.overlayHealthBar:SetAllPoints(frame.healthBar)
-				-- frame.overlayHealthBar:SetIgnoreParentAlpha(true)
-			end
-
-			if frame.overlayHealthBar then
-				local min, max = frame.healthBar:GetMinMaxValues()
-				frame.overlayHealthBar:SetMinMaxValues(min, max)
-				if (frame.optionTable.smoothHealthUpdates ) then
-					frame.overlayHealthBar:SetSmoothedValue(healthLost)
-				else
-					frame.overlayHealthBar:SetValue(healthLost)
-				end
-				frame.healthBar:SetAlpha(0)
-				frame.overlayHealthBar:SetAlpha(1)
-				applyBarTexture(frame.overlayHealthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
-				frame.overlayHealthBar:GetStatusBarTexture():SetVertexColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true, isTest))
-			end
-			--
 
 			local showPredictions = false
 			if (frame.optionTable.displayHealPrediction and (issecretvalue ~= nil or healthLost > 0)) then
-				-- FIXME: WAIT API to hide if hasMaxHealth
+				-- FIXME: Midnight (12) WAIT API to hide if hasMaxHealth
 				showPredictions = true
 				local hbS = frame.healthBar:GetStatusBarTexture();
 				frame.myHealPrediction:ClearAllPoints();
@@ -397,7 +402,7 @@ end
 function ns.UpdateNameRaidColor(frame)
     if not frame:IsForbidden() and UnitPlayerControlled(frame.displayedUnit) and FrameIsCompact(frame) then
         local name = frame.name;
-        local c = KRF_GetClassColors()[select(2,UnitClass(frame.displayedUnit))];
+        local c = KRF_GetClassColor(frame.displayedUnit)
         -- Party / Raid Frames
         if _G[ns.OPTIONS_NAME].FriendsClassColor then
             if KRF_UnitIsDeadOrGhost(frame) then
@@ -420,7 +425,7 @@ function ns.UpdateNameRaidColor(frame)
 end
 
 function ns.ApplyFuncToRaidFrames(func, ...)
-	for member = 1, 40 do
+	for member = 1, 80 do -- Pets included
 		local frame = _G["CompactRaidFrame"..member];
 		if frame and frame:IsVisible() then
 			func(frame, ...);
@@ -428,6 +433,10 @@ function ns.ApplyFuncToRaidFrames(func, ...)
 	end
 	for member = 1, 5 do
 		local frame = _G["CompactPartyFrameMember"..member];
+		if frame and frame:IsVisible() then
+			func(frame, ...);
+		end
+		frame = _G["CompactPartyFramePet"..member];
 		if frame and frame:IsVisible() then
 			func(frame, ...);
 		end
@@ -489,7 +498,7 @@ function ns.DebugFrames()
 		ns.LoopDebug();
 	else
 		ns.AddMsgWarn(l.OPTION_DEBUG_OFF_MESSAGE);
-		if (issecurevalue ~= nil) then
+		if (issecretvalue ~= nil) then
 			ns.AddMsgWarn(l.OPTION_RELOAD_REQUIRED) -- IF OPTION REVERT AND MIDNIGHT
 		end
 		ns.optionsFrame.Debug.Text:SetText(l.OPTION_DEBUG_ON);

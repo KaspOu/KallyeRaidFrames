@@ -1,5 +1,6 @@
 v11.2.504
 - Midnight: all fixes completed (Healthbars colors ok)
+- Highlight now works on pet
 
 v11.2.503
 - Classic 1.15.8
