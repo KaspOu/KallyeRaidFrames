@@ -2,7 +2,7 @@ local _, ns = ...
 local l = ns.I18N;
 
 local DEFAULT_RAIDHEALTHBAR_TEXTURE = 423819
-local DEFAULT_RAID_ALPHA_INRANGE = 1
+local SPELL_ONE_BUTTON = 1229376
 
 function ns.InterfaceOptions_AddCategory(frame, addOn, position)
 	if not Settings or not Settings.RegisterCanvasLayoutSubcategory then
@@ -100,7 +100,8 @@ local function KRF_GetClassColor(unit)
 	return classColors[unitClass]
 end
 
-local KRF_HasUnitInRange = (issecretvalue == nil)
+local hasOneButton = not C_Spell.IsSpellInRange(SPELL_ONE_BUTTON, "player")
+
 --[[
 ! Managing Alpha depending on range
 - Alpha not in range
@@ -109,11 +110,14 @@ local KRF_HasUnitInRange = (issecretvalue == nil)
 ]]
 function ns.Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
-		local isInRange
-		if KRF_HasUnitInRange then
-			isInRange = UnitInRange(frame.displayedUnit) or UnitIsUnit(frame.displayedUnit, "player")
+		local isInRange, hasCheckedRange
+		if hasOneButton then
+			isInRange = C_Spell.IsSpellInRange(SPELL_ONE_BUTTON, frame.displayedUnit)
 		else
-			isInRange = (frame:GetAlpha() == DEFAULT_RAID_ALPHA_INRANGE) or UnitIsUnit(frame.displayedUnit, "player")
+			isInRange, hasCheckedRange = UnitInRange(frame.displayedUnit)
+			if not hasCheckedRange then
+				isInRange = UnitIsUnit(frame.displayedUnit, "player")
+			end
 		end
 		local newAlpha = 1;
 		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and not isInRange then
