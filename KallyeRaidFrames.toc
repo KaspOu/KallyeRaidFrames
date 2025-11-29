@@ -1,4 +1,4 @@
-## Interface: 120000, 110205, 50501, 50502, 11508
+## Interface: 120000, 110205, 110207, 50501, 50502, 38000, 11508
 ## Title: |cff00ff00Kallye|r RaidFrames
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid. Buffs / debuffs size, max limit...
@@ -12,7 +12,7 @@
 ## Notes-ruRU: Подсвечивает рейдовые рамки при низком уровне здоровья, всегда показывает рейд. Размер баффов/дебаффов, максимальное количество...
 ## Notes-zhCN: 突出显示低生命值团队框架，始终显示团队。增益/减益效果：大小，最大数量...
 ## Notes-zhTW: 突出显示低生命值團隊框架，始終顯示團隊。增益/减益效果：大小，最大數量...
-## Version: 11.2.504
+## Version: 11.2.701
 ## Author: Kallye of Elune (EU)
 ## LoadSavedVariablesFirst: 1
 ## SavedVariables: KallyeRaidFramesOptions

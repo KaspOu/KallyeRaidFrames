@@ -113,7 +113,7 @@ function ns.Hook_UpdateInRange(frame)
 		if KRF_HasUnitInRange then
 			isInRange = UnitInRange(frame.displayedUnit) or UnitIsUnit(frame.displayedUnit, "player")
 		else
-			isInRange = (frame:GetAlpha() == DEFAULT_RAID_ALPHA_INRANGE) or UnitIsUnit(frame.displayedUnit, "player")
+			isInRange = C_Spell.IsSpellInRange(1229376) or UnitIsUnit(frame.displayedUnit, "player")
 		end
 		local newAlpha = 1;
 		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and not isInRange then
@@ -121,7 +121,7 @@ function ns.Hook_UpdateInRange(frame)
 		elseif not InCombatLockdown() and _G[ns.OPTIONS_NAME].AlphaNotInCombat < 100 then
 			newAlpha = _G[ns.OPTIONS_NAME].AlphaNotInCombat/100;
 		end
-		if (floor(frame:GetAlpha()*100) ~= floor(newAlpha*100)) then
+		if (not KRF_HasUnitInRange or floor(frame:GetAlpha()*100) ~= floor(newAlpha*100)) then
 			frame:SetAlpha(newAlpha);
 			frame.background:SetAlpha(newAlpha);
 		end
