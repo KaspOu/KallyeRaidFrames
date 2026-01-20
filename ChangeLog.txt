@@ -1,9 +1,21 @@
+v12.0.001
+- Midnight prepatch fixes
+- Midnight: Disable Debuff Guard / Spell Watch List
+
+v11.2.702
+- Classic Anniversary
+
+v11.2.701
+- TWW 11.2.7
+- Wotlk China
+
 v11.2.504
 - Midnight: all fixes completed (Healthbars colors ok)
 - Highlight now works on pet
 
 v11.2.503
 - Classic 1.15.8
+- Locales loaded only if necessary
 
 v11.2.502
 - Midnight fixes

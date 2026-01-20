@@ -20,8 +20,9 @@ function ns.InterfaceOptions_AddCategory(frame, addOn, position)
         return subcategory, category;
     else
         local category, layout = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
-        category.ID = frame.name;
+        -- category.ID = frame.name;
         Settings.RegisterAddOnCategory(category);
+		ns.CATEGORY_ID = category:GetID()
         return category;
     end
 end
@@ -158,7 +159,7 @@ local function GetHPSeverity(unit, percent, revert, isTest)
 	local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
 
 	if curveRegular and not isTest then
-		local color = UnitHealthPercentColor(unit, revert and curveRevert or curveRegular);
+		local color = UnitHealthPercent(unit, false, revert and curveRevert or curveRegular);
 		-- if isTest then -- BUG?
 		-- 	color = revert and curveRevert:Evaluate(percent) or curveRegular:Evaluate(percent)
 		-- end

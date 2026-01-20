@@ -121,7 +121,7 @@ local function SLASH_KRF_command(msgIn)
 		StaticPopup_Show(ns.ADDON_NAME.."_CONFIRM_RESET")
 	else
 		if Settings then
-			Settings.OpenToCategory(ns.TITLE);
+			Settings.OpenToCategory(ns.CATEGORY_ID);
 		else
 			InterfaceOptionsFrame_OpenToCategory(ns.TITLE);
 		end
