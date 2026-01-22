@@ -114,7 +114,7 @@ function ns.Hook_UpdateInRange(frame)
 		if KRF_HasUnitInRange then
 			isInRange = UnitInRange(frame.displayedUnit) or UnitIsUnit(frame.displayedUnit, "player")
 		else
-			isInRange = C_Spell.IsSpellInRange(1229376) or UnitIsUnit(frame.displayedUnit, "player")
+			isInRange = C_Spell.IsSpellInRange(1229376, frame.displayedUnit) or UnitIsUnit(frame.displayedUnit, "player")
 		end
 		local newAlpha = 1;
 		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and not isInRange then
