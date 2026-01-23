@@ -101,7 +101,7 @@ local function KRF_GetClassColor(unit)
 	return classColors[unitClass]
 end
 
-local KRF_HasUnitInRange = (issecretvalue == nil)
+ns.IsSecretValue = issecretvalue or function(_) return false end
 --[[
 ! Managing Alpha depending on range
 - Alpha not in range
@@ -110,19 +110,24 @@ local KRF_HasUnitInRange = (issecretvalue == nil)
 ]]
 function ns.Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
-		local isInRange
-		if KRF_HasUnitInRange then
-			isInRange = UnitInRange(frame.displayedUnit) or UnitIsUnit(frame.displayedUnit, "player")
-		else
-			isInRange = C_Spell.IsSpellInRange(1229376, frame.displayedUnit) or UnitIsUnit(frame.displayedUnit, "player")
+		local inRangeAlpha = InCombatLockdown() and 1 or math.min(_G[ns.OPTIONS_NAME].AlphaNotInCombat/100, 1)
+		local outOfRangeAlpha = math.min(_G[ns.OPTIONS_NAME].AlphaNotInRange/100, 1)
+
+		local isInRange = UnitInRange(frame.displayedUnit)
+		-- C_Spell.IsSpellInRange(1229376, frame.displayedUnit)
+		if UnitIsUnit(frame.displayedUnit, "player") then
+			isInRange = true
 		end
-		local newAlpha = 1;
-		if _G[ns.OPTIONS_NAME].AlphaNotInRange < 100 and not isInRange then
-			newAlpha = _G[ns.OPTIONS_NAME].AlphaNotInRange/100;
-		elseif not InCombatLockdown() and _G[ns.OPTIONS_NAME].AlphaNotInCombat < 100 then
-			newAlpha = _G[ns.OPTIONS_NAME].AlphaNotInCombat/100;
+		-- Since Midnight (12)
+		if (issecretvalue) then
+			-- secret fallback (frame:GetAlpha() secret)
+			frame:SetAlphaFromBoolean(isInRange, inRangeAlpha, outOfRangeAlpha)
+			frame.background:SetAlphaFromBoolean(isInRange, inRangeAlpha, outOfRangeAlpha)
+			return
 		end
-		if (not KRF_HasUnitInRange or floor(frame:GetAlpha()*100) ~= floor(newAlpha*100)) then
+
+		local newAlpha = isInRange and inRangeAlpha or outOfRangeAlpha
+		if (floor(frame:GetAlpha()*100) ~= floor(newAlpha*100)) then
 			frame:SetAlpha(newAlpha);
 			frame.background:SetAlpha(newAlpha);
 		end
@@ -132,7 +137,7 @@ end
 local curveRegular, curveRevert
 -- Since Midnight (12)
 if C_CurveUtil then
-	function initCurve(revert)
+	local function initCurve(revert)
 		local BGColorOK=revert and _G[ns.OPTIONS_NAME].RevertColorOK or _G[ns.OPTIONS_NAME].BGColorOK;
 		local BGColorWarn=revert and _G[ns.OPTIONS_NAME].RevertColorWarn or _G[ns.OPTIONS_NAME].BGColorWarn;
 		local BGColorLow=revert and _G[ns.OPTIONS_NAME].RevertColorLow or _G[ns.OPTIONS_NAME].BGColorLow;
