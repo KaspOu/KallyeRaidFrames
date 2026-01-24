@@ -38,8 +38,8 @@ local function ManageUnitDebuffsOptions()
     local debuffsPosYSlide = ns.FindControl("DebuffsPosY")
 
     ns.OptionsSiblingsEnable(_G[ns.OPTIONS_NAME], activeCheckbox, isEnabled, .2)
-    ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, not ns.USE_MAXBUFFS_TAINT_METHOD, false, .1)
-    ns.OptionsSetShownAndEnable(taintWarningText, ns.USE_MAXBUFFS_TAINT_METHOD, false, .1)
+    ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == nil, false, .1)
+    ns.OptionsSetShownAndEnable(taintWarningText, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD ~= false, false, .1)
     ns.OptionsEnable(flickerWarningText, false, .1)
     ns.OptionsEnable(resetButton, false, .1)
 
@@ -58,10 +58,27 @@ local function ManageUnitDebuffsOptions()
         DebuffsPosX = debuffsPosXSlide:GetValue(),
         DebuffsPosY = debuffsPosYSlide:GetValue()
     }
-    ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, not ns.USE_MAXBUFFS_TAINT_METHOD, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
-    ns.OptionsSetShownAndEnable(taintWarningText, ns.USE_MAXBUFFS_TAINT_METHOD, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
+    ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == nil, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
+    ns.OptionsSetShownAndEnable(taintWarningText, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == true, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
     ns.OptionsEnable(flickerWarningText, ns.isFlickerWarningShowed(currentOptions), .1)
     ns.OptionsEnable(resetButton, ns.isFlickerWarningShowed(currentOptions), .1)
+
+    -- FIXME: HotFix
+    ns.OptionsSetShownAndEnable(ns.FindControl("HotFix"), ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == false, true, .1)
+    if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == false then
+        ns.OptionsEnable(buffsPerLineSlide, false, .1)
+        ns.OptionsEnable(maxBuffsSlide, false, .1)
+        ns.OptionsEnable(buffsOrientationDropdown, false, .1)
+        ns.OptionsEnable(buffsPosXSlide, false, .1)
+        ns.OptionsEnable(buffsPosYSlide, false, .1)
+        ns.OptionsEnable(debuffsPerLineSlide, false, .1)
+        ns.OptionsEnable(maxDebuffsSlide, false, .1)
+        ns.OptionsEnable(debuffsOrientationDropdown, false, .1)
+        ns.OptionsEnable(debuffsPosXSlide, false, .1)
+        ns.OptionsEnable(debuffsPosYSlide, false, .1)
+        ns.OptionsEnable(flickerWarningText, false, .1)
+        ns.OptionsEnable(resetButton, false, .1)
+    end
 
     updatePerLineLabel(buffsPerLineSlide, currentOptions.BuffsPerLine, currentOptions.MaxBuffs)
     updatePerLineLabel(debuffsPerLineSlide, currentOptions.DebuffsPerLine, currentOptions.MaxDebuffs)

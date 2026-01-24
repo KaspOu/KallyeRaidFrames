@@ -121,6 +121,7 @@ l.OPTION_USETAINTMETHOD_TOOLTIP = "Unchecked, uses an experimental display\nChec
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changing Max buffs/debuffs causes one "..l.RDL.."error per session|r, not a big deal..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Repositioning may be affected for a few seconds after a boss kill"
 l.OPTION_BUFFS_RESET = "Cancel any repositioning"
+l.OPTION_HOTFIX = l.ALERT..l.RD.." HOTFIX: Repositioning disabled"
 -- KBD END
 
 -- KNC START

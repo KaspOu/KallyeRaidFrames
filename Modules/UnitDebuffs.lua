@@ -4,10 +4,18 @@ local l = ns.I18N;
 -- * avoid conflict override
 if ns.CONFLICT then return; end
 
-ns.USE_MAXBUFFS_TAINT_METHOD = (CompactUnitFrame_GetOptionDisplayOnlyDispellableDebuffs == nil) -- maxBuffs only
+ns.FORCE_USE_MAXBUFFS_TAINT_METHOD = nil -- maxBuffs only
+if (issecretvalue ~= nil) then
+	-- Midnight
+	ns.FORCE_USE_MAXBUFFS_TAINT_METHOD = false
+elseif CompactUnitFrame_GetOptionDisplayOnlyDispellableDebuffs == nil then
+	-- Classic
+	ns.FORCE_USE_MAXBUFFS_TAINT_METHOD = true
+end
 
 local DEFAULT_MAXBUFFS = ns.DEFAULT_MAXBUFFS or 3
 local DEFAULT_MAXDEBUFFS = DEFAULT_MAXBUFFS
+local DEFAULT_BUFFS_PER_LINE = 3
 
 --[[
 ! Manage buffs
@@ -17,6 +25,10 @@ local DEFAULT_MAXDEBUFFS = DEFAULT_MAXBUFFS
 		-- * alternative safe method (else maxBuffs taints frame)
 		function ns.CompactUnitFrame_UpdateAurasInternal(frame, unitAuraUpdateInfo)
 			if frame.isLootObject then
+				return;
+			end
+			-- FIXME: Midnight HotFix
+			if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == false then
 				return;
 			end
 
@@ -127,12 +139,16 @@ end
 --- @meta param.frameType string Frame type (e.g., "Buffs" or "Debuffs")
 --- @meta param.maxCount number Maximum number of icons to display
 --- @meta param.lineSize number Number of icons per line
+--- @meta param.useTaintMethod boolean
 --- @meta param.orientation string Icon orientation (e.g., "LeftThenUp")
 --- @meta param.posX number Position X relative to the first icon
 --- @meta param.posY number Position Y relative to the first icon
 --- @meta param.blizzardOrientation string Blizzard's default orientation for buffs or debuffs
 --- @meta param.defaultMax number Default maximum number of icons to display
 local function ManageUnitFrames(param)
+	if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD ~= nil then
+		param.useTaintMethod = ns.FORCE_USE_MAXBUFFS_TAINT_METHOD
+	end
 	if not FrameIsCompact(param.frame) or FrameIsPet(param.frame) or param.frame:IsForbidden() then
 		return
 	end
@@ -145,6 +161,15 @@ local function ManageUnitFrames(param)
 	local BLIZZARD_MAX_PROP = "max"..param.frameType.."s" -- frame.maxBuffs / .maxDebuffs / .maxDispelDebuff
 	local defaultMaxProp = "defaultMax"..param.frameType.."s" -- save BLizzard MAX first time
 	param.frame[defaultMaxProp] = param.frame[defaultMaxProp] or param.frame[BLIZZARD_MAX_PROP]
+
+	-- FIXME: HotFix
+	if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == false then
+		param.posX = 0
+		param.posY = 0
+		param.maxCount = param.frame[defaultMaxProp]
+		param.lineSize = param.maxCount
+		param.orientation = param.blizzardOrientation
+	end
 
 	-- Reposition first icon if necessary
 	if param.posX ~= 0 or param.posY ~= 0 then
@@ -224,7 +249,10 @@ function ns.Hook_ManageBuffs(frame)
     local max = cacheOptions.MaxBuffs
     local scale = cacheOptions.BuffsScale
 	local slotsPerLine = cacheOptions.BuffsPerLine
-	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or cacheOptions.UseTaintMethod
+	local useTaintMethod = cacheOptions.UseTaintMethod
+	if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD ~= nil then
+		useTaintMethod = ns.FORCE_USE_MAXBUFFS_TAINT_METHOD
+	end
 	local orientation = cacheOptions.BuffsOrientation or OrientationEnum.LeftThenUp
 	local posX = cacheOptions.BuffsPosX or 0
 	local posY = cacheOptions.BuffsPosY or 0
@@ -251,7 +279,10 @@ function ns.Hook_ManageDebuffs(frame)
     local max = cacheOptions.MaxDebuffs
     local scale = cacheOptions.DebuffsScale
 	local slotsPerLine = cacheOptions.DebuffsPerLine
-	local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or cacheOptions.UseTaintMethod
+	local useTaintMethod = cacheOptions.UseTaintMethod
+	if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD ~= nil then
+		useTaintMethod = ns.FORCE_USE_MAXBUFFS_TAINT_METHOD
+	end
 	local orientation = cacheOptions.DebuffsOrientation or OrientationEnum.RightThenUp
 	local posX = cacheOptions.DebuffsPosX or 0
 	local posY = cacheOptions.DebuffsPosY or 0
@@ -315,7 +346,10 @@ local function onSaveOptions(self, options)
         ns._UnitDebuffsHooked = true
 		local buffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxBuffs", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsOrientation ~= "LeftThenUp", options.BuffsPosX, options.BuffsPosY)
 		local debuffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxDebuffs", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsOrientation ~= "RightThenUp", options.DebuffsPosX, options.DebuffsPosY)
-		local useTaintMethod = ns.USE_MAXBUFFS_TAINT_METHOD or options.UseTaintMethod
+		local useTaintMethod = options.UseTaintMethod
+		if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD ~= nil then
+			useTaintMethod = ns.FORCE_USE_MAXBUFFS_TAINT_METHOD
+		end
         hooksecurefunc(buffsHook, ns.Hook_ManageBuffs)
         hooksecurefunc(debuffsHook, ns.Hook_ManageDebuffs)
 		if not useTaintMethod and (options.MaxBuffs ~= DEFAULT_MAXBUFFS or options.MaxDebuffs ~= DEFAULT_MAXDEBUFFS) then

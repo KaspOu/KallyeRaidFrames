@@ -32,7 +32,7 @@
 		</Scripts>
 	</CheckButton>
 	<!-- Replace buggy OptionsSliderTemplate -->
-	<Slider name="KRFUI_OptionsSliderTemplate" inherits="UISliderTemplate" virtual="true">
+	<Slider name="KRFUI_OptionsSliderTemplate" inherits="MinimalSliderTemplate,UISliderTemplate" virtual="true">
 		<Size x="144" y="17"/>
 		<Layers>
 			<Layer level="ARTWORK">
@@ -107,6 +107,15 @@ Historique checkboxes:
  InterfaceOptionsBaseCheckButtonTemplate
  -> OptionsBaseCheckButtonTemplate (l'autre plantait sur  InterfaceOptionsPanel_CheckButton_OnClick(self))
  -> UICheckButtonTemplate, avec Size 26/26 (l'autre est en deprecated)
+
+ Historique Slider
+	HorizontalSliderTemplate
+	-> UISliderTemplate: fonctionnait Retail + Classic mais plus Anniversary (barre manquante)
+
+	Puis Anniversary
+	-> MinimalSliderTemplate,UISliderTemplate: hériter des 2 fonctionne avec Classic / Anniversary / Retail
+
+	Dispos: MinimalSliderTemplate,UISliderTemplate,PropertySliderTemplate ?
 
 https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/AddOns/Blizzard_FrameXML/DeprecatedTemplates.xml
 

@@ -339,7 +339,8 @@ function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 		self.Label:SetText(value * tonumber(formatRatio));
 	end
 	local default = self:GetAttribute("default") or nil;
-	if tostring(value) == default then
+	default = l(default) or _G[default] or default;
+	if tostring(value) == tostring(default) then
 		self.Label:SetText(l("DEFAULT")..self.Label:GetText().."|r")
 	end
 	self:SetValue(value);
