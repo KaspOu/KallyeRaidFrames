@@ -13,6 +13,12 @@ sed -i 's/KRF/KNC/g' ../KNameplateColor/Shared/OptionsNameplatesColorKNC.xml
 sed -i 's/KallyeRaidFrames/KNameplateColor/g' ../KNameplateColor/Shared/OptionsNameplatesColorKNC.xml
 sed -i 's/KRF/KNC/g' ../KNameplateColor/Shared/WidgetsKNC.xml
 
+echo "Shared Options & Widgets: KRaidFade"
+# cp ./Shared/OptionsRaidFadeKRF.xml ../KRaidFade/Shared/OptionsRaidFadeKF.xml
+cp ./Shared/WidgetsKRF.xml ../KRaidFade/Shared/WidgetsKF.xml
+sed -i 's/KRF/KF/g' ../KRaidFade/Shared/OptionsRaidFadeKF.xml
+sed -i 's/KRF/KF/g' ../KRaidFade/Shared/WidgetsKF.xml
+
 echo "Shared Options & Widgets: KRaidIcons"
 cp ./Shared/OptionsRaidIconsKRF.xml ../KRaidIcons/Shared/OptionsRaidIconsKRI.xml
 cp ./Shared/WidgetsKRF.xml ../KRaidIcons/Shared/WidgetsKRI.xml

@@ -55,6 +55,7 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, O
 l.OPTION_BAR_TEXTURE = "Textura"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Textura de la barra de vida"
 l.OPTION_NOTINRANGE = "Transparencia si est\195\161 fuera de rango";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Por defecto en Wow: 55%";
 l.OPTION_NOTINCOMBAT = "Transparencia de la banda fuera de combate";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Por defecto en Wow: 100%";
 l.OPTION_SOLORAID = l.CY.."Mostrar marcos de banda en modo solo "..required;
