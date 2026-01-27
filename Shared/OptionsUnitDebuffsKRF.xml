@@ -264,14 +264,6 @@
 						<Anchor point="TOPLEFT" relativeKey="$parent.BuffsOrientation" relativePoint="BOTTOMLEFT"><Offset x="0" y="-4" /></Anchor>
 					</Anchors>
 				</CheckButton>
-				<CheckButton parentKey="HotFix" inherits="KRFUI_TextWidget">
-					<Attributes>
-						<Attribute name="text" value="OPTION_HOTFIX" />
-					</Attributes>
-					<Anchors>
-						<Anchor point="TOPLEFT" relativeKey="$parent.BuffsOrientation" relativePoint="BOTTOMLEFT"><Offset x="0" y="-4" /></Anchor>
-					</Anchors>
-				</CheckButton>
 			<!-- -->
 			<CheckButton parentKey="FlickerWarning" inherits="KRFUI_TextWidget">
 				<Attributes>

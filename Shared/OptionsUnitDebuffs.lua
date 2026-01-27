@@ -63,23 +63,6 @@ local function ManageUnitDebuffsOptions()
     ns.OptionsEnable(flickerWarningText, ns.isFlickerWarningShowed(currentOptions), .1)
     ns.OptionsEnable(resetButton, ns.isFlickerWarningShowed(currentOptions), .1)
 
-    -- FIXME: HotFix
-    ns.OptionsSetShownAndEnable(ns.FindControl("HotFix"), ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == false, true, .1)
-    if ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == false then
-        ns.OptionsEnable(buffsPerLineSlide, false, .1)
-        ns.OptionsEnable(maxBuffsSlide, false, .1)
-        ns.OptionsEnable(buffsOrientationDropdown, false, .1)
-        ns.OptionsEnable(buffsPosXSlide, false, .1)
-        ns.OptionsEnable(buffsPosYSlide, false, .1)
-        ns.OptionsEnable(debuffsPerLineSlide, false, .1)
-        ns.OptionsEnable(maxDebuffsSlide, false, .1)
-        ns.OptionsEnable(debuffsOrientationDropdown, false, .1)
-        ns.OptionsEnable(debuffsPosXSlide, false, .1)
-        ns.OptionsEnable(debuffsPosYSlide, false, .1)
-        ns.OptionsEnable(flickerWarningText, false, .1)
-        ns.OptionsEnable(resetButton, false, .1)
-    end
-
     updatePerLineLabel(buffsPerLineSlide, currentOptions.BuffsPerLine, currentOptions.MaxBuffs)
     updatePerLineLabel(debuffsPerLineSlide, currentOptions.DebuffsPerLine, currentOptions.MaxDebuffs)
 end
