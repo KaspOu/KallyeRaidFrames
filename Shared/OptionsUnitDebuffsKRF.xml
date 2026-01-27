@@ -50,7 +50,7 @@
 					<Attribute name="text" value="OPTION_MAXBUFFS" />
 					<Attribute name="tooltip" value="OPTION_MAXBUFFS_TOOLTIP" />
 					<Attribute name="format" value="OPTION_MAXBUFFS_FORMAT" />
-					<Attribute name="default" value="3" />
+					<Attribute name="default" value="DEFAULT_MAXBUFFS" />
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
@@ -159,7 +159,7 @@
 					<Attribute name="text" value="OPTION_MAXDEBUFFS" />
 					<Attribute name="tooltip" value="OPTION_MAXDEBUFFS_TOOLTIP" />
 					<Attribute name="format" value="OPTION_MAXDEBUFFS_FORMAT" />
-					<Attribute name="default" value="3" />
+					<Attribute name="default" value="DEFAULT_MAXDEBUFFS" />
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
@@ -296,7 +296,10 @@
 							"DebuffsPosX",
 							"DebuffsPosY"
 						}, {
-							MaxBuffs = 3
+							MaxBuffs = KRFUI.l.DEFAULT_MAXBUFFS,
+							BuffsPerLine = KRFUI.l.DEFAULT_MAXBUFFS,
+							MaxDebuffs = KRFUI.l.DEFAULT_MAXBUFFS,
+							DebuffsPerLine = KRFUI.l.DEFAULT_MAXBUFFS,
 						})
 					</OnClick>
 				</Scripts>

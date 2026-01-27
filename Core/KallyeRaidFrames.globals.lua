@@ -21,14 +21,16 @@ ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 
 ns.HAS_colorNameBySelection = ns.IS_RETAIL; --? colorNameBySelection, Since BfA (7)
 ns.IsDebugFramesTimerActive = false;
-ns.DEFAULT_MAXBUFFS = 3;
+ns.DEFAULT_MAXBUFFS = issecretvalue and 9 or 3;
 ns.DEFAULT_RAIDICON_SIZE = 12;
 
--- Prepare I18N, with chat colors
+-- Prepare I18N, with chat colors & other values for UI
 ns.I18N = {};
 local l = ns.I18N;
 local function BCC(r, g, b) return string.format("|cff%02x%02x%02x", (r*255), (g*255), (b*255)); end
 
+l.DEFAULT_MAXBUFFS = ns.DEFAULT_MAXBUFFS
+l.DEFAULT_MAXDEBUFFS = ns.DEFAULT_MAXBUFFS
 l.RT7 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t" -- Cross
 l.RT8 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t" -- Skull
 l.ALERT = "|TInterface\\DialogFrame\\UI-Dialog-Icon-AlertNew:20|t"
