@@ -66,7 +66,7 @@ l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 55%";
 l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 100%";
-l.OPTION_SOLORAID = l.CY.."Affiche les cadres de raid en mode solo "..required;
+l.OPTION_SOLORAID = l.CY.."Affiche les cadres de raid en mode solo"..required;
 l.OPTION_SOLORAID_TOOLTIP = "Cadres de groupe/raid toujours visibles,\nactivera "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 
 l.OPTION_EDITMODE_PARTY = format("Blizzard : %s", USE_RAID_STYLE_PARTY_FRAMES)
@@ -87,7 +87,7 @@ l.OPTION_ORIENTATION_UpThenLeft = "En Haut, puis \195\160 Gauche"
 l.OPTION_ORIENTATION_RightThenUp = "\195\128 Droite, puis en Haut"
 l.OPTION_ORIENTATION_RightThenUp_Default = l.DEFAULT.."\195\128 Droite, puis en Haut (par d\195\169faut)"
 l.OPTION_ORIENTATION_UpThenRight = "En Haut, puis \195\160 Droite"
-l.OPTION_BUFFSSCALE = "Taille des buffs "..required;
+l.OPTION_BUFFSSCALE = "Taille des buffs"..required;
 l.OPTION_BUFFSSCALE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 1"
 l.OPTION_MAXBUFFS = "Limite de buffs"..required;
 l.OPTION_MAXBUFFS_TOOLTIP = "Nombre maximum de buffs \195\160 afficher\n"..l.CY.."Par d\195\169faut dans Wow : "..ns.DEFAULT_MAXBUFFS;
@@ -101,7 +101,7 @@ l.OPTION_BUFFS_RELATIVE_X = "Position horizontale"..required;
 l.OPTION_BUFFS_RELATIVE_X_TOOLTIP = "Ajustez la position horizontale relative des buffs";
 l.OPTION_BUFFS_RELATIVE_Y = "Position verticale"..required;
 l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Ajustez la position verticale relative des buffs";
-l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs "..required;
+l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 1"
 l.OPTION_MAXDEBUFFS = "Limite de d\195\169buffs"..required;
 l.OPTION_MAXDEBUFFS_TOOLTIP = "Nombre maximum de d\195\169buffs \195\160 afficher\n"..l.CY.."Par d\195\169faut dans Wow : "..ns.DEFAULT_MAXBUFFS;
@@ -204,6 +204,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."Affiche les cadres de groupe en mode solo"..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "Affiche aussi les cadres de groupe en raid"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "Lorsque vous \195\170tes en raid, affiche les cadres de groupe et de raid en m\195\170me temps"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s l'option %s|r des %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Note : Tapez "..l.YL.."/reload|r apr\195\168s le "..HUD_EDIT_MODE_MENU..", pour \195\169viter toute erreur";

@@ -303,6 +303,7 @@ local function SliderWidget_SetLabel(self, value)
 	self.Label:SetText(value)
 end
 function K_SHARED_UI.SliderWidget_OnLoad (self)
+	self._isLoaded = false
 	self.type = CONTROLTYPE_SLIDER;
 	--? Since Shadowlands (9)
 	if (BackdropTemplateMixin) then
@@ -327,6 +328,9 @@ function K_SHARED_UI.SliderWidget_OnLoad (self)
 	self.Label = self.Low;
 	self.Label:ClearAllPoints();
 	self.Label:SetPoint("LEFT", self, "RIGHT", 3.5, 1);
+	C_Timer.After(1, function()
+		self._isLoaded = true
+	end)
 end
 function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 	local format = self:GetAttribute("format") or nil;
@@ -345,6 +349,9 @@ function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 	end
 	self:SetValue(value);
 
+	if not self._isLoaded then
+		return
+	end
 	local onEventScript = self:GetScript("OnEvent")
 	if onEventScript then
 		onEventScript(self, "change")

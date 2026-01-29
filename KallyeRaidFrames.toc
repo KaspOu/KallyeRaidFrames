@@ -1,4 +1,4 @@
-## Interface: 120000, 120001, 110205, 110207, 50501, 50502, 38000, 20505, 11508
+## Interface: 120000, 120001, 110205, 110207, 50503, 38000, 20505, 11508
 ## Title: |cff00ff00Kallye|r RaidFrames
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid. Buffs / debuffs size, max limit...

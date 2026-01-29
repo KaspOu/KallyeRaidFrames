@@ -4,9 +4,11 @@ local l = ns.I18N;
 -- * avoid conflict override
 if ns.CONFLICT then return; end
 
-local Hook_CompactPartyFrame_UpdateVisibility = function() end;
-local SoloRaid_GetDisplayedAllyFrames = function() end;
-local SoloRaid_CompactRaidFrameContainer_OnEvent = function() end;
+local function noop() end;
+local Hook_CompactPartyFrame_UpdateVisibility = noop
+local Hook_CompactRaidFrameManager_UpdateContainerVisibility = noop
+local SoloRaid_GetDisplayedAllyFrames = noop
+local SoloRaid_CompactRaidFrameContainer_OnEvent = noop
 
 if (EditModeManagerFrame.UseRaidStylePartyFrames) then
     --[[
@@ -17,6 +19,21 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         if (not IsInGroup() and not IsInRaid()) then
             if InCombatLockdown() then
                 C_Timer.After(1, Hook_CompactPartyFrame_UpdateVisibility);
+                return
+            end
+            CompactPartyFrame:SetShown(true);
+        end
+    end
+
+    --[[
+    ! Solo Party Frames in raid, since DragonFlight (10)
+    - Show both Party and Raid Frames in Raid
+    ]]
+    Hook_CompactRaidFrameManager_UpdateContainerVisibility = function()
+        local cacheOptions = ns.Module.cacheOptions
+        if (cacheOptions.SoloRaidFrameGroupInRaid and IsInRaid()) then
+            if InCombatLockdown() then
+                C_Timer.After(1, Hook_CompactRaidFrameManager_UpdateContainerVisibility);
                 return
             end
             CompactPartyFrame:SetShown(true);
@@ -151,10 +168,15 @@ local function onSaveOptions(self, options)
     end
 end
 local function onInit(self, options)
-    if (options.SoloRaidFrame) then
+    if (options.SoloRaidFrame or options.SoloRaidFrameGroupInRaid) then
         if (EditModeManagerFrame.UseRaidStylePartyFrames) then
             --? Edit Mode - Since DragonFlight (10)
-            hooksecurefunc(CompactPartyFrame, "UpdateVisibility", Hook_CompactPartyFrame_UpdateVisibility);
+            if options.SoloRaidFrame then
+                hooksecurefunc(CompactPartyFrame, "UpdateVisibility", Hook_CompactPartyFrame_UpdateVisibility);
+            end
+            if options.SoloRaidFrameGroupInRaid then
+                hooksecurefunc("CompactRaidFrameManager_UpdateContainerVisibility", Hook_CompactRaidFrameManager_UpdateContainerVisibility)
+            end
         else
             --? Classic
             CompactRaidFrameManager:Show()
@@ -170,6 +192,7 @@ local function onInit(self, options)
     end
 
 end
+
 local module = ns.Module:new(onInit, "Soloraid");
 module:SetOnSaveOptions(onSaveOptions);
 module:SetGetInfo(getInfo);

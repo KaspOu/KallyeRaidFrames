@@ -196,6 +196,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."Gruppenrahmen anzeigen, wenn allein "..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "Gruppenrahmen auch im Schlachtzug anzeigen"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "Zeige sowohl Gruppen- als auch Schlachtzugsrahmen (im Schlachtzug)"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s die Option %s|r der %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Hinweis: Geben Sie "..l.YL.."/reload|r nach dem "..HUD_EDIT_MODE_MENU.." ein, um Fehler zu vermeiden";

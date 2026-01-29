@@ -13,9 +13,10 @@ ns.Module.__index = ns.Module;
 ns.Module.cacheOptions = {};
 
 -- Constructeur pour les modules
-function ns.Module:new(onInit, name)
+function ns.Module:new(onInit, name, onEnterWorld)
 	local instance = setmetatable({
 		onInit = onInit or noop,
+		onEnterWorld = onEnterWorld or nil,
 		name = name or "Unnamed",
 		onSaveOptions = noop,
 		getInfo = noop,
@@ -38,8 +39,25 @@ function ns.Module:SetGetInfo(getInfo)
 end
 --#endregion
 
+local function registerEnterWorld(self)
+	if not self.onEnterWorld then
+		return
+	end
+	local eventsFrame = CreateFrame("Frame", nil, UIParent)
+	eventsFrame:SetScript("OnEvent",
+		function(frame, event, ...)
+			frame:UnregisterEvent("PLAYER_ENTERING_WORLD");
+			if ns.AddMsgDebug then
+				ns.AddMsgDebug(string.format("Enter world <%s> module...", self.name));
+			end
+			self.onEnterWorld(self, ns.Module.cacheOptions, ...);
+		end
+	);
+	eventsFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+end
 --#region CalledByCore
 function ns.Module:Init(options, ...)
+	registerEnterWorld(self)
 	if ns.AddMsgDebug then
 		ns.AddMsgDebug(string.format("Loading <%s> module...", self.name));
 	end

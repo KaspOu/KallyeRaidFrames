@@ -196,6 +196,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."Mostrar marcos de grupo cuando est\195\169s solo "..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "Mostrar tambi\195\169n los marcos de grupo en banda"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "Mostrar tanto los marcos de grupo como los de banda (en banda)"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s la opci\195\179n %s|r de los %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Nota: Escribe "..l.YL.."/reload|r despu\195\169s del "..HUD_EDIT_MODE_MENU..", para evitar cualquier error";

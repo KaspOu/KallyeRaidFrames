@@ -196,6 +196,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."Mostra i frame del gruppo quando sei solo "..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "Mostra anche i frame del gruppo in raid"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "Mostra sia i frame del gruppo che quelli del raid (quando sei in raid)"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s l'opzione %s|r di %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Nota: Digita "..l.YL.."/reload|r dopo il "..HUD_EDIT_MODE_MENU..", per evitare errori";

@@ -40,7 +40,8 @@ local function ManageUnitDebuffsOptions()
     ns.OptionsSiblingsEnable(_G[ns.OPTIONS_NAME], activeCheckbox, isEnabled, .2)
     ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == nil, false, .1)
     ns.OptionsSetShownAndEnable(taintWarningText, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD ~= false, false, .1)
-    ns.OptionsEnable(flickerWarningText, false, .1)
+    -- ns.OptionsEnable(flickerWarningText, false, .1)
+    flickerWarningText:Hide()
     ns.OptionsEnable(resetButton, false, .1)
 
     if not isEnabled then
@@ -60,7 +61,8 @@ local function ManageUnitDebuffsOptions()
     }
     ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == nil, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
     ns.OptionsSetShownAndEnable(taintWarningText, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == true, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
-    ns.OptionsEnable(flickerWarningText, ns.isFlickerWarningShowed(currentOptions), .1)
+    -- ns.OptionsEnable(flickerWarningText, ns.isFlickerWarningShowed(currentOptions), .1)
+    flickerWarningText:Hide()
     ns.OptionsEnable(resetButton, ns.isFlickerWarningShowed(currentOptions), .1)
 
     updatePerLineLabel(buffsPerLineSlide, currentOptions.BuffsPerLine, currentOptions.MaxBuffs)

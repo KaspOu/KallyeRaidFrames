@@ -194,6 +194,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."Отображать рамки группы в одиночку "..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "Показывать также рамки группы в рейде"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "Показывать как рамки группы, так и рейда (в рейде)"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s опцию %s|r из %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU); -- ChatGPT
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL; -- ChatGPT
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Примечание: Введите "..l.YL.."/reload|r после "..HUD_EDIT_MODE_MENU..", чтобы избежать ошибок"; -- ChatGPT

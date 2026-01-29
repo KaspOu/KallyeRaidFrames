@@ -67,7 +67,7 @@ l.OPTION_NOTINRANGE = "Transparency when out of range";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
 l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
-l.OPTION_SOLORAID = l.CY.."Display raid frames while solo "..required;
+l.OPTION_SOLORAID = l.CY.."Display raid frames while solo"..required;
 l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames,\nwill active "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES
 
 l.OPTION_EDITMODE_PARTY = format("Blizzard: %s", USE_RAID_STYLE_PARTY_FRAMES)
@@ -206,6 +206,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
       end)
   end
+  l.OPTION_SOLORAID = l.CY.."Display party frames while solo "..required;
+  l.OPTION_SOLORAID_GROUPINRAID = "Show party frames too in raid"..required
+  l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "Show both party and raid frames (while in raid)"
   l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s option %s|r of %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
   l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU..": "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
   l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Note: Use "..l.YL.."/reload|r after "..HUD_EDIT_MODE_MENU..", to avoid possibles errors";

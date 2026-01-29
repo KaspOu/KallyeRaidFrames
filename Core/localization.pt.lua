@@ -198,6 +198,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."Exibir quadros do grupo enquanto solo "..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "Mostrar tamb\195\169m os quadros do grupo em raide"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "Mostrar tanto os quadros do grupo quanto os de raide (enquanto em raide)"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s a op\195\167\195\163o %s|r dos %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "Nota: Digite "..l.YL.."/reload|r ap\195\180s o "..HUD_EDIT_MODE_MENU..", para evitar qualquer erro";

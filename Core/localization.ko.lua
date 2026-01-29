@@ -196,6 +196,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."솔로 시 파티 프레임 표시 "..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "공격대에서 파티 프레임도 표시"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "공격대 안에서도 파티와 공격대 프레임 둘 다 표시합니다 (추천)"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s %s|r 옵션 %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "참고: "..HUD_EDIT_MODE_MENU.." 후 "..l.YL.."/reload|r를 입력하여 오류를 방지하세요.";

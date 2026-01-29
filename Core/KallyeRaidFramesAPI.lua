@@ -2,7 +2,6 @@ local _, ns = ...
 local l = ns.I18N;
 
 local DEFAULT_RAIDHEALTHBAR_TEXTURE = 423819
-local DEFAULT_RAID_ALPHA_INRANGE = 1
 
 function ns.InterfaceOptions_AddCategory(frame, addOn, position)
 	if not Settings or not Settings.RegisterCanvasLayoutSubcategory then

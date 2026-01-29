@@ -55,7 +55,7 @@
 				</Anchors>
 				<ScrollChild>
 					<Frame name="KRFUI_OptionsFrame">
-						<Size x="550" y="800" />
+						<Size x="550" y="830" />
 						<Frames>
 							<CheckButton parentKey="LabelRaid" inherits="KRFUI_HeadingWidget">
 								<Anchors>
@@ -386,7 +386,7 @@
 									<Attribute name="tooltip" value="OPTION_EDITMODE_PARTY_TOOLTIP" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="20" y="-5" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="20" y="0" /></Anchor>
 								</Anchors>
 								<Scripts>
 									<OnClick>
@@ -397,7 +397,7 @@
 							<Button parentKey="EditModeBtn" inherits="UIPanelButtonTemplate" hidden="true">
 								<Size x="300" y="20" />
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="0" y="-5" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.SoloRaidFrame" relativePoint="BOTTOMLEFT"><Offset x="20" y="0" /></Anchor>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
@@ -410,10 +410,24 @@
 									</OnClick>
 								</Scripts>
 							</Button>
+							<CheckButton parentKey="SoloRaidFrameGroupInRaid" inherits="KRFUI_CheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="OPTION_SOLORAID_GROUPINRAID" />
+									<Attribute name="tooltip" value="OPTION_SOLORAID_GROUPINRAID_TOOLTIP" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.EditMode" relativePoint="BOTTOMLEFT"><Offset x="-20" y="0" /></Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										K_SHARED_UI.RefreshOptions()
+									</OnClick>
+								</Scripts>
+							</CheckButton>
 
 							<Frame parentKey="Options1" inherits="KRFOptionsUnitDebuffs">
 								<Anchors>
-									<Anchor point="TOP" relativeKey="$parent.EditMode" relativePoint="BOTTOM"><Offset x="0" y="-10" /></Anchor>
+									<Anchor point="TOP" relativeKey="$parent.SoloRaidFrameGroupInRaid" relativePoint="BOTTOM"><Offset x="0" y="0" /></Anchor>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" /></Anchor>
 								</Anchors>
 							</Frame>

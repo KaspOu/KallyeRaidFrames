@@ -196,6 +196,9 @@ if (EditModeManagerFrame.UseRaidStylePartyFrames) then
         end
         end)
     end
+    l.OPTION_SOLORAID = l.CY.."单人时显示队伍框架 "..required;
+    l.OPTION_SOLORAID_GROUPINRAID = "在团队中也显示队伍框架"..required
+    l.OPTION_SOLORAID_GROUPINRAID_TOOLTIP = "在团队中同时显示队伍和团队框架"
     l.OPTION_EDITMODE_PARTY_TOOLTIP = format("%s / %s 选项 %s|r 的 %s|r\n(%s|r)", ENABLE, DISABLE, l.YL..USE_RAID_STYLE_PARTY_FRAMES, l.YL..HUD_EDIT_MODE_PARTY_FRAMES_LABEL, l.RDD..HUD_EDIT_MODE_MENU)
     l.OPTION_EDITMODE_BTN_PARTY = HUD_EDIT_MODE_MENU.." : "..HUD_EDIT_MODE_PARTY_FRAMES_LABEL;
     l.OPTION_EDITMODE_BTN_PARTY_NOTE = "注意：在"..l.YL..HUD_EDIT_MODE_MENU.."|r 后输入 "..l.YL.."/reload|r，以避免任何错误";

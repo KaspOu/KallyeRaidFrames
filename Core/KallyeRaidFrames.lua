@@ -33,6 +33,7 @@ local defaultOptions = {
 	AlphaNotInCombat = 100, -- 70
 	Bar_Texture = "",
 	SoloRaidFrame = false,		 -- Show solo raid (useful for testing)
+	SoloRaidFrameGroupInRaid = false,
 
 	ActiveUnitDebuffs = true,
 	BuffsScale = 0.75,
@@ -223,6 +224,7 @@ end
 
 local function RequiredReloadOptionsString()
 	return tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
+		..tostring(_G[ns.OPTIONS_NAME].SoloRaidFrameGroupInRaid)
 		..tostring(_G[ns.OPTIONS_NAME].RevertBar)
 		..tostring(_G[ns.OPTIONS_NAME].UpdateHealthColor)
 		..tostring(_G[ns.OPTIONS_NAME].FriendsClassColor)
@@ -360,18 +362,23 @@ local function ManageOptionsVisibility()
 
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		-- Edit Mode - Since DragonFlight (10)
+		if (EditableLayout == nil) then
+			return
+		end
 		ns.optionsFrame.EditMode:SetShown(EditableLayout)
 		ns.optionsFrame.EditModeBtn:SetShown(not EditableLayout)
 		if not EditableLayout then
 			ns.optionsFrame.EditModeBtn:SetAlpha(EditModeManagerFrame:UseRaidStylePartyFrames() and .4 or 1);
 		else
-			ns.optionsFrame.EditMode:SetChecked(ns.GetUseRaidStylePartyFrames() == 1)
-			ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .2);
+			ns.optionsFrame.EditMode:SetChecked(ns.GetUseRaidStylePartyFrames() == 1 or SoloRaidOption)
+			ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .4);
 		end
 	else
+		-- Classic
 		ns.optionsFrame.EditModeBtn:SetShown(false)
 		ns.optionsFrame.EditMode:SetChecked(SoloRaidOption or ns.GetUseRaidStylePartyFrames())
 		ns.OptionsEnable(ns.optionsFrame.EditMode, not SoloRaidOption, .2);
+		ns.optionsFrame.SoloRaidFrameGroupInRaid:SetShown(false)
 		ns.OptionsEnable(ns.optionsFrame.BlizzFriendsClassColor, false, .2);
 	end
 
@@ -395,7 +402,7 @@ local function ManageOptionsVisibility()
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlphaText  , not RevertBarOption and raidFramesDisplayClassColor, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlpha  , not RevertBarOption and raidFramesDisplayClassColor, HealthOption);
 
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.AddonCompartmentFilter,	true, not not AddonCompartmentFrame, .1);
+	ns.OptionsEnable(ns.optionsFrame.AddonCompartmentFilter,	not not AddonCompartmentFrame, .1);
 end
 
 K_SHARED_UI.AddRefreshOptions(ManageOptionsVisibility)
