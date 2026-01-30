@@ -207,7 +207,7 @@ local function unitHealthValues(displayedUnit, health, isTest)
 		unitHealthMax = UnitHealthMax(displayedUnit)
 		-- Since Midnight (12.0)
 		if (UnitHealthPercent) then
-			-- healthPercentage = UnitHealthPercent(displayedUnit, nil, true) -- FIXME: inc heal issue?
+			-- healthPercentage = UnitHealthPercent(displayedUnit, nil, curve) -- FIXME only curve
 			healthPercentage = GetUnitTotalModifiedMaxHealthPercent(displayedUnit)
 			healthLost = UnitHealthMissing(displayedUnit)
 		else
@@ -253,6 +253,18 @@ local function UpdateHealth_Regular(frame, health, isTest)
 				end
 				ns.UpdateNameRaidColor(frame);
 				frame._wasDead = false;
+			end
+			if frame.DispelOverlay and frame.DispelOverlay:IsUsingParentLevel() then
+				-- frame.healthBar:SetUsingParentLevel(false)
+				-- frame.healthBar:SetFrameLevel(frame:GetFrameLevel()-1)
+				local newFrameLevel = frame.powerBar:GetFrameLevel()+1
+				frame.DispelOverlay:SetUsingParentLevel(false)
+				frame.DispelOverlay:SetFrameLevel(newFrameLevel)
+				if frame.dispelDebuffFrames then
+					for _, debuffFrame in ipairs(frame.dispelDebuffFrames) do
+						debuffFrame:SetFrameLevel(newFrameLevel)
+					end
+				end
 			end
 		end
 	end
@@ -309,7 +321,7 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			local showPredictions = false
 			if (frame.optionTable.displayHealPrediction and (issecretvalue ~= nil or healthLost > 0)) then
 				-- FIXME: Midnight (12) WAIT API to hide if hasMaxHealth
-				showPredictions = true
+				local hb = frame.healthBar
 				local hbS = frame.healthBar:GetStatusBarTexture();
 				frame.myHealPrediction:ClearAllPoints();
 				frame.myHealPrediction:SetPoint("TOPRIGHT", hbS, "TOPRIGHT");
@@ -322,7 +334,15 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 				-- frame.totalAbsorb:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
 				frame.totalAbsorb:SetPoint("TOPRIGHT", frame.otherHealPrediction, "TOPLEFT");
 				frame.totalAbsorb:SetPoint("BOTTOMRIGHT", frame.otherHealPrediction, "BOTTOMLEFT");
+
+				frame.overHealAbsorbGlow:ClearAllPoints();
+				frame.overHealAbsorbGlow:SetPoint("BOTTOMLEFT", hb, "BOTTOMRIGHT", -7, 0)
+				frame.overHealAbsorbGlow:SetPoint("TOPLEFT", hb, "TOPRIGHT", -7, 0)
+				frame.overAbsorbGlow:ClearAllPoints();
+				frame.overAbsorbGlow:SetPoint("BOTTOMRIGHT", hb, "BOTTOMLEFT", 7, 0)
+				frame.overAbsorbGlow:SetPoint("TOPRIGHT", hb, "TOPLEFT", 7, 0)
 			else
+				showPredictions = frame.optionTable.displayHealPrediction
 				frame.myHealPrediction:SetShown(showPredictions)
 				frame.otherHealPrediction:SetShown(showPredictions)
 				frame.totalAbsorb:SetShown(showPredictions)
