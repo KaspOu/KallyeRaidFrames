@@ -10,10 +10,11 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
-- New raid option: Show both party and raid frames
-- DispelOverlay fixed
-- Added new localizations
-- Raid healthbar texture
+- New options (Midnight):
+  > Dispel Overlay transparency
+  > Raid: Show both party and raid frames
+
+- Reverted HP: Heal prediction & absorb bars fixed
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -67,6 +68,8 @@ l.OPTION_NOTINRANGE = "Transparency when out of range";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
 l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Dispel Overlay transparency"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Display raid frames while solo"..required;
 l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames,\nwill active "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES
 

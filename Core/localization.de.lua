@@ -58,6 +58,8 @@ l.OPTION_NOTINRANGE = "Transparenz bei Au\195\159er-Reichweite";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Standard in Wow: 55%";
 l.OPTION_NOTINCOMBAT = "Raid-Transparenz au\195\159erhalb des Kampfes";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Standard in Wow: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Transparenz des Dispel-Overlays"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Zeigt Raidrahmen im Solomodus an "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Gruppen-/Raidrahmen immer sichtbar,\naktiviert "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 

@@ -32,6 +32,7 @@ local defaultOptions = {
 	AlphaNotInRange = 55, -- 30
 	AlphaNotInCombat = 100, -- 70
 	Bar_Texture = "",
+	AlphaDispelOverlay = 100, -- 100
 	SoloRaidFrame = false,		 -- Show solo raid (useful for testing)
 	SoloRaidFrameGroupInRaid = false,
 
@@ -386,6 +387,7 @@ local function ManageOptionsVisibility()
 	ns.OptionsEnable(ns.optionsFrame.LimitLow , HealthOption);
 	ns.OptionsEnable(ns.optionsFrame.LimitWarn, HealthOption);
 	ns.OptionsEnable(ns.optionsFrame.LimitOk  , HealthOption);
+	ns.OptionsEnable(ns.optionsFrame.AlphaDispelOverlay  , HealthOption);
 
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorLow , not RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorWarn, not RevertBarOption, HealthOption);

@@ -11,11 +11,11 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
-- Nouvelle option raid : Afficher à la fois les cadres de groupe et de raid
-- Correction de DispelOverlay
-- Texture des barres de raid
-- Textures des barres d'info
-- Nouvelles options aux Buffs & débuffs (positions)
+- Nouvelles options (Midnight) :
+  > Transparence du Dispel Overlay
+  > Raid: Afficher à la fois les groupes et les cadres de raid
+
+- Vie inversée : Barres de prédiction de soins et d’absorption corrigées
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -68,6 +68,8 @@ l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 55%";
 l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Transparence de l'indicateur de dissipations"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Affiche les cadres de raid en mode solo"..required;
 l.OPTION_SOLORAID_TOOLTIP = "Cadres de groupe/raid toujours visibles,\nactivera "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 

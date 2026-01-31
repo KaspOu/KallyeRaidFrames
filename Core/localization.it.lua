@@ -58,6 +58,8 @@ l.OPTION_NOTINRANGE = "Trasparenza se fuori portata";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 55%";
 l.OPTION_NOTINCOMBAT = "Trasparenza del raid fuori combattimento";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Trasparenza indicatore dissoluzione"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Mostra le cornici del raid in modalit\195\160 solo "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Cornici gruppo/raid sempre visibili,\nattiver\195\160 "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 

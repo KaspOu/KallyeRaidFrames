@@ -56,6 +56,8 @@ l.OPTION_NOTINRANGE = "Прозрачность, если вне зоны дей
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: 55%"; -- ChatGPT
 l.OPTION_NOTINCOMBAT = "Прозрачность рейда вне боя"; -- ChatGPT
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
+l.OPTION_ALPHADISPELOVERLAY = "Прозрачность наложения рассеивания"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Показывать рейдовые рамки в соло-режиме "..required; -- ChatGPT
 l.OPTION_SOLORAID_TOOLTIP = "Рамки группы/рейда всегда видны,\nактивирует "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES; -- ChatGPT
 

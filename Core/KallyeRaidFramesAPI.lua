@@ -218,7 +218,11 @@ local function unitHealthValues(displayedUnit, health, isTest)
 	return health, unitHealthMax, healthPercentage, healthLost
 end
 
-local function SetHealPredictionAnchors(frame, healthBar, invert)
+--- Rearranges the overlay frames: heal predictions / absorb, and dispelOverlay (with alpha)
+---@param frame table The main unit or group frame (CompactUnitFrame).
+---@param healthBar table The health bar associated with this frame (healthBar or healthBarRevert)
+---@param invert boolean Whether to invert the bar/overlay orientation
+local function RearrangeOverlayFrames(frame, healthBar, invert)
 	local hb = healthBar
 	local hbS = hb:GetStatusBarTexture()
 
@@ -227,27 +231,46 @@ local function SetHealPredictionAnchors(frame, healthBar, invert)
 		LEFT, RIGHT, deltaGlow, deltaLeft, deltaRight = "RIGHT", "LEFT", -12, 8, 0
 	end
 
+	if frame.DispelOverlay then
+		frame.DispelOverlay:SetAlpha(_G[ns.OPTIONS_NAME].AlphaDispelOverlay/100)
+
+		if invert then
+			if frame.DispelOverlay:IsUsingParentLevel() then
+				local newFrameLevel = frame.powerBar:GetFrameLevel()+1
+				frame.DispelOverlay:SetUsingParentLevel(false)
+				frame.DispelOverlay:SetFrameLevel(newFrameLevel)
+				if frame.dispelDebuffFrames then
+					for _, debuffFrame in ipairs(frame.dispelDebuffFrames) do
+						debuffFrame:SetFrameLevel(newFrameLevel)
+					end
+				end
+			end
+		end
+	end
+
 	local _, rel = frame.overAbsorbGlow:GetPoint(1)
 
 	if invert or hb ~= rel then
 		-- If inverted or if setting changed
-		-- Comment rafraichir moins souvent en invert?
+		-- TODO: How to refresh only once while inverted?
+
 		-- HealPrediction Always on the right of HealthBar
+		local drawLayer = invert and "ARTWORK" or "BORDER"
 		frame.myHealPrediction:ClearAllPoints();
 		frame.myHealPrediction:SetPoint("TOP"..LEFT, hbS, "TOPRIGHT")
 		frame.myHealPrediction:SetPoint("BOTTOM"..LEFT, hbS, "BOTTOMRIGHT")
-		frame.myHealPrediction:SetDrawLayer("ARTWORK", 1)
+		frame.myHealPrediction:SetDrawLayer(drawLayer, 5)
 
 		frame.otherHealPrediction:ClearAllPoints();
-		frame.otherHealPrediction:SetDrawLayer("ARTWORK", 1)
+		frame.otherHealPrediction:SetDrawLayer(drawLayer, 5)
 		frame.otherHealPrediction:SetPoint("TOP"..LEFT, frame.myHealPrediction, "TOP"..LEFT)
 		frame.otherHealPrediction:SetPoint("BOTTOM"..LEFT, frame.myHealPrediction, "BOTTOM"..LEFT)
 
 		frame.totalAbsorb:ClearAllPoints()
 		frame.totalAbsorb:SetPoint("TOP"..LEFT, frame.otherHealPrediction, "TOP"..RIGHT)
 		frame.totalAbsorb:SetPoint("BOTTOM"..LEFT, frame.otherHealPrediction, "BOTTOM"..RIGHT)
-		frame.totalAbsorb:SetDrawLayer("ARTWORK", invert and 1 or -1)
-		frame.totalAbsorbOverlay:SetDrawLayer("ARTWORK", invert and 1 or -1)
+		frame.totalAbsorb:SetDrawLayer(drawLayer, 5)
+		frame.totalAbsorbOverlay:SetDrawLayer(drawLayer, 6)
 
 		frame.overAbsorbGlow:ClearAllPoints()
 		frame.overAbsorbGlow:SetPoint("BOTTOM"..LEFT, hb, "BOTTOM"..RIGHT, -deltaGlow, 0)
@@ -299,20 +322,8 @@ local function UpdateHealth_Regular(frame, health, isTest)
 				ns.UpdateNameRaidColor(frame);
 				frame._wasDead = false;
 			end
-			if frame.DispelOverlay and frame.DispelOverlay:IsUsingParentLevel() then
-				-- frame.healthBar:SetUsingParentLevel(false)
-				-- frame.healthBar:SetFrameLevel(frame:GetFrameLevel()-1)
-				local newFrameLevel = frame.powerBar:GetFrameLevel()+1
-				frame.DispelOverlay:SetUsingParentLevel(false)
-				frame.DispelOverlay:SetFrameLevel(newFrameLevel)
-				if frame.dispelDebuffFrames then
-					for _, debuffFrame in ipairs(frame.dispelDebuffFrames) do
-						debuffFrame:SetFrameLevel(newFrameLevel)
-					end
-				end
-			end
 			if (frame.optionTable.displayHealPrediction) then
-				SetHealPredictionAnchors(frame, frame.healthBar, false)
+				RearrangeOverlayFrames(frame, frame.healthBar, false)
 			end
 		end
 	end
@@ -379,7 +390,7 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			end
 
 			if (frame.optionTable.displayHealPrediction) then
-				SetHealPredictionAnchors(frame, frame.healthBarRevert, true)
+				RearrangeOverlayFrames(frame, frame.healthBarRevert, true)
 			end
 		end
 	end
@@ -416,7 +427,7 @@ function ns.Hook_UpdateRoleIcon(frame)
 
 		if _G[ns.OPTIONS_NAME].MoveRoleIcons then
 			icon:ClearAllPoints();
-			icon:SetPoint("TOPLEFT", -offset, offset);
+			icon:SetPoint("TOPLEFT", -offset-2, offset-2);
 			frame.name:SetPoint("TOPLEFT", 5, -5);
 			icon:SetDrawLayer("ARTWORK", 3)
 		end

@@ -60,6 +60,8 @@ l.OPTION_NOTINRANGE = "Transpar\195\170ncia se fora de alcance";
 l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Padr\195\163o no Wow: 55%";
 l.OPTION_NOTINCOMBAT = "Transpar\195\170ncia do raide fora de combate";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Padr\195\163o no Wow: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Transpar\195\170ncia do Overlay de Dissipa\195\167\195\163o"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Exibe os quadros de raide em modo solo "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Quadros de grupo/raide sempre vis\195\173veis,\nativar\195\161 "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 
