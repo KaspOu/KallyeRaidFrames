@@ -1,6 +1,13 @@
+v12.0.003
+- New option (retail): Show both party and raid frames (while in raid)
+- Fix dispelOverlay visibility
+
+v12.0.002
+- Midnight: Fix buffs / debuffs
+- Isolated and Modulable Code
+
 v12.0.001
 - Midnight prepatch fixes
-- Midnight: Disable Debuff Guard / Spell Watch List
 
 v11.2.702
 - Classic Anniversary

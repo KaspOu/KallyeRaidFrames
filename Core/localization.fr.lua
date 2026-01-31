@@ -11,6 +11,8 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
+- Nouvelle option raid : Afficher à la fois les cadres de groupe et de raid
+- Correction de DispelOverlay
 - Texture des barres de raid
 - Textures des barres d'info
 - Nouvelles options aux Buffs & débuffs (positions)

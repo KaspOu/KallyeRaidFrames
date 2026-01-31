@@ -10,10 +10,10 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- New raid option: Show both party and raid frames
+- DispelOverlay fixed
 - Added new localizations
 - Raid healthbar texture
-- Nameplates textures
-- Buffs & debuffs new options (positions)
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
