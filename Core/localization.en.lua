@@ -40,7 +40,7 @@ l.INIT_FAILED = format("%s not initialized correctly!", l.VERS_TITLE);
 local required = l.YL.."*";
 l.OPTION_RAID_HEADER = "Party / Raid";
 l.OPTION_HIGHLIGHTLOWHP = "Highlight players HP loss (dynamic colors)";
-l.OPTION_REVERTBAR = l.YL.."Revert|r HP bars (less life = bigger bar !) "..required;
+l.OPTION_REVERTBAR = l.YL.."Revert|r HP bars (less life = bigger bar !) ";
 l.OPTION_HEALTH_LOW = "Almost dead!";
 l.OPTION_HEALTH_LOW_TOOLTIP = "Low health color applied "..l.YLL.."BELOW|r this limit\n\n"
   .."i.e.: Red below 25%";

@@ -217,6 +217,46 @@ local function unitHealthValues(displayedUnit, health, isTest)
 	end
 	return health, unitHealthMax, healthPercentage, healthLost
 end
+
+local function SetHealPredictionAnchors(frame, healthBar, invert)
+	local hb = healthBar
+	local hbS = hb:GetStatusBarTexture()
+
+	local LEFT, RIGHT, deltaGlow, deltaLeft, deltaRight = "LEFT", "RIGHT", 7, 0, -8
+	if invert then
+		LEFT, RIGHT, deltaGlow, deltaLeft, deltaRight = "RIGHT", "LEFT", -12, 8, 0
+	end
+
+	local _, rel = frame.overAbsorbGlow:GetPoint(1)
+
+	if invert or hb ~= rel then
+		-- If inverted or if setting changed
+		-- Comment rafraichir moins souvent en invert?
+		-- HealPrediction Always on the right of HealthBar
+		frame.myHealPrediction:ClearAllPoints();
+		frame.myHealPrediction:SetPoint("TOP"..LEFT, hbS, "TOPRIGHT")
+		frame.myHealPrediction:SetPoint("BOTTOM"..LEFT, hbS, "BOTTOMRIGHT")
+		frame.myHealPrediction:SetDrawLayer("ARTWORK", 1)
+
+		frame.otherHealPrediction:ClearAllPoints();
+		frame.otherHealPrediction:SetDrawLayer("ARTWORK", 1)
+		frame.otherHealPrediction:SetPoint("TOP"..LEFT, frame.myHealPrediction, "TOP"..LEFT)
+		frame.otherHealPrediction:SetPoint("BOTTOM"..LEFT, frame.myHealPrediction, "BOTTOM"..LEFT)
+
+		frame.totalAbsorb:ClearAllPoints()
+		frame.totalAbsorb:SetPoint("TOP"..LEFT, frame.otherHealPrediction, "TOP"..RIGHT)
+		frame.totalAbsorb:SetPoint("BOTTOM"..LEFT, frame.otherHealPrediction, "BOTTOM"..RIGHT)
+		frame.totalAbsorb:SetDrawLayer("ARTWORK", invert and 1 or -1)
+		frame.totalAbsorbOverlay:SetDrawLayer("ARTWORK", invert and 1 or -1)
+
+		frame.overAbsorbGlow:ClearAllPoints()
+		frame.overAbsorbGlow:SetPoint("BOTTOM"..LEFT, hb, "BOTTOM"..RIGHT, -deltaGlow, 0)
+		frame.overAbsorbGlow:SetPoint("TOP"..LEFT, hb, "TOP"..RIGHT, -deltaGlow, 0)
+		frame.overHealAbsorbGlow:ClearAllPoints()
+		frame.overHealAbsorbGlow:SetPoint("BOTTOM"..RIGHT, hb, "BOTTOM"..LEFT, deltaGlow, 0)
+		frame.overHealAbsorbGlow:SetPoint("TOP"..RIGHT, hb, "TOP"..LEFT, deltaGlow, 0)
+	end
+end
 --[[
 ! Managing Health color: background
 ]]
@@ -225,6 +265,10 @@ local function UpdateHealth_Regular(frame, health, isTest)
 		local c = KRF_GetClassColor(frame.unit);
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, 0, _G[ns.OPTIONS_NAME].HealthAlpha / 100))
+		end
+		if frame.healthBarRevert and frame.healthBarRevert:IsShown() then
+			frame.healthBar:Show()
+			frame.healthBarRevert:Hide()
 		end
 		if not KRF_UnitIsConnected(frame) then
 			-- Disconnected
@@ -245,6 +289,7 @@ local function UpdateHealth_Regular(frame, health, isTest)
 			-- Alive
 			local unitHealthMax, healthPercentage, healthLost
 			health, unitHealthMax, healthPercentage, healthLost = unitHealthValues(frame.displayedUnit, health, isTest)
+			frame.healthBar:SetMinMaxValues(0, unitHealthMax)
 			applyBarTexture(frame.healthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
 			frame.background:SetColorTexture(GetHPSeverity(frame.displayedUnit, healthPercentage, false, isTest))
 			if frame._wasDead then
@@ -266,6 +311,9 @@ local function UpdateHealth_Regular(frame, health, isTest)
 					end
 				end
 			end
+			if (frame.optionTable.displayHealPrediction) then
+				SetHealPredictionAnchors(frame, frame.healthBar, false)
+			end
 		end
 	end
 end
@@ -282,15 +330,26 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			frame.name:SetShadowColor(c.r, c.g, c.b, .3);
 		end
 
+		if not frame.healthBarRevert then
+			frame.healthBarRevert = CreateFrame("StatusBar", nil, frame)
+			frame.healthBarRevert:SetAllPoints(frame.healthBar)
+			frame.healthBarRevert:SetStatusBarTexture(_G[ns.OPTIONS_NAME].Bar_Texture or DEFAULT_RAIDHEALTHBAR_TEXTURE, "ARTWORK")
+			frame.healthBarRevert:GetStatusBarTexture():SetHorizTile(true)
+			frame.healthBarRevert:GetStatusBarTexture():SetVertTile(true)
+			frame.healthBarRevert:SetUsingParentLevel(true)
+		end
+		frame.healthBar:Hide()
+		frame.healthBarRevert:Show()
+
 		if not KRF_UnitIsConnected(frame) then
 			-- Disconnected
-			frame.healthBar:SetValue(0);
+			frame.healthBarRevert:SetValue(0);
 			frame.background:SetColorTexture(darken(_G[ns.OPTIONS_NAME].RevertColorLow.r, _G[ns.OPTIONS_NAME].RevertColorLow.g, _G[ns.OPTIONS_NAME].RevertColorLow.b, .6, .4));
 			ns.Hook_UpdateName(frame, true);
 			ns.UpdateNameRaidColor(frame);
 		elseif KRF_UnitIsDeadOrGhost(frame) then
 			-- Dead
-			frame.healthBar:SetValue(0);
+			frame.healthBarRevert:SetValue(0);
 			frame._wasDead = true;
 			if (_G[ns.OPTIONS_NAME].IconOnDeath) then
 				ns.Hook_UpdateName(frame, true);
@@ -300,8 +359,9 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 			-- Alive
 			local unitHealthMax, healthPercentage, healthLost
 			health, unitHealthMax, healthPercentage, healthLost = unitHealthValues(frame.displayedUnit, health, isTest)
-			applyBarTexture(frame.healthBar, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
-			frame.healthBar:GetStatusBarTexture():SetVertexColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true, isTest))
+			frame.healthBarRevert:SetMinMaxValues(0, unitHealthMax)
+			applyBarTexture(frame.healthBarRevert, _G[ns.OPTIONS_NAME].Bar_Texture, DEFAULT_RAIDHEALTHBAR_TEXTURE)
+			frame.healthBarRevert:GetStatusBarTexture():SetVertexColor(GetHPSeverity(frame.displayedUnit, healthPercentage, true, isTest))
 
 			if frame._wasDead then
 				if (_G[ns.OPTIONS_NAME].IconOnDeath) then
@@ -313,39 +373,13 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 
 			-- Set reverted value
 			if (frame.optionTable.smoothHealthUpdates ) then
-				frame.healthBar:SetSmoothedValue(healthLost);
+				frame.healthBarRevert:SetSmoothedValue(healthLost);
 			else
-				frame.healthBar:SetValue(healthLost);
+				frame.healthBarRevert:SetValue(healthLost);
 			end
 
-			local showPredictions = false
-			if (frame.optionTable.displayHealPrediction and (issecretvalue ~= nil or healthLost > 0)) then
-				-- FIXME: Midnight (12) WAIT API to hide if hasMaxHealth
-				local hb = frame.healthBar
-				local hbS = frame.healthBar:GetStatusBarTexture();
-				frame.myHealPrediction:ClearAllPoints();
-				frame.myHealPrediction:SetPoint("TOPRIGHT", hbS, "TOPRIGHT");
-				frame.myHealPrediction:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
-				frame.otherHealPrediction:ClearAllPoints();
-				frame.otherHealPrediction:SetPoint("TOPRIGHT", frame.myHealPrediction, "TOPLEFT");
-				frame.otherHealPrediction:SetPoint("BOTTOMRIGHT", frame.myHealPrediction, "BOTTOMLEFT");
-				frame.totalAbsorb:ClearAllPoints();
-				-- frame.totalAbsorb:SetPoint("TOPRIGHT", hbS, "TOPRIGHT");
-				-- frame.totalAbsorb:SetPoint("BOTTOMRIGHT", hbS, "BOTTOMRIGHT");
-				frame.totalAbsorb:SetPoint("TOPRIGHT", frame.otherHealPrediction, "TOPLEFT");
-				frame.totalAbsorb:SetPoint("BOTTOMRIGHT", frame.otherHealPrediction, "BOTTOMLEFT");
-
-				frame.overHealAbsorbGlow:ClearAllPoints();
-				frame.overHealAbsorbGlow:SetPoint("BOTTOMLEFT", hb, "BOTTOMRIGHT", -7, 0)
-				frame.overHealAbsorbGlow:SetPoint("TOPLEFT", hb, "TOPRIGHT", -7, 0)
-				frame.overAbsorbGlow:ClearAllPoints();
-				frame.overAbsorbGlow:SetPoint("BOTTOMRIGHT", hb, "BOTTOMLEFT", 7, 0)
-				frame.overAbsorbGlow:SetPoint("TOPRIGHT", hb, "TOPLEFT", 7, 0)
-			else
-				showPredictions = frame.optionTable.displayHealPrediction
-				frame.myHealPrediction:SetShown(showPredictions)
-				frame.otherHealPrediction:SetShown(showPredictions)
-				frame.totalAbsorb:SetShown(showPredictions)
+			if (frame.optionTable.displayHealPrediction) then
+				SetHealPredictionAnchors(frame, frame.healthBarRevert, true)
 			end
 		end
 	end
@@ -378,12 +412,13 @@ function ns.Hook_UpdateRoleIcon(frame)
 			return;
 		end
 
-		local offset = icon:GetWidth() / 4;
+		local offset = icon:GetWidth() / 4
 
 		if _G[ns.OPTIONS_NAME].MoveRoleIcons then
 			icon:ClearAllPoints();
 			icon:SetPoint("TOPLEFT", -offset, offset);
 			frame.name:SetPoint("TOPLEFT", 5, -5);
+			icon:SetDrawLayer("ARTWORK", 3)
 		end
 
 		local role = UnitGroupRolesAssigned(frame.unit);
@@ -482,6 +517,8 @@ end
 function ns.RaidFrames_ResetHealth(frame, testMode)
 	local health = UnitHealth(frame.displayedUnit);
 	-- frame:SetMinMaxValues(0, unitHealthMax)
+	local healthBar = _G[ns.OPTIONS_NAME].RevertBar and frame.healthBarRevert or frame.healthBar
+	healthBar:SetMinMaxValues(0, UnitHealthMax(frame.displayedUnit))
 	if testMode then
 		if frame._testHealthPercentage == nil then
 			frame._testHealthPercentage = fastrandom(0, 100)
@@ -502,14 +539,14 @@ function ns.RaidFrames_ResetHealth(frame, testMode)
 		else
 			frame.statusText:SetText(format("%d%%", frame._testHealthPercentage));
 		end
-		-- frame.healthBar:SetMinMaxValues(0, unitHealthMax)
+		-- healthBar:SetMinMaxValues(0, unitHealthMax)
 		if ( frame.optionTable.smoothHealthUpdates ) then
-			frame.healthBar:SetMinMaxSmoothedValue(0, unitHealthMax)
+			healthBar:SetMinMaxSmoothedValue(0, unitHealthMax)
 		else
-			frame.healthBar:SetMinMaxValues(0, unitHealthMax)
+			healthBar:SetMinMaxValues(0, unitHealthMax)
 		end
 	end
-	frame.healthBar:SetValue(health);
+	healthBar:SetValue(health);
 	ns.Hook_UpdateHealth(frame, health, testMode);
 end
 
