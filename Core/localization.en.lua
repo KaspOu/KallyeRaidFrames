@@ -13,6 +13,7 @@ l.WHATSNEW = [[ What's new:
 - New options (Midnight):
   > Dispel Overlay transparency
   > Raid: Show both party and raid frames
+  > Alpha in range (combat)
 
 - Reverted HP: Heal prediction & absorb bars fixed
 ]]
@@ -64,12 +65,6 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLOR
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Texture"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Texture of the health bar"
-l.OPTION_NOTINRANGE = "Transparency when out of range";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
-l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
-l.OPTION_ALPHADISPELOVERLAY = "Dispel Overlay transparency"
-l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Display raid frames while solo"..required;
 l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames,\nwill active "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES
 
@@ -82,6 +77,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
 l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
+
+-- KF START
+l.OPTION_INRANGE = "Transparency when in range";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."Wow default: 100%";
+l.OPTION_NOTINRANGE = "Transparency when out of range";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
+l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Dispel Overlay transparency"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"

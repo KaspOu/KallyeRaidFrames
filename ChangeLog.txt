@@ -1,5 +1,6 @@
 v12.0.004
 - New option (Midnight): Dispel Overlay transparency
+- New option: Alpha in range (combat)
 - Reverted HP: Heal prediction & absorb bars fixed
 
 v12.0.003

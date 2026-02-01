@@ -54,14 +54,9 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLOR
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Textur"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Textur des Lebensbalkens"
-l.OPTION_NOTINRANGE = "Transparenz bei Au\195\159er-Reichweite";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Standard in Wow: 55%";
-l.OPTION_NOTINCOMBAT = "Raid-Transparenz au\195\159erhalb des Kampfes";
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Standard in Wow: 100%";
-l.OPTION_ALPHADISPELOVERLAY = "Transparenz des Dispel-Overlays"
-l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Zeigt Raidrahmen im Solomodus an "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Gruppen-/Raidrahmen immer sichtbar,\naktiviert "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
+--
 
 l.OPTION_EDITMODE_PARTY = format("Blizzard: %s", USE_RAID_STYLE_PARTY_FRAMES)
 l.OPTION_EDITMODE_PARTY_TOOLTIP = "";
@@ -72,6 +67,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test gestoppt, Sie k\195\182nnen normale Aktivit\1
 
 l.OPTION_ACTIVATE_MODULE = "Modul aktivieren / deaktivieren"
 l.OPTION_HIDEDISABLED = l.GYL.."Deaktivierte Module ausblenden"
+
+-- KF START
+l.OPTION_INRANGE = "Transparenz bei Reichweite";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."Standard in Wow: 100%";
+l.OPTION_NOTINRANGE = "Transparenz bei Au\195\159er-Reichweite";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Standard in Wow: 55%";
+l.OPTION_NOTINCOMBAT = "Raid-Transparenz au\195\159erhalb des Kampfes";
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Standard in Wow: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Transparenz des Dispel-Overlays"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"

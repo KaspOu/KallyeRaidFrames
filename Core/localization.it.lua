@@ -54,12 +54,6 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLOR
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s : %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Texture"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Texture della barra della vita"
-l.OPTION_NOTINRANGE = "Trasparenza se fuori portata";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 55%";
-l.OPTION_NOTINCOMBAT = "Trasparenza del raid fuori combattimento";
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 100%";
-l.OPTION_ALPHADISPELOVERLAY = "Trasparenza indicatore dissoluzione"
-l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Mostra le cornici del raid in modalit\195\160 solo "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Cornici gruppo/raid sempre visibili,\nattiver\195\160 "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 
@@ -72,6 +66,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test fermato, puoi riprendere l'attivit\195\160 no
 
 l.OPTION_ACTIVATE_MODULE = "Attiva / Disattiva il modulo"
 l.OPTION_HIDEDISABLED = l.GYL.."Nascondi i moduli disattivati"
+
+-- KF START
+l.OPTION_INRANGE = "Trasparenza quando in portata";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 100%";
+l.OPTION_NOTINRANGE = "Trasparenza se fuori portata";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 55%";
+l.OPTION_NOTINCOMBAT = "Trasparenza del raid fuori combattimento";
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Trasparenza indicatore dissoluzione"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Buff / Debuff"

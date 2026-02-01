@@ -14,6 +14,7 @@ l.WHATSNEW = [[ Nouveautés :
 - Nouvelles options (Midnight) :
   > Transparence du Dispel Overlay
   > Raid: Afficher à la fois les groupes et les cadres de raid
+  > Transparence à portée (en combat)
 
 - Vie inversée : Barres de prédiction de soins et d’absorption corrigées
 ]];
@@ -64,12 +65,6 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard : %s", RAID_USE_CLASS_COLO
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s : %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Texture"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Texture de la barre de vie"
-l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 55%";
-l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 100%";
-l.OPTION_ALPHADISPELOVERLAY = "Transparence de l'indicateur de dissipations"
-l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Affiche les cadres de raid en mode solo"..required;
 l.OPTION_SOLORAID_TOOLTIP = "Cadres de groupe/raid toujours visibles,\nactivera "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 
@@ -82,6 +77,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test arr\195\170t\195\169, vous pouvez reprendre u
 
 l.OPTION_ACTIVATE_MODULE = "Activer / D\195\169sactiver le module"
 l.OPTION_HIDEDISABLED = l.GYL.."Masquer les modules d\195\169sactiv\195\169s"
+
+-- KF START
+l.OPTION_INRANGE = "Transparence \195\160 port\195\169e";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 100%";
+l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 55%";
+l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Transparence de l'indicateur de dissipations"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"

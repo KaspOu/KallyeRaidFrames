@@ -52,12 +52,6 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLOR
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS) -- ChatGPT
 l.OPTION_BAR_TEXTURE = "Текстура" -- ChatGPT
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Текстура полосы здоровья" -- ChatGPT
-l.OPTION_NOTINRANGE = "Прозрачность, если вне зоны действия"; -- ChatGPT
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: 55%"; -- ChatGPT
-l.OPTION_NOTINCOMBAT = "Прозрачность рейда вне боя"; -- ChatGPT
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
-l.OPTION_ALPHADISPELOVERLAY = "Прозрачность наложения рассеивания"
-l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 l.OPTION_SOLORAID = l.CY.."Показывать рейдовые рамки в соло-режиме "..required; -- ChatGPT
 l.OPTION_SOLORAID_TOOLTIP = "Рамки группы/рейда всегда видны,\nактивирует "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES; -- ChatGPT
 
@@ -70,6 +64,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Тест остановлен, вы можете �
 
 l.OPTION_ACTIVATE_MODULE = "Активировать / Деактивировать модуль" -- ChatGPT
 l.OPTION_HIDEDISABLED = l.GYL.."Скрыть отключенные модули" -- ChatGPT
+
+-- KF START
+l.OPTION_INRANGE = "Прозрачность, если в зоне действия";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
+l.OPTION_NOTINRANGE = "Прозрачность, если вне зоны действия"; -- ChatGPT
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: 55%"; -- ChatGPT
+l.OPTION_NOTINCOMBAT = "Прозрачность рейда вне боя"; -- ChatGPT
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
+l.OPTION_ALPHADISPELOVERLAY = "Прозрачность наложения рассеивания" -- ChatGPT
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Баффы / Дебаффы";
