@@ -54,10 +54,6 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLOR
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Textura"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Textura de la barra de vida"
-l.OPTION_NOTINRANGE = "Transparencia si est\195\161 fuera de rango";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Por defecto en Wow: 55%";
-l.OPTION_NOTINCOMBAT = "Transparencia de la banda fuera de combate";
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Por defecto en Wow: 100%";
 l.OPTION_SOLORAID = l.CY.."Mostrar marcos de banda en modo solo "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Marcos de grupo/banda siempre visibles,\nactivar\195\161 "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 
@@ -70,6 +66,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Prueba detenida, puedes reanudar la actividad norm
 
 l.OPTION_ACTIVATE_MODULE = "Activar / Desactivar m\195\179dulo"
 l.OPTION_HIDEDISABLED = l.GYL.."Ocultar m\195\179dulos desactivados"
+
+-- KF START
+l.OPTION_INRANGE = "Transparencia cuando está en rango";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."Por defecto en Wow: 100%";
+l.OPTION_NOTINRANGE = "Transparencia si est\195\161 fuera de rango";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Por defecto en Wow: 55%";
+l.OPTION_NOTINCOMBAT = "Transparencia de la banda fuera de combate";
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Por defecto en Wow: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Transparencia del Overlay de disipaci\195\179n"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Beneficios / Perjuicios"

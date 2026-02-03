@@ -77,7 +77,7 @@ local function SetRaidIcons(dontResetPositions, overrideOptions)
 	-- detect group type
 	for typeName, groups in pairs(types) do
 		local unit = GetUnitFrame(typeName, 1, 1)
-		if unit and unit:IsShown() then
+		if unit and unit:IsVisible() then
 			groupType, nbGroups = typeName, groups
 			break
 		end
@@ -88,8 +88,8 @@ local function SetRaidIcons(dontResetPositions, overrideOptions)
 		for group = 1, nbGroups do
 			for member = 1, 5 do
 				local unitFrame = GetUnitFrame(groupType, group, member)
-				if unitFrame and unitFrame:IsShown() then
-					local unit = unitFrame:GetAttribute("unit")
+				if unitFrame and unitFrame:IsVisible() then
+					local unit = unitFrame.displayedUnit
 					if (unit) then
 						local markId = GetRaidTargetIndex(unit)
 						if type(markId) ~= "nil" then
@@ -109,8 +109,8 @@ local function SetRaidIcons(dontResetPositions, overrideOptions)
 		for group = 1, nbGroups do
 			for member = 1, 5 do
 				local unitFrame = GetUnitFrame(groupType, group, member)
-				if unitFrame and unitFrame:IsShown() then
-					local unit = unitFrame:GetAttribute("unit")
+				if unitFrame and unitFrame:IsVisible() then
+					local unit = unitFrame.displayedUnit
 					if (unit) then
 						local markId = GetRaidTargetIndex(unit)
 						if type(markId) ~= "nil" then

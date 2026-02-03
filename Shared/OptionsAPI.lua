@@ -101,7 +101,7 @@ function K_SHARED_UI.RefreshOptions()
     local previewOptions = nil
 
     -- Get options for direct preview
-    if ns.optionsFrame:IsShown() then
+    if ns.optionsFrame:IsVisible() then
         previewOptions = {}
         foreach(_G[ns.OPTIONS_NAME],
             function (optionName, defaultValue)

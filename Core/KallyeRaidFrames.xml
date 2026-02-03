@@ -326,6 +326,18 @@
 								</Anchors>
 							</Frame>
 
+							<Slider parentKey="AlphaInRange" inherits="KRFUI_SliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+								<Size x="200" y="15" />
+								<Attributes>
+									<Attribute name="text" value="OPTION_INRANGE" />
+									<Attribute name="tooltip" value="OPTION_INRANGE_TOOLTIP" />
+									<Attribute name="format" value="%d %%" />
+									<Attribute name="default" value="100" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.HideRealm" relativePoint="BOTTOMLEFT"><Offset x="0" y="-30" /></Anchor>
+								</Anchors>
+							</Slider>
 							<Slider parentKey="AlphaNotInRange" inherits="KRFUI_SliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
 								<Size x="200" y="15" />
 								<Attributes>
@@ -335,7 +347,7 @@
 									<Attribute name="default" value="55" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.HideRealm" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-30" /></Anchor>
 								</Anchors>
 							</Slider>
 							<Slider parentKey="AlphaNotInCombat" inherits="KRFUI_SliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
@@ -347,7 +359,22 @@
 									<Attribute name="default" value="100" />
 								</Attributes>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaNotInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaNotInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-30" /></Anchor>
+								</Anchors>
+							</Slider>
+
+							<!-- Special: right next to AlphaNotInRange, but under textures / IconOnDeath -->
+							<Slider parentKey="AlphaDispelOverlay" inherits="KRFUI_SliderWidget" minValue="0" maxValue="100" valueStep="1" stepsPerPage="1" obeyStepOnDrag="false">
+								<Size x="200" y="15" />
+								<Attributes>
+									<Attribute name="text" value="OPTION_ALPHADISPELOVERLAY" />
+									<Attribute name="tooltip" value="OPTION_ALPHADISPELOVERLAY_TOOLTIP" />
+									<Attribute name="format" value="%d %%" />
+									<Attribute name="default" value="100" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOP" relativeKey="$parent.AlphaNotInRange" relativePoint="TOP"><Offset y="0"/></Anchor>
+									<Anchor point="LEFT" relativeKey="$parent.IconOnDeath"><Offset x="0" /></Anchor>
 								</Anchors>
 							</Slider>
 							<CheckButton parentKey="SoloRaidFrame" inherits="KRFUI_CheckboxWidget">

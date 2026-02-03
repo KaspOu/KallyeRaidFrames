@@ -10,10 +10,12 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
-- New raid option: Show both party and raid frames
-- DispelOverlay fixed
-- Added new localizations
-- Raid healthbar texture
+- New options (Midnight):
+  > Dispel Overlay transparency
+  > Raid: Show both party and raid frames
+  > Alpha in range (combat)
+
+- Reverted HP: Heal prediction & absorb bars fixed
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -40,7 +42,7 @@ l.INIT_FAILED = format("%s not initialized correctly!", l.VERS_TITLE);
 local required = l.YL.."*";
 l.OPTION_RAID_HEADER = "Party / Raid";
 l.OPTION_HIGHLIGHTLOWHP = "Highlight players HP loss (dynamic colors)";
-l.OPTION_REVERTBAR = l.YL.."Revert|r HP bars (less life = bigger bar !) "..required;
+l.OPTION_REVERTBAR = l.YL.."Revert|r HP bars (less life = bigger bar !) ";
 l.OPTION_HEALTH_LOW = "Almost dead!";
 l.OPTION_HEALTH_LOW_TOOLTIP = "Low health color applied "..l.YLL.."BELOW|r this limit\n\n"
   .."i.e.: Red below 25%";
@@ -63,10 +65,6 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLOR
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s: %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Texture"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Texture of the health bar"
-l.OPTION_NOTINRANGE = "Transparency when out of range";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
-l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
 l.OPTION_SOLORAID = l.CY.."Display raid frames while solo"..required;
 l.OPTION_SOLORAID_TOOLTIP = "Always display party/raid frames,\nwill active "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES
 
@@ -79,6 +77,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
 l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
+
+-- KF START
+l.OPTION_INRANGE = "Transparency when in range";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."Wow default: 100%";
+l.OPTION_NOTINRANGE = "Transparency when out of range";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
+l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Dispel Overlay transparency"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"

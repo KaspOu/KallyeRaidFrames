@@ -116,7 +116,8 @@
         "OPTION_TOOLTIP_RAID_USE_CLASS_COLORS",
         "RAID_USE_CLASS_COLORS",
         "INTERFACE_LABEL",
-        "tContains"
+        "tContains",
+        "SetRaidTargetIconTexture"
     ],
     "cSpell.words": [
         "prepatch"

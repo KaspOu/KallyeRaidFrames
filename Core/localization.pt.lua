@@ -56,10 +56,6 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard : %s", RAID_USE_CLASS_COLO
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s : %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Textura"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Textura da barra de vida"
-l.OPTION_NOTINRANGE = "Transpar\195\170ncia se fora de alcance";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Padr\195\163o no Wow: 55%";
-l.OPTION_NOTINCOMBAT = "Transpar\195\170ncia do raide fora de combate";
-l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Padr\195\163o no Wow: 100%";
 l.OPTION_SOLORAID = l.CY.."Exibe os quadros de raide em modo solo "..required;
 l.OPTION_SOLORAID_TOOLTIP = "Quadros de grupo/raide sempre vis\195\173veis,\nativar\195\161 "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 
@@ -72,6 +68,17 @@ l.OPTION_DEBUG_OFF_MESSAGE = "Teste parado, voc\195\170 pode retomar a atividade
 
 l.OPTION_ACTIVATE_MODULE = "Ativar / Desativar o m\195\186dulo"
 l.OPTION_HIDEDISABLED = l.GYL.."Ocultar m\195\186dulos desativados"
+
+-- KF START
+l.OPTION_INRANGE = "Transpar\195\170ncia quando em alcance";
+l.OPTION_INRANGE_TOOLTIP = l.CY.."Padr\195\163o no Wow: 100%";
+l.OPTION_NOTINRANGE = "Transpar\195\170ncia se fora de alcance";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Padr\195\163o no Wow: 55%";
+l.OPTION_NOTINCOMBAT = "Transpar\195\170ncia do raide fora de combate";
+l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Padr\195\163o no Wow: 100%";
+l.OPTION_ALPHADISPELOVERLAY = "Transpar\195\170ncia do Overlay de Dissipa\195\167\195\163o"
+l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
+-- KF END
 
 -- KBD START
 l.OPTION_BUFFS_HEADER = "B\195\186fes / Debufes"

@@ -28,7 +28,7 @@ sed -i 's/KRF/KRI/g' ../KRaidIcons/Shared/WidgetsKRI.xml
 LANGS=("en" "fr" "de" "es" "it" "ko" "pt" "ru" "zh")
 
 for lang in "${LANGS[@]}"; do
-    echo "/KBigDebuffs/Core/localization.${lang}.lua: KBigDebuffs / KNameplateColor / KRaidIcons"
+    echo "/KBigDebuffs/Core/localization.${lang}.lua: KBigDebuffs / KNameplateColor / KRaidFade / KRaidIcons"
     # KBD
     sed -n "/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!p}}" Core/localization.${lang}.lua > /tmp/temp.${lang}.lua
     sed -i "/-- KBD START/,/-- KBD END/{/-- KBD START/!{/-- KBD END/!d}}" ../KBigDebuffs/Core/localization.${lang}.lua
@@ -38,6 +38,11 @@ for lang in "${LANGS[@]}"; do
     sed -n "/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!p}}" Core/localization.${lang}.lua > /tmp/temp.${lang}.lua
     sed -i "/-- KNC START/,/-- KNC END/{/-- KNC START/!{/-- KNC END/!d}}" ../KNameplateColor/Core/localization.${lang}.lua
     sed -i "/-- KNC START/r /tmp/temp.${lang}.lua" ../KNameplateColor/Core/localization.${lang}.lua
+
+    # Raid Icons (KF)
+    sed -n "/-- KF START/,/-- KF END/{/-- KF START/!{/-- KF END/!p}}" Core/localization.${lang}.lua > /tmp/temp.${lang}.lua
+    sed -i "/-- KF START/,/-- KF END/{/-- KF START/!{/-- KF END/!d}}" ../KRaidFade/Core/localization.${lang}.lua
+    sed -i "/-- KF START/r /tmp/temp.${lang}.lua" ../KRaidFade/Core/localization.${lang}.lua
 
     # Raid Icons (KRI)
     sed -n "/-- KRI START/,/-- KRI END/{/-- KRI START/!{/-- KRI END/!p}}" Core/localization.${lang}.lua > /tmp/temp.${lang}.lua
