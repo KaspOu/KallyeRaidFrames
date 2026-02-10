@@ -17,6 +17,7 @@ l.WHATSNEW = [[ Nouveautés :
   > Transparence à portée (en combat)
 
 - Vie inversée : Barres de prédiction de soins et d’absorption corrigées
+- Débuffs à gauche & buffs à droite, comme attendu
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -82,7 +83,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."Masquer les modules d\195\169sactiv\195\169s"
 l.OPTION_INRANGE = "Transparence \195\160 port\195\169e";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 100%";
 l.OPTION_NOTINRANGE = "Transparence si hors de port\195\169e";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 55%";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : "..l.DEFAULT_ALPHA_OUTOFRANGE.."%";
 l.OPTION_NOTINCOMBAT = "Transparence du raid hors de combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 100%";
 l.OPTION_ALPHADISPELOVERLAY = "Transparence de l'indicateur de dissipations"
@@ -90,7 +91,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"
+l.OPTION_BUFFS_HEADER = "Debuffs / Buffs"
 l.OPTION_ORIENTATION_LeftThenUp = "\195\128 Gauche, puis en Haut"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."\195\128 Gauche, puis en Haut (par d\195\169faut)"
 l.OPTION_ORIENTATION_UpThenLeft = "En Haut, puis \195\160 Gauche"
@@ -114,7 +115,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Ajustez la position verticale relative des 
 l.OPTION_DEBUFFSSCALE = "Taille des d\195\169buffs"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Par d\195\169faut dans Wow : 1"
 l.OPTION_MAXDEBUFFS = "Limite de d\195\169buffs"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "Nombre maximum de d\195\169buffs \195\160 afficher\n"..l.CY.."Par d\195\169faut dans Wow : "..ns.DEFAULT_MAXBUFFS;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "Nombre maximum de d\195\169buffs \195\160 afficher\n"..l.CY.."Par d\195\169faut dans Wow : "..ns.DEFAULT_MAXDEBUFFS;
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4d\195\169buff:d\195\169buffs";
 l.OPTION_DEBUFFSPERLINE = "D\195\169buffs par ligne"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Nombre d'ic\195\180nes de d\195\169buff par ligne\n"..l.CY.."Ignor\195\169 si sup\195\169rieur \195\160 la Limite";

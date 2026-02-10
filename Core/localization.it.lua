@@ -71,7 +71,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."Nascondi i moduli disattivati"
 l.OPTION_INRANGE = "Trasparenza quando in portata";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 100%";
 l.OPTION_NOTINRANGE = "Trasparenza se fuori portata";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 55%";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: "..l.DEFAULT_ALPHA_OUTOFRANGE.."%";
 l.OPTION_NOTINCOMBAT = "Trasparenza del raid fuori combattimento";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 100%";
 l.OPTION_ALPHADISPELOVERLAY = "Trasparenza indicatore dissoluzione"
@@ -79,7 +79,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "Buff / Debuff"
+l.OPTION_BUFFS_HEADER = "Debuff / Buff"
 l.OPTION_ORIENTATION_LeftThenUp = "A Sinistra, poi in Alto"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."A Sinistra, poi in Alto (predefinito)"
 l.OPTION_ORIENTATION_UpThenLeft = "In Alto, poi a Sinistra"
@@ -103,7 +103,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Regola la posizione verticale relativa dei 
 l.OPTION_DEBUFFSSCALE = "Dimensione dei debuff "..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Per impostazione predefinita in Wow: 1"
 l.OPTION_MAXDEBUFFS = "Limite di debuff"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "Numero massimo di debuff da visualizzare\n"..l.CY.."Per impostazione predefinita in Wow: "..ns.DEFAULT_MAXBUFFS;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "Numero massimo di debuff da visualizzare\n"..l.CY.."Per impostazione predefinita in Wow: "..ns.DEFAULT_MAXDEBUFFS;
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4debuff:debuffs";
 l.OPTION_DEBUFFSPERLINE = "Debuff per riga"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Numero di icone di debuff per riga\n"..l.CY.."Ignorato se superiore al Limite";

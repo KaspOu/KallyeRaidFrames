@@ -71,7 +71,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."隐藏已禁用模块"
 l.OPTION_INRANGE = "范围内透明度";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."魔兽世界默认：100%";
 l.OPTION_NOTINRANGE = "范围外透明化";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."魔兽世界默认：55%";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."魔兽世界默认："..l.DEFAULT_ALPHA_OUTOFRANGE.."%";
 l.OPTION_NOTINCOMBAT = "脱战时团队透明化";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."魔兽世界默认：100%";
 l.OPTION_ALPHADISPELOVERLAY = "驱散覆盖层透明度"
@@ -79,7 +79,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "增益 / 减益"
+l.OPTION_BUFFS_HEADER = "减益 / 增益"
 l.OPTION_ORIENTATION_LeftThenUp = "左侧，然后向上"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."左侧，然后向上 (默认)"
 l.OPTION_ORIENTATION_UpThenLeft = "向上，然后向左"
@@ -103,7 +103,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "调整增益的相对垂直位置";
 l.OPTION_DEBUFFSSCALE = "减益图标大小"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."魔兽世界默认：1"
 l.OPTION_MAXDEBUFFS = "减益上限"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "最大显示减益数量\n"..l.CY.."魔兽世界默认："..ns.DEFAULT_MAXBUFFS;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "最大显示减益数量\n"..l.CY.."魔兽世界默认："..ns.DEFAULT_MAXDEBUFFS;
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4减益:减益";
 l.OPTION_DEBUFFSPERLINE = "每行减益数量"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "每行减益图标数量\n"..l.CY.."如果超过上限则忽略";

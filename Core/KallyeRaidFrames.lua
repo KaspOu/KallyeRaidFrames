@@ -30,7 +30,7 @@ local defaultOptions = {
 	IconOnDeath = true,
 	FriendsClassColor = false,
 	AlphaInRange = 100,
-	AlphaNotInRange = 55, -- 30
+	AlphaNotInRange = ns.DEFAULT_ALPHA_OUTOFRANGE, -- 30
 	AlphaNotInCombat = 100, -- 70
 	Bar_Texture = "",
 	AlphaDispelOverlay = 100, -- 100
@@ -45,8 +45,8 @@ local defaultOptions = {
 	BuffsPosX = 0,
 	BuffsPosY = 0,
 	DebuffsScale = 1.25,
-	MaxDebuffs = ns.DEFAULT_MAXBUFFS,
-	DebuffsPerLine = ns.DEFAULT_MAXBUFFS,
+	MaxDebuffs = ns.DEFAULT_MAXDEBUFFS,
+	DebuffsPerLine = ns.DEFAULT_MAXDEBUFFS,
 	DebuffsOrientation = "RightThenUp",
 	DebuffsPosX = 0,
 	DebuffsPosY = 0,
@@ -158,7 +158,7 @@ local function OnEvent(self, event, ...)
 			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth);
 		end
 
-		if _G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100 then
+		if _G[ns.OPTIONS_NAME].AlphaNotInRange ~= ns.DEFAULT_ALPHA_OUTOFRANGE or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100 then
 			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
 			hooksecurefunc("CompactUnitFrame_UpdateInRange", ns.Hook_UpdateInRange);
 			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateInRange);
@@ -245,7 +245,7 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPosY)
 		..tostring(_G[ns.OPTIONS_NAME].UseTaintMethod)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveRaidIcons)
-		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= 55 or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
+		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= ns.DEFAULT_ALPHA_OUTOFRANGE or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end
 
 

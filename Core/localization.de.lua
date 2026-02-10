@@ -72,7 +72,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."Deaktivierte Module ausblenden"
 l.OPTION_INRANGE = "Transparenz bei Reichweite";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."Standard in Wow: 100%";
 l.OPTION_NOTINRANGE = "Transparenz bei Au\195\159er-Reichweite";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Standard in Wow: 55%";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Standard in Wow: "..l.DEFAULT_ALPHA_OUTOFRANGE.."%";
 l.OPTION_NOTINCOMBAT = "Raid-Transparenz au\195\159erhalb des Kampfes";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Standard in Wow: 100%";
 l.OPTION_ALPHADISPELOVERLAY = "Transparenz des Dispel-Overlays"
@@ -80,7 +80,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"
+l.OPTION_BUFFS_HEADER = "Debuffs / Buffs"
 l.OPTION_ORIENTATION_LeftThenUp = "Links, dann nach oben"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."Links, dann nach oben (Standard)"
 l.OPTION_ORIENTATION_UpThenLeft = "Oben, dann nach links"
@@ -104,7 +104,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Passen Sie die relative vertikale Position 
 l.OPTION_DEBUFFSSCALE = "Debuff-Gr\195\182\195\159e "..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Standard in Wow: 1"
 l.OPTION_MAXDEBUFFS = "Debuff-Limit"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "Maximale Anzahl der anzuzeigenden Debuffs\n"..l.CY.."Standard in Wow: "..ns.DEFAULT_MAXBUFFS;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "Maximale Anzahl der anzuzeigenden Debuffs\n"..l.CY.."Standard in Wow: "..ns.DEFAULT_MAXDEBUFFS;
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4Debuff:Debuffs";
 l.OPTION_DEBUFFSPERLINE = "Debuffs pro Reihe"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Anzahl der Debuff-Symbole pro Reihe\n"..l.CY.."Ignoriert, wenn \195\188ber dem Limit";

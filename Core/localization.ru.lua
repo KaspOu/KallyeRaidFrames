@@ -69,7 +69,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."Скрыть отключенные модули
 l.OPTION_INRANGE = "Прозрачность, если в зоне действия";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
 l.OPTION_NOTINRANGE = "Прозрачность, если вне зоны действия"; -- ChatGPT
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: 55%"; -- ChatGPT
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."По умолчанию в WoW: "..l.DEFAULT_ALPHA_OUTOFRANGE.."%"; -- ChatGPT
 l.OPTION_NOTINCOMBAT = "Прозрачность рейда вне боя"; -- ChatGPT
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."По умолчанию в WoW: 100%"; -- ChatGPT
 l.OPTION_ALPHADISPELOVERLAY = "Прозрачность наложения рассеивания" -- ChatGPT
@@ -77,7 +77,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "Баффы / Дебаффы";
+l.OPTION_BUFFS_HEADER = "Дебаффы / Баффы";
 l.OPTION_ORIENTATION_LeftThenUp = "Влево, затем вверх"; -- ChatGPT
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."Влево, затем вверх (по умолчанию)"; -- ChatGPT
 l.OPTION_ORIENTATION_UpThenLeft = "Вверх, затем влево"; -- ChatGPT
@@ -101,7 +101,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Отрегулируйте относите
 l.OPTION_DEBUFFSSCALE = "Относительный размер дебаффов"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."По умолчанию в WoW: 1"
 l.OPTION_MAXDEBUFFS = "Максимум дебаффов"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "Максимальное количество отображаемых дебаффов\n"..l.CY.."По умолчанию в WoW: "..ns.DEFAULT_MAXBUFFS
+l.OPTION_MAXDEBUFFS_TOOLTIP = "Максимальное количество отображаемых дебаффов\n"..l.CY.."По умолчанию в WoW: "..ns.DEFAULT_MAXDEBUFFS
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4дебафф:дебаффа:дебаффов";
 l.OPTION_DEBUFFSPERLINE = "Дебаффов в строке"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Количество иконок дебаффов в строке\n"..l.CY.."По умолчанию в WoW: максимум"

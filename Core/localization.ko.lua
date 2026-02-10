@@ -71,7 +71,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."비활성화된 모듈 숨기기"
 l.OPTION_INRANGE = "사거리 내일 때 투명도";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."WoW 기본값: 100%";
 l.OPTION_NOTINRANGE = "사거리 밖일 때 투명도";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."WoW 기본값: 55%";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."WoW 기본값: "..l.DEFAULT_ALPHA_OUTOFRANGE.."%";
 l.OPTION_NOTINCOMBAT = "비전투 시 공격대 투명도";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."WoW 기본값: 100%";
 l.OPTION_ALPHADISPELOVERLAY = "해제 오버레이 투명도"
@@ -79,7 +79,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "버프 / 디버프"
+l.OPTION_BUFFS_HEADER = "디버프 / 버프"
 l.OPTION_ORIENTATION_LeftThenUp = "왼쪽에서 위로"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."왼쪽에서 위로 (기본값)"
 l.OPTION_ORIENTATION_UpThenLeft = "위에서 왼쪽으로"
@@ -103,7 +103,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "버프의 상대적인 세로 위치를 조
 l.OPTION_DEBUFFSSCALE = "디버프 크기 "..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."WoW 기본값: 1"
 l.OPTION_MAXDEBUFFS = "디버프 제한"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "표시할 디버프의 최대 개수\n"..l.CY.."WoW 기본값: "..ns.DEFAULT_MAXBUFFS;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "표시할 디버프의 최대 개수\n"..l.CY.."WoW 기본값: "..ns.DEFAULT_MAXDEBUFFS;
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4디버프:디버프";
 l.OPTION_DEBUFFSPERLINE = "줄당 디버프 개수"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "줄당 디버프 아이콘 개수\n"..l.CY.."제한보다 많으면 무시됩니다.";

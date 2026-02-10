@@ -1,7 +1,14 @@
+v12.0.101
+- Midnight 12.0.1
+- Debuffs on the left & buffs on the right, as expected
+- Default Midnight Buffs limits = 6
+- Default Midnight Out of Combat transparency= 30%
+
 v12.0.004
 - New option (Midnight): Dispel Overlay transparency
 - New option: Alpha in range (combat)
 - Reverted HP: Heal prediction & absorb bars fixed
+- Fix RaidTarget Icons while in party
 
 v12.0.003
 - New option (retail): Show both party and raid frames (while in raid)

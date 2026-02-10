@@ -71,7 +71,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."Ocultar m\195\179dulos desactivados"
 l.OPTION_INRANGE = "Transparencia cuando está en rango";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."Por defecto en Wow: 100%";
 l.OPTION_NOTINRANGE = "Transparencia si est\195\161 fuera de rango";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Por defecto en Wow: 55%";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Por defecto en Wow: "..l.DEFAULT_ALPHA_OUTOFRANGE.."%";
 l.OPTION_NOTINCOMBAT = "Transparencia de la banda fuera de combate";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Por defecto en Wow: 100%";
 l.OPTION_ALPHADISPELOVERLAY = "Transparencia del Overlay de disipaci\195\179n"
@@ -79,7 +79,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "Beneficios / Perjuicios"
+l.OPTION_BUFFS_HEADER = "Perjuicios / Beneficios"
 l.OPTION_ORIENTATION_LeftThenUp = "A la izquierda, luego arriba"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."A la izquierda, luego arriba (por defecto)"
 l.OPTION_ORIENTATION_UpThenLeft = "Arriba, luego a la izquierda"
@@ -103,7 +103,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Ajusta la posici\195\179n vertical relativa
 l.OPTION_DEBUFFSSCALE = "Tama\195\177o de perjuicios "..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Por defecto en Wow: 1"
 l.OPTION_MAXDEBUFFS = "L\195\173mite de perjuicios"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "N\195\186mero m\195\161ximo de perjuicios a mostrar\n"..l.CY.."Por defecto en Wow: "..ns.DEFAULT_MAXBUFFS;
+l.OPTION_MAXDEBUFFS_TOOLTIP = "N\195\186mero m\195\161ximo de perjuicios a mostrar\n"..l.CY.."Por defecto en Wow: "..ns.DEFAULT_MAXDEBUFFS;
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4perjuicio:perjuicios";
 l.OPTION_DEBUFFSPERLINE = "Perjuicios por l\195\177nea"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "N\195\186mero de iconos de perjuicio por l\195\177nea\n"..l.CY.."Ignorado si es superior al L\195\173mite";

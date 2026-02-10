@@ -16,6 +16,7 @@ l.WHATSNEW = [[ What's new:
   > Alpha in range (combat)
 
 - Reverted HP: Heal prediction & absorb bars fixed
+- Debuffs on the left & buffs on the right, as expected
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -82,7 +83,7 @@ l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
 l.OPTION_INRANGE = "Transparency when in range";
 l.OPTION_INRANGE_TOOLTIP = l.CY.."Wow default: 100%";
 l.OPTION_NOTINRANGE = "Transparency when out of range";
-l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: 55%";
+l.OPTION_NOTINRANGE_TOOLTIP = l.CY.."Wow default: "..l.DEFAULT_ALPHA_OUTOFRANGE.."%";
 l.OPTION_NOTINCOMBAT = "Raid transparency out of combat";
 l.OPTION_NOTINCOMBAT_TOOLTIP = l.CY.."Wow default: 100%";
 l.OPTION_ALPHADISPELOVERLAY = "Dispel Overlay transparency"
@@ -90,7 +91,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 -- KBD START
-l.OPTION_BUFFS_HEADER = "Buffs / Debuffs"
+l.OPTION_BUFFS_HEADER = "Debuffs / Buffs"
 l.OPTION_ORIENTATION_LeftThenUp = "Left, then Up"
 l.OPTION_ORIENTATION_LeftThenUp_Default = l.DEFAULT.."Left, then Up (default)"
 l.OPTION_ORIENTATION_UpThenLeft = "Up, then Left"
@@ -114,7 +115,7 @@ l.OPTION_BUFFS_RELATIVE_Y_TOOLTIP = "Adjust the relative vertical position of th
 l.OPTION_DEBUFFSSCALE = "Debuffs relative size"..required;
 l.OPTION_DEBUFFSSCALE_TOOLTIP = l.CY.."Wow default: 1"
 l.OPTION_MAXDEBUFFS = "Max debuffs"..required;
-l.OPTION_MAXDEBUFFS_TOOLTIP = "Max debuffs to display\n"..l.CY.."Wow default: "..ns.DEFAULT_MAXBUFFS
+l.OPTION_MAXDEBUFFS_TOOLTIP = "Max debuffs to display\n"..l.CY.."Wow default: "..ns.DEFAULT_MAXDEBUFFS
 l.OPTION_MAXDEBUFFS_FORMAT = "%d |4debuff:debuffs";
 l.OPTION_DEBUFFSPERLINE = "Debuffs per line"..required;
 l.OPTION_DEBUFFSPERLINE_TOOLTIP = "Number of debuff icons per line\n"..l.CY.."Ignored if greater than max debuffs";

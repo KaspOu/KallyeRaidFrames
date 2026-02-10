@@ -344,7 +344,7 @@
 									<Attribute name="text" value="OPTION_NOTINRANGE" />
 									<Attribute name="tooltip" value="OPTION_NOTINRANGE_TOOLTIP" />
 									<Attribute name="format" value="%d %%" />
-									<Attribute name="default" value="55" />
+									<Attribute name="default" value="DEFAULT_ALPHA_OUTOFRANGE" />
 								</Attributes>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaInRange" relativePoint="BOTTOMLEFT"><Offset x="0" y="-30" /></Anchor>

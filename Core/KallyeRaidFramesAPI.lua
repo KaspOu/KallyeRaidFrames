@@ -105,7 +105,7 @@ ns.IsSecretValue = issecretvalue or function(_) return false end
 ! Managing Alpha depending on range
 - Alpha not in range
 - then alpha out of combat
-- Disabled if alpha values are equals to blizzard default (100% / 55%)
+- Disabled if alpha values are equals to blizzard default (100% / ns.DEFAULT_ALPHA_OUTOFRANGE%)
 ]]
 function ns.Hook_UpdateInRange(frame)
 	if UnitInPartyOrRaid(frame) and FrameIsCompact(frame) and not frame:IsForbidden() then
@@ -603,6 +603,7 @@ end
 ? GlobalStrings: https://www.townlong-yak.com/framexml/live/Helix/GlobalStrings.lua
 
 ? /fstack /dump CompactPartyFrameMember1.myHealPrediction
+? /etrace
 ? /console scriptErrors 1
 ? print (tostring(checked))
 ? /run print(select(4, GetBuildInfo()))
