@@ -285,6 +285,7 @@ end
 ]]
 local function UpdateHealth_Regular(frame, health, isTest)
 	if not frame:IsForbidden() and frame.background and UnitInPartyOrRaid(frame) and FrameIsCompact(frame) then
+		frame.background:SetVertexColor(1,1,1)
 		local c = KRF_GetClassColor(frame.unit);
 		if c and frame.optionTable.useClassColors then
 			frame.healthBar:SetStatusBarColor(darken(c.r, c.g, c.b, 0, _G[ns.OPTIONS_NAME].HealthAlpha / 100))
@@ -337,6 +338,7 @@ local function UpdateHealth_Reverted(frame, health, isTest)
 		local c = KRF_GetClassColor(frame.unit);
 
 		if c and frame and frame.background and frame.optionTable.useClassColors then
+			frame.background:SetVertexColor(1,1,1)
 			frame.background:SetColorTexture(darken(c.r, c.g, c.b, .7, .8));
 			frame.name:SetShadowColor(c.r, c.g, c.b, .3);
 		end
