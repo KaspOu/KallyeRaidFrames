@@ -62,7 +62,7 @@ end
 						return false;
 					end
 
-					local debuffFrame = frame.debuffFrames[frameNum];
+					-- local debuffFrame = frame.debuffFrames[frameNum];
 					-- ns.CompactUnitFrame_UtilSetDebuff(frame, debuffFrame, aura);
 					frameNum = frameNum + 1;
 
@@ -81,10 +81,9 @@ end
 					if CompactUnitFrame_GetOptionShowBigDefensive(frame) and frame.bigDefensives:Size() ~= 0 then
 						local bigDefensiveAura = frame.bigDefensives:GetTop();
 						buffAuraInstanceIDToSkip = bigDefensiveAura.auraInstanceID;
-
-						ns.CompactUnitFrame_UtilSetBuff(frame.CenterDefensiveBuff, bigDefensiveAura);
-					else
-						frame.CenterDefensiveBuff:Hide();
+						-- ns.CompactUnitFrame_UtilSetBuff(frame.CenterDefensiveBuff, bigDefensiveAura);
+					-- else
+						-- frame.CenterDefensiveBuff:Hide();
 					end
 				end
 				-- local maxBuffs = frame.maxBuffs; -- modification
