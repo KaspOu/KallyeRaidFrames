@@ -461,9 +461,7 @@ function ns.Hook_UpdateName(frame, calledOutsideHook)
 	local dead = (_G[ns.OPTIONS_NAME].IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or ""
 
 	if _G[ns.OPTIONS_NAME].HideRealm then
-		local playerName, realm = UnitName(frame.displayedUnit)
-		realm = realm or ""
-		name:SetText(dead .. playerName .. (realm ~= "" and FOREIGN_SERVER_LABEL or "")) -- (*)
+		name:SetText(string.format("%s%s", dead, GetUnitName(frame.displayedUnit, false)))
 	elseif _G[ns.OPTIONS_NAME].IconOnDeath then
 		name:SetText(dead .. GetUnitName(frame.displayedUnit, true))
 	end
