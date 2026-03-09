@@ -258,8 +258,8 @@ local function ManageUnitFrames(param)
 				point = point,
 				relativeTo = relativeTo,
 				relativePoint = relativePoint,
-				xOfs = xOfs,
-				yOfs = yOfs
+				xOfs = xOfs or 0,
+				yOfs = yOfs or 0
 			})
 			attr = firstChild:GetAttribute("_firstPoint")
 		end
