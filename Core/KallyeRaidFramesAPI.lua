@@ -114,9 +114,9 @@ function ns.Hook_UpdateInRange(frame)
 
 		local isInRange = UnitInRange(frame.displayedUnit)
 		-- C_Spell.IsSpellInRange(1229376, frame.displayedUnit)
-		if UnitIsUnit(frame.displayedUnit, "player") then
-			isInRange = true
-		end
+		-- if UnitIsUnit(frame.displayedUnit, "player") then
+		-- 	isInRange = true
+		-- end
 		-- Since Midnight (12)
 		if (issecretvalue) then
 			-- secret fallback (frame:GetAlpha() secret)
@@ -441,6 +441,19 @@ function ns.Hook_UpdateRoleIcon(frame)
 	end
 end
 
+local GetUnitNameSafe = function(unit, showServerName)
+	local name, server = UnitName(unit);
+	if ( type(server) ~= "nil") then
+		if ( showServerName ) then
+			return string.format("%s-%s", name, server);
+		end
+		local relationship = UnitRealmRelationship(unit);
+		if (relationship ~= LE_REALM_RELATION_VIRTUAL) then
+			return string.format("%s%s", name, FOREIGN_SERVER_LABEL);
+		end
+	end
+	return name;
+end
 
 --[[
 ! Manage player names (partyframes & nameplates)
@@ -461,9 +474,9 @@ function ns.Hook_UpdateName(frame, calledOutsideHook)
 	local dead = (_G[ns.OPTIONS_NAME].IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or ""
 
 	if _G[ns.OPTIONS_NAME].HideRealm then
-		name:SetText(string.format("%s%s", dead, GetUnitName(frame.displayedUnit, false)))
+		name:SetText(string.format("%s%s", dead, GetUnitNameSafe(frame.displayedUnit, false)))
 	elseif _G[ns.OPTIONS_NAME].IconOnDeath then
-		name:SetText(dead .. GetUnitName(frame.displayedUnit, true))
+		name:SetText(string.format("%s%s", dead, GetUnitNameSafe(frame.displayedUnit, true)))
 	end
 end
 
