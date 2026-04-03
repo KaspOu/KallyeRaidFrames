@@ -113,10 +113,10 @@ function ns.Hook_UpdateInRange(frame)
 		local outOfRangeAlpha = math.min(_G[ns.OPTIONS_NAME].AlphaNotInRange/100, 1)
 
 		local isInRange = UnitInRange(frame.displayedUnit)
-		-- C_Spell.IsSpellInRange(1229376, frame.displayedUnit)
+		if C_Spell.IsSpellInRange(1229376, frame.displayedUnit) then
 		-- if UnitIsUnit(frame.displayedUnit, "player") then
-		-- 	isInRange = true
-		-- end
+			isInRange = true
+		end
 		-- Since Midnight (12)
 		if (issecretvalue) then
 			-- secret fallback (frame:GetAlpha() secret)
