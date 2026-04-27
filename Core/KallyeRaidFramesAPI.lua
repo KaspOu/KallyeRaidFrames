@@ -113,8 +113,8 @@ function ns.Hook_UpdateInRange(frame)
 		local outOfRangeAlpha = math.min(_G[ns.OPTIONS_NAME].AlphaNotInRange/100, 1)
 
 		local isInRange = UnitInRange(frame.displayedUnit)
-		if C_Spell.IsSpellInRange(1229376, frame.displayedUnit) then
-		-- if UnitIsUnit(frame.displayedUnit, "player") then
+		-- if C_Spell.IsSpellInRange(1229376, frame.displayedUnit) then
+		if UnitIsUnit(frame.displayedUnit, "player") then
 			isInRange = true
 		end
 		-- Since Midnight (12)

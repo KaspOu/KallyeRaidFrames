@@ -1,3 +1,6 @@
+v12.0.501
+- Fixed: range detection on player
+
 v12.0.103
 - Realm names fixed in instances
 
