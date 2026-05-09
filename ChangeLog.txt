@@ -1,3 +1,7 @@
+v12.0.502
+- Default Midnight Out of Combat transparency= 50%
+- Disabled Buffs & Debuffs: rework needed (thanks Blizzard...)
+
 v12.0.501
 - Fixed: range detection on player
 

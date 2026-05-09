@@ -113,8 +113,8 @@ function ns.Hook_UpdateInRange(frame)
 		local outOfRangeAlpha = math.min(_G[ns.OPTIONS_NAME].AlphaNotInRange/100, 1)
 
 		local isInRange = UnitInRange(frame.displayedUnit)
-		-- if C_Spell.IsSpellInRange(1229376, frame.displayedUnit) then
-		if UnitIsUnit(frame.displayedUnit, "player") then
+		if C_Spell.IsSpellInRange(1229376, frame.displayedUnit) then
+		-- if UnitIsUnit(frame.displayedUnit, "player") then
 			isInRange = true
 		end
 		-- Since Midnight (12)
@@ -218,6 +218,46 @@ local function unitHealthValues(displayedUnit, health, isTest)
 	return health, unitHealthMax, healthPercentage, healthLost
 end
 
+--- DispelOverlay can be a userdata where metatable exposes SetAlpha but the C binding rejects self ("bad self").
+--- Try direct SetAlpha, then fall back to visible regions/child frames when self is truly a Frame.
+---@param dispelOverlay Frame|Texture|Region|nil
+---@param alpha number 0..1
+local function DispelOverlay_SetAlpha(dispelOverlay, alpha)
+	if not dispelOverlay then
+		return
+	end
+	local function pack(...) return { ... } end
+	local function safeGetRegions(f)
+		local ok, list = pcall(function()
+			return pack(f:GetRegions())
+		end)
+		return ok and list or {}
+	end
+	local function safeGetChildren(f)
+		local ok, list = pcall(function()
+			return pack(f:GetChildren())
+		end)
+		return ok and list or {}
+	end
+	local function try(r)
+		if not r then
+			return false
+		end
+		return pcall(function()
+			r:SetAlpha(alpha)
+		end)
+	end
+	if try(dispelOverlay) then
+		return
+	end
+	for _, r in ipairs(safeGetRegions(dispelOverlay)) do
+		try(r)
+	end
+	for _, child in ipairs(safeGetChildren(dispelOverlay)) do
+		DispelOverlay_SetAlpha(child, alpha)
+	end
+end
+
 --- Rearranges the overlay frames: heal predictions / absorb, and dispelOverlay (with alpha)
 ---@param frame table The main unit or group frame (CompactUnitFrame).
 ---@param healthBar table The health bar associated with this frame (healthBar or healthBarRevert)
@@ -232,13 +272,21 @@ local function RearrangeOverlayFrames(frame, healthBar, invert)
 	end
 
 	if frame.DispelOverlay then
-		frame.DispelOverlay:SetAlpha(_G[ns.OPTIONS_NAME].AlphaDispelOverlay/100)
+		local dispelOverlay = frame.DispelOverlay
+		DispelOverlay_SetAlpha(dispelOverlay, _G[ns.OPTIONS_NAME].AlphaDispelOverlay / 100)
 
 		if invert then
-			if frame.DispelOverlay:IsUsingParentLevel() then
+			local okUsing, usingParent = pcall(function()
+				return dispelOverlay:IsUsingParentLevel()
+			end)
+			if okUsing and usingParent then
 				local newFrameLevel = frame.powerBar:GetFrameLevel()+1
-				frame.DispelOverlay:SetUsingParentLevel(false)
-				frame.DispelOverlay:SetFrameLevel(newFrameLevel)
+				pcall(function()
+					dispelOverlay:SetUsingParentLevel(false)
+				end)
+				pcall(function()
+					dispelOverlay:SetFrameLevel(newFrameLevel)
+				end)
 				if frame.dispelDebuffFrames then
 					for _, debuffFrame in ipairs(frame.dispelDebuffFrames) do
 						debuffFrame:SetFrameLevel(newFrameLevel)

@@ -20,7 +20,7 @@ local function ManageUnitDebuffsOptions()
     local activeCheckbox = ns.FindControl("ActiveUnitDebuffs")
     local headingLabel = ns.FindControl("LabelMaxBuffs")
     local hideDisabledModules = ns.FindControl("HideDisabledModules")
-    local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveUnitDebuffs, hideDisabledModules and hideDisabledModules:GetChecked())
+    local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveUnitDebuffs, hideDisabledModules and hideDisabledModules:GetChecked()) and ns.HAS_SECRETS ~= true
 
     local useTaintMethodCheckbox = ns.FindControl("UseTaintMethod")
     local taintWarningText = ns.FindControl("TaintWarning")

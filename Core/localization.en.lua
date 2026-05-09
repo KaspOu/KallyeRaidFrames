@@ -77,6 +77,8 @@ l.OPTION_DEBUG_OFF = "! STOP Test !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
+
+l.OPTION_ACTIVATE_MODULE_DEBUFFS = ns.HAS_SECRETS and (l.RDL.."Temporarly disabled for Midnight") or l.OPTION_ACTIVATE_MODULE
 l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
 
 -- KF START

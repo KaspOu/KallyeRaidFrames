@@ -438,7 +438,7 @@ local function getInfo(self)
 end
 
 local function isEnabled(options)
-    return options.ActiveUnitDebuffs ~= false
+    return ns.HAS_SECRETS ~= true and options.ActiveUnitDebuffs ~= false
 		and (
 			options.BuffsScale ~= 1
 			or options.MaxBuffs   ~= DEFAULT_MAXBUFFS

@@ -16,7 +16,7 @@
 			<CheckButton parentKey="ActiveUnitDebuffs" FrameLevel="6" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
 					<Attribute name="text" value="" />
-					<Attribute name="tooltip" value="OPTION_ACTIVATE_MODULE" />
+					<Attribute name="tooltip" value="OPTION_ACTIVATE_MODULE_DEBUFFS" />
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOP" relativeKey="$parent.LabelMaxBuffs" relativePoint="TOP">
