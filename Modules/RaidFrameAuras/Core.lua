@@ -5,9 +5,10 @@ local l = ns.I18N;
 if ns.CONFLICT then return; end
 
 
+
 local RaidFrameAuras = ns.RaidFrameAuras
 if not RaidFrameAuras then
-    RaidFrameAuras = CreateFrame("Frame", "RFA_Core")
+    RaidFrameAuras = CreateFrame("Frame", "RFA_Core_K")
     ns.RaidFrameAuras = RaidFrameAuras
 end
 
@@ -115,7 +116,7 @@ RaidFrameAuras:SetScript("OnEvent", function(self, event, ...)
         if loadedName == addonName then
             -- Embedded in KallyeRaidFrames: wait for ns.LoadRaidFramesAuras()
             if not ns.LoadRaidFramesAuras then
-                self:Initialize()
+                -- self:Initialize() -- FIXME:
             end
         elseif loadedName == "Blizzard_CompactRaidFrames" and IsRaidFrameAurasRuntimeActive(self) then
             self:ScheduleRefreshBurst("layout")

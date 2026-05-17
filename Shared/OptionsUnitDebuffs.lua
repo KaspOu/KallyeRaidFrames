@@ -64,7 +64,7 @@ local function ManageUnitDebuffsOptions()
     ns.OptionsSetShownAndEnable(taintWarningText, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == true, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
     -- ns.OptionsEnable(flickerWarningText, ns.isFlickerWarningShowed(currentOptions), .1)
     flickerWarningText:Hide()
-    ns.OptionsEnable(resetButton, ns.isFlickerWarningShowed(currentOptions), .1)
+    ns.OptionsEnable(resetButton, ns.isFlickerWarningShowed and ns.isFlickerWarningShowed(currentOptions) or false, .1)
 
     updatePerLineLabel(buffsPerLineSlide, currentOptions.BuffsPerLine, currentOptions.MaxBuffs)
     updatePerLineLabel(debuffsPerLineSlide, currentOptions.DebuffsPerLine, currentOptions.MaxDebuffs)

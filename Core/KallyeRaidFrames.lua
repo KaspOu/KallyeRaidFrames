@@ -140,12 +140,15 @@ end
 local function OnEvent(self, event, ...)
 	local arg1 = select(1, ...);
 	if (event == "ADDON_LOADED" and arg1 == ns.ADDON_NAME) then
-		self:UnregisterEvent("ADDON_LOADED");
 		isLoaded = true;
 
 		if l.UpdateLocales then l.UpdateLocales() end
 		ns.SetDefaultOptions(defaultOptions);
 		ns.RefreshOptions(defaultOptions);
+
+		if C_AddOns.GetAddOnInfo("RaidFrameAuras") == nil then
+			self:UnregisterEvent("ADDON_LOADED");
+		end
 
 		-- ! Hooks
 		hooksecurefunc("CompactUnitFrame_UpdateName", ns.Hook_UpdateName);
@@ -190,6 +193,16 @@ local function OnEvent(self, event, ...)
 			end
 		end
 
+	end
+	if (event == "ADDON_LOADED" and arg1 == "RaidFrameAuras") then
+		self:UnregisterEvent("ADDON_LOADED");
+		ns.CONFLICT_RFA = true
+		ns.LoadRaidFramesAuras = nil
+		if _G[ns.OPTIONS_NAME].ActiveUnitDebuffs then
+			_G[ns.OPTIONS_NAME].ActiveUnitDebuffs = false
+			ns.AddMsgErr("RaidFrameAuras detected, Debuffs disabled")
+			ns.AddMsgWarn(l.OPTION_RELOAD_REQUIRED)
+		end
 	end
 end -- END KRF_OnEvent
 

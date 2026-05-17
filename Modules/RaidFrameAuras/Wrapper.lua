@@ -4,6 +4,7 @@ local _, ns = ...
 if ns.CONFLICT then return; end
 
 --[[ TODO:
+-- * Fix Core: replace RFA_Core
 -- * Config/Defaults: Replace enabled = false
 -- * Fix GetLongBuffReason
 --]]
@@ -136,6 +137,7 @@ end
 
 ns.LoadRaidFramesAuras = function(options)
     applyBlizzardAuraCVarPolicy(false)
+    ns.RaidFrameAuras:Initialize()
     if not ensureRaidFrameAurasInitialized() then
         return
     end

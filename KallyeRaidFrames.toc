@@ -39,8 +39,8 @@ Core\localization.ru.lua [AllowLoadTextLocale ruRU]
 Core\localization.zh.lua [AllowLoadTextLocale zhCN, zhTW]
 Libs\LibEditModeOverride-1.0\LibStub\LibStub.lua
 Libs\LibEditModeOverride-1.0\LibEditModeOverride.lua
+Modules\RaidFrameAuras\RaidFrameAuras.xml [AllowLoadGameType mainline]
 Shared\WidgetsKRF.xml
 Core\KallyeRaidFramesAPI.lua
-Modules\RaidFrameAuras\RaidFrameAuras.xml [AllowLoadGameType mainline]
 Modules\modules.xml
 Core\KallyeRaidFrames.xml

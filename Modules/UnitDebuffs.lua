@@ -4,6 +4,7 @@ local l = ns.I18N;
 -- * avoid conflict override
 if ns.CONFLICT then return; end
 
+
 ns.FORCE_USE_MAXBUFFS_TAINT_METHOD = nil -- maxBuffs only
 if (issecretvalue ~= nil) then
 	-- Since Midnight (12)
