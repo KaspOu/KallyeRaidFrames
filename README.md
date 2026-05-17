@@ -47,4 +47,11 @@ All features are optional.
 
 
 https://www.curseforge.com/members/kaspou/projects
-All rights reserved
+
+## License
+
+Kallye Raid Frames is **All Rights Reserved** (see [License.txt](License.txt)).
+
+The **buffs/debuffs** feature on retail uses code from **Raid Frame Auras** ([CurseForge](https://www.curseforge.com/wow/addons/raid-party-frame-auras)) by **Anahkas**, included under the [Apache License 2.0](Modules/RaidFrameAuras/LICENSE) in `Modules/RaidFrameAuras/`.
+
+[LibEditModeOverride-1.0](Libs/LibEditModeOverride-1.0/LICENSE) is under the MIT License.

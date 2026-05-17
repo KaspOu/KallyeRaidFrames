@@ -128,6 +128,7 @@ local function SLASH_KRF_command(msgIn)
 		else
 			InterfaceOptionsFrame_OpenToCategory(ns.TITLE);
 		end
+		C_Timer.After(1, K_SHARED_UI.RefreshOptions);
 	end
 end
 
@@ -388,7 +389,8 @@ local function ManageOptionsVisibility()
 	ns.OptionsEnable(ns.optionsFrame.LimitLow , HealthOption);
 	ns.OptionsEnable(ns.optionsFrame.LimitWarn, HealthOption);
 	ns.OptionsEnable(ns.optionsFrame.LimitOk  , HealthOption);
-	ns.OptionsSetShownAndEnable(ns.optionsFrame.AlphaDispelOverlay, (CompactPartyFrameMember1 and CompactPartyFrameMember1.DispelOverlay) and true or false  , HealthOption);
+	-- ns.OptionsSetShownAndEnable(ns.optionsFrame.AlphaDispelOverlay, (CompactPartyFrameMember1 and CompactPartyFrameMember1.DispelOverlay) and true or false  , HealthOption);
+	ns.OptionsSetShownAndEnable(ns.optionsFrame.AlphaDispelOverlay, (CompactPartyFrameMember1 and CompactPartyFrameMember1.DispelOverlay) and true or false  , false);
 
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorLow , not RevertBarOption, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.BGColorWarn, not RevertBarOption, HealthOption);

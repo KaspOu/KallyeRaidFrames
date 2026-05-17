@@ -125,6 +125,9 @@ function ns.Hook_UpdateInRange(frame)
 			return
 		end
 
+		if UnitIsUnit(frame.displayedUnit, "player") then
+			isInRange = true
+		end
 		local newAlpha = isInRange and inRangeAlpha or outOfRangeAlpha
 		if (floor(frame:GetAlpha()*100) ~= floor(newAlpha*100)) then
 			frame:SetAlpha(newAlpha);

@@ -1,0 +1,1178 @@
+local _, ns = ...
+local l = ns.I18N;
+
+-- * avoid conflict override
+if ns.CONFLICT then return; end
+local addonName, ns = ...
+
+local RaidFrameAuras = ns.RaidFrameAuras
+if not RaidFrameAuras then return end
+
+local State = ns.State or {}
+local Util = ns.Util or {}
+local C_UnitAuras = C_UnitAuras
+local RawAuraFilters = AuraUtil and AuraUtil.AuraFilters or {}
+local GetAuraSlots = C_UnitAuras and C_UnitAuras.GetAuraSlots
+local GetAuraDataBySlot = C_UnitAuras and C_UnitAuras.GetAuraDataBySlot
+local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
+local IsAuraFilteredOut = C_UnitAuras and C_UnitAuras.IsAuraFilteredOutByInstanceID
+local CreateAuraFilterString = AuraUtil and AuraUtil.CreateFilterString
+local AURA_FILTER_SEPARATOR = "|"
+local LONG_BUFF_LISTED = "listed"
+local Unpack = unpack
+local NoAuraFilters = {}
+
+local KnownLongBuffSpellIDs = {
+    -- Retail/Midnight long-term raid buffs exposed by Blizzard for aura filtering.
+    [1126] = true, -- Mark of the Wild
+    [432661] = true, -- Mark of the Wild
+    [1459] = true, -- Arcane Intellect
+    [432778] = true, -- Arcane Intellect / alternate 12.0+ aura
+    [6673] = true, -- Battle Shout
+    [21562] = true, -- Power Word: Fortitude
+    [79104] = true, -- Power Word: Fortitude aura variant, non-grouped target
+    [79105] = true, -- Power Word: Fortitude group aura variant
+    [369459] = true, -- Source of Magic
+    [1289630] = true, -- Source of Magic aura / alternate 12.0+ variant
+    [462854] = true, -- Skyfury
+    [474750] = true, -- Symbiotic Relationship cast / talent spell
+    [474754] = true, -- Symbiotic Relationship applied aura
+
+    -- Blessing of the Bronze.
+    [364342] = true, -- Blessing of the Bronze cast/root spell; triggers class aura IDs below
+    [381732] = true, -- Blessing of the Bronze: Death's Advance / Death Knight
+    [381741] = true, -- Blessing of the Bronze: Fel Rush / Infernal Strike / Demon Hunter
+    [381746] = true, -- Blessing of the Bronze: Dash / Tiger Dash / Druid
+    [381748] = true, -- Blessing of the Bronze: Hover / Evoker
+    [381749] = true, -- Blessing of the Bronze: Aspect of the Cheetah / Hunter
+    [381750] = true, -- Blessing of the Bronze: Blink / Shimmer / Mage
+    [381751] = true, -- Blessing of the Bronze: Roll / Chi Torpedo / Monk
+    [381752] = true, -- Blessing of the Bronze: Divine Steed / Paladin
+    [381753] = true, -- Blessing of the Bronze: Leap of Faith / Priest
+    [381754] = true, -- Blessing of the Bronze: Sprint / Rogue
+    [381756] = true, -- Blessing of the Bronze: Spirit Walk / Spiritwalker's Grace / Gust of Wind / Shaman
+    [381757] = true, -- Blessing of the Bronze: Demonic Circle: Teleport / Warlock
+    [381758] = true, -- Blessing of the Bronze: Heroic Leap / Warrior
+    [432652] = true, -- Blessing of the Bronze: Shaman movement abilities, 12.0+ variant
+    [432655] = true, -- Blessing of the Bronze: Aspect of the Cheetah / Hunter, 12.0+ variant
+    [442744] = true, -- Blessing of the Bronze: movement / mounted speed variant
+
+    -- Retail long-term self buffs exposed by Blizzard's aura filtering list.
+    [433568] = true, -- Rite of Sanctification
+    [433583] = true, -- Rite of Adjuration
+
+    -- Rogue poison buffs: long-duration weapon/self maintenance buffs.
+    [2823] = true, -- Deadly Poison
+    [8679] = true, -- Wound Poison
+    [3408] = true, -- Crippling Poison
+    [5761] = true, -- Numbing Poison
+    [315584] = true, -- Instant Poison
+    [381637] = true, -- Atrophic Poison
+    [381664] = true, -- Amplifying Poison
+
+    -- Shaman weapon imbuements: long-duration weapon/self maintenance buffs.
+    [319773] = true, -- Windfury Weapon
+    [319778] = true, -- Flametongue Weapon
+    [382021] = true, -- Earthliving Weapon
+    [382022] = true, -- Earthliving Weapon alternate aura
+    [457496] = true, -- Tidecaller's Guard
+    [457481] = true, -- Tidecaller's Guard alternate aura
+    [462757] = true, -- Thunderstrike Ward
+    [462742] = true, -- Thunderstrike Ward alternate aura
+
+    -- Paladin no-duration / persistent group auras.
+    [465] = true, -- Devotion Aura
+    [353101] = true, -- Devotion Aura applied aura variant
+    [32223] = true, -- Crusader Aura
+    [317920] = true, -- Concentration Aura
+    [183435] = true, -- Retribution Aura: persistent rolling aura, refreshed every second
+
+    -- Permanent-style utility/state buffs seen on raid frames.
+    [244457] = true, -- Mounted
+    [409896] = true, -- Mounted
+    [372014] = true, -- Visage: Dracthyr visage aura; increases out-of-combat health regeneration for party
+    [166646] = true, -- Windwalking: movement speed increased by 4%
+    [97340] = true, -- Guild Champion: guild reputation gains increased by 50%
+    [97341] = true, -- Guild Champion: guild reputation gains increased by 100%
+    [186403] = true, -- Sign of Battle: Battleground bonus event honor buff
+    [335152] = true, -- Sign of Iron: Warlords of Draenor reputation bonus event buff
+    [417805] = true, -- Spirit of Cooperation: linked partner movement and damage reduction buff
+    [430191] = true, -- Warband Mentored Leveling: Warband XP bonus, stacks up to 25%
+    [472433] = true, -- Evangelism: Power Word: Radiance instant cast / reduced mana cost buff
+    [1250491] = true, -- Find High-Value Beasts: tracking buff for nearby high-value beasts
+    [1254631] = true, -- Trovehunter's Bounty: unlocks a Hidden Trove on the next Tier 4+ Delve
+    [426756] = true, -- Dungeon Assistance: follower dungeon / guided dungeon assistance marker
+}
+
+local function GetUnitCacheGUID(unit)
+    if type(UnitGUID) ~= "function" then return nil end
+    local guid = UnitGUID(unit)
+    if Util.IsSecretValue and Util.IsSecretValue(guid) then return nil end
+    return guid
+end
+
+local function BumpAuraCacheGeneration(cache)
+    if not cache then return end
+    State.auraCacheGeneration = (State.auraCacheGeneration or 0) + 1
+    cache.generation = State.auraCacheGeneration
+end
+
+local AuraFilters = {
+    HELPFUL = RawAuraFilters.Helpful or "HELPFUL",
+    HARMFUL = RawAuraFilters.Harmful or "HARMFUL",
+    PLAYER = RawAuraFilters.Player or "PLAYER",
+    RAID = RawAuraFilters.Raid or "RAID",
+    CANCELABLE = RawAuraFilters.Cancelable or "CANCELABLE",
+    NOT_CANCELABLE = RawAuraFilters.NotCancelable or "NOT_CANCELABLE",
+    INCLUDE_NAME_PLATE_ONLY = RawAuraFilters.IncludeNameplateOnly or RawAuraFilters.IncludeNamePlateOnly or "INCLUDE_NAME_PLATE_ONLY",
+    EXTERNAL_DEFENSIVE = RawAuraFilters.ExternalDefensive or "EXTERNAL_DEFENSIVE",
+    CROWD_CONTROL = RawAuraFilters.CrowdControl or "CROWD_CONTROL",
+    RAID_IN_COMBAT = RawAuraFilters.RaidInCombat or "RAID_IN_COMBAT",
+    RAID_PLAYER_DISPELLABLE = RawAuraFilters.RaidPlayerDispellable or "RAID_PLAYER_DISPELLABLE",
+    BIG_DEFENSIVE = RawAuraFilters.BigDefensive or "BIG_DEFENSIVE",
+    IMPORTANT = RawAuraFilters.Important or "IMPORTANT",
+}
+
+local function BuildAuraFilter(...)
+    local parts = {}
+    for i = 1, select("#", ...) do
+        local part = select(i, ...)
+        if part and part ~= "" then
+            parts[#parts + 1] = part
+        end
+    end
+
+    if CreateAuraFilterString then
+        return CreateAuraFilterString(Unpack(parts))
+    end
+
+    local filter
+    for i = 1, #parts do
+        filter = filter and (filter .. AURA_FILTER_SEPARATOR .. parts[i]) or parts[i]
+    end
+    return filter or ""
+end
+
+local function BuildHelpfulScanFilter(db)
+    return BuildAuraFilter(AuraFilters.HELPFUL, db.directBuffIncludeNameplateOnly and AuraFilters.INCLUDE_NAME_PLATE_ONLY or nil)
+end
+
+local function BuildHarmfulScanFilter(db)
+    return BuildAuraFilter(AuraFilters.HARMFUL, db.directDebuffIncludeNameplateOnly and AuraFilters.INCLUDE_NAME_PLATE_ONLY or nil)
+end
+
+local function IsPlayerInCombat()
+    local affectingCombat = UnitAffectingCombat and UnitAffectingCombat("player")
+    if affectingCombat then return true end
+    local inLockdown = InCombatLockdown and InCombatLockdown()
+    return inLockdown ~= nil and inLockdown ~= false
+end
+
+function RaidFrameAuras:IsPlayerInCombat()
+    return IsPlayerInCombat()
+end
+
+local function GetSafeAuraSpellID(auraData)
+    local spellID = auraData and auraData.spellId
+    if spellID == nil then return nil end
+    if Util.IsSecretValue and Util.IsSecretValue(spellID) then return nil end
+    spellID = tonumber(spellID)
+    if not spellID or spellID ~= spellID or spellID == math.huge or spellID == -math.huge then return nil end
+    return spellID
+end
+
+local function IsKnownLongBuffSpellID(spellID)
+    return spellID ~= nil and KnownLongBuffSpellIDs[spellID] == true
+end
+
+local function GetLongBuffReason(auraData, db)
+    -- 12.0.5 safety: aura duration/expiration values can be secret in combat.
+    -- This feature only marks known long-buff spell IDs while out of combat,
+    -- then reuses the cached marker in combat. Never compare duration or
+    -- expiration values in combat.
+    if IsPlayerInCombat() then return nil end
+    if not db or db.directBuffHideLong ~= true then return nil end
+
+    local spellID = GetSafeAuraSpellID(auraData)
+    if spellID ~= nil and auraData.duration and not Util.IsSecretValue(auraData.duration) then
+        if  auraData.duration == 0 or auraData.duration > 60*15 then
+            KnownLongBuffSpellIDs[spellID] = true
+        end
+    end
+    return IsKnownLongBuffSpellID(spellID) and LONG_BUFF_LISTED or nil
+end
+
+local function RememberLongBuffSpellID(auraData, reason)
+    local spellID = GetSafeAuraSpellID(auraData)
+    State.longBuffSpellIDs = State.longBuffSpellIDs or {}
+    State.longBuffSpellIDs[spellID] = reason or LONG_BUFF_LISTED
+end
+
+local function IsMarkedLongBuff(cache, id, auraData)
+    local marker = cache and cache.longBuffs and cache.longBuffs[id]
+    if marker ~= nil then
+        return true
+    end
+
+    -- If the same spell was safely classified out of combat before, hide newly
+    -- seen/re-applied instances during combat without touching duration values.
+    -- If spellId is secret, GetSafeAuraSpellID returns nil and this fails closed.
+    local spellID = GetSafeAuraSpellID(auraData)
+    if not IsKnownLongBuffSpellID(spellID) then return false end
+
+    local spellMarker = spellID ~= nil and State.longBuffSpellIDs and State.longBuffSpellIDs[spellID]
+    return spellMarker ~= nil
+end
+
+local function HideMarkedLongBuff(cache, id, db, auraData)
+    if not db or db.directBuffHideLong ~= true then return false end
+    if not IsMarkedLongBuff(cache, id, auraData) then return false end
+    if db.directBuffHideLongOnlyInCombat == true then
+        return IsPlayerInCombat()
+    end
+    return true
+end
+
+local function HasAnyLongBuffMarker()
+    if State.longBuffSpellIDs and next(State.longBuffSpellIDs) ~= nil then
+        return true
+    end
+
+    for _, cache in pairs(State.auraCache) do
+        if cache and cache.longBuffs and next(cache.longBuffs) ~= nil then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function EnsureAuraCacheEntry(unit)
+    local entry = State.auraCache[unit]
+    if entry then return entry end
+    entry = {
+        buffs = {},
+        debuffs = {},
+        defensives = {},
+        playerDispellable = {},
+        allDispellable = {},
+        crowdControls = {},
+        categoryScales = {},
+        buffData = {},
+        debuffData = {},
+        buffsByID = {},
+        debuffsByID = {},
+        longBuffs = {},
+        orderByID = {},
+        nextOrder = 0,
+        hasFullScan = false,
+        generation = 0,
+        buffOrderDirty = false,
+        debuffOrderDirty = false,
+    }
+    State.auraCache[unit] = entry
+    return entry
+end
+
+local function BuildDirectBuffFilters(db)
+    local onlyMine = db.directBuffOnlyMine
+    local playerFilter = onlyMine and AuraFilters.PLAYER or nil
+    if db.directBuffShowAll then
+        return onlyMine and { BuildAuraFilter(AuraFilters.HELPFUL, playerFilter) } or nil
+    end
+    local filters = {}
+    if db.directBuffFilterRaid and not (db.directBuffFilterRaidHideInCombat and IsPlayerInCombat()) then
+        filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.RAID, playerFilter)
+    end
+    if db.directBuffFilterRaidInCombat then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.RAID_IN_COMBAT, playerFilter) end
+    if db.directBuffFilterCancelable then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.CANCELABLE, playerFilter) end
+    if db.directBuffFilterNotCancelable then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.NOT_CANCELABLE, playerFilter) end
+    if db.directBuffFilterImportant then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.IMPORTANT, playerFilter) end
+    if db.directBuffFilterBigDefensive then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.BIG_DEFENSIVE, playerFilter) end
+    if db.directBuffFilterExternalDefensive then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.EXTERNAL_DEFENSIVE, playerFilter) end
+    if #filters == 0 then return NoAuraFilters end
+    return filters
+end
+
+local function BuildDirectDebuffFilters(db)
+    local onlyMine = db.directDebuffOnlyMine
+    local playerFilter = onlyMine and AuraFilters.PLAYER or nil
+    if db.directDebuffShowAll then
+        return onlyMine and { BuildAuraFilter(AuraFilters.HARMFUL, playerFilter) } or nil
+    end
+    local filters = {}
+    if db.directDebuffFilterRaid then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.RAID, playerFilter) end
+    if db.directDebuffFilterRaidInCombat then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.RAID_IN_COMBAT, playerFilter) end
+    if db.directDebuffFilterCrowdControl then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.CROWD_CONTROL, playerFilter) end
+    if db.directDebuffFilterImportant then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.IMPORTANT, playerFilter) end
+    if db.directDebuffDispellableMode == "PLAYER" then filters[#filters + 1] = BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.RAID_PLAYER_DISPELLABLE, playerFilter) end
+    if #filters == 0 then
+        return NoAuraFilters
+    end
+    return filters
+end
+
+local function AddCategoryScaleFilter(filters, optionKey, exclusionFilters, ...)
+    filters[#filters + 1] = {
+        optionKey = optionKey,
+        filter = BuildAuraFilter(...),
+        exclusionFilters = exclusionFilters,
+    }
+end
+
+local function BuildBuffDefensiveCategoryFilters(playerFilter)
+    return {
+        BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.BIG_DEFENSIVE, playerFilter),
+        BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.EXTERNAL_DEFENSIVE, playerFilter),
+    }
+end
+
+local function BuildBuffCategoryScaleFilters(db)
+    local onlyMine = db.directBuffOnlyMine
+    local playerFilter = onlyMine and AuraFilters.PLAYER or nil
+    local filters = {}
+    if db.directBuffFilterImportant then
+        AddCategoryScaleFilter(filters, "directBuffFilterImportantScale", BuildBuffDefensiveCategoryFilters(playerFilter), AuraFilters.HELPFUL, AuraFilters.IMPORTANT, playerFilter)
+    end
+    if db.directBuffFilterBigDefensive then
+        AddCategoryScaleFilter(filters, "directBuffFilterBigDefensiveScale", nil, AuraFilters.HELPFUL, AuraFilters.BIG_DEFENSIVE, playerFilter)
+    end
+    if db.directBuffFilterExternalDefensive then
+        AddCategoryScaleFilter(filters, "directBuffFilterExternalDefensiveScale", nil, AuraFilters.HELPFUL, AuraFilters.EXTERNAL_DEFENSIVE, playerFilter)
+    end
+    return #filters > 0 and filters or nil
+end
+
+local function BuildDebuffCategoryScaleFilters(db)
+    local playerFilter = db.directDebuffOnlyMine and AuraFilters.PLAYER or nil
+    local filters = {}
+    if db.directDebuffFilterCrowdControl then
+        AddCategoryScaleFilter(filters, "directDebuffFilterCrowdControlScale", nil, AuraFilters.HARMFUL, AuraFilters.CROWD_CONTROL, playerFilter)
+    end
+    if db.directDebuffFilterImportant then
+        AddCategoryScaleFilter(filters, "directDebuffFilterImportantScale", { BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.CROWD_CONTROL, playerFilter) }, AuraFilters.HARMFUL, AuraFilters.IMPORTANT, playerFilter)
+    end
+    return #filters > 0 and filters or nil
+end
+
+-- Specialized categories that overlap should OR together, but Important must
+-- not bring them back when none of their specialized categories are enabled.
+local function BuildSpecializedCategoryExclusion(matchFilters, enabledFilters)
+    if not matchFilters or #matchFilters == 0 then return nil end
+    if enabledFilters and #enabledFilters >= #matchFilters then return nil end
+    return {
+        matchFilters = matchFilters,
+        enabledFilters = enabledFilters or NoAuraFilters,
+    }
+end
+
+local function AddEnabledSpecializedCategoryFilter(filters, optionEnabled, filter)
+    if optionEnabled == true then
+        filters[#filters + 1] = filter
+    end
+end
+
+local function BuildBuffCategoryExclusionFilters(db)
+    if db.directBuffShowAll then return nil end
+    local playerFilter = db.directBuffOnlyMine and AuraFilters.PLAYER or nil
+    local matchFilters = BuildBuffDefensiveCategoryFilters(playerFilter)
+    local enabledFilters = {}
+    AddEnabledSpecializedCategoryFilter(enabledFilters, db.directBuffFilterBigDefensive, matchFilters[1])
+    AddEnabledSpecializedCategoryFilter(enabledFilters, db.directBuffFilterExternalDefensive, matchFilters[2])
+    local exclusion = BuildSpecializedCategoryExclusion(matchFilters, enabledFilters)
+    return exclusion and { exclusion } or nil
+end
+
+local function BuildDebuffCategoryExclusionFilters(db)
+    if db.directDebuffShowAll then return nil end
+    local playerFilter = db.directDebuffOnlyMine and AuraFilters.PLAYER or nil
+    local crowdControlFilter = BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.CROWD_CONTROL, playerFilter)
+    local enabledFilters = {}
+    AddEnabledSpecializedCategoryFilter(enabledFilters, db.directDebuffFilterCrowdControl, crowdControlFilter)
+    local exclusion = BuildSpecializedCategoryExclusion({ crowdControlFilter }, enabledFilters)
+    return exclusion and { exclusion } or nil
+end
+
+local function BuildDirectDefensiveFilters(db)
+    if State.cachedDefensiveFilters and not State.filtersDirty then return State.cachedDefensiveFilters end
+    local filters = {}
+    if not db or db.directBuffFilterBigDefensive == true then
+        filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.BIG_DEFENSIVE)
+    end
+    if not db or db.directBuffFilterExternalDefensive == true then
+        filters[#filters + 1] = BuildAuraFilter(AuraFilters.HELPFUL, AuraFilters.EXTERNAL_DEFENSIVE)
+    end
+    State.cachedDefensiveFilters = #filters > 0 and filters or nil
+    return State.cachedDefensiveFilters
+end
+
+local function BuildDirectDispelFilter()
+    if State.cachedDispelFilter and not State.filtersDirty then return State.cachedDispelFilter end
+    State.cachedDispelFilter = BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.RAID_PLAYER_DISPELLABLE)
+    return State.cachedDispelFilter
+end
+
+local function BuildCrowdControlFilter()
+    return BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.CROWD_CONTROL)
+end
+
+local function ResolveFilters()
+    if State.filtersDirty then
+        State.cachedBuffFilters = BuildDirectBuffFilters(RaidFrameAuras.db)
+        State.cachedDebuffFilters = BuildDirectDebuffFilters(RaidFrameAuras.db)
+        State.cachedBuffCategoryScaleFilters = BuildBuffCategoryScaleFilters(RaidFrameAuras.db)
+        State.cachedDebuffCategoryScaleFilters = BuildDebuffCategoryScaleFilters(RaidFrameAuras.db)
+        State.cachedBuffCategoryExclusionFilters = BuildBuffCategoryExclusionFilters(RaidFrameAuras.db)
+        State.cachedDebuffCategoryExclusionFilters = BuildDebuffCategoryExclusionFilters(RaidFrameAuras.db)
+        State.cachedCrowdControlFilter = BuildCrowdControlFilter()
+        State.cachedBuffScanFilter = BuildHelpfulScanFilter(RaidFrameAuras.db)
+        State.cachedDebuffScanFilter = BuildHarmfulScanFilter(RaidFrameAuras.db)
+        State.cachedDefensiveFilters = nil
+        State.cachedDispelFilter = nil
+        State.filtersDirty = false
+    end
+    return State.cachedBuffFilters,
+        State.cachedDebuffFilters,
+        BuildDirectDefensiveFilters(RaidFrameAuras.db),
+        BuildDirectDispelFilter(),
+        State.cachedBuffCategoryScaleFilters,
+        State.cachedDebuffCategoryScaleFilters,
+        State.cachedCrowdControlFilter,
+        State.cachedBuffScanFilter,
+        State.cachedDebuffScanFilter,
+        State.cachedBuffCategoryExclusionFilters,
+        State.cachedDebuffCategoryExclusionFilters
+end
+
+local function AuraPassesAnyFilter(unit, auraInstanceID, filters)
+    if filters and #filters == 0 then return false end
+    if not filters or not IsAuraFilteredOut then return true end
+    for i = 1, #filters do
+        local ok, filtered = pcall(IsAuraFilteredOut, unit, auraInstanceID, filters[i])
+        if ok and not filtered then
+            return true
+        end
+    end
+    return false
+end
+
+local function AuraPassesFilterStrict(unit, auraInstanceID, filter)
+    if not filter or not IsAuraFilteredOut then return false end
+    local ok, filtered = pcall(IsAuraFilteredOut, unit, auraInstanceID, filter)
+    return ok and not filtered
+end
+
+local function AuraIsExcludedByFilters(unit, auraInstanceID, filters)
+    if not filters or #filters == 0 then return false end
+    for i = 1, #filters do
+        local filter = filters[i]
+        if type(filter) == "table" then
+            if AuraPassesAnyFilter(unit, auraInstanceID, filter.matchFilters) and not AuraPassesAnyFilter(unit, auraInstanceID, filter.enabledFilters) then
+                return true
+            end
+        elseif AuraPassesFilterStrict(unit, auraInstanceID, filter) then
+            return true
+        end
+    end
+    return false
+end
+
+local function BoolText(value)
+    return value and "yes" or "no"
+end
+
+local function DebugValueText(value, fallback)
+    if value == nil then return fallback or "nil" end
+    if Util.IsSecretValue(value) then return "secret" end
+    return tostring(value)
+end
+
+local function DebugAuraPassesFilter(labels, unit, auraInstanceID, label, ...)
+    if AuraPassesFilterStrict(unit, auraInstanceID, BuildAuraFilter(...)) then
+        labels[#labels + 1] = label
+    end
+end
+
+local function DebugGetAuraFilterLabels(unit, auraInstanceID, kind)
+    local labels = {}
+    if kind == "buff" then
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL", AuraFilters.HELPFUL)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|PLAYER", AuraFilters.HELPFUL, AuraFilters.PLAYER)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|RAID", AuraFilters.HELPFUL, AuraFilters.RAID)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|RAID_IN_COMBAT", AuraFilters.HELPFUL, AuraFilters.RAID_IN_COMBAT)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|CANCELABLE", AuraFilters.HELPFUL, AuraFilters.CANCELABLE)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|NOT_CANCELABLE", AuraFilters.HELPFUL, AuraFilters.NOT_CANCELABLE)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|IMPORTANT", AuraFilters.HELPFUL, AuraFilters.IMPORTANT)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|BIG_DEFENSIVE", AuraFilters.HELPFUL, AuraFilters.BIG_DEFENSIVE)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HELPFUL|EXTERNAL_DEFENSIVE", AuraFilters.HELPFUL, AuraFilters.EXTERNAL_DEFENSIVE)
+    else
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HARMFUL", AuraFilters.HARMFUL)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HARMFUL|PLAYER", AuraFilters.HARMFUL, AuraFilters.PLAYER)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HARMFUL|RAID", AuraFilters.HARMFUL, AuraFilters.RAID)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HARMFUL|RAID_IN_COMBAT", AuraFilters.HARMFUL, AuraFilters.RAID_IN_COMBAT)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HARMFUL|CROWD_CONTROL", AuraFilters.HARMFUL, AuraFilters.CROWD_CONTROL)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HARMFUL|IMPORTANT", AuraFilters.HARMFUL, AuraFilters.IMPORTANT)
+        DebugAuraPassesFilter(labels, unit, auraInstanceID, "HARMFUL|RAID_PLAYER_DISPELLABLE", AuraFilters.HARMFUL, AuraFilters.RAID_PLAYER_DISPELLABLE)
+    end
+    return #labels > 0 and table.concat(labels, ",") or "none"
+end
+
+local function DebugLogAuraClassification(cache, unit, auraData, kind)
+    local db = RaidFrameAuras.db
+    if not db or db.debugMode ~= true then return end
+
+    local id = auraData and auraData.auraInstanceID
+    if not id then return end
+
+    local spellID = auraData.spellId
+    local scale = cache.categoryScales[id]
+    local scaleText = scale and string.format("%.2f", scale) or "1.00"
+    local shown
+    if kind == "buff" then
+        shown = cache.buffs[id] == true
+    else
+        shown = cache.debuffs[id] == true
+    end
+    local extra
+    if kind == "buff" then
+        extra = string.format("defensive=%s longBuff=%s", BoolText(cache.defensives[id] == true), BoolText(cache.longBuffs[id] ~= nil))
+    else
+        extra = string.format(
+            "playerDispellable=%s allDispellable=%s crowdControl=%s dispelType=%s",
+            BoolText(cache.playerDispellable[id] == true),
+            BoolText(cache.allDispellable[id] == true),
+            BoolText(cache.crowdControls[id] == true),
+            tostring(auraData.dispelName or "none")
+        )
+    end
+
+    Util.DebugLog(
+        "aura %s unit=%s name=\"%s\" spellId=%s auraId=%s source=%s stacks=%s shown=%s scale=%s filters=[%s] %s",
+        kind,
+        tostring(unit),
+        DebugValueText(auraData.name, ""),
+        DebugValueText(spellID),
+        tostring(id),
+        DebugValueText(auraData.sourceUnit),
+        DebugValueText(auraData.applications, "0"),
+        BoolText(shown),
+        scaleText,
+        DebugGetAuraFilterLabels(unit, id, kind),
+        extra
+    )
+end
+
+local function AuraPassesDebuffOnlyMine(unit, auraInstanceID, db)
+    if not db.directDebuffOnlyMine then return true end
+    return AuraPassesFilterStrict(unit, auraInstanceID, BuildAuraFilter(AuraFilters.HARMFUL, AuraFilters.PLAYER))
+end
+
+local function GetMatchedCategoryScale(unit, auraInstanceID, categoryFilters, db)
+    if not categoryFilters then return nil end
+    local bestScale
+    local bestDelta = -1
+    for i = 1, #categoryFilters do
+        local entry = categoryFilters[i]
+        if entry and AuraPassesFilterStrict(unit, auraInstanceID, entry.filter) and (not entry.exclusionFilters or not AuraPassesAnyFilter(unit, auraInstanceID, entry.exclusionFilters)) then
+            local scale = Util.ClampCategoryScale(db[entry.optionKey])
+            local delta = math.abs(scale - 1)
+            if delta > bestDelta then
+                bestScale = scale
+                bestDelta = delta
+            end
+        end
+    end
+    return bestScale
+end
+
+local function ClassifyAura(cache, unit, auraData, kind, buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
+    local id = auraData and auraData.auraInstanceID
+    if not id then return end
+    if kind == "buff" then
+        local excluded = AuraIsExcludedByFilters(unit, id, buffExclusionFilters)
+        if not IsPlayerInCombat() then
+            local longBuffReason = GetLongBuffReason(auraData, db)
+            cache.longBuffs[id] = longBuffReason or nil
+            if longBuffReason then
+                RememberLongBuffSpellID(auraData, longBuffReason)
+            end
+        end
+        if HideMarkedLongBuff(cache, id, db, auraData) then
+            excluded = true
+        end
+        if not excluded and (not buffFilters or AuraPassesAnyFilter(unit, id, buffFilters)) then
+            cache.buffs[id] = true
+        end
+        if not excluded and defFilters and AuraPassesAnyFilter(unit, id, defFilters) then
+            cache.defensives[id] = true
+        end
+        local categoryScale = not excluded and GetMatchedCategoryScale(unit, id, buffCategoryScaleFilters, db) or nil
+        cache.categoryScales[id] = categoryScale and categoryScale ~= 1 and categoryScale or nil
+        DebugLogAuraClassification(cache, unit, auraData, kind)
+    else
+        local allDispellable = auraData.dispelName ~= nil
+        if allDispellable then
+            cache.allDispellable[id] = true
+        end
+        local excluded = AuraIsExcludedByFilters(unit, id, debuffExclusionFilters)
+        local passesFilters = not excluded and (not debuffFilters or AuraPassesAnyFilter(unit, id, debuffFilters))
+        local passesAllDispellable = not excluded and db.directDebuffDispellableMode == "ALL" and allDispellable and AuraPassesDebuffOnlyMine(unit, id, db)
+        if passesFilters or passesAllDispellable then
+            cache.debuffs[id] = true
+        end
+        if dispelFilter and AuraPassesAnyFilter(unit, id, { dispelFilter }) then
+            cache.playerDispellable[id] = true
+        end
+        if crowdControlFilter and AuraPassesFilterStrict(unit, id, crowdControlFilter) then
+            cache.crowdControls[id] = true
+        end
+        local categoryScale = not excluded and GetMatchedCategoryScale(unit, id, debuffCategoryScaleFilters, db) or nil
+        cache.categoryScales[id] = categoryScale and categoryScale ~= 1 and categoryScale or nil
+        DebugLogAuraClassification(cache, unit, auraData, kind)
+    end
+end
+
+local function UnclassifyAura(cache, id, preserveLongBuff)
+    cache.buffs[id] = nil
+    cache.debuffs[id] = nil
+    if not preserveLongBuff then
+        cache.longBuffs[id] = nil
+    end
+    cache.defensives[id] = nil
+    cache.playerDispellable[id] = nil
+    cache.allDispellable[id] = nil
+    cache.crowdControls[id] = nil
+    cache.categoryScales[id] = nil
+end
+
+local function SetAuraOrder(cache, id, order)
+    if not id then return end
+    if cache.orderByID[id] then return end
+    order = tonumber(order)
+    if not order then
+        cache.nextOrder = (cache.nextOrder or 0) + 1
+        order = cache.nextOrder
+    end
+    cache.orderByID[id] = order
+    if order > (cache.nextOrder or 0) then
+        cache.nextOrder = order
+    end
+end
+
+local function GetAuraExpirationForSort(auraData)
+    local ok, result = pcall(function()
+        local exp = tonumber(auraData and auraData.expirationTime) or 0
+        return exp > 0 and exp or math.huge
+    end)
+    return ok and result or math.huge
+end
+
+local function GetAuraAppliedTimeForSort(auraData)
+    local ok, result = pcall(function()
+        local exp = tonumber(auraData and auraData.expirationTime) or 0
+        local duration = tonumber(auraData and auraData.duration) or 0
+        if exp > 0 and duration > 0 then
+            return exp - duration
+        end
+    end)
+    return ok and result or nil
+end
+
+local function GetAuraNameForSort(auraData)
+    local ok, result = pcall(function()
+        return tostring(auraData and auraData.name or "")
+    end)
+    return ok and result or ""
+end
+
+local function CompareSortValues(aValue, bValue, reverse)
+    if aValue == bValue then return nil end
+    if reverse then
+        return aValue > bValue
+    end
+    return aValue < bValue
+end
+
+local function SortByTimeRemaining(a, b, reverse)
+    local aExp = GetAuraExpirationForSort(a)
+    local bExp = GetAuraExpirationForSort(b)
+    return CompareSortValues(aExp, bExp, reverse)
+end
+
+local function SortByName(a, b, reverse)
+    local aName = GetAuraNameForSort(a)
+    local bName = GetAuraNameForSort(b)
+    return CompareSortValues(aName, bName, reverse)
+end
+
+local function GetAuraScaleForSort(cache, auraData)
+    local id = auraData and auraData.auraInstanceID
+    return id and cache.categoryScales[id] or 1
+end
+
+local function SortByDefaultOrder(cache, a, b, reverse)
+    local missingOrder = reverse and -math.huge or math.huge
+    local aOrder = cache.orderByID[a and a.auraInstanceID] or missingOrder
+    local bOrder = cache.orderByID[b and b.auraInstanceID] or missingOrder
+    local sorted = CompareSortValues(aOrder, bOrder, reverse)
+    if sorted ~= nil then
+        return sorted
+    end
+    local aID = a and a.auraInstanceID or 0
+    local bID = b and b.auraInstanceID or 0
+    return CompareSortValues(aID, bID, reverse) or false
+end
+
+local function SortByLatestApplied(cache, a, b, reverse)
+    local aApplied = GetAuraAppliedTimeForSort(a)
+    local bApplied = GetAuraAppliedTimeForSort(b)
+    local aKnown = aApplied ~= nil
+    local bKnown = bApplied ~= nil
+    if aKnown ~= bKnown then
+        if reverse then
+            return not aKnown
+        end
+        return aKnown
+    end
+    if aApplied and bApplied and aApplied ~= bApplied then
+        return CompareSortValues(aApplied, bApplied, not reverse)
+    end
+    return SortByDefaultOrder(cache, a, b, not reverse)
+end
+
+local function SortAuras(cache, auraList, sortOrder, bigIconsFirst, reverse)
+    if #auraList <= 1 then return end
+    table.sort(auraList, function(a, b)
+        if bigIconsFirst then
+            local aScale = GetAuraScaleForSort(cache, a)
+            local bScale = GetAuraScaleForSort(cache, b)
+            if aScale ~= bScale then
+                return aScale > bScale
+            end
+        end
+        local sorted
+        if sortOrder == "TIME" then
+            sorted = SortByTimeRemaining(a, b, reverse)
+        elseif sortOrder == "LATEST" then
+            sorted = SortByLatestApplied(cache, a, b, reverse)
+        elseif sortOrder == "NAME" then
+            sorted = SortByName(a, b, reverse)
+        end
+        if sorted ~= nil then
+            return sorted
+        end
+        return SortByDefaultOrder(cache, a, b, reverse)
+    end)
+end
+
+local function RebuildSortedBuffArray(cache, db)
+    Util.WipeTable(State.sortScratchBuffs)
+    for id, auraData in pairs(cache.buffsByID) do
+        if cache.buffs[id] and not HideMarkedLongBuff(cache, id, db, auraData) then
+            State.sortScratchBuffs[#State.sortScratchBuffs + 1] = auraData
+        end
+    end
+    SortAuras(cache, State.sortScratchBuffs, db.directBuffSortOrder, db.directBuffSortBigIconsFirst == true, db.directBuffSortReverse == true)
+    Util.WipeTable(cache.buffData)
+    for i = 1, #State.sortScratchBuffs do
+        cache.buffData[i] = State.sortScratchBuffs[i]
+    end
+    cache.buffOrderDirty = false
+end
+
+local function RebuildSortedDebuffArray(cache, db)
+    Util.WipeTable(State.sortScratchDebuffs)
+    for id, auraData in pairs(cache.debuffsByID) do
+        if cache.debuffs[id] then
+            State.sortScratchDebuffs[#State.sortScratchDebuffs + 1] = auraData
+        end
+    end
+    SortAuras(cache, State.sortScratchDebuffs, db.directDebuffSortOrder, db.directDebuffSortBigIconsFirst == true, db.directDebuffSortReverse == true)
+    Util.WipeTable(cache.debuffData)
+    for i = 1, #State.sortScratchDebuffs do
+        cache.debuffData[i] = State.sortScratchDebuffs[i]
+    end
+    cache.debuffOrderDirty = false
+end
+
+local function RebuildSortedArrays(cache, db, auraType)
+    if auraType == "BUFF" then
+        RebuildSortedBuffArray(cache, db)
+        return
+    end
+    if auraType == "DEBUFF" then
+        RebuildSortedDebuffArray(cache, db)
+        return
+    end
+
+    RebuildSortedBuffArray(cache, db)
+    RebuildSortedDebuffArray(cache, db)
+end
+
+local function ProcessAuraSlots(
+    cache,
+    unit,
+    db,
+    auraType,
+    auraTable,
+    buffFilters,
+    debuffFilters,
+    defFilters,
+    dispelFilter,
+    buffCategoryScaleFilters,
+    debuffCategoryScaleFilters,
+    crowdControlFilter,
+    buffExclusionFilters,
+    debuffExclusionFilters,
+    continuationToken,
+    ...
+)
+    for i = 1, select("#", ...) do
+        local slot = select(i, ...)
+        Util.PerfCount("LiveAuraCall")
+        local auraData = GetAuraDataBySlot(unit, slot)
+        if auraData and auraData.auraInstanceID then
+            auraTable[auraData.auraInstanceID] = auraData
+            SetAuraOrder(cache, auraData.auraInstanceID)
+            ClassifyAura(
+                cache,
+                unit,
+                auraData,
+                auraType,
+                buffFilters,
+                debuffFilters,
+                defFilters,
+                dispelFilter,
+                db,
+                buffCategoryScaleFilters,
+                debuffCategoryScaleFilters,
+                crowdControlFilter,
+                buffExclusionFilters,
+                debuffExclusionFilters
+            )
+        end
+    end
+end
+
+function RaidFrameAuras:ScanUnitFull(unit)
+    if not self:IsTrackedUnit(unit) or not UnitExists(unit) or not GetAuraSlots or not GetAuraDataBySlot then
+        return false
+    end
+    Util.PerfCount("ScanUnitFull")
+    local perf = Util.PerfBegin("ScanUnitFull")
+    local cache = EnsureAuraCacheEntry(unit)
+    cache.unitGUID = GetUnitCacheGUID(unit) or false
+    Util.WipeTable(cache.buffsByID)
+    Util.WipeTable(cache.debuffsByID)
+    if not IsPlayerInCombat() then
+        Util.WipeTable(cache.longBuffs)
+    end
+    Util.WipeTable(cache.buffs)
+    Util.WipeTable(cache.debuffs)
+    Util.WipeTable(cache.defensives)
+    Util.WipeTable(cache.playerDispellable)
+    Util.WipeTable(cache.allDispellable)
+    Util.WipeTable(cache.crowdControls)
+    Util.WipeTable(cache.categoryScales)
+    Util.WipeTable(cache.orderByID)
+    cache.nextOrder = 0
+
+    local buffFilters, debuffFilters, defFilters, dispelFilter, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffScanFilter, debuffScanFilter, buffExclusionFilters, debuffExclusionFilters = ResolveFilters()
+    local db = self.db
+    local scanBuffs = db.showBuffs == true
+    local scanDebuffs = db.showDebuffs == true
+
+    if scanBuffs then
+        Util.PerfCount("LiveAuraCall")
+        ProcessAuraSlots(
+            cache,
+            unit,
+            db,
+            "buff",
+            cache.buffsByID,
+            buffFilters,
+            debuffFilters,
+            defFilters,
+            dispelFilter,
+            buffCategoryScaleFilters,
+            debuffCategoryScaleFilters,
+            crowdControlFilter,
+            buffExclusionFilters,
+            debuffExclusionFilters,
+            GetAuraSlots(unit, buffScanFilter)
+        )
+    end
+
+    if scanDebuffs then
+        Util.PerfCount("LiveAuraCall")
+        ProcessAuraSlots(
+            cache,
+            unit,
+            db,
+            "debuff",
+            cache.debuffsByID,
+            buffFilters,
+            debuffFilters,
+            defFilters,
+            dispelFilter,
+            buffCategoryScaleFilters,
+            debuffCategoryScaleFilters,
+            crowdControlFilter,
+            buffExclusionFilters,
+            debuffExclusionFilters,
+            GetAuraSlots(unit, debuffScanFilter)
+        )
+    end
+
+    RebuildSortedArrays(cache, db)
+    cache.hasFullScan = true
+    BumpAuraCacheGeneration(cache)
+    Util.PerfEnd("ScanUnitFull", perf)
+    return true
+end
+
+function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
+    if not self:IsTrackedUnit(unit) or not updateInfo then return false end
+    local cache = EnsureAuraCacheEntry(unit)
+    if not cache.hasFullScan then return false end
+    if self:IsAuraCacheStale(unit, cache) then
+        State.auraCache[unit] = nil
+        return false
+    end
+
+    local buffFilters, debuffFilters, defFilters, dispelFilter, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffScanFilter, debuffScanFilter, buffExclusionFilters, debuffExclusionFilters = ResolveFilters()
+    local db = self.db
+    local scanBuffs = db.showBuffs == true
+    local scanDebuffs = db.showDebuffs == true
+    local changed = false
+
+    if updateInfo.addedAuras then
+        for _, auraData in ipairs(updateInfo.addedAuras) do
+            local id = auraData.auraInstanceID
+            if id and IsAuraFilteredOut then
+                if scanBuffs and AuraPassesFilterStrict(unit, id, buffScanFilter) then
+                    cache.buffsByID[id] = auraData
+                    SetAuraOrder(cache, id)
+                    ClassifyAura(cache, unit, auraData, "buff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
+                    cache.buffOrderDirty = true
+                    changed = true
+                elseif scanDebuffs and AuraPassesFilterStrict(unit, id, debuffScanFilter) then
+                    cache.debuffsByID[id] = auraData
+                    SetAuraOrder(cache, id)
+                    ClassifyAura(cache, unit, auraData, "debuff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
+                    cache.debuffOrderDirty = true
+                    changed = true
+                end
+            end
+        end
+    end
+
+    if updateInfo.updatedAuraInstanceIDs then
+        for _, id in ipairs(updateInfo.updatedAuraInstanceIDs) do
+            if cache.buffsByID[id] then
+                if not scanBuffs then
+                    cache.buffsByID[id] = nil
+                    cache.orderByID[id] = nil
+                    UnclassifyAura(cache, id)
+                    cache.buffOrderDirty = true
+                    changed = true
+                else
+                    Util.PerfCount("LiveAuraCall")
+                    local fresh = GetAuraDataByAuraInstanceID and GetAuraDataByAuraInstanceID(unit, id)
+                    if fresh then
+                        cache.buffsByID[id] = fresh
+                        UnclassifyAura(cache, id, IsPlayerInCombat())
+                        ClassifyAura(cache, unit, fresh, "buff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
+                        cache.buffOrderDirty = true
+                        changed = true
+                    end
+                end
+            elseif cache.debuffsByID[id] then
+                if not scanDebuffs then
+                    cache.debuffsByID[id] = nil
+                    cache.orderByID[id] = nil
+                    UnclassifyAura(cache, id)
+                    cache.debuffOrderDirty = true
+                    changed = true
+                else
+                    Util.PerfCount("LiveAuraCall")
+                    local fresh = GetAuraDataByAuraInstanceID and GetAuraDataByAuraInstanceID(unit, id)
+                    if fresh then
+                        cache.debuffsByID[id] = fresh
+                        UnclassifyAura(cache, id)
+                        ClassifyAura(cache, unit, fresh, "debuff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
+                        cache.debuffOrderDirty = true
+                        changed = true
+                    end
+                end
+            end
+        end
+    end
+
+    if updateInfo.removedAuraInstanceIDs then
+        for _, id in ipairs(updateInfo.removedAuraInstanceIDs) do
+            if cache.buffsByID[id] then
+                cache.buffsByID[id] = nil
+                cache.orderByID[id] = nil
+                UnclassifyAura(cache, id)
+                cache.buffOrderDirty = true
+                changed = true
+            elseif cache.debuffsByID[id] then
+                cache.debuffsByID[id] = nil
+                cache.orderByID[id] = nil
+                UnclassifyAura(cache, id)
+                cache.debuffOrderDirty = true
+                changed = true
+            end
+        end
+    end
+
+    local rebuildBuffs = cache.buffOrderDirty == true
+    local rebuildDebuffs = cache.debuffOrderDirty == true
+
+    if rebuildBuffs then
+        RebuildSortedArrays(cache, db, "BUFF")
+    end
+    if rebuildDebuffs then
+        RebuildSortedArrays(cache, db, "DEBUFF")
+    end
+    if rebuildBuffs or rebuildDebuffs then
+        BumpAuraCacheGeneration(cache)
+        changed = true
+    end
+    return true, changed
+end
+
+function RaidFrameAuras:GetAuraCache(unit)
+    return State.auraCache and State.auraCache[unit]
+end
+
+function RaidFrameAuras:GetUnitCacheGUID(unit)
+    return GetUnitCacheGUID(unit)
+end
+
+function RaidFrameAuras:IsAuraCacheStale(unit, cache)
+    if not cache then return false end
+    local cachedGUID = cache.unitGUID
+    if cachedGUID == nil then return false end
+    local currentGUID = GetUnitCacheGUID(unit)
+    return currentGUID ~= nil and currentGUID ~= cachedGUID
+end
+
+function RaidFrameAuras:ClearAuraCache(unit)
+    if unit and State.auraCache then
+        State.auraCache[unit] = nil
+    end
+end
+
+function RaidFrameAuras:UnclassifyAura(cache, id)
+    return UnclassifyAura(cache, id)
+end
+
+function RaidFrameAuras:RebuildSortedArrays(cache, db, auraType)
+    return RebuildSortedArrays(cache, db, auraType)
+end
+
+function RaidFrameAuras:RefreshCombatSensitiveBuffVisibility()
+    local db = self.db
+    if not db or db.showBuffs ~= true then return false end
+    if db.directBuffHideLong ~= true and db.directBuffFilterRaidHideInCombat ~= true then
+        return false
+    end
+
+    if db.directBuffFilterRaidHideInCombat == true then
+        State.filtersDirty = true
+    end
+
+    local buffFilters, debuffFilters, defFilters, dispelFilter, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, _, _, buffExclusionFilters, debuffExclusionFilters = ResolveFilters()
+    local preserveLongBuffs = IsPlayerInCombat()
+    local changed = false
+
+    for unit, cache in pairs(State.auraCache) do
+        if cache and cache.hasFullScan and next(cache.buffsByID) ~= nil then
+            for id in pairs(cache.buffsByID) do
+                UnclassifyAura(cache, id, preserveLongBuffs)
+            end
+
+            for _, auraData in pairs(cache.buffsByID) do
+                ClassifyAura(cache, unit, auraData, "buff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
+            end
+
+            RebuildSortedArrays(cache, db)
+            BumpAuraCacheGeneration(cache)
+            changed = true
+        end
+    end
+
+    return changed
+end
+
+function RaidFrameAuras:RefreshLongBuffVisibility()
+    local db = self.db
+    if not db or db.directBuffHideLong ~= true then return false end
+
+    local inCombat = IsPlayerInCombat()
+    if inCombat and not HasAnyLongBuffMarker() then return false end
+
+    local changed = false
+    for _, cache in pairs(State.auraCache) do
+        if cache and cache.hasFullScan then
+            if inCombat then
+                -- Preserve the existing out-of-combat sort order; only remove buffs that
+                -- were already marked long before combat. No aura duration, expiration,
+                -- name, scale, or sort comparisons are performed here.
+                local originalCount = #cache.buffData
+                local keptCount = 0
+                Util.WipeTable(State.sortScratchBuffs)
+                for i = 1, originalCount do
+                    local auraData = cache.buffData[i]
+                    local id = auraData and auraData.auraInstanceID
+                    if id and not HideMarkedLongBuff(cache, id, db, auraData) then
+                        keptCount = keptCount + 1
+                        State.sortScratchBuffs[keptCount] = auraData
+                    end
+                end
+
+                if keptCount ~= originalCount then
+                    Util.WipeTable(cache.buffData)
+                    for i = 1, keptCount do
+                        cache.buffData[i] = State.sortScratchBuffs[i]
+                    end
+                    cache.buffOrderDirty = false
+                    BumpAuraCacheGeneration(cache)
+                    changed = true
+                end
+            else
+                RebuildSortedArrays(cache, db)
+                BumpAuraCacheGeneration(cache)
+                changed = true
+            end
+        end
+    end
+
+    return changed
+end
+
+function RaidFrameAuras:InvalidateAuraData()
+    State.filtersDirty = true
+    State.cachedBuffFilters = nil
+    State.cachedDebuffFilters = nil
+    State.cachedBuffCategoryScaleFilters = nil
+    State.cachedDebuffCategoryScaleFilters = nil
+    State.cachedBuffCategoryExclusionFilters = nil
+    State.cachedDebuffCategoryExclusionFilters = nil
+    State.cachedCrowdControlFilter = nil
+    State.cachedBuffScanFilter = nil
+    State.cachedDebuffScanFilter = nil
+    State.cachedDefensiveFilters = nil
+    State.cachedDispelFilter = nil
+    State.debuffBorderCurve = nil
+    State.durationColorCurve = nil
+    State.durationHideCurves = {}
+    State.expiringBorderColorCurve = nil
+    State.expiringCurves = {}
+    State.longBuffSpellIDs = {}
+    for unit in pairs(State.auraCache) do
+        State.auraCache[unit] = nil
+    end
+end

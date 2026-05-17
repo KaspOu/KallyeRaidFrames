@@ -1,6 +1,10 @@
+v12.0.503
+- Buffs & Debuffs back: thanks to *Raid Frame Auras* by Anahkas
+- Classic: fixed range detection on player
+
 v12.0.502
 - Default Midnight Out of Combat transparency= 50%
-- Disabled Buffs & Debuffs: rework needed (thanks Blizzard...)
+- Disabled Buffs & Debuffs for Midnight 12.0.5: rework needed
 
 v12.0.501
 - Fixed: range detection on player

@@ -78,6 +78,8 @@ l.OPTION_ALPHADISPELOVERLAY = "Transparencia del Overlay de disipaci\195\179n"
 l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
+l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE .. "\n"
+  ..l.WH.."Los beneficios/perjuicios de Blizzard ser\195\161n reemplazados por RaidFrameAuras"
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Perjuicios / Beneficios"
 l.OPTION_ORIENTATION_LeftThenUp = "A la izquierda, luego arriba"

@@ -10,13 +10,12 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
+- Buffs & Debuffs are now using Raid Frame Auras
 - New options (Midnight):
-  > Dispel Overlay transparency
   > Raid: Show both party and raid frames
   > Alpha in range (combat)
 
 - Reverted HP: Heal prediction & absorb bars fixed
-- Debuffs on the left & buffs on the right, as expected
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -77,8 +76,6 @@ l.OPTION_DEBUG_OFF = "! STOP Test !";
 l.OPTION_DEBUG_OFF_MESSAGE = "Test stopped, have fun!";
 
 l.OPTION_ACTIVATE_MODULE = "Activate / Desactivate module"
-
-l.OPTION_ACTIVATE_MODULE_DEBUFFS = ns.HAS_SECRETS and (l.RDL.."Temporarly disabled for Midnight") or l.OPTION_ACTIVATE_MODULE
 l.OPTION_HIDEDISABLED = l.GYL.."Hide disabled modules"
 
 -- KF START
@@ -92,6 +89,8 @@ l.OPTION_ALPHADISPELOVERLAY = "Dispel Overlay transparency"
 l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
+l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE
+  .. ( issecretvalue and "\n"..l.WH.."Blizzard buffs/debuffs will be replaced by RaidFrameAuras" or "")
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Debuffs / Buffs"
 l.OPTION_ORIENTATION_LeftThenUp = "Left, then Up"

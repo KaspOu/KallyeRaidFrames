@@ -438,6 +438,9 @@ local function getInfo(self)
 end
 
 local function isEnabled(options)
+	if ns.LoadRaidFramesAuras then
+		return options.ActiveUnitDebuffs ~= false
+	end
     return ns.HAS_SECRETS ~= true and options.ActiveUnitDebuffs ~= false
 		and (
 			options.BuffsScale ~= 1
@@ -470,6 +473,20 @@ function ns.isFlickerWarningShowed(options)
 	return buffsHook..debuffsHook ~= ""
 end
 local function onSaveOptions(self, options)
+	if ns.LoadRaidFramesAuras then
+		if isEnabled(options) then
+			if not ns._UnitDebuffsHooked then
+				ns._UnitDebuffsHooked = true
+				ns.LoadRaidFramesAuras(options)
+			elseif ns.SyncRaidFramesAuras then
+				ns.SyncRaidFramesAuras(options)
+			end
+		elseif ns._UnitDebuffsHooked and ns.SyncRaidFramesAuras then
+			ns.SyncRaidFramesAuras(options)
+		end
+		return
+	end
+	-- Until Midnight (12)
     if not ns._UnitDebuffsHooked and isEnabled(options) then
         ns._UnitDebuffsHooked = true
 		local buffsHook = determineAppropriateHook("CompactUnitFrame_SetMaxBuffs", options.BuffsPerLine, options.MaxBuffs, DEFAULT_MAXBUFFS, options.BuffsOrientation ~= "LeftThenUp", options.BuffsPosX, options.BuffsPosY)

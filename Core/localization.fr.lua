@@ -11,13 +11,11 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
+- Les Buffs & Débuffs utilisent Raid Frame Auras
 - Nouvelles options (Midnight) :
-  > Transparence du Dispel Overlay
   > Raid: Afficher à la fois les groupes et les cadres de raid
   > Transparence à portée (en combat)
-
 - Vie inversée : Barres de prédiction de soins et d’absorption corrigées
-- Débuffs à gauche & buffs à droite, comme attendu
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -90,6 +88,8 @@ l.OPTION_ALPHADISPELOVERLAY = "Transparence de l'indicateur de dissipations"
 l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
+l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE
+.. ( issecretvalue and "\n"..l.WH.."Les buffs/d\195\169buffs Blizzard seront remplac\195\169s par RaidFrameAuras" or "")
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Debuffs / Buffs"
 l.OPTION_ORIENTATION_LeftThenUp = "\195\128 Gauche, puis en Haut"

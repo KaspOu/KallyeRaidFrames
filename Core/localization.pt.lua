@@ -80,6 +80,8 @@ l.OPTION_ALPHADISPELOVERLAY = "Transpar\195\170ncia do Overlay de Dissipa\195\16
 l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
+l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE .. "\n"
+  ..l.WH.."Os b\195\186fes/debuffs da Blizzard ser\195\163o substitu\195\173dos por RaidFrameAuras"
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Debufes / B\195\186fes"
 l.OPTION_ORIENTATION_LeftThenUp = "\195\128 Esquerda, depois para Cima"

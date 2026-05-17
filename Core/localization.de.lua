@@ -79,6 +79,8 @@ l.OPTION_ALPHADISPELOVERLAY = "Transparenz des Dispel-Overlays"
 l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
+l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE .. "\n"
+  ..l.WH.."Blizzard-Buffs/Debuffs werden durch RaidFrameAuras ersetzt"
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Debuffs / Buffs"
 l.OPTION_ORIENTATION_LeftThenUp = "Links, dann nach oben"
