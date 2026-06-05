@@ -22,10 +22,10 @@ ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 ns.HAS_colorNameBySelection = ns.IS_RETAIL; --? colorNameBySelection, Since BfA (7)
 ns.IsDebugFramesTimerActive = false;
 ns.HAS_SECRETS = issecretvalue and true or false;
-ns.DEFAULT_MAXBUFFS = issecretvalue and 9 or 3;
+ns.DEFAULT_MAXBUFFS = ns.IS_RETAIL and 9 or 3;
 ns.DEFAULT_MAXDEBUFFS = 3;
 ns.DEFAULT_RAIDICON_SIZE = 12;
-ns.DEFAULT_ALPHA_OUTOFRANGE = issecretvalue and  50 or 55;
+ns.DEFAULT_ALPHA_OUTOFRANGE = ns.IS_RETAIL and  50 or 55;
 
 -- Prepare I18N, with chat colors & other values for UI
 ns.I18N = {};
