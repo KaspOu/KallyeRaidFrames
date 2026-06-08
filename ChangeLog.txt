@@ -1,3 +1,6 @@
+v12.0.504
+- Buffs & Debuffs: Fix for Mists (with Raid Frame Auras)
+
 v12.0.503
 - Buffs & Debuffs back: thanks to *Raid Frame Auras* by Anahkas
 - Classic: fixed range detection on player

@@ -135,6 +135,15 @@ ns.SyncRaidFramesAuras = function(options)
     RaidFrameAuras:ApplySettings(false)
 end
 
+local function disableBlizzAuras(frame)
+	if (frame.optionTable and frame.optionTable.displayBuffs ~= false) then
+		frame.optionTable.displayBuffs = false
+		frame.optionTable.displayDebuffs = false
+		frame.optionTable.displayDispelDebuffs = false
+		-- CompactUnitFrame_SetOptionTable(frame, frame.optionTable)
+	end
+end
+
 ns.LoadRaidFramesAuras = function(options)
     applyBlizzardAuraCVarPolicy(false)
     ns.RaidFrameAuras:Initialize()
@@ -147,4 +156,8 @@ ns.LoadRaidFramesAuras = function(options)
     local RaidFrameAuras = ns.RaidFrameAuras
     applyBlizzardAuraCVarPolicy(RaidFrameAuras.db.enabled)
     RaidFrameAuras:ApplySettings(true)
+
+    if not ns.IS_RETAIL then
+        hooksecurefunc("CompactUnitFrame_SetUpFrame", disableBlizzAuras)
+    end
 end
