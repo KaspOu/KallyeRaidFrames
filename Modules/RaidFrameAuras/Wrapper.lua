@@ -141,6 +141,11 @@ local function disableBlizzAuras(frame)
 		frame.optionTable.displayDebuffs = false
 		frame.optionTable.displayDispelDebuffs = false
 		-- CompactUnitFrame_SetOptionTable(frame, frame.optionTable)
+        --[[ To test:
+        	CompactUnitFrame_SetMaxBuffs(frame, isPvPFrame and 0 or 6);
+            CompactUnitFrame_SetMaxDebuffs(frame, 3);
+            CompactUnitFrame_SetMaxDispelDebuffs(frame, isPvPFrame and 0 or 3);
+        --]]
 	end
 end
 
