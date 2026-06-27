@@ -11,11 +11,11 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
-- Les Buffs & Débuffs utilisent Raid Frame Auras
+- Barre d'infos: couleurs corrigées
+- Buffs & Débuffs: correctifs
 - Nouvelles options (Midnight) :
   > Raid: Afficher à la fois les groupes et les cadres de raid
   > Transparence à portée (en combat)
-- Vie inversée : Barres de prédiction de soins et d’absorption corrigées
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -130,6 +130,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."Affichage classique de la Limite de buffs / d\1
 l.OPTION_USETAINTMETHOD_TOOLTIP = "D\195\169coch\195\169, utilise l'affichage exp\195\169rimental\nCoch\195\169, utilise l'affichage stable, mais avec une "..l.RDL.."erreur par session|r, pas si grave..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changer la Limite provoque une "..l.RDL.."erreur par session|r, pas si grave..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Le repositionnement peut \195\170tre affect\195\169 quelques secondes \195\160 la mort d'un boss"
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Masquer les auras Blizzard"
 l.OPTION_BUFFS_RESET = "Annuler tout repositionnement"
 -- KBD END
 

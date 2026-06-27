@@ -120,6 +120,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."버프/디버프 제한의 고전적인 표시"
 l.OPTION_USETAINTMETHOD_TOOLTIP = "체크 해제 시, 실험적인 표시를 사용합니다.\n체크 시, 안정적인 표시를 사용하지만 "..l.RDL.."세션당 오류|r가 발생할 수 있습니다. 심각하지 않습니다..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." 제한을 변경하면 "..l.RDL.."세션당 오류|r가 발생할 수 있습니다. 심각하지 않습니다..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." 보스 사망 시 몇 초 동안 재배치에 영향을 받을 수 있습니다."
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " 블리자드 오라 숨기기"
 l.OPTION_BUFFS_RESET = "모든 재배치 취소"
 -- KBD END
 

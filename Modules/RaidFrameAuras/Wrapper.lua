@@ -115,8 +115,8 @@ local function SafeSetCVar(name, value)
     return ok == true
 end
 
-local function applyBlizzardAuraCVarPolicy(enabled)
-    local value = enabled and "0" or "1"
+local function applyBlizzardAuraCVarPolicy(hide)
+    local value = hide and "0" or "1"
     for _, spec in ipairs(BLIZZARD_AURA_CVARS) do
         SafeSetCVar(spec.name, value)
     end
@@ -131,7 +131,7 @@ ns.SyncRaidFramesAuras = function(options)
     if not RaidFrameAuras.initialized then
         return
     end
-    applyBlizzardAuraCVarPolicy(RaidFrameAuras.db.enabled)
+    applyBlizzardAuraCVarPolicy(RaidFrameAuras.db.enabled and options.HideBlizzardAuras)
     RaidFrameAuras:ApplySettings(false)
 end
 
@@ -159,10 +159,10 @@ ns.LoadRaidFramesAuras = function(options)
         return
     end
     local RaidFrameAuras = ns.RaidFrameAuras
-    applyBlizzardAuraCVarPolicy(RaidFrameAuras.db.enabled)
+    applyBlizzardAuraCVarPolicy(RaidFrameAuras.db.enabled and options.HideBlizzardAuras)
     RaidFrameAuras:ApplySettings(true)
 
-    if not ns.IS_RETAIL then
+    if not ns.IS_RETAIL and options.HideBlizzardAuras then
         hooksecurefunc("CompactUnitFrame_SetUpFrame", disableBlizzAuras)
     end
 end

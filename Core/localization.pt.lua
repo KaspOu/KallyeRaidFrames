@@ -122,6 +122,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."Exibi\195\167\195\163o cl\195\161ssica do Limit
 l.OPTION_USETAINTMETHOD_TOOLTIP = "Desmarcado, usa a exibi\195\167\195\163o experimental\nMarcado, usa a exibi\195\167\195\163o est\195\161vel, mas com um "..l.RDL.."erro por sess\195\163o|r, n\195\163o t\195\163o grave..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Alterar o Limite causa um "..l.RDL.."erro por sess\195\163o|r, n\195\163o t\195\163o grave..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." O reposicionamento pode ser afetado por alguns segundos ap\195\180s a morte de um chefe"
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Ocultar auras da Blizzard"
 l.OPTION_BUFFS_RESET = "Cancelar todo o reposicionamento"
 -- KBD END
 

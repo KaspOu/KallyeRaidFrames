@@ -9,7 +9,9 @@
     <Script file="Database.lua"/>
     <Script file="Modules\AuraScanner.lua"/>
     <Script file="Modules\Tooltip.lua"/>
+    <Script file="Modules\Masque.lua"/>
     <Script file="UI\Frames.lua"/>
+    <Script file="Modules\ObjectiveCarriers.lua"/>
     <Script file="Modules\PrivateAuras.lua"/>
     <Script file="Modules\RaidFrames.lua"/>
     <Script file="Modules\ChatCommands.lua"/>

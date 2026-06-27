@@ -97,11 +97,28 @@ local function applyBarTexture(frame, texture, default)
 end
 
 local function applyBarColor(healthBar, useColorOption, color, customColor)
-    if useColorOption == "1" then
+    if useColorOption == "1" and color then
         healthBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
     elseif useColorOption == "2" then
         healthBar:SetStatusBarColor(customColor.r, customColor.g, customColor.b, customColor.a)
     end
+end
+
+--- Determines the color to use for a nameplate unit.
+--- Returns class color for players (detected reliably via GUID to avoid the
+--- transient red flash when UnitIsPlayer momentarily returns false on a freshly
+--- shown/updated nameplate). Returns nil for a player whose class is not yet
+--- resolved, so the caller skips this pass instead of applying the hostile
+--- selection color (red).
+local function getUnitColor(unit)
+    local guid = UnitGUID(unit)
+    local isPlayer = UnitIsPlayer(unit) or (guid and strsub(guid, 1, 6) == "Player")
+    if isPlayer then
+        local _, class = UnitClass(unit)
+        return class and getClassColors()[class] or nil
+    end
+    local r, g, b, a = UnitSelectionColor(unit)
+    return { r = r, g = g, b = b, a = a }
 end
 
 local function filterNameplateBarOption(option)
@@ -127,8 +144,7 @@ local function Hook_CUF_UpdateName(frame)
         applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
     end
 
-    local r, g, b, a = UnitSelectionColor(frame.displayedUnit)
-    local c = not UnitIsPlayer(frame.displayedUnit) and {r= r, g= g, b=b, a=a} or getClassColors()[select(2,UnitClass(frame.displayedUnit))]
+    local c = getUnitColor(frame.displayedUnit)
 
     if not UnitIsFriend(frame.displayedUnit, "player") then
         applyTextColor(frame.name, cacheOptions.EnemiesNameplates_Txt_UseColor, c, cacheOptions.EnemiesNameplates_Txt_Color)
@@ -146,6 +162,29 @@ local function Hook_CUF_UpdateName(frame)
             cacheOptions.FriendsNameplates_Txt_ShowLevel,
             cacheOptions.FriendsNameplates_Txt_Level_Color_Under,
             cacheOptions.FriendsNameplates_Txt_Level_Color_Over)
+        local optionBarUseColor = filterNameplateBarOption(cacheOptions.FriendsNameplates_Bar_UseColor)
+        applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.FriendsNameplates_Bar_Color)
+    end
+end
+
+--- Re-applies only the health bar color/texture.
+--- Hooked to CompactUnitFrame_UpdateHealthColor because Blizzard recolors the
+--- bar (red for hostile / threat-based) on health/threat/selection changes,
+--- which would otherwise override our class color until the next UpdateName.
+local function Hook_CUF_UpdateHealthColor(frame)
+    if frame:IsForbidden() or FrameIsCompact(frame) or not UnitExists(frame.displayedUnit) or _G[ns.OPTIONS_NAME].ActiveNameplatesColor == false then
+        return
+    end
+
+    local cacheOptions = ns.Module.cacheOptions
+    local c = getUnitColor(frame.displayedUnit)
+
+    if not UnitIsFriend(frame.displayedUnit, "player") then
+        applyBarTexture(frame.healthBar, cacheOptions.EnemiesNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
+        local optionBarUseColor = filterNameplateBarOption(cacheOptions.EnemiesNameplates_Bar_UseColor)
+        applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.EnemiesNameplates_Bar_Color)
+    else
+        applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
         local optionBarUseColor = filterNameplateBarOption(cacheOptions.FriendsNameplates_Bar_UseColor)
         applyBarColor(frame.healthBar, optionBarUseColor, c, cacheOptions.FriendsNameplates_Bar_Color)
     end
@@ -184,6 +223,7 @@ local function onSaveOptions(self, options)
     if not ns._NameplatesHooked and isEnabled(options) then
         ns._NameplatesHooked = true;
         hooksecurefunc("CompactUnitFrame_UpdateName", Hook_CUF_UpdateName);
+        hooksecurefunc("CompactUnitFrame_UpdateHealthColor", Hook_CUF_UpdateHealthColor);
 
         ns._PlayerLevel = UnitLevel("player");
         local f = CreateFrame("Frame", nil, UIParent);
@@ -203,7 +243,7 @@ module:SetGetInfo(getInfo);
 --[[
 hooksecurefunc(NamePlateDriverFrame,"OnNamePlateCreated", ??
 Blizzard nameplates color test: local allowClassColor = frame.optionTable.allowClassColorsForNPCs or UnitIsPlayer(frame.unit) or (UnitTreatAsPlayerForDisplay and UnitTreatAsPlayerForDisplay(frame.unit));
-Textures: 
+Textures:
 https://github.com/Gethe/wow-ui-textures/tree/live/PVPFrame
 --]]
 --@end-do-not-package@

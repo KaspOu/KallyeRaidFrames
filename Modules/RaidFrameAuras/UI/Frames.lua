@@ -15,6 +15,30 @@ local C_UnitAuras = C_UnitAuras
 
 State.layoutVersion = State.layoutVersion or 0
 
+local ICON_DRAW_LAYER = "ARTWORK"
+local ICON_DRAW_LEVEL = 0
+local BORDER_DRAW_LAYER = "BACKGROUND"
+local BORDER_DRAW_LEVEL = -1
+
+local function SafeNumber(value, fallback)
+    if Util.AsSafeNumber then
+        return Util.AsSafeNumber(value, fallback)
+    end
+    if Util.IsSecretValue and Util.IsSecretValue(value) then
+        return fallback
+    end
+    value = tonumber(value)
+    if not value or value ~= value or value == math.huge or value == -math.huge then
+        return fallback
+    end
+    return value
+end
+
+local function NumberKey(value)
+    value = SafeNumber(value, 0) or 0
+    return tostring(math.floor(value * 100 + 0.5))
+end
+
 local function ConfigureAuraIconMouse(icon)
     if not icon then return end
     -- RFA owns hover so tooltip options are authoritative; clicks are disabled on the aura itself.
@@ -50,6 +74,22 @@ local function IsAnchorableRegion(region)
     return type(region) == "table" and type(region.SetPoint) == "function"
 end
 
+local function GetSafeRegionNumber(region, method)
+    if not region or type(region[method]) ~= "function" then return nil end
+    local value = Util.AsSafeNumber(region[method](region))
+    if value == nil then return nil end
+    return value
+end
+
+local function GetRegionOffset(reference, region, method, fallback)
+    local referenceValue = GetSafeRegionNumber(reference, method)
+    local regionValue = GetSafeRegionNumber(region, method)
+    if referenceValue and regionValue then
+        return regionValue - referenceValue
+    end
+    return fallback or 0
+end
+
 local function GetFrameHealthBar(frame)
     if not frame then return nil end
     local healthBar = frame.healthBar or frame.HealthBar or frame.healthbar
@@ -59,9 +99,57 @@ local function GetFrameHealthBar(frame)
     return nil
 end
 
+local function GetFrameMaxHealthLossBar(frame)
+    if not frame then return nil end
+    local maxHealthLossBar = frame.TempMaxHealthLoss or frame.tempMaxHealthLoss
+    if IsAnchorableRegion(maxHealthLossBar) then
+        return maxHealthLossBar
+    end
+
+    local healthBarsContainer = frame.HealthBarsContainer or frame.healthBarsContainer
+    if type(healthBarsContainer) == "table" then
+        maxHealthLossBar = healthBarsContainer.TempMaxHealthLoss or healthBarsContainer.tempMaxHealthLoss
+        if IsAnchorableRegion(maxHealthLossBar) then
+            return maxHealthLossBar
+        end
+    end
+
+    return nil
+end
+
+local function GetStableHealthBarAnchorTarget(frame)
+    local healthBar = GetFrameHealthBar(frame)
+    local maxHealthLossBar = GetFrameMaxHealthLossBar(frame)
+    if not healthBar or not maxHealthLossBar then
+        return healthBar
+    end
+
+    local anchor = frame.rfaStableHealthBarAnchor
+    if not IsAnchorableRegion(anchor) then
+        anchor = RaidFrameAuras:CreatePrivateFrame("Frame", "HealthBarAnchor", frame)
+        anchor:EnableMouse(false)
+        frame.rfaStableHealthBarAnchor = anchor
+    end
+
+    local powerBarUsedHeight = Util.AsSafeNumber(frame.powerBarUsedHeight, 0) or 0
+    local rightOffset = GetRegionOffset(frame, maxHealthLossBar, "GetRight", -1)
+    local bottomOffset = GetRegionOffset(frame, healthBar, "GetBottom", 1 + powerBarUsedHeight)
+    local key = tostring(healthBar) .. ":" .. tostring(maxHealthLossBar) .. ":" .. NumberKey(rightOffset) .. ":" .. NumberKey(bottomOffset)
+    if anchor.rfaStableHealthBarAnchorKey ~= key then
+        anchor:ClearAllPoints()
+        anchor:SetPoint("TOPLEFT", healthBar, "TOPLEFT", 0, 0)
+        -- Blizzard narrows frame.healthBar when temporary max HP loss is shown.
+        -- Keep RFA's health-bar target on the full right edge instead.
+        anchor:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", rightOffset, bottomOffset)
+        anchor.rfaStableHealthBarAnchorKey = key
+    end
+
+    return anchor
+end
+
 local function GetAuraAnchorTarget(frame, db)
     if GetAuraAnchorTargetSetting(db) == "HEALTH_BAR" then
-        return GetFrameHealthBar(frame) or frame
+        return GetStableHealthBarAnchorTarget(frame) or frame
     end
     return frame
 end
@@ -89,24 +177,21 @@ local function GetLayoutCacheKey(frame, auraType, maxIcons, baseSize)
         .. ":" .. tostring(InCombatLockdown and InCombatLockdown() or false)
 end
 
-local function NumberKey(value)
-    return tostring(math.floor((tonumber(value) or 0) * 100 + 0.5))
-end
-
 local function SetSizeIfChanged(region, width, height)
-    if not region or not width then return end
+    if not region or not width then return false end
     width = Util.AsSafeNumber(width)
     height = Util.AsSafeNumber(height, width)
-    if not width then return end
+    if not width then return false end
     height = height or width
 
     region.rfaLayoutWidth = width
     region.rfaLayoutHeight = height
 
     local key = NumberKey(width) .. ":" .. NumberKey(height)
-    if region.rfaSizeKey == key then return end
+    if region.rfaSizeKey == key then return false end
     region:SetSize(width, height)
     region.rfaSizeKey = key
+    return true
 end
 
 local function SetAlphaIfChanged(region, alpha)
@@ -134,6 +219,33 @@ local function SetTextureBoxIfChanged(region, key, insetX, insetY)
     region:SetPoint("TOPLEFT", insetX, -insetY)
     region:SetPoint("BOTTOMRIGHT", -insetX, insetY)
     region.rfaPointKey = key
+end
+
+local function ApplyAuraIconRegionGeometry(icon, force)
+    if not icon then return end
+    local textureInset = tonumber(icon.rfaTextureInset) or 0
+
+    if icon.border and icon.border.SetDrawLayer then
+        icon.border:SetDrawLayer(BORDER_DRAW_LAYER, BORDER_DRAW_LEVEL)
+    end
+    if icon.texture and icon.texture.SetDrawLayer then
+        icon.texture:SetDrawLayer(ICON_DRAW_LAYER, ICON_DRAW_LEVEL)
+    end
+
+    if force and icon.texture then
+        icon.texture.rfaPointKey = nil
+    end
+    SetTextureBoxIfChanged(icon.texture, "texture:" .. NumberKey(textureInset), textureInset)
+
+    if icon.cooldown and (force or icon.cooldown.rfaPointKey ~= "cooldown:texture") then
+        icon.cooldown:ClearAllPoints()
+        icon.cooldown:SetAllPoints(icon.texture or icon)
+        icon.cooldown.rfaPointKey = "cooldown:texture"
+    end
+end
+
+function RaidFrameAuras:RestoreAuraIconRegionGeometry(icon)
+    ApplyAuraIconRegionGeometry(icon, true)
 end
 
 local function SetBorderBoxIfChanged(region, key, leftInset, topInset, rightInset, bottomInset)
@@ -193,16 +305,13 @@ local function SafeSetCooldown(cooldown, auraData, unit)
         end
     end
 
-    local dur = auraData.duration
-    local exp = auraData.expirationTime
-    if Util.IsSecretValue(dur) or Util.IsSecretValue(exp) then
-        return
-    end
-    if dur and exp and dur > 0 then
+    local dur = SafeNumber(auraData.duration)
+    local exp = SafeNumber(auraData.expirationTime)
+    if dur and exp and dur > 0 and exp > 0 then
         if cooldown.SetCooldownFromExpirationTime then
-            cooldown:SetCooldownFromExpirationTime(exp, dur)
+            pcall(cooldown.SetCooldownFromExpirationTime, cooldown, exp, dur)
         elseif cooldown.SetCooldown then
-            cooldown:SetCooldown(exp - dur, dur)
+            pcall(cooldown.SetCooldown, cooldown, exp - dur, dur)
         end
     end
 end
@@ -217,11 +326,13 @@ function RaidFrameAuras:CreateAuraIcon(parent, auraType)
     icon:Hide()
 
     icon.border = icon:CreateTexture(nil, "BACKGROUND")
+    icon.border:SetDrawLayer(BORDER_DRAW_LAYER, BORDER_DRAW_LEVEL)
     icon.border:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
     icon.border:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 1, -1)
     icon.border:SetColorTexture(0, 0, 0, 0.8)
 
     icon.texture = icon:CreateTexture(nil, "ARTWORK")
+    icon.texture:SetDrawLayer(ICON_DRAW_LAYER, ICON_DRAW_LEVEL)
     icon.texture:SetTexCoord(0.08, 0.92, 0.08, 0.92)
     icon.texture:SetAllPoints()
 
@@ -231,6 +342,8 @@ function RaidFrameAuras:CreateAuraIcon(parent, auraType)
     icon.cooldown:SetDrawSwipe(true)
     icon.cooldown:SetReverse(true)
     icon.cooldown:SetHideCountdownNumbers(false)
+    icon.rfaTextureInset = 0
+    ApplyAuraIconRegionGeometry(icon, true)
 
     icon.textOverlay = self:CreatePrivateFrame("Frame", auraType == "BUFF" and "BuffIconTextOverlay" or "DebuffIconTextOverlay", icon)
     icon.textOverlay:SetAllPoints(icon)
@@ -298,6 +411,10 @@ function RaidFrameAuras:CreateAuraIcon(parent, auraType)
 
     if not InCombatLockdown() then
         ConfigureAuraIconMouse(icon)
+    end
+
+    if self.RegisterMasqueAuraIcon then
+        self:RegisterMasqueAuraIcon(icon, auraType)
     end
 
     return icon
@@ -439,7 +556,9 @@ function RaidFrameAuras:ApplyAuraLayout(frame, auraType, requestedIconCount)
     for i = 1, targetCount do
         local icon = icons[i]
         SetFrameLayerIfChanged(icon, frameStrata, frameLevel)
-        SetSizeIfChanged(icon, size, size)
+        if SetSizeIfChanged(icon, size, size) and self.ScheduleMasqueIconReskin then
+            self:ScheduleMasqueIconReskin(icon)
+        end
         icon:SetScale(1)
         icon.rfaLayoutScale = 1
         SetAlphaIfChanged(icon, alpha)
@@ -487,7 +606,8 @@ function RaidFrameAuras:ApplyAuraLayout(frame, auraType, requestedIconCount)
         SetPointIfChanged(icon, "layout:" .. anchorTargetKey .. ":" .. anchor .. ":" .. NumberKey(offsetX) .. ":" .. NumberKey(offsetY), anchor, anchorTarget, anchor, offsetX, offsetY)
 
         local textureInset = math.max(0, borderThickness - 1)
-        SetTextureBoxIfChanged(icon.texture, "texture:" .. NumberKey(textureInset), textureInset)
+        icon.rfaTextureInset = textureInset
+        ApplyAuraIconRegionGeometry(icon, true)
         icon.texture:SetVertexColor(1, 1, 1, 1)
 
         SetBorderBoxIfChanged(icon.border, "border:" .. NumberKey(borderThickness) .. ":" .. NumberKey(borderInset), -borderThickness + borderInset, borderThickness - borderInset, borderThickness - borderInset, -borderThickness + borderInset)
@@ -599,10 +719,7 @@ local function EnsureDebuffBorderCurve(db)
 end
 
 local function GetNumericStackText(applications, stackMinimum)
-    if Util.IsSecretValue(applications) then
-        return nil, false
-    end
-    local value = tonumber(applications)
+    local value = SafeNumber(applications)
     if value and value >= stackMinimum then
         return value, true
     end
@@ -623,7 +740,7 @@ local function GetAuraStackText(icon, unit, auraData, options)
         return cachedText, true
     end
 
-    if C_UnitAuras.GetAuraApplicationDisplayCount and unit and auraData.auraInstanceID then
+    if C_UnitAuras and C_UnitAuras.GetAuraApplicationDisplayCount and unit and auraData.auraInstanceID then
         Util.PerfCount("LiveAuraCall")
         Util.PerfCount("IconPaintLiveStack")
         local ok, stackText = pcall(C_UnitAuras.GetAuraApplicationDisplayCount, unit, auraData.auraInstanceID, stackMinimum, 99)
@@ -645,19 +762,15 @@ local function GetAuraExpirationState(unit, auraData, options)
         return hasExpiration, hasExpiration
     end
 
-    local duration = auraData and auraData.duration
-    local expiration = auraData and auraData.expirationTime
-    if not Util.IsSecretValue(duration) and not Util.IsSecretValue(expiration) then
-        duration = tonumber(duration)
-        expiration = tonumber(expiration)
-        if duration ~= nil and expiration ~= nil then
-            local hasExpiration = duration > 0 and expiration > 0
-            return hasExpiration, hasExpiration
-        end
+    local duration = SafeNumber(auraData and auraData.duration)
+    local expiration = SafeNumber(auraData and auraData.expirationTime)
+    if duration ~= nil and expiration ~= nil then
+        local hasExpiration = duration > 0 and expiration > 0
+        return hasExpiration, hasExpiration
     end
 
     if options.useLiveCooldown ~= false and unit and auraData and auraData.auraInstanceID then
-        if C_UnitAuras.DoesAuraHaveExpirationTime then
+        if C_UnitAuras and C_UnitAuras.DoesAuraHaveExpirationTime then
             Util.PerfCount("LiveAuraCall")
             Util.PerfCount("IconPaintLiveExpiration")
             local ok, hasExpiration = pcall(C_UnitAuras.DoesAuraHaveExpirationTime, unit, auraData.auraInstanceID)
@@ -693,15 +806,8 @@ local AuraTimer_OnUpdate
 local function IconHasSafeCachedDuration(icon)
     if not icon then return false end
 
-    local duration = icon.auraDuration
-    local expiration = icon.expirationTime
-
-    if Util.IsSecretValue(duration) or Util.IsSecretValue(expiration) then
-        return false
-    end
-
-    duration = tonumber(duration)
-    expiration = tonumber(expiration)
+    local duration = SafeNumber(icon.auraDuration)
+    local expiration = SafeNumber(icon.expirationTime)
 
     return duration ~= nil and expiration ~= nil and duration > 0 and expiration > 0
 end
@@ -856,13 +962,22 @@ local function ApplyAuraIconVisuals(frame, icon, unit, auraType, auraData, optio
             r, g, b = Util.ReadColor(options.borderColor, 0, 0, 0, 1)
             icon.border:SetColorTexture(r, g, b, 1)
         elseif auraType == "DEBUFF" and not options.unitDeadOrOffline then
-            if db.debuffBorderColorByType ~= false and C_UnitAuras.GetAuraDispelTypeColor and unit and id then
+            if db.debuffBorderColorByType ~= false and C_UnitAuras and C_UnitAuras.GetAuraDispelTypeColor and unit and id then
                 local curve = EnsureDebuffBorderCurve(db)
                 Util.PerfCount("LiveAuraCall")
-                local borderColor = curve and C_UnitAuras.GetAuraDispelTypeColor(unit, id, curve)
-                if borderColor and borderColor.GetRGB then
-                    r, g, b = borderColor:GetRGB()
-                    icon.border:SetColorTexture(r, g, b, 1)
+                local ok, borderColor = false, nil
+                if curve then
+                    ok, borderColor = pcall(C_UnitAuras.GetAuraDispelTypeColor, unit, id, curve)
+                end
+                if ok and borderColor and borderColor.GetRGB then
+                    local rgbOk
+                    rgbOk, r, g, b = pcall(borderColor.GetRGB, borderColor)
+                    if rgbOk then
+                        icon.border:SetColorTexture(r, g, b, 1)
+                    else
+                        local c = db.debuffBorderColorNone or DEFAULTS.debuffBorderColorNone
+                        icon.border:SetColorTexture(c.r, c.g, c.b, 1)
+                    end
                 else
                     local c = db.debuffBorderColorNone or DEFAULTS.debuffBorderColorNone
                     icon.border:SetColorTexture(c.r, c.g, c.b, 1)
@@ -941,6 +1056,9 @@ function RaidFrameAuras:HideFrameAuras(frame)
     if self.ClearPrivateAuraAnchors then
         self:ClearPrivateAuraAnchors(frame)
     end
+    if self.HideFrameObjectiveCarrier then
+        self:HideFrameObjectiveCarrier(frame)
+    end
     local state = frame and State.frameStates[frame]
     if not state then return end
     state.buffDisplaySignature = nil
@@ -995,7 +1113,7 @@ function RaidFrameAuras:UpdateAuraIcons(frame, auraType)
     local icons = auraType == "BUFF" and state.buffIcons or state.debuffIcons
     local cache = State.auraCache[unit]
     if cache and (cache.buffOrderDirty or cache.debuffOrderDirty) then
-        self:RebuildSortedArrays(cache, db)
+        self:RebuildSortedArrays(cache, db, nil, unit)
     end
     local dataList = cache and (auraType == "BUFF" and cache.buffData or cache.debuffData)
 
@@ -1044,7 +1162,9 @@ function RaidFrameAuras:UpdateAuraIcons(frame, auraType)
             local iconSize = self:GetAuraIconSize(auraType, categoryScale, frame)
             icon.rfaCategoryScale = categoryScale
             icon.rfaVisualScale = visualScale
-            SetSizeIfChanged(icon, iconSize, iconSize)
+            if SetSizeIfChanged(icon, iconSize, iconSize) and self.ScheduleMasqueIconReskin then
+                self:ScheduleMasqueIconReskin(icon)
+            end
             if ApplyAuraIconVisuals(frame, icon, unit, auraType, auraData, {
                 index = i,
                 showDurationText = auraType ~= "DEBUFF"
@@ -1096,13 +1216,8 @@ end
 
 local function GetIconRemainingDuration(icon)
     if not icon or not GetTime then return nil end
-    local duration = icon.auraDuration
-    local expiration = icon.expirationTime
-    if Util.IsSecretValue(duration) or Util.IsSecretValue(expiration) then
-        return nil
-    end
-    duration = tonumber(duration)
-    expiration = tonumber(expiration)
+    local duration = SafeNumber(icon.auraDuration)
+    local expiration = SafeNumber(icon.expirationTime)
     if not duration or not expiration or duration <= 0 or expiration <= 0 then
         return nil
     end
@@ -1360,4 +1475,3 @@ AuraTimer_OnUpdate = function(_, elapsed)
 end
 
 auraTimer:SetScript("OnUpdate", nil)
-ns.auraTimer = auraTimer

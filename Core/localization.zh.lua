@@ -120,6 +120,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."经典增益/减益上限显示"..required.." "
 l.OPTION_USETAINTMETHOD_TOOLTIP = "未勾选时，使用实验性显示\n勾选时，使用稳定显示，但每会话会产生一个"..l.RDL.."错误|r，问题不大..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." 更改上限会导致每会话产生一个"..l.RDL.."错误|r，问题不大..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." 在首领死亡时，重新定位可能会受到几秒钟的影响"
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " 隐藏暴雪光环"
 l.OPTION_BUFFS_RESET = "取消所有重新定位"
 -- KBD END
 

@@ -8,7 +8,7 @@ if ns.CONFLICT then return; end
 
 local RaidFrameAuras = ns.RaidFrameAuras
 if not RaidFrameAuras then
-    RaidFrameAuras = CreateFrame("Frame", "RFA_Core_K")
+    RaidFrameAuras = CreateFrame("Frame", "RFA_Core_K") -- FIXME:RFA
     ns.RaidFrameAuras = RaidFrameAuras
 end
 
@@ -22,7 +22,7 @@ do
     end
     ns.ADDON_VERSION = addonVersion or ""
 end
-    ns.DB_VERSION = 1303
+ns.DB_VERSION = 1403
 ns.frameNameCounter = ns.frameNameCounter or 0
 
 function RaidFrameAuras:NextFrameName(suffix)
@@ -69,6 +69,7 @@ ns.State = ns.State or {
     sortScratchBuffs = {},
     sortScratchDebuffs = {},
     longBuffSpellIDs = {},
+    objectiveCarriers = {},
     frameSizeRefreshPending = setmetatable({}, { __mode = "k" }),
 }
 
@@ -78,6 +79,9 @@ function RaidFrameAuras:Initialize()
     if self.initialized then return end
     self.initialized = true
     self:InitializeDatabase()
+    if self.InitializeMasque then
+        self:InitializeMasque()
+    end
 
     if C_AddOns and C_AddOns.LoadAddOn then
         pcall(C_AddOns.LoadAddOn, "Blizzard_CompactRaidFrames")
@@ -99,15 +103,14 @@ function RaidFrameAuras:Initialize()
     if self.RegisterOptions then
         self:RegisterOptions()
     end
+    if self.InitializeObjectiveCarriers then
+        self:InitializeObjectiveCarriers()
+    end
 
     self:ApplySettings(true)
     self:ForEachTrackedFrame(function(frame)
         self:HookFrameScripts(frame)
     end)
-end
-
-local function IsRaidFrameAurasRuntimeActive(self)
-    return self.initialized and self.db and self.db.enabled == true
 end
 
 RaidFrameAuras:SetScript("OnEvent", function(self, event, ...)
@@ -116,28 +119,25 @@ RaidFrameAuras:SetScript("OnEvent", function(self, event, ...)
         if loadedName == addonName then
             -- Embedded in KallyeRaidFrames: wait for ns.LoadRaidFramesAuras()
             if not ns.LoadRaidFramesAuras then
-                -- self:Initialize() -- FIXME:
+                -- self:Initialize() -- FIXME::RFA
             end
-        elseif loadedName == "Blizzard_CompactRaidFrames" and IsRaidFrameAurasRuntimeActive(self) then
+        elseif loadedName == "Blizzard_CompactRaidFrames" and self.initialized then
             self:ScheduleRefreshBurst("layout")
+        elseif loadedName == "Masque" and self.initialized then
+            local masqueChanged = false
+            if self.InitializeMasque then
+                masqueChanged = self:InitializeMasque() == true
+            end
+            if masqueChanged then
+                self:ScheduleRefreshBurst("layout")
+            end
         end
-        return
-    end
-
-    if not self.initialized then
-        return
-    end
-
-    if event ~= "PLAYER_LOGIN" and not IsRaidFrameAurasRuntimeActive(self) then
         return
     end
 
     if event == "PLAYER_LOGIN" then
-        if not IsRaidFrameAurasRuntimeActive(self) then
-            return
-        end
         if self.PrintBlizzardAuraCVarLoginReminder then
-            self:PrintBlizzardAuraCVarLoginReminder()
+            -- self:PrintBlizzardAuraCVarLoginReminder() -- FIXME:RFA
         end
         return
     end
@@ -191,6 +191,9 @@ RaidFrameAuras:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_REGEN_ENABLED" then
         if self.InvalidateAuraData then
             self:InvalidateAuraData()
+        end
+        if self.ProcessPendingMasqueUpdate then
+            self:ProcessPendingMasqueUpdate()
         end
         if self.ProcessPendingPrivateAuraAnchors then
             self:ProcessPendingPrivateAuraAnchors()

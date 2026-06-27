@@ -273,6 +273,16 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsOrientation" relativePoint="BOTTOMLEFT"><Offset x="0" y="-29" /></Anchor>
 				</Anchors>
 			</CheckButton>
+
+			<CheckButton parentKey="HideBlizzardAuras" inherits="KRFUI_CheckboxWidget">
+				<Attributes>
+					<Attribute name="text" value="OPTION_BUFFS_HIDEBLIZZARDAURAS" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.FlickerWarning"><Offset x="0" y="-35"/></Anchor>
+					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
+				</Anchors>
+			</CheckButton>
 			<Button parentKey="Reset" inherits="UIPanelButtonTemplate">
 				<Size x="200" y="20" />
 				<Anchors>

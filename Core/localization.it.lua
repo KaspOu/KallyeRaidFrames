@@ -120,6 +120,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."Visualizzazione classica del Limite di buff / d
 l.OPTION_USETAINTMETHOD_TOOLTIP = "Deselezionato, usa la visualizzazione sperimentale\nSelezionato, usa la visualizzazione stabile, ma con un "..l.RDL.."errore per sessione|r, non cos\195\174 grave..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Cambiare il Limite provoca un "..l.RDL.."errore per sessione|r, non cos\195\174 grave..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Il riposizionamento pu\195\170 essere influenzato per alcuni secondi alla morte di un boss"
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Nascondere le aure Blizzard"
 l.OPTION_BUFFS_RESET = "Annulla tutto il riposizionamento"
 -- KBD END
 

@@ -6,8 +6,9 @@ if ns.CONFLICT then return; end
 -- ! Replace enabled = false
 
 local DEFAULTS = {
-    dbVersion = ns.DB_VERSION or 1302,
-    enabled = false, -- FIXME:
+    dbVersion = ns.DB_VERSION or 1403,
+    enabled = false, -- FIXME:RFA
+    masqueEnabled = false,
     showPlayer = true,
     showParty = true,
     showRaid = true,
@@ -19,6 +20,11 @@ local DEFAULTS = {
     auraFrameStrata = "LOW",
     auraFrameLevel = 35,
     auraAnchorTarget = "HEALTH_BAR",
+    showObjectiveCarriers = true,
+    objectiveCarrierSize = 20,
+    objectiveCarrierAnchor = "TOPRIGHT",
+    objectiveCarrierOffsetX = -1,
+    objectiveCarrierOffsetY = -1,
 
     showBuffs = true,
     buffAlpha = 1,

@@ -50,6 +50,7 @@ local defaultOptions = {
 	DebuffsOrientation = "RightThenUp",
 	DebuffsPosX = 0,
 	DebuffsPosY = 0,
+	HideBlizzardAuras = true,
 	UseTaintMethod = false,
 
 	ActiveNameplatesColor = true,
@@ -257,6 +258,7 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsOrientation)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPosX)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPosY)
+		..tostring(_G[ns.OPTIONS_NAME].HideBlizzardAuras)
 		..tostring(_G[ns.OPTIONS_NAME].UseTaintMethod)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveRaidIcons)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= ns.DEFAULT_ALPHA_OUTOFRANGE or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);

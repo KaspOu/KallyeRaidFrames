@@ -189,6 +189,9 @@ function RaidFrameAuras:RefreshFrame(frame, options)
             if self.RefreshPrivateAuraAnchors then
                 self:RefreshPrivateAuraAnchors(frame)
             end
+            if self.RefreshObjectiveCarrierIcon then
+                self:RefreshObjectiveCarrierIcon(frame)
+            end
             Util.PerfEnd("RefreshFrame", perf)
             return
         end
@@ -209,6 +212,9 @@ function RaidFrameAuras:RefreshFrame(frame, options)
     end
     if self.RefreshPrivateAuraAnchors then
         self:RefreshPrivateAuraAnchors(frame)
+    end
+    if self.RefreshObjectiveCarrierIcon then
+        self:RefreshObjectiveCarrierIcon(frame)
     end
     Util.PerfEnd("RefreshFrame", perf)
 end
@@ -341,7 +347,7 @@ function RaidFrameAuras:SyncRosterAuraCaches()
             local guid = SafeGetUnitGUID(unit)
             local previousGUID = State.rosterGUIDs[unit]
 
-            -- 12.0.5 safety: during combat, UnitGUID for restricted units may be
+            -- 12.x safety: during combat, UnitGUID for restricted units may be
             -- unavailable/secret. Do not convert that into a fake GUID change,
             -- because clearing the aura cache here also drops the out-of-combat
             -- long-buff markers used by "Only in combat" hiding. Resync normally
@@ -385,6 +391,9 @@ local function RunRefreshBurst(reason, isFallback)
     RaidFrameAuras:TryHookCompactFrames()
     RaidFrameAuras:RebuildTrackedFrameRegistry()
     RaidFrameAuras:SyncRosterAuraCaches()
+    if RaidFrameAuras.ClearStalePrivateAuraAnchors then
+        RaidFrameAuras:ClearStalePrivateAuraAnchors()
+    end
     if RaidFrameAuras.RefreshLongBuffVisibility
         and RaidFrameAuras.db
         and RaidFrameAuras.db.directBuffHideLong == true

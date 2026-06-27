@@ -10,12 +10,11 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
-- Buffs & Debuffs are now using Raid Frame Auras
+- Nameplate colors fixed
+- Buffs & Debuffs: many fixes
 - New options (Midnight):
   > Raid: Show both party and raid frames
   > Alpha in range (combat)
-
-- Reverted HP: Heal prediction & absorb bars fixed
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -131,6 +130,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."Legacy display for Max buffs/debuffs"..required
 l.OPTION_USETAINTMETHOD_TOOLTIP = "Unchecked, uses an experimental display\nChecked, uses a stable display, but with one "..l.RDL.."error per session|r, not a big deal..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changing Max buffs/debuffs causes one "..l.RDL.."error per session|r, not a big deal..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Repositioning may be affected for a few seconds after a boss kill"
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = "Hide Blizzard Auras"
 l.OPTION_BUFFS_RESET = "Cancel any repositioning"
 l.OPTION_HOTFIX = l.ALERT..l.RD.." HOTFIX: Repositioning disabled"
 -- KBD END

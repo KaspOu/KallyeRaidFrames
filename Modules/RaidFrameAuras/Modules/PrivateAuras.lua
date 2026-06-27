@@ -83,6 +83,17 @@ local function HideHolderFrames(state)
     end
 end
 
+local function HasPrivateAuraState(state)
+    if not state then return false end
+    if state.privateAuraUnit ~= nil or state.privateAuraLayoutKey ~= nil or state.privateAuraAnchorKey ~= nil then
+        return true
+    end
+    if state.privateAuraAnchorIDs and #state.privateAuraAnchorIDs > 0 then
+        return true
+    end
+    return state.privateAuraFrames and #state.privateAuraFrames > 0
+end
+
 local function SetFrameLayer(frame, strata, level)
     if not frame then return end
     if strata and frame.rfaPrivateAuraStrata ~= strata then
@@ -368,6 +379,7 @@ local function ShouldShowPrivateAuras(frame, unit)
     end
     if not HasPrivateAuraAPI() then return false end
     if not frame or not Util.IsCompactUnitFrame(frame) then return false end
+    if not frame:IsVisible() then return false end
     if not RaidFrameAuras:IsTrackedUnit(unit) or not UnitExists(unit) then return false end
     return true
 end
@@ -400,9 +412,32 @@ function RaidFrameAuras:ClearPrivateAuraAnchors(frame)
     end
 end
 
+function RaidFrameAuras:ClearStalePrivateAuraAnchors()
+    local frameStates = State.frameStates
+    if not frameStates then return false end
+
+    if IsPlayerInCombat() then
+        MarkPrivateAuraRefreshPending()
+        return false
+    end
+
+    local cleared = false
+    for frame, state in pairs(frameStates) do
+        if HasPrivateAuraState(state) then
+            local unit = Util.GetFrameUnit(frame) or frame.rfaUnit
+            if not ShouldShowPrivateAuras(frame, unit) then
+                self:ClearPrivateAuraAnchors(frame)
+                cleared = true
+            end
+        end
+    end
+    return cleared
+end
+
 function RaidFrameAuras:RefreshPrivateAuraAnchors(frame)
     if not frame then return end
-    local unit = frame.rfaUnit or Util.GetFrameUnit(frame)
+    local unit = Util.GetFrameUnit(frame) or frame.rfaUnit
+    frame.rfaUnit = unit
     if not ShouldShowPrivateAuras(frame, unit) then
         self:ClearPrivateAuraAnchors(frame)
         return
@@ -442,6 +477,7 @@ end
 function RaidFrameAuras:ProcessPendingPrivateAuraAnchors()
     if IsPlayerInCombat() or not State.privateAuraRefreshPending then return end
     State.privateAuraRefreshPending = nil
+    self:ClearStalePrivateAuraAnchors()
     if self.ForEachTrackedFrame then
         self:ForEachTrackedFrame(function(frame)
             self:RefreshPrivateAuraAnchors(frame)

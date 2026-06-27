@@ -121,6 +121,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."Klassische Anzeige des Buff-/Debuff-Limits"..re
 l.OPTION_USETAINTMETHOD_TOOLTIP = "Deaktiviert, verwendet die experimentelle Anzeige\nAktiviert, verwendet die stabile Anzeige, aber mit einem "..l.RDL.."Fehler pro Sitzung|r, nicht so schlimm..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Das \195\164ndern des Limits verursacht einen "..l.RDL.."Fehler pro Sitzung|r, nicht so schlimm..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Die Neupositionierung kann f\195\188r einige Sekunden nach dem Tod eines Bosses beeintr\195\164chtigt sein"
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Blizzard-Auren ausblenden"
 l.OPTION_BUFFS_RESET = "Alle Neupositionierungen r\195\188ckg\195\164ngig machen"
 -- KBD END
 

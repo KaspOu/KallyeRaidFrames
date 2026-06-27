@@ -120,6 +120,7 @@ l.OPTION_USETAINTMETHOD = l.CY.."Visualizaci\195\179n cl\195\161sica del L\195\1
 l.OPTION_USETAINTMETHOD_TOOLTIP = "Desmarcado, usa la visualizaci\195\179n experimental\nMarcado, usa la visualizaci\195\179n estable, pero con un "..l.RDL.."error por sesi\195\179n|r, no tan grave..."
 l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Cambiar el L\195\173mite provoca un "..l.RDL.."error por sesi\195\179n|r, no tan grave..."
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." El reposicionamiento puede verse afectado unos segundos al morir un jefe"
+l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Ocultar auras de Blizzard"
 l.OPTION_BUFFS_RESET = "Cancelar todo reposicionamiento"
 -- KBD END
 

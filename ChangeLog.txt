@@ -1,3 +1,8 @@
+v12.0.702
+- Nameplates colors fixed
+- Buffs & Debuffs: *Raid Frame Auras* updated (many fixes)
+- Buffs & Debuffs: Hide Blizzard Auras is now an option
+
 v12.0.504
 - Buffs & Debuffs: Fix for Mists (with Raid Frame Auras)
 
