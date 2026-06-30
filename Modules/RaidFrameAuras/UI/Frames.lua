@@ -1,4 +1,4 @@
-local _, ns = ...
+local addonName, ns = ...
 local l = ns.I18N;
 
 -- * avoid conflict override
@@ -20,23 +20,8 @@ local ICON_DRAW_LEVEL = 0
 local BORDER_DRAW_LAYER = "BACKGROUND"
 local BORDER_DRAW_LEVEL = -1
 
-local function SafeNumber(value, fallback)
-    if Util.AsSafeNumber then
-        return Util.AsSafeNumber(value, fallback)
-    end
-    if Util.IsSecretValue and Util.IsSecretValue(value) then
-        return fallback
-    end
-    value = tonumber(value)
-    if not value or value ~= value or value == math.huge or value == -math.huge then
-        return fallback
-    end
-    return value
-end
-
 local function NumberKey(value)
-    value = SafeNumber(value, 0) or 0
-    return tostring(math.floor(value * 100 + 0.5))
+    return tostring(math.floor((tonumber(value) or 0) * 100 + 0.5))
 end
 
 local function ConfigureAuraIconMouse(icon)
@@ -305,13 +290,16 @@ local function SafeSetCooldown(cooldown, auraData, unit)
         end
     end
 
-    local dur = SafeNumber(auraData.duration)
-    local exp = SafeNumber(auraData.expirationTime)
-    if dur and exp and dur > 0 and exp > 0 then
+    local dur = auraData.duration
+    local exp = auraData.expirationTime
+    if Util.IsSecretValue(dur) or Util.IsSecretValue(exp) then
+        return
+    end
+    if dur and exp and dur > 0 then
         if cooldown.SetCooldownFromExpirationTime then
-            pcall(cooldown.SetCooldownFromExpirationTime, cooldown, exp, dur)
+            cooldown:SetCooldownFromExpirationTime(exp, dur)
         elseif cooldown.SetCooldown then
-            pcall(cooldown.SetCooldown, cooldown, exp - dur, dur)
+            cooldown:SetCooldown(exp - dur, dur)
         end
     end
 end
@@ -719,7 +707,10 @@ local function EnsureDebuffBorderCurve(db)
 end
 
 local function GetNumericStackText(applications, stackMinimum)
-    local value = SafeNumber(applications)
+    if Util.IsSecretValue(applications) then
+        return nil, false
+    end
+    local value = tonumber(applications)
     if value and value >= stackMinimum then
         return value, true
     end
@@ -740,7 +731,7 @@ local function GetAuraStackText(icon, unit, auraData, options)
         return cachedText, true
     end
 
-    if C_UnitAuras and C_UnitAuras.GetAuraApplicationDisplayCount and unit and auraData.auraInstanceID then
+    if C_UnitAuras.GetAuraApplicationDisplayCount and unit and auraData.auraInstanceID then
         Util.PerfCount("LiveAuraCall")
         Util.PerfCount("IconPaintLiveStack")
         local ok, stackText = pcall(C_UnitAuras.GetAuraApplicationDisplayCount, unit, auraData.auraInstanceID, stackMinimum, 99)
@@ -762,15 +753,19 @@ local function GetAuraExpirationState(unit, auraData, options)
         return hasExpiration, hasExpiration
     end
 
-    local duration = SafeNumber(auraData and auraData.duration)
-    local expiration = SafeNumber(auraData and auraData.expirationTime)
-    if duration ~= nil and expiration ~= nil then
-        local hasExpiration = duration > 0 and expiration > 0
-        return hasExpiration, hasExpiration
+    local duration = auraData and auraData.duration
+    local expiration = auraData and auraData.expirationTime
+    if not Util.IsSecretValue(duration) and not Util.IsSecretValue(expiration) then
+        duration = tonumber(duration)
+        expiration = tonumber(expiration)
+        if duration ~= nil and expiration ~= nil then
+            local hasExpiration = duration > 0 and expiration > 0
+            return hasExpiration, hasExpiration
+        end
     end
 
     if options.useLiveCooldown ~= false and unit and auraData and auraData.auraInstanceID then
-        if C_UnitAuras and C_UnitAuras.DoesAuraHaveExpirationTime then
+        if C_UnitAuras.DoesAuraHaveExpirationTime then
             Util.PerfCount("LiveAuraCall")
             Util.PerfCount("IconPaintLiveExpiration")
             local ok, hasExpiration = pcall(C_UnitAuras.DoesAuraHaveExpirationTime, unit, auraData.auraInstanceID)
@@ -806,8 +801,15 @@ local AuraTimer_OnUpdate
 local function IconHasSafeCachedDuration(icon)
     if not icon then return false end
 
-    local duration = SafeNumber(icon.auraDuration)
-    local expiration = SafeNumber(icon.expirationTime)
+    local duration = icon.auraDuration
+    local expiration = icon.expirationTime
+
+    if Util.IsSecretValue(duration) or Util.IsSecretValue(expiration) then
+        return false
+    end
+
+    duration = tonumber(duration)
+    expiration = tonumber(expiration)
 
     return duration ~= nil and expiration ~= nil and duration > 0 and expiration > 0
 end
@@ -962,22 +964,13 @@ local function ApplyAuraIconVisuals(frame, icon, unit, auraType, auraData, optio
             r, g, b = Util.ReadColor(options.borderColor, 0, 0, 0, 1)
             icon.border:SetColorTexture(r, g, b, 1)
         elseif auraType == "DEBUFF" and not options.unitDeadOrOffline then
-            if db.debuffBorderColorByType ~= false and C_UnitAuras and C_UnitAuras.GetAuraDispelTypeColor and unit and id then
+            if db.debuffBorderColorByType ~= false and C_UnitAuras.GetAuraDispelTypeColor and unit and id then
                 local curve = EnsureDebuffBorderCurve(db)
                 Util.PerfCount("LiveAuraCall")
-                local ok, borderColor = false, nil
-                if curve then
-                    ok, borderColor = pcall(C_UnitAuras.GetAuraDispelTypeColor, unit, id, curve)
-                end
-                if ok and borderColor and borderColor.GetRGB then
-                    local rgbOk
-                    rgbOk, r, g, b = pcall(borderColor.GetRGB, borderColor)
-                    if rgbOk then
-                        icon.border:SetColorTexture(r, g, b, 1)
-                    else
-                        local c = db.debuffBorderColorNone or DEFAULTS.debuffBorderColorNone
-                        icon.border:SetColorTexture(c.r, c.g, c.b, 1)
-                    end
+                local borderColor = curve and C_UnitAuras.GetAuraDispelTypeColor(unit, id, curve)
+                if borderColor and borderColor.GetRGB then
+                    r, g, b = borderColor:GetRGB()
+                    icon.border:SetColorTexture(r, g, b, 1)
                 else
                     local c = db.debuffBorderColorNone or DEFAULTS.debuffBorderColorNone
                     icon.border:SetColorTexture(c.r, c.g, c.b, 1)
@@ -1216,8 +1209,13 @@ end
 
 local function GetIconRemainingDuration(icon)
     if not icon or not GetTime then return nil end
-    local duration = SafeNumber(icon.auraDuration)
-    local expiration = SafeNumber(icon.expirationTime)
+    local duration = icon.auraDuration
+    local expiration = icon.expirationTime
+    if Util.IsSecretValue(duration) or Util.IsSecretValue(expiration) then
+        return nil
+    end
+    duration = tonumber(duration)
+    expiration = tonumber(expiration)
     if not duration or not expiration or duration <= 0 or expiration <= 0 then
         return nil
     end

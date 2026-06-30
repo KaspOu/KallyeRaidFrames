@@ -1,9 +1,10 @@
-local _, ns = ...
+local addonName, ns = ...
 local l = ns.I18N;
 
 -- * avoid conflict override
 if ns.CONFLICT then return; end
 -- ! Replace enabled = false
+-- ! Keep all FIXME:RFA (Core, Config/Defaults)
 
 local DEFAULTS = {
     dbVersion = ns.DB_VERSION or 1403,

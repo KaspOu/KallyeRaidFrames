@@ -1,9 +1,8 @@
-local _, ns = ...
+local addonName, ns = ...
 local l = ns.I18N;
 
 -- * avoid conflict override
 if ns.CONFLICT then return; end
-local addonName, ns = ...
 
 local RaidFrameAuras = ns.RaidFrameAuras
 if not RaidFrameAuras then return end
@@ -24,10 +23,6 @@ local LONG_BUFF_LONG_DURATION = "long-duration"
 local LONG_BUFF_NO_DURATION = "no-duration"
 local Unpack = unpack
 local NoAuraFilters = {}
-
-local function Pack(...)
-    return { n = select("#", ...), ... }
-end
 
 local LongBuffSpellIDExceptions = {
     [974] = true, -- Earth Shield
@@ -144,33 +139,6 @@ local function GetSafeAuraSpellID(auraData)
     return spellID
 end
 
-local function GetSafeAuraNumber(value)
-    if value == nil then return nil end
-    if Util.AsSafeNumber then
-        return Util.AsSafeNumber(value)
-    end
-    if Util.IsSecretValue and Util.IsSecretValue(value) then return nil end
-    value = tonumber(value)
-    if not value or value ~= value or value == math.huge or value == -math.huge then return nil end
-    return value
-end
-
-local function IsSafeAuraInstanceID(id)
-    return id ~= nil and not (Util.IsSecretValue and Util.IsSecretValue(id))
-end
-
-local function SafeGetAuraDataBySlot(unit, slot)
-    if not GetAuraDataBySlot then return nil end
-    local ok, auraData = pcall(GetAuraDataBySlot, unit, slot)
-    if ok then return auraData end
-end
-
-local function SafeGetAuraDataByAuraInstanceID(unit, id)
-    if not GetAuraDataByAuraInstanceID or not IsSafeAuraInstanceID(id) then return nil end
-    local ok, auraData = pcall(GetAuraDataByAuraInstanceID, unit, id)
-    if ok then return auraData end
-end
-
 -- Blizzard's compact raid frames always display boss-flagged debuffs, even with
 -- "only dispellable" or other restrictive filters active. Mirror that so boss
 -- mechanics (e.g. dungeon bleeds) cannot be filtered away. isBossAura is a plain
@@ -188,7 +156,15 @@ local function IsLongBuffSpellIDException(spellID)
 end
 
 local function GetSafeAuraDuration(auraData)
-    return GetSafeAuraNumber(auraData and auraData.duration)
+    local duration = auraData and auraData.duration
+    if duration == nil then return nil end
+    if Util.AsSafeNumber then
+        return Util.AsSafeNumber(duration)
+    end
+    if Util.IsSecretValue and Util.IsSecretValue(duration) then return nil end
+    duration = tonumber(duration)
+    if not duration or duration ~= duration or duration == math.huge or duration == -math.huge then return nil end
+    return duration
 end
 
 local function GetLongBuffReason(auraData, db)
@@ -593,7 +569,7 @@ local function DebugLogAuraClassification(cache, unit, auraData, kind)
             BoolText(cache.playerDispellable[id] == true),
             BoolText(cache.allDispellable[id] == true),
             BoolText(cache.crowdControls[id] == true),
-            DebugValueText(auraData.dispelName, "none")
+            tostring(auraData.dispelName or "none")
         )
     end
 
@@ -664,8 +640,7 @@ local function ClassifyAura(cache, unit, auraData, kind, buffFilters, debuffFilt
         cache.categoryScales[id] = categoryScale and categoryScale ~= 1 and categoryScale or nil
         DebugLogAuraClassification(cache, unit, auraData, kind)
     else
-        local dispelName = auraData.dispelName
-        local allDispellable = dispelName ~= nil and not (Util.IsSecretValue and Util.IsSecretValue(dispelName))
+        local allDispellable = auraData.dispelName ~= nil
         if allDispellable then
             cache.allDispellable[id] = true
         end
@@ -720,24 +695,27 @@ local function SetAuraOrder(cache, id, order)
 end
 
 local function GetAuraExpirationForSort(auraData)
-    local exp = GetSafeAuraNumber(auraData and auraData.expirationTime)
-    return exp and exp > 0 and exp or math.huge
+    local ok, result = pcall(function()
+        local exp = tonumber(auraData and auraData.expirationTime) or 0
+        return exp > 0 and exp or math.huge
+    end)
+    return ok and result or math.huge
 end
 
 local function GetAuraAppliedTimeForSort(auraData)
-    local exp = GetSafeAuraNumber(auraData and auraData.expirationTime)
-    local duration = GetSafeAuraNumber(auraData and auraData.duration)
-    if exp and duration and exp > 0 and duration > 0 then
-        return exp - duration
-    end
-    return nil
+    local ok, result = pcall(function()
+        local exp = tonumber(auraData and auraData.expirationTime) or 0
+        local duration = tonumber(auraData and auraData.duration) or 0
+        if exp > 0 and duration > 0 then
+            return exp - duration
+        end
+    end)
+    return ok and result or nil
 end
 
 local function GetAuraNameForSort(auraData)
-    local name = auraData and auraData.name
-    if name == nil or (Util.IsSecretValue and Util.IsSecretValue(name)) then return "" end
     local ok, result = pcall(function()
-        return tostring(name)
+        return tostring(auraData and auraData.name or "")
     end)
     return ok and result or ""
 end
@@ -883,7 +861,7 @@ local function AddScannedAuraData(
     debuffExclusionFilters,
     auraData
 )
-    if auraData and IsSafeAuraInstanceID(auraData.auraInstanceID) then
+    if auraData and auraData.auraInstanceID then
         auraTable[auraData.auraInstanceID] = auraData
         SetAuraOrder(cache, auraData.auraInstanceID)
         ClassifyAura(
@@ -926,7 +904,7 @@ local function ProcessAuraSlots(
     for i = 1, select("#", ...) do
         local slot = select(i, ...)
         Util.PerfCount("LiveAuraCall")
-        local auraData = SafeGetAuraDataBySlot(unit, slot)
+        local auraData = GetAuraDataBySlot(unit, slot)
         AddScannedAuraData(
             cache,
             unit,
@@ -968,7 +946,7 @@ local function AddAuraDataFromDelta(
     debuffExclusionFilters
 )
     local id = auraData and auraData.auraInstanceID
-    if not IsSafeAuraInstanceID(id) or not IsAuraFilteredOut then return false end
+    if not id or not IsAuraFilteredOut then return false end
 
     if scanBuffs and AuraPassesFilterStrict(unit, id, buffScanFilter) then
         cache.buffsByID[id] = auraData
@@ -1009,10 +987,6 @@ local function ProcessAuraSlotPages(
     local continuationToken
     repeat
         Util.PerfCount("LiveAuraCall")
-        local results = Pack(pcall(GetAuraSlots, unit, scanFilter, nil, continuationToken))
-        if not results[1] then
-            return false
-        end
         continuationToken = ProcessAuraSlots(
             cache,
             unit,
@@ -1028,10 +1002,9 @@ local function ProcessAuraSlotPages(
             crowdControlFilter,
             buffExclusionFilters,
             debuffExclusionFilters,
-            Unpack(results, 2, results.n)
+            GetAuraSlots(unit, scanFilter, nil, continuationToken)
         )
     until not continuationToken
-    return true
 end
 
 local function ProcessAuraList(
@@ -1053,8 +1026,7 @@ local function ProcessAuraList(
 )
     if not GetUnitAuras then return false end
     Util.PerfCount("LiveAuraCall")
-    local ok, auras = pcall(GetUnitAuras, unit, scanFilter)
-    if not ok then return false end
+    local auras = GetUnitAuras(unit, scanFilter)
     if type(auras) ~= "table" then return false end
 
     for i = 1, #auras do
@@ -1098,7 +1070,7 @@ local function ProcessAuraFullScan(
     scanFilter
 )
     if GetAuraSlots and GetAuraDataBySlot then
-        local scanned = ProcessAuraSlotPages(
+        ProcessAuraSlotPages(
             cache,
             unit,
             db,
@@ -1115,9 +1087,7 @@ local function ProcessAuraFullScan(
             debuffExclusionFilters,
             scanFilter
         )
-        if scanned then
-            return true
-        end
+        return true
     end
 
     return ProcessAuraList(
@@ -1169,10 +1139,9 @@ function RaidFrameAuras:ScanUnitFull(unit)
     local db = self.db
     local scanBuffs = db.showBuffs == true
     local scanDebuffs = db.showDebuffs == true
-    local scanOk = true
 
     if scanBuffs then
-        scanOk = ProcessAuraFullScan(
+        ProcessAuraFullScan(
             cache,
             unit,
             db,
@@ -1188,11 +1157,11 @@ function RaidFrameAuras:ScanUnitFull(unit)
             buffExclusionFilters,
             debuffExclusionFilters,
             buffScanFilter
-        ) == true and scanOk
+        )
     end
 
     if scanDebuffs then
-        scanOk = ProcessAuraFullScan(
+        ProcessAuraFullScan(
             cache,
             unit,
             db,
@@ -1208,13 +1177,7 @@ function RaidFrameAuras:ScanUnitFull(unit)
             buffExclusionFilters,
             debuffExclusionFilters,
             debuffScanFilter
-        ) == true and scanOk
-    end
-
-    if not scanOk then
-        cache.hasFullScan = false
-        Util.PerfEnd("ScanUnitFull", perf)
-        return false
+        )
     end
 
     RebuildSortedArrays(cache, db, nil, unit)
@@ -1258,7 +1221,7 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
                     changed = true
                 else
                     Util.PerfCount("LiveAuraCall")
-                    local fresh = SafeGetAuraDataByAuraInstanceID(unit, id)
+                    local fresh = GetAuraDataByAuraInstanceID and GetAuraDataByAuraInstanceID(unit, id)
                     if fresh then
                         cache.buffsByID[id] = fresh
                         UnclassifyAura(cache, id, IsPlayerInCombat())
@@ -1276,7 +1239,7 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
                     changed = true
                 else
                     Util.PerfCount("LiveAuraCall")
-                    local fresh = SafeGetAuraDataByAuraInstanceID(unit, id)
+                    local fresh = GetAuraDataByAuraInstanceID and GetAuraDataByAuraInstanceID(unit, id)
                     if fresh then
                         cache.debuffsByID[id] = fresh
                         UnclassifyAura(cache, id)
@@ -1287,7 +1250,7 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
                 end
             else
                 Util.PerfCount("LiveAuraCall")
-                local fresh = SafeGetAuraDataByAuraInstanceID(unit, id)
+                local fresh = GetAuraDataByAuraInstanceID and GetAuraDataByAuraInstanceID(unit, id)
                 if AddAuraDataFromDelta(cache, unit, fresh, scanBuffs, scanDebuffs, buffScanFilter, debuffScanFilter, buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters) then
                     changed = true
                 end

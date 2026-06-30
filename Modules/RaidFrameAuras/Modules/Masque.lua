@@ -1,9 +1,8 @@
-local _, ns = ...
+local addonName, ns = ...
 local l = ns.I18N;
 
 -- * avoid conflict override
 if ns.CONFLICT then return; end
-local addonName, ns = ...
 
 local RaidFrameAuras = ns.RaidFrameAuras
 if not RaidFrameAuras then return end
