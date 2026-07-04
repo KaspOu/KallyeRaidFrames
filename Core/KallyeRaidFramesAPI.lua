@@ -672,6 +672,7 @@ end
 ? print (tostring(checked))
 ? /run print(select(4, GetBuildInfo()))
 ? wowversion, wowbuild, wowdate, wowtocversion = GetBuildInfo()
+? secretwrap : tester les secrets hors donjon
 
 EditModeManagerFrame:IsEditModeActive()
 ]]

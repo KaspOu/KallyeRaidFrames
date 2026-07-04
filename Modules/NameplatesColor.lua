@@ -9,6 +9,7 @@ if ns.HAS_colorNameBySelection == nil then
     --? colorNameBySelection, Since BfA (7)
     ns.HAS_colorNameBySelection = ns.IS_RETAIL or (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 end
+ns.IsSecretValue = issecretvalue or function(_) return false end
 
 local DEFAULT_NAMEPLATES_TEXTURE = 137014
 
@@ -112,7 +113,10 @@ end
 --- selection color (red).
 local function getUnitColor(unit)
     local guid = UnitGUID(unit)
-    local isPlayer = UnitIsPlayer(unit) or (guid and strsub(guid, 1, 6) == "Player")
+    local isPlayer = UnitIsPlayer(unit)
+    if not isPlayer and not ns.IsSecretValue(guid) then
+        isPlayer = (guid and strsub(guid, 1, 6) == "Player") or false
+    end
     if isPlayer then
         local _, class = UnitClass(unit)
         return class and getClassColors()[class] or nil
