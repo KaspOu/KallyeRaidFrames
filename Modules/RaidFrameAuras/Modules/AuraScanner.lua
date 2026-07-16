@@ -25,22 +25,45 @@ local Unpack = unpack
 local NoAuraFilters = {}
 
 local LongBuffSpellIDExceptions = {
+    -- Restoration Shaman
     [974] = true, -- Earth Shield
     [383648] = true, -- Earth Shield
+    [61295] = true, -- Riptide
 
+    -- Holy Paladin
     [53563] = true, -- Beacon of Light
     [156910] = true, -- Beacon of Faith
     [1244893] = true, -- Beacon of the Savior
 
+    -- Preservation Evoker
     [360827] = true, -- Blistering Scales
+    [364343] = true, -- Echo
+    [366155] = true, -- Reversion
+    [367364] = true, -- Reversion (Echo copy)
+    [355941] = true, -- Dream Breath
+    [373267] = true, -- Lifebind
 
-    -- Resto Druid HoTs can be cast exactly as combat starts. In that pull
-    -- transition, WoW can briefly expose incomplete duration data; never let
-    -- those short healing buffs become cached as long-buff spell IDs.
+    -- Short healer effects can be present just before combat starts. During
+    -- that transition, WoW can briefly expose incomplete duration data; never
+    -- let these short effects become cached as long-buff spell IDs.
+    -- Restoration Druid
     [774] = true, -- Rejuvenation
     [155777] = true, -- Germination
     [33763] = true, -- Lifebloom
     [8936] = true, -- Regrowth
+    [102351] = true, -- Cenarion Ward
+    [102352] = true, -- Cenarion Ward (periodic heal)
+    [48438] = true, -- Wild Growth
+    [325748] = true, -- Adaptive Swarm
+
+    -- Mistweaver Monk
+    [448430] = true, -- Renewing Mist (applied aura)
+    [227345] = true, -- Enveloping Mist (applied aura)
+
+    -- Priest
+    [139] = true, -- Renew
+    [41635] = true, -- Prayer of Mending
+    [194384] = true, -- Atonement
 }
 
 local function GetUnitCacheGUID(unit)
