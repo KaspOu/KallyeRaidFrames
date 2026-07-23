@@ -1,3 +1,7 @@
+v12.0.703
+- Buffs & Debuffs: Fix for Vanilla / BC (with Raid Frame Auras)
+- *Raid Frame Auras* updated (many fixes)
+
 v12.0.702
 - Nameplates colors fixed
 - Buffs & Debuffs: *Raid Frame Auras* updated (many fixes)

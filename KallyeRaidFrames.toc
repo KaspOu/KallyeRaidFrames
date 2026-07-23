@@ -1,4 +1,4 @@
-## Interface: 120005, 120007, 50504, 38000, 20505, 11508
+## Interface: 120005, 120007, 50504, 38000, 20506, 11509
 ## Title: |cff00ff00Kallye|r RaidFrames
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid. Buffs / debuffs size, max limit...
@@ -12,7 +12,7 @@
 ## Notes-ruRU: Подсвечивает рейдовые рамки при низком уровне здоровья, всегда показывает рейд. Размер баффов/дебаффов, максимальное количество...
 ## Notes-zhCN: 突出显示低生命值团队框架，始终显示团队。增益/减益效果：大小，最大数量...
 ## Notes-zhTW: 突出显示低生命值團隊框架，始終顯示團隊。增益/减益效果：大小，最大數量...
-## Version: 12.0.702
+## Version: 12.0.703
 ## Author: Kallye of Elune (EU)
 ## LoadSavedVariablesFirst: 1
 ## SavedVariables: KallyeRaidFramesOptions
@@ -39,7 +39,7 @@ Core\localization.ru.lua [AllowLoadTextLocale ruRU]
 Core\localization.zh.lua [AllowLoadTextLocale zhCN, zhTW]
 Libs\LibEditModeOverride-1.0\LibStub\LibStub.lua
 Libs\LibEditModeOverride-1.0\LibEditModeOverride.lua
-Modules\RaidFrameAuras\RaidFrameAuras.xml [AllowLoadGameType mainline mists]
+Modules\RaidFrameAuras\RaidFrameAuras.xml
 Shared\WidgetsKRF.xml
 Core\KallyeRaidFramesAPI.lua
 Modules\modules.xml

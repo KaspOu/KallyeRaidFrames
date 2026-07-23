@@ -14,15 +14,24 @@ local RawAuraFilters = AuraUtil and AuraUtil.AuraFilters or {}
 local GetAuraSlots = C_UnitAuras and C_UnitAuras.GetAuraSlots
 local GetAuraDataBySlot = C_UnitAuras and C_UnitAuras.GetAuraDataBySlot
 local GetUnitAuras = C_UnitAuras and C_UnitAuras.GetUnitAuras
+local GetUnitAuraInstanceIDs = C_UnitAuras and C_UnitAuras.GetUnitAuraInstanceIDs
 local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
 local IsAuraFilteredOut = C_UnitAuras and C_UnitAuras.IsAuraFilteredOutByInstanceID
 local CreateAuraFilterString = AuraUtil and AuraUtil.CreateFilterString
+local UnitAuraSortRule = Enum and Enum.UnitAuraSortRule
+local UnitAuraSortDirection = Enum and Enum.UnitAuraSortDirection
+local NAME_ONLY_SORT_RULE = UnitAuraSortRule and UnitAuraSortRule.NameOnly
+local NORMAL_SORT_DIRECTION = UnitAuraSortDirection and UnitAuraSortDirection.Normal
+local REVERSE_SORT_DIRECTION = UnitAuraSortDirection and UnitAuraSortDirection.Reverse
 local AURA_FILTER_SEPARATOR = "|"
 local LONG_BUFF_DURATION_THRESHOLD = 15 * 60
+local LATEST_ORDER_INCREMENT = 0.000001
 local LONG_BUFF_LONG_DURATION = "long-duration"
 local LONG_BUFF_NO_DURATION = "no-duration"
 local Unpack = unpack
+local GetTime = GetTime
 local NoAuraFilters = {}
+local NameOrderByID = {}
 
 local LongBuffSpellIDExceptions = {
     -- Restoration Shaman
@@ -278,7 +287,10 @@ local function EnsureAuraCacheEntry(unit)
         longBuffs = {},
         priorityLongBuffExemptions = {},
         orderByID = {},
+        latestOrderByID = {},
         nextOrder = 0,
+        nextLatestOrder = 0,
+        nextUnknownLatestOrder = 0,
         hasFullScan = false,
         generation = 0,
         buffOrderDirty = false,
@@ -718,29 +730,58 @@ local function SetAuraOrder(cache, id, order)
 end
 
 local function GetAuraExpirationForSort(auraData)
-    local ok, result = pcall(function()
-        local exp = tonumber(auraData and auraData.expirationTime) or 0
-        return exp > 0 and exp or math.huge
-    end)
-    return ok and result or math.huge
+    local exp = Util.AsSafeNumber(auraData and auraData.expirationTime, 0) or 0
+    return exp > 0 and exp or math.huge
 end
 
 local function GetAuraAppliedTimeForSort(auraData)
-    local ok, result = pcall(function()
-        local exp = tonumber(auraData and auraData.expirationTime) or 0
-        local duration = tonumber(auraData and auraData.duration) or 0
-        if exp > 0 and duration > 0 then
-            return exp - duration
+    local exp = Util.AsSafeNumber(auraData and auraData.expirationTime, 0) or 0
+    local duration = Util.AsSafeNumber(auraData and auraData.duration, 0) or 0
+    if exp > 0 and duration > 0 then
+        return exp - duration
+    end
+    return nil
+end
+
+-- 12.0.7 does not expose a native "latest applied" aura sort. Keep exact
+-- applied timestamps when they are readable out of combat, then use the time
+-- at which UNIT_AURA reports an add/update as a combat-safe best-effort rank.
+local function SetLatestAuraOrder(cache, id, auraData, isDelta)
+    if Util.IsSecretValue(id) or id == nil then return end
+
+    cache.latestOrderByID = cache.latestOrderByID or {}
+    local order
+    if not IsPlayerInCombat() then
+        order = GetAuraAppliedTimeForSort(auraData)
+    end
+
+    if order == nil then
+        if not isDelta and cache.latestOrderByID[id] ~= nil then return end
+
+        if isDelta then
+            local nextOrder = cache.nextLatestOrder or 0
+            if type(GetTime) == "function" then
+                order = Util.AsSafeNumber(GetTime())
+            end
+            if order == nil or order <= nextOrder then
+                order = nextOrder + LATEST_ORDER_INCREMENT
+            end
+        else
+            cache.nextUnknownLatestOrder = (cache.nextUnknownLatestOrder or 0) + 1
+            order = -1 / cache.nextUnknownLatestOrder
         end
-    end)
-    return ok and result or nil
+    end
+
+    cache.latestOrderByID[id] = order
+    if order > (cache.nextLatestOrder or 0) then
+        cache.nextLatestOrder = order
+    end
 end
 
 local function GetAuraNameForSort(auraData)
-    local ok, result = pcall(function()
-        return tostring(auraData and auraData.name or "")
-    end)
-    return ok and result or ""
+    local name = auraData and auraData.name
+    if Util.IsSecretValue(name) then return nil end
+    return type(name) == "string" and name or nil
 end
 
 local function CompareSortValues(aValue, bValue, reverse)
@@ -757,10 +798,67 @@ local function SortByTimeRemaining(a, b, reverse)
     return CompareSortValues(aExp, bExp, reverse)
 end
 
-local function SortByName(a, b, reverse)
+local function SortByReadableName(a, b, reverse)
     local aName = GetAuraNameForSort(a)
     local bName = GetAuraNameForSort(b)
+    local aKnown = aName ~= nil
+    local bKnown = bName ~= nil
+    if aKnown ~= bKnown then
+        return aKnown
+    end
+    if not aKnown then return nil end
     return CompareSortValues(aName, bName, reverse)
+end
+
+-- Aura names can be secret during 12.x combat restrictions. Ask Blizzard to
+-- perform the name sort, then compare only the returned aura-instance ranks.
+local function RefreshNativeNameOrder(unit, scanFilter, reverse)
+    Util.WipeTable(NameOrderByID)
+    if not GetUnitAuraInstanceIDs or NAME_ONLY_SORT_RULE == nil then return false end
+
+    local sortDirection = reverse and REVERSE_SORT_DIRECTION or NORMAL_SORT_DIRECTION
+    if sortDirection == nil then return false end
+
+    Util.PerfCount("LiveAuraCall")
+    local ok, auraInstanceIDs = pcall(
+        GetUnitAuraInstanceIDs,
+        unit,
+        scanFilter,
+        nil,
+        NAME_ONLY_SORT_RULE,
+        sortDirection
+    )
+    if not ok or type(auraInstanceIDs) ~= "table" or Util.IsSecretValue(auraInstanceIDs) then
+        return false
+    end
+
+    local ranked = pcall(function()
+        for i = 1, #auraInstanceIDs do
+            local id = auraInstanceIDs[i]
+            if not Util.IsSecretValue(id) and id ~= nil then
+                NameOrderByID[id] = i
+            end
+        end
+    end)
+    if not ranked then
+        Util.WipeTable(NameOrderByID)
+        return false
+    end
+    return true
+end
+
+local function SortByNativeNameOrder(a, b)
+    local aID = a and a.auraInstanceID
+    local bID = b and b.auraInstanceID
+    local aRank = not Util.IsSecretValue(aID) and aID ~= nil and NameOrderByID[aID] or nil
+    local bRank = not Util.IsSecretValue(bID) and bID ~= nil and NameOrderByID[bID] or nil
+    local aKnown = aRank ~= nil
+    local bKnown = bRank ~= nil
+    if aKnown ~= bKnown then
+        return aKnown
+    end
+    if not aKnown then return nil end
+    return CompareSortValues(aRank, bRank, false)
 end
 
 local function GetAuraScaleForSort(cache, auraData)
@@ -782,23 +880,20 @@ local function SortByDefaultOrder(cache, a, b, reverse)
 end
 
 local function SortByLatestApplied(cache, a, b, reverse)
-    local aApplied = GetAuraAppliedTimeForSort(a)
-    local bApplied = GetAuraAppliedTimeForSort(b)
-    local aKnown = aApplied ~= nil
-    local bKnown = bApplied ~= nil
-    if aKnown ~= bKnown then
-        if reverse then
-            return not aKnown
-        end
-        return aKnown
-    end
-    if aApplied and bApplied and aApplied ~= bApplied then
-        return CompareSortValues(aApplied, bApplied, not reverse)
+    local latestOrderByID = cache.latestOrderByID
+    local aID = a and a.auraInstanceID
+    local bID = b and b.auraInstanceID
+    local aApplied = latestOrderByID and not Util.IsSecretValue(aID) and aID ~= nil and latestOrderByID[aID] or nil
+    local bApplied = latestOrderByID and not Util.IsSecretValue(bID) and bID ~= nil and latestOrderByID[bID] or nil
+    local missingOrder = -math.huge
+    local sorted = CompareSortValues(aApplied or missingOrder, bApplied or missingOrder, not reverse)
+    if sorted ~= nil then
+        return sorted
     end
     return SortByDefaultOrder(cache, a, b, not reverse)
 end
 
-local function SortAuras(cache, auraList, sortOrder, bigIconsFirst, reverse)
+local function SortAuras(cache, auraList, sortOrder, bigIconsFirst, reverse, nativeNameOrderAvailable)
     if #auraList <= 1 then return end
     table.sort(auraList, function(a, b)
         if bigIconsFirst then
@@ -814,7 +909,11 @@ local function SortAuras(cache, auraList, sortOrder, bigIconsFirst, reverse)
         elseif sortOrder == "LATEST" then
             sorted = SortByLatestApplied(cache, a, b, reverse)
         elseif sortOrder == "NAME" then
-            sorted = SortByName(a, b, reverse)
+            if nativeNameOrderAvailable then
+                sorted = SortByNativeNameOrder(a, b)
+            else
+                sorted = SortByReadableName(a, b, reverse)
+            end
         end
         if sorted ~= nil then
             return sorted
@@ -830,7 +929,15 @@ local function RebuildSortedBuffArray(cache, db, unit)
             State.sortScratchBuffs[#State.sortScratchBuffs + 1] = auraData
         end
     end
-    SortAuras(cache, State.sortScratchBuffs, db.directBuffSortOrder, db.directBuffSortBigIconsFirst == true, db.directBuffSortReverse == true)
+    local nativeNameOrderAvailable = false
+    if #State.sortScratchBuffs > 1 and db.directBuffSortOrder == "NAME" then
+        nativeNameOrderAvailable = RefreshNativeNameOrder(
+            unit,
+            BuildHelpfulScanFilter(db),
+            db.directBuffSortReverse == true
+        )
+    end
+    SortAuras(cache, State.sortScratchBuffs, db.directBuffSortOrder, db.directBuffSortBigIconsFirst == true, db.directBuffSortReverse == true, nativeNameOrderAvailable)
     Util.WipeTable(cache.buffData)
     for i = 1, #State.sortScratchBuffs do
         cache.buffData[i] = State.sortScratchBuffs[i]
@@ -838,14 +945,22 @@ local function RebuildSortedBuffArray(cache, db, unit)
     cache.buffOrderDirty = false
 end
 
-local function RebuildSortedDebuffArray(cache, db)
+local function RebuildSortedDebuffArray(cache, db, unit)
     Util.WipeTable(State.sortScratchDebuffs)
     for id, auraData in pairs(cache.debuffsByID) do
         if cache.debuffs[id] then
             State.sortScratchDebuffs[#State.sortScratchDebuffs + 1] = auraData
         end
     end
-    SortAuras(cache, State.sortScratchDebuffs, db.directDebuffSortOrder, db.directDebuffSortBigIconsFirst == true, db.directDebuffSortReverse == true)
+    local nativeNameOrderAvailable = false
+    if #State.sortScratchDebuffs > 1 and db.directDebuffSortOrder == "NAME" then
+        nativeNameOrderAvailable = RefreshNativeNameOrder(
+            unit,
+            BuildHarmfulScanFilter(db),
+            db.directDebuffSortReverse == true
+        )
+    end
+    SortAuras(cache, State.sortScratchDebuffs, db.directDebuffSortOrder, db.directDebuffSortBigIconsFirst == true, db.directDebuffSortReverse == true, nativeNameOrderAvailable)
     Util.WipeTable(cache.debuffData)
     for i = 1, #State.sortScratchDebuffs do
         cache.debuffData[i] = State.sortScratchDebuffs[i]
@@ -859,12 +974,12 @@ local function RebuildSortedArrays(cache, db, auraType, unit)
         return
     end
     if auraType == "DEBUFF" then
-        RebuildSortedDebuffArray(cache, db)
+        RebuildSortedDebuffArray(cache, db, unit)
         return
     end
 
     RebuildSortedBuffArray(cache, db, unit)
-    RebuildSortedDebuffArray(cache, db)
+    RebuildSortedDebuffArray(cache, db, unit)
 end
 
 local function AddScannedAuraData(
@@ -887,6 +1002,9 @@ local function AddScannedAuraData(
     if auraData and auraData.auraInstanceID then
         auraTable[auraData.auraInstanceID] = auraData
         SetAuraOrder(cache, auraData.auraInstanceID)
+        local newlyObservedInCombat = cache.preserveLatestOrderDuringScan == true
+            and cache.latestOrderByID[auraData.auraInstanceID] == nil
+        SetLatestAuraOrder(cache, auraData.auraInstanceID, auraData, newlyObservedInCombat)
         ClassifyAura(
             cache,
             unit,
@@ -974,6 +1092,7 @@ local function AddAuraDataFromDelta(
     if scanBuffs and AuraPassesFilterStrict(unit, id, buffScanFilter) then
         cache.buffsByID[id] = auraData
         SetAuraOrder(cache, id)
+        SetLatestAuraOrder(cache, id, auraData, true)
         ClassifyAura(cache, unit, auraData, "buff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
         cache.buffOrderDirty = true
         return true
@@ -982,6 +1101,7 @@ local function AddAuraDataFromDelta(
     if scanDebuffs and AuraPassesFilterStrict(unit, id, debuffScanFilter) then
         cache.debuffsByID[id] = auraData
         SetAuraOrder(cache, id)
+        SetLatestAuraOrder(cache, id, auraData, true)
         ClassifyAura(cache, unit, auraData, "debuff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
         cache.debuffOrderDirty = true
         return true
@@ -1139,7 +1259,13 @@ function RaidFrameAuras:ScanUnitFull(unit)
     Util.PerfCount("ScanUnitFull")
     local perf = Util.PerfBegin("ScanUnitFull")
     local cache = EnsureAuraCacheEntry(unit)
-    cache.unitGUID = GetUnitCacheGUID(unit) or false
+    local currentGUID = GetUnitCacheGUID(unit)
+    local preserveLatestOrder = IsPlayerInCombat()
+        and currentGUID ~= nil
+        and cache.unitGUID ~= nil
+        and cache.unitGUID ~= false
+        and cache.unitGUID == currentGUID
+    cache.unitGUID = currentGUID or false
     Util.WipeTable(cache.buffsByID)
     Util.WipeTable(cache.debuffsByID)
     if not IsPlayerInCombat() then
@@ -1157,6 +1283,13 @@ function RaidFrameAuras:ScanUnitFull(unit)
     Util.WipeTable(cache.categoryScales)
     Util.WipeTable(cache.orderByID)
     cache.nextOrder = 0
+    cache.latestOrderByID = cache.latestOrderByID or {}
+    if not preserveLatestOrder then
+        Util.WipeTable(cache.latestOrderByID)
+        cache.nextLatestOrder = 0
+        cache.nextUnknownLatestOrder = 0
+    end
+    cache.preserveLatestOrderDuringScan = preserveLatestOrder or nil
 
     local buffFilters, debuffFilters, defFilters, dispelFilter, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffScanFilter, debuffScanFilter, buffExclusionFilters, debuffExclusionFilters = ResolveFilters()
     local db = self.db
@@ -1202,6 +1335,13 @@ function RaidFrameAuras:ScanUnitFull(unit)
             debuffScanFilter
         )
     end
+    cache.preserveLatestOrderDuringScan = nil
+
+    for id in pairs(cache.latestOrderByID) do
+        if cache.buffsByID[id] == nil and cache.debuffsByID[id] == nil then
+            cache.latestOrderByID[id] = nil
+        end
+    end
 
     RebuildSortedArrays(cache, db, nil, unit)
     cache.hasFullScan = true
@@ -1213,6 +1353,7 @@ end
 function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
     if not self:IsTrackedUnit(unit) or not updateInfo then return false end
     local cache = EnsureAuraCacheEntry(unit)
+    cache.latestOrderByID = cache.latestOrderByID or {}
     if not cache.hasFullScan then return false end
     if self:IsAuraCacheStale(unit, cache) then
         State.auraCache[unit] = nil
@@ -1239,6 +1380,7 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
                 if not scanBuffs then
                     cache.buffsByID[id] = nil
                     cache.orderByID[id] = nil
+                    cache.latestOrderByID[id] = nil
                     UnclassifyAura(cache, id)
                     cache.buffOrderDirty = true
                     changed = true
@@ -1247,6 +1389,7 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
                     local fresh = GetAuraDataByAuraInstanceID and GetAuraDataByAuraInstanceID(unit, id)
                     if fresh then
                         cache.buffsByID[id] = fresh
+                        SetLatestAuraOrder(cache, id, fresh, true)
                         UnclassifyAura(cache, id, IsPlayerInCombat())
                         ClassifyAura(cache, unit, fresh, "buff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
                         cache.buffOrderDirty = true
@@ -1257,6 +1400,7 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
                 if not scanDebuffs then
                     cache.debuffsByID[id] = nil
                     cache.orderByID[id] = nil
+                    cache.latestOrderByID[id] = nil
                     UnclassifyAura(cache, id)
                     cache.debuffOrderDirty = true
                     changed = true
@@ -1265,6 +1409,7 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
                     local fresh = GetAuraDataByAuraInstanceID and GetAuraDataByAuraInstanceID(unit, id)
                     if fresh then
                         cache.debuffsByID[id] = fresh
+                        SetLatestAuraOrder(cache, id, fresh, true)
                         UnclassifyAura(cache, id)
                         ClassifyAura(cache, unit, fresh, "debuff", buffFilters, debuffFilters, defFilters, dispelFilter, db, buffCategoryScaleFilters, debuffCategoryScaleFilters, crowdControlFilter, buffExclusionFilters, debuffExclusionFilters)
                         cache.debuffOrderDirty = true
@@ -1286,12 +1431,14 @@ function RaidFrameAuras:ApplyAuraDelta(unit, updateInfo)
             if cache.buffsByID[id] then
                 cache.buffsByID[id] = nil
                 cache.orderByID[id] = nil
+                cache.latestOrderByID[id] = nil
                 UnclassifyAura(cache, id)
                 cache.buffOrderDirty = true
                 changed = true
             elseif cache.debuffsByID[id] then
                 cache.debuffsByID[id] = nil
                 cache.orderByID[id] = nil
+                cache.latestOrderByID[id] = nil
                 UnclassifyAura(cache, id)
                 cache.debuffOrderDirty = true
                 changed = true
