@@ -18,14 +18,484 @@ local DEFAULT_MAXBUFFS = ns.DEFAULT_MAXBUFFS or 3
 local DEFAULT_MAXDEBUFFS = DEFAULT_MAXBUFFS
 local DEFAULT_BUFFS_PER_LINE = 3
 
+local DEFAULT_BUFF_SIZE = 11
+local DEFAULT_DEBUFF_SIZE = 11
+local MAX_TRACKED_AURAS = 40
+local BLIZZARD_BUFF_BASE_OFFSET_X = -3
+local BLIZZARD_BUFF_BASE_OFFSET_Y = 2
+local BLIZZARD_DEBUFF_BASE_OFFSET_X = 3
+local BLIZZARD_DEBUFF_BASE_OFFSET_Y = 2
+local BLIZZARD_POWERBAR_OFFSET_Y = 8
+local BLIZZARD_ELEMENT_SPACING = 0
+local BLIZZARD_LINE_SPACING = 1
+
+local BLIZZARD_AURA_CVARS = {
+	"raidFramesDisplayBuffs",
+	"raidFramesDisplayDebuffs",
+}
+
+local ORIENTATION_TO_LAYOUT = {
+	LeftThenUp = {
+		lineAxis = "HORIZONTAL",
+		horizontalDirection = "BACKWARD",
+		verticalDirection = "FORWARD",
+		anchorPoint = "BOTTOMRIGHT",
+	},
+	UpThenLeft = {
+		lineAxis = "VERTICAL",
+		horizontalDirection = "BACKWARD",
+		verticalDirection = "FORWARD",
+		anchorPoint = "BOTTOMRIGHT",
+	},
+	RightThenUp = {
+		lineAxis = "HORIZONTAL",
+		horizontalDirection = "FORWARD",
+		verticalDirection = "FORWARD",
+		anchorPoint = "BOTTOMLEFT",
+	},
+	UpThenRight = {
+		lineAxis = "VERTICAL",
+		horizontalDirection = "FORWARD",
+		verticalDirection = "FORWARD",
+		anchorPoint = "BOTTOMLEFT",
+	},
+}
+
+local inCombat = InCombatLockdown()
+
+local function getEnumValue(enumTable, ...)
+	if not enumTable then return nil end
+	for i = 1, select("#", ...) do
+		local key = select(i, ...)
+		if enumTable[key] ~= nil then
+			return enumTable[key]
+		end
+	end
+	return nil
+end
+
+local function resolveFlowLayoutEnums()
+	--[[
+	AnchorUtil.FlowLayoutAxis={Vertical=1, Horizontal=0}
+	AnchorUtil.FlowDirection={Down=1, Right=1, Left=1, Up=1}
+	]]
+	local anchorEnum = AnchorUtil
+	local axisEnum = anchorEnum and anchorEnum.FlowLayoutAxis
+	local directionEnum = anchorEnum and anchorEnum.FlowDirection
+	if not axisEnum or not directionEnum then
+		return nil
+	end
+
+	return {
+		axisHorizontal = getEnumValue(axisEnum, "Horizontal", "HORIZONTAL", "X"),
+		axisVertical = getEnumValue(axisEnum, "Vertical", "VERTICAL", "Y"),
+		directionForward = getEnumValue(directionEnum, "Up", "Right", "Forward", "FORWARD", "Positive"),
+		directionBackward = getEnumValue(directionEnum, "Down", "Left", "Backward", "BACKWARD", "Negative"),
+	}
+end
+
+local function toFlowLayoutAxis(enumValues, value)
+	if not enumValues then return nil end
+	if value == "VERTICAL" then
+		return enumValues.axisVertical
+	end
+	return enumValues.axisHorizontal
+end
+
+local function toFlowLayoutDirection(enumValues, value)
+	if not enumValues then return nil end
+	if value == "BACKWARD" then
+		return enumValues.directionBackward
+	end
+	return enumValues.directionForward
+end
+
+local AuraContainer = ns.UD_AuraContainer or {
+	options = nil,
+	enabled = false,
+	hooksInstalled = false,
+	frameState = setmetatable({}, { __mode = "k" }),
+}
+
+local function IsAuraContainer_Supported()
+	return not not AuraContainerSortDirection
+end
+
+local function SafeSetCVar(name, value)
+	if not SetCVar or value == nil then return false end
+	local ok = pcall(SetCVar, name, value)
+	return ok == true
+end
+
+local function applyBlizzardAuraCVarPolicy(hide)
+	local value = hide and "0" or "1"
+	for _, cvarName in ipairs(BLIZZARD_AURA_CVARS) do
+		SafeSetCVar(cvarName, value)
+	end
+end
+
+local function scaleToSize(baseSize, scale)
+	scale = tonumber(scale) or 1
+	return math.max(4, math.min(80, math.floor(baseSize * scale + 0.5)))
+end
 
 local function FrameIsCompact(frame)
+	if issecretvalue(frame) or frame:IsForbidden() then
+		return true
+	end
 	local getName = frame:GetName();
 	return getName ~=nil and strsub(getName, 0, 7) == "Compact"
 end
+
+local function getFrameUnit(frame)
+	if not frame then return nil end
+	return frame.unit or frame.displayedUnit or (frame.GetAttribute and frame:GetAttribute("unit"))
+end
+
 local function FrameIsPet(frame)
-	local getName = frame:GetName();
-	return getName ~=nil and string.find(getName, "Pet") ~= nil
+	local unit = getFrameUnit(frame)
+	if not unit then return false end
+	return UnitIsMinion(unit)
+end
+
+local function FrameIsCompactNoPet(frame)
+	return FrameIsCompact(frame) and not FrameIsPet(frame)
+end
+
+local function safeCreateAuraContainer(parent)
+	local ok, container = pcall(CreateFrame, "AuraContainer", nil, parent, "CustomAuraContainerTemplate")
+	if ok and container then
+		return container
+	end
+
+	ok, container = pcall(CreateFrame, "AuraContainer", nil, parent)
+	if ok then
+		return container
+	end
+
+	return nil
+end
+
+local function getOrCreateAuraContainerState(frame)
+	local state = AuraContainer.frameState[frame]
+	if state then
+		return state
+	end
+
+	state = {
+		buffContainer = nil,
+		debuffContainer = nil,
+		hasBuffGroup = false,
+		hasDebuffGroup = false,
+		unit = nil,
+	}
+	AuraContainer.frameState[frame] = state
+	return state
+end
+
+local function clearContainerGroups(container)
+	if not container then return end
+	if type(container.ClearAuraGroups) == "function" then
+		pcall(container.ClearAuraGroups, container)
+	end
+end
+
+local function hideContainer(container)
+	if not container then return end
+	clearContainerGroups(container)
+	container:Hide()
+end
+
+local function addGroupIfNeeded(state, container, groupKey, filterString, maxCount, iconSize, isMouseEnabled, isBuff)
+	if not container or type(container.AddAuraGroup) ~= "function" then
+		return false
+	end
+
+	local hasGroup = isBuff and state.hasBuffGroup or state.hasDebuffGroup
+	if hasGroup then
+		return true
+	end
+
+	local options = {
+		maxFrameCount = math.max(0, math.min(MAX_TRACKED_AURAS, tonumber(maxCount) or 0)),
+		sortMethod = AuraContainerSortMethod.Default,
+		sortDirection = AuraContainerSortDirection.Normal,
+		initializeFrame = function(auraButton)
+			auraButton:SetSize(iconSize, iconSize)
+
+			local texture = auraButton:CreateTexture()
+			texture:SetAllPoints()
+			auraButton:SetIcon(texture)
+
+			auraButton.Cooldown = CreateFrame ("cooldown", "$parentCooldown", auraButton, "CooldownFrameTemplate")
+			local iconOffset = 0
+			-- PixelUtil.SetPoint (auraButton.Cooldown, "TOPLEFT", auraButton, "TOPLEFT", -iconOffset, iconOffset)
+			-- PixelUtil.SetPoint (auraButton.Cooldown, "TOPRIGHT", auraButton, "TOPRIGHT", iconOffset, iconOffset)
+			-- PixelUtil.SetPoint (auraButton.Cooldown, "BOTTOMLEFT", auraButton, "BOTTOMLEFT", -iconOffset, -iconOffset)
+			-- PixelUtil.SetPoint (auraButton.Cooldown, "BOTTOMRIGHT", auraButton, "BOTTOMRIGHT", iconOffset, -iconOffset)
+			auraButton.Cooldown:EnableMouse (false)
+			if auraButton.Cooldown.EnableMouseMotion then
+				auraButton.Cooldown:EnableMouseMotion (false)
+			end
+			auraButton.Cooldown:SetHideCountdownNumbers (not IS_WOW_PROJECT_MIDNIGHT)
+			auraButton.Cooldown:SetCountdownAbbrevThreshold(60)
+			auraButton.Cooldown:SetMinimumCountdownDuration(0)
+			auraButton.Cooldown:SetReverse(true)
+			auraButton:SetDurationCooldown(auraButton.Cooldown)
+
+			auraButton:EnableMouse(isMouseEnabled)
+		end,
+	}
+
+	local ok = pcall(container.AddAuraGroup, container, groupKey, filterString, options)
+	if not ok then
+		return false
+	end
+
+	if isBuff then
+		state.hasBuffGroup = true
+	else
+		state.hasDebuffGroup = true
+	end
+	return true
+end
+
+local function applyContainerFlowLayout(container, orientation, wrap)
+	if not container then
+		return false
+	end
+
+	local layout = ORIENTATION_TO_LAYOUT[orientation] or ORIENTATION_TO_LAYOUT.LeftThenUp
+	local enumValues = resolveFlowLayoutEnums()
+	if not enumValues then
+		return false
+	end
+
+	local axis = toFlowLayoutAxis(enumValues, layout.lineAxis)
+	local horizontalDirection = toFlowLayoutDirection(enumValues, layout.horizontalDirection)
+	local verticalDirection = toFlowLayoutDirection(enumValues, layout.verticalDirection)
+	if axis == nil or not horizontalDirection or not verticalDirection then
+		return false
+	end
+
+	container:SetFlowLayoutAxis(axis)
+	container:SetFlowLayoutGrowthDirection(horizontalDirection, verticalDirection)
+	container:SetFlowLayoutAnchorPoint(layout.anchorPoint)
+	container:SetFlowLayoutMaximumLineSize(math.max(1, tonumber(wrap) or 1))
+
+	return true
+end
+
+local function applyGroupLayout(container, groupKey, orientation, wrapElements, iconSize, elementSpacing, lineSpacing)
+	local layout = ORIENTATION_TO_LAYOUT[orientation] or ORIENTATION_TO_LAYOUT.LeftThenUp
+	local layoutOptions = {
+		elementWidth = iconSize,
+		elementHeight = iconSize,
+		elementSpacing = elementSpacing,
+		lineSpacing = lineSpacing,
+		layoutIndex = 1,
+	}
+	local wrap = wrapElements * (iconSize+elementSpacing)
+
+	if not applyContainerFlowLayout(container, orientation, wrap) then
+		-- Fallback for intermediate API variants.
+		layoutOptions.growthDirection = layout.horizontalDirection == "BACKWARD" and
+			(layout.lineAxis == "VERTICAL" and "UP_LEFT" or "LEFT_UP") or
+			(layout.lineAxis == "VERTICAL" and "UP_RIGHT" or "RIGHT_UP")
+		layoutOptions.wrapAfter = math.max(1, tonumber(wrap) or 1)
+	end
+
+	container:SetAuraGroupLayout(groupKey, layoutOptions)
+	return true
+	-- local ok = pcall(container.SetAuraGroupLayout, container, groupKey, layoutOptions)
+	-- return ok == true
+end
+
+local function setContainerAnchor(container, frame, relativeTo, orientation, posX, posY)
+	if not container or not frame then return end
+	local layout = ORIENTATION_TO_LAYOUT[orientation] or ORIENTATION_TO_LAYOUT.LeftThenUp
+	local anchorPoint = layout.anchorPoint or "BOTTOMRIGHT"
+	container:ClearAllPoints()
+	container:SetPoint(anchorPoint, frame, relativeTo, tonumber(posX) or 0, tonumber(posY) or 0)
+end
+
+local function AuraContainerRefreshFrame(frame)
+	if not frame or not IsAuraContainer_Supported() or not FrameIsCompactNoPet(frame) then
+		return
+	end
+
+	local state = getOrCreateAuraContainerState(frame)
+	if not AuraContainer.enabled or not AuraContainer.options then
+		hideContainer(state.buffContainer)
+		hideContainer(state.debuffContainer)
+		state.hasBuffGroup = false
+		state.hasDebuffGroup = false
+		state.unit = nil
+		return
+	end
+
+	local unit = getFrameUnit(frame)
+	if not unit then
+		return
+	end
+
+	local options = AuraContainer.options
+	local maxBuffs = math.max(0, tonumber(options.MaxBuffs) or 0)
+	local maxDebuffs = math.max(0, tonumber(options.MaxDebuffs) or 0)
+	local buffSize = scaleToSize(DEFAULT_BUFF_SIZE, options.BuffsScale)
+	local debuffSize = scaleToSize(DEFAULT_DEBUFF_SIZE, options.DebuffsScale)
+	local buffsElemSpacing = options.BuffsElemSpacing or BLIZZARD_ELEMENT_SPACING
+	local debuffsElemSpacing = options.DebuffsElemSpacing or BLIZZARD_ELEMENT_SPACING
+	local buffsLineSpacing = options.BuffsLineSpacing or BLIZZARD_LINE_SPACING
+	local debuffsLineSpacing = options.DebuffsLineSpacing or BLIZZARD_LINE_SPACING
+	local buffMouseEnabled = options.BuffsMouseEnabled ~= false
+	local debuffMouseEnabled = options.DebuffsMouseEnabled ~= false
+
+	local hasPowerBar = frame.powerBar and frame.powerBar:IsShown()
+	local powerBarOffsetY = hasPowerBar and BLIZZARD_POWERBAR_OFFSET_Y or 0
+
+	if maxBuffs > 0 then
+		if not state.buffContainer then
+			state.buffContainer = safeCreateAuraContainer(frame)
+			state.hasBuffGroup = false
+		end
+		local buffContainer = state.buffContainer
+		if buffContainer then
+			pcall(buffContainer.SetUnit, buffContainer, unit)
+			pcall(buffContainer.SetAuraGroupMaxFrameCount, buffContainer, "kbd_buffs", maxBuffs)
+
+			if addGroupIfNeeded(state, buffContainer, "kbd_buffs", "HELPFUL|RAID_IN_COMBAT", maxBuffs, buffSize, buffMouseEnabled, true) then
+				applyGroupLayout(buffContainer, "kbd_buffs", options.BuffsOrientation, options.BuffsPerLine, buffSize, buffsElemSpacing, buffsLineSpacing)
+			end
+			local filterString = inCombat and "HELPFUL|RAID_IN_COMBAT" or "HELPFUL|RAID"
+			buffContainer:SetAuraGroupFilterString("kbd_buffs", filterString)
+			setContainerAnchor(
+				buffContainer,
+				frame,
+				"BOTTOMRIGHT",
+				options.BuffsOrientation,
+				BLIZZARD_BUFF_BASE_OFFSET_X + (tonumber(options.BuffsPosX) or 0),
+				BLIZZARD_BUFF_BASE_OFFSET_Y + (tonumber(options.BuffsPosY) or 0) + powerBarOffsetY
+			)
+			buffContainer:Show()
+		end
+	else
+		hideContainer(state.buffContainer)
+		state.hasBuffGroup = false
+	end
+
+	if maxDebuffs > 0 then
+		if not state.debuffContainer then
+			state.debuffContainer = safeCreateAuraContainer(frame)
+			state.hasDebuffGroup = false
+		end
+		local debuffContainer = state.debuffContainer
+		if debuffContainer then
+			pcall(debuffContainer.SetUnit, debuffContainer, unit)
+			pcall(debuffContainer.SetAuraGroupMaxFrameCount, debuffContainer, "kbd_debuffs", maxDebuffs)
+
+			if addGroupIfNeeded(state, debuffContainer, "kbd_debuffs", "HARMFUL|RAID_IN_COMBAT", maxDebuffs, debuffSize, debuffMouseEnabled, false) then
+				applyGroupLayout(debuffContainer, "kbd_debuffs", options.DebuffsOrientation, options.DebuffsPerLine, debuffSize, debuffsElemSpacing, debuffsLineSpacing)
+			end
+			local filterString = InCombatLockdown() and "HARMFUL|RAID_IN_COMBAT" or "HARMFUL|RAID"
+			debuffContainer:SetAuraGroupFilterString("kbd_debuffs", filterString)
+			setContainerAnchor(
+				debuffContainer,
+				frame,
+				"BOTTOMLEFT",
+				options.DebuffsOrientation,
+				BLIZZARD_DEBUFF_BASE_OFFSET_X + (tonumber(options.DebuffsPosX) or 0),
+				BLIZZARD_DEBUFF_BASE_OFFSET_Y + (tonumber(options.DebuffsPosY) or 0) + powerBarOffsetY
+			)
+			if type(debuffContainer.Show) == "function" then
+				debuffContainer:Show()
+			end
+		end
+	else
+		hideContainer(state.debuffContainer)
+		state.hasDebuffGroup = false
+	end
+
+	state.unit = unit
+end
+
+local function AuraContainerRefreshAllFrames()
+	for i = 1, 40 do
+		AuraContainerRefreshFrame(_G["CompactRaidFrame" .. i])
+	end
+
+	for group = 1, 8 do
+		for member = 1, 5 do
+			AuraContainerRefreshFrame(_G["CompactRaidGroup" .. group .. "Member" .. member])
+		end
+	end
+
+	for i = 1, 5 do
+		AuraContainerRefreshFrame(_G["CompactPartyFrameMember" .. i])
+		AuraContainerRefreshFrame(_G["CompactArenaFrameMember" .. i])
+	end
+end
+
+local function AuraContainerEnsureHooks()
+	if AuraContainer.hooksInstalled then
+		return
+	end
+
+	if type(CompactUnitFrame_UpdateAll) == "function" then
+		hooksecurefunc("CompactUnitFrame_UpdateAll", AuraContainerRefreshFrame)
+	end
+
+	if type(CompactUnitFrame_SetUnit) == "function" then
+		hooksecurefunc("CompactUnitFrame_SetUnit", AuraContainerRefreshFrame)
+	end
+	
+	local eventFrame = CreateFrame("Frame")
+
+	eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+	eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+
+	eventFrame:SetScript("OnEvent", function(self, event)
+		local previousInCombat = inCombat
+		if event == "PLAYER_REGEN_DISABLED" then
+			inCombat = true
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			inCombat = false
+		end
+		if previousInCombat ~= inCombat then
+			AuraContainerRefreshAllFrames()
+		end
+	end)
+
+	AuraContainer.hooksInstalled = true
+end
+
+local function AuraContainerDisable()
+	AuraContainer.enabled = false
+	AuraContainer.options = nil
+
+	for frame, state in pairs(AuraContainer.frameState) do
+		if FrameIsCompactNoPet(frame) then
+			hideContainer(state.buffContainer)
+			hideContainer(state.debuffContainer)
+			state.hasBuffGroup = false
+			state.hasDebuffGroup = false
+			state.unit = nil
+		end
+	end
+end
+
+local function ApplyAuraContainer(options)
+	if not IsAuraContainer_Supported() then
+		AuraContainerDisable()
+		return false
+	end
+
+	AuraContainerEnsureHooks()
+	AuraContainer.options = options
+	AuraContainer.enabled = options and options.ActiveUnitDebuffs ~= false
+	applyBlizzardAuraCVarPolicy(AuraContainer.enabled and options.HideBlizzardAuras == true)
+	AuraContainerRefreshAllFrames()
+	return true
 end
 
 		-- ! Blizzard original method modified, from CompactUnitFrame / Midnight
@@ -46,7 +516,7 @@ end
 			-- modification start
 			local cacheOptions = ns.Module.cacheOptions
 			local maxBuffs = cacheOptions.MaxBuffs
-    		local maxDebuffs = cacheOptions.MaxDebuffs
+			local maxDebuffs = cacheOptions.MaxDebuffs
 			local debuffsChanged = not ignoreBuffs;
 			local buffsChanged = not ignoreDebuffs;
 			-- modification end
@@ -136,7 +606,7 @@ end
 			-- modification start
 			local cacheOptions = ns.Module.cacheOptions
 			local maxBuffs = cacheOptions.MaxBuffs
-    		local maxDebuffs = cacheOptions.MaxDebuffs
+			local maxDebuffs = cacheOptions.MaxDebuffs
 			local debuffsChanged = not ignoreBuffs;
 			local buffsChanged = not ignoreDebuffs;
 			-- modification end
@@ -439,6 +909,10 @@ local function getInfo(self)
 end
 
 local function isEnabled(options)
+	if IsAuraContainer_Supported() then
+		return options.ActiveUnitDebuffs ~= false
+	end
+
 	if ns.LoadRaidFramesAuras then
 		return options.ActiveUnitDebuffs ~= false
 	end
@@ -474,6 +948,11 @@ function ns.isFlickerWarningShowed(options)
 	return buffsHook..debuffsHook ~= ""
 end
 local function onSaveOptions(self, options)
+	if IsAuraContainer_Supported() then
+		ApplyAuraContainer(options)
+		return
+	end
+
 	if ns.LoadRaidFramesAuras then
 		if isEnabled(options) then
 			if not ns._UnitDebuffsHooked then

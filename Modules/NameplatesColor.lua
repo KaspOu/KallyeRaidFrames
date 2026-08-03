@@ -66,7 +66,8 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
             prefix = levelShowed;
         end
     end
-    if UnitIsPVP(unit) and pvpIconOption ~= "0" then
+    local isPvP = UnitIsPVP(unit)
+    if not issecretvalue(isPvP) and isPvP and pvpIconOption ~= "0" then
         local icon = ns.pvpIcons[pvpIconOption] or ""
         if pvpIconOption == "faction" then
             local faction = UnitFactionGroup(unit)
