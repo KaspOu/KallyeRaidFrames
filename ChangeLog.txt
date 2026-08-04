@@ -1,3 +1,6 @@
+v12.0.704
+- 12.1.0 PTR Compatible
+
 v12.0.703
 - Buffs & Debuffs: Fix for Vanilla / BC (with Raid Frame Auras)
 - *Raid Frame Auras* updated (many fixes)
