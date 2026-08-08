@@ -1,3 +1,6 @@
+v12.0.705
+- Buffs & Debuffs: Fixed anchor while choosing another orientation
+
 v12.0.704
 - 12.1.0 PTR Compatible
 

@@ -14,6 +14,12 @@ local DEFAULT_DEBUFF_SIZE = 6
 local DEFAULT_BUFFS_SCALE = 0.75
 local DEFAULT_DEBUFFS_SCALE = 1.25
 
+local ORIENTATION_TO_ANCHOR = {
+    LeftThenUp = "BOTTOMRIGHT",
+    UpThenLeft = "BOTTOMRIGHT",
+    RightThenUp = "BOTTOMLEFT",
+    UpThenRight = "BOTTOMLEFT",
+}
 local ORIENTATION_TO_GROWTH = {
     LeftThenUp = "LEFT_UP",
     UpThenLeft = "UP_LEFT",
@@ -73,6 +79,7 @@ local function syncKRFOptionsToRaidFrameAuras(options)
     db.buffBorderEnabled = true
     db.buffMax = math.max(1, maxBuffs)
     db.buffWrap = math.max(1, tonumber(options.BuffsPerLine) or 1)
+    db.buffAnchor = ORIENTATION_TO_ANCHOR[options.BuffsOrientation] or "BOTTOMRIGHT"
     db.buffGrowth = ORIENTATION_TO_GROWTH[options.BuffsOrientation] or "LEFT_UP"
     db.buffOffsetX = -3 + (tonumber(options.BuffsPosX) or 0)
     db.buffOffsetY = 2 + (tonumber(options.BuffsPosY) or 0)
@@ -83,6 +90,7 @@ local function syncKRFOptionsToRaidFrameAuras(options)
 
     db.debuffMax = math.max(1, maxDebuffs)
     db.debuffWrap = math.max(1, tonumber(options.DebuffsPerLine) or 1)
+    db.debuffAnchor = ORIENTATION_TO_ANCHOR[options.DebuffsOrientation] or "BOTTOMLEFT"
     db.debuffGrowth = ORIENTATION_TO_GROWTH[options.DebuffsOrientation] or "RIGHT_UP"
     db.debuffOffsetX = 3 + (tonumber(options.DebuffsPosX) or 0)
     db.debuffOffsetY = 2 + (tonumber(options.DebuffsPosY) or 0)

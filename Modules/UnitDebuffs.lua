@@ -311,12 +311,12 @@ local function applyGroupLayout(container, groupKey, orientation, wrapElements, 
 	-- return ok == true
 end
 
-local function setContainerAnchor(container, frame, relativeTo, orientation, posX, posY)
+local function setContainerAnchor(container, frame, orientation, posX, posY)
 	if not container or not frame then return end
 	local layout = ORIENTATION_TO_LAYOUT[orientation] or ORIENTATION_TO_LAYOUT.LeftThenUp
 	local anchorPoint = layout.anchorPoint or "BOTTOMRIGHT"
 	container:ClearAllPoints()
-	container:SetPoint(anchorPoint, frame, relativeTo, tonumber(posX) or 0, tonumber(posY) or 0)
+	container:SetPoint(anchorPoint, frame, anchorPoint, tonumber(posX) or 0, tonumber(posY) or 0)
 end
 
 local function AuraContainerRefreshFrame(frame)
@@ -372,7 +372,6 @@ local function AuraContainerRefreshFrame(frame)
 			setContainerAnchor(
 				buffContainer,
 				frame,
-				"BOTTOMRIGHT",
 				options.BuffsOrientation,
 				BLIZZARD_BUFF_BASE_OFFSET_X + (tonumber(options.BuffsPosX) or 0),
 				BLIZZARD_BUFF_BASE_OFFSET_Y + (tonumber(options.BuffsPosY) or 0) + powerBarOffsetY
@@ -402,7 +401,6 @@ local function AuraContainerRefreshFrame(frame)
 			setContainerAnchor(
 				debuffContainer,
 				frame,
-				"BOTTOMLEFT",
 				options.DebuffsOrientation,
 				BLIZZARD_DEBUFF_BASE_OFFSET_X + (tonumber(options.DebuffsPosX) or 0),
 				BLIZZARD_DEBUFF_BASE_OFFSET_Y + (tonumber(options.DebuffsPosY) or 0) + powerBarOffsetY
