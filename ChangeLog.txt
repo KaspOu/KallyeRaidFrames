@@ -1,3 +1,6 @@
+v12.1.001
+- Midnight 12.1.0 - New Auras display
+
 v12.0.705
 - Buffs & Debuffs: Fixed anchor while choosing another orientation
 

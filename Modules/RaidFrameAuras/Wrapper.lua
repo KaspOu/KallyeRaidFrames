@@ -170,7 +170,8 @@ ns.LoadRaidFramesAuras = function(options)
     applyBlizzardAuraCVarPolicy(RaidFrameAuras.db.enabled and options.HideBlizzardAuras)
     RaidFrameAuras:ApplySettings(true)
 
-    if not ns.IS_RETAIL and options.HideBlizzardAuras then
+    -- FIXME: TO REMOVE when bugfixed
+    if options.HideBlizzardAuras and GetCVar("raidFramesDisplayBuffs") == nil then
         hooksecurefunc("CompactUnitFrame_SetUpFrame", disableBlizzAuras)
     end
 end
