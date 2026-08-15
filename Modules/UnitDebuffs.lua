@@ -206,6 +206,67 @@ local function hideContainer(container)
 	container:Hide()
 end
 
+
+--@do-not-package@
+--[[
+local pandemicColorCurve = C_CurveUtil and C_CurveUtil.CreateColorCurve()
+if pandemicColorCurve then
+	pandemicColorCurve:SetType(Enum.LuaCurveType.Step)
+	pandemicColorCurve:AddPoint(0, CreateColor(1, 0, 0, 1))
+	pandemicColorCurve:AddPoint(.15, CreateColor(1, 0.5, 0, 1))
+	pandemicColorCurve:AddPoint(.3, CreateColor(1, 1, 1, 1))
+end
+local timeFormatter = C_StringUtil.CreateNumericRuleFormatter()
+if timeFormatter then
+  	timeFormatter:AddBreakpoint({
+		threshold = 0,
+		step = 1,
+		format = "%d",
+	})
+	timeFormatter:AddBreakpoint({
+		threshold = 60,
+		format = "%d:%02d",
+		components = {
+			{
+				div = 60,
+			},
+			{
+				mod = 60,
+			},
+		}
+ 	})
+end
+local durationTextOptions
+if timeFormatter and pandemicColorCurve then
+	durationTextOptions = {
+		textFormatter = timeFormatter,
+		textColor = {
+			curve = pandemicColorCurve,
+			property = Enum.DurationTextBindingProperty.RemainingPercent,
+		}
+	}
+end
+--- HOW TO USE?
+			auraButton.Cooldown:SetHideCountdownNumbers (not ns.IS_RETAIL) -- Show if is Retail / Hide if Classic
+
+			auraButton.Count = auraButton:CreateFontString (nil, "artwork", "NumberFontNormalSmall")
+			auraButton.Count:SetJustifyH ("right")
+			auraButton.Count:SetPoint ("bottomright", 3, -2)
+
+			auraButton:SetApplicationCount(auraButton.Count)
+
+			auraButton.TimerText = auraButton.Cooldown:CreateFontString (nil, "overlay", "NumberFontNormal")
+			auraButton.TimerText:SetPoint ("center")
+			if ns.timer then
+				auraButton:SetDurationText(auraButton.TimerText, durationTextOptions)
+				auraButton.TimerText:Show()
+			else
+				auraButton.TimerText:Hide()
+				auraButton:ClearDurationText()
+			end
+]]
+--@end-do-not-package@
+
 local function addGroupIfNeeded(state, container, groupKey, filterString, maxCount, iconSize, isMouseEnabled, isBuff)
 	if not container or type(container.AddAuraGroup) ~= "function" then
 		return false
@@ -237,13 +298,17 @@ local function addGroupIfNeeded(state, container, groupKey, filterString, maxCou
 			if auraButton.Cooldown.EnableMouseMotion then
 				auraButton.Cooldown:EnableMouseMotion (false)
 			end
-			auraButton.Cooldown:SetHideCountdownNumbers (not IS_WOW_PROJECT_MIDNIGHT)
+			auraButton.Cooldown:SetHideCountdownNumbers(true)
 			auraButton.Cooldown:SetCountdownAbbrevThreshold(60)
 			auraButton.Cooldown:SetMinimumCountdownDuration(0)
 			auraButton.Cooldown:SetReverse(true)
 			auraButton:SetDurationCooldown(auraButton.Cooldown)
 
+
 			auraButton:EnableMouse(isMouseEnabled)
+			if (isMouseEnabled) then
+				auraButton:SetCancelAuraButtons("RightButtonUp")
+			end
 		end,
 	}
 
@@ -1001,6 +1066,8 @@ module:SetGetInfo(getInfo);
 
 --@do-not-package@
 --[[
+https://github.com/Tercioo/Plater-Nameplates/blob/master/Plater_Auras.lua
+
 Hooks:
 CompactUnitFrame_SetMaxBuffs si pas de repositionnement
 DefaultCompactUnitFrameSetup si repositionnement (multiligne, etc...)
