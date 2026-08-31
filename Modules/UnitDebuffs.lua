@@ -26,8 +26,6 @@ local BLIZZARD_BUFF_BASE_OFFSET_Y = 2
 local BLIZZARD_DEBUFF_BASE_OFFSET_X = 3
 local BLIZZARD_DEBUFF_BASE_OFFSET_Y = 2
 local BLIZZARD_POWERBAR_OFFSET_Y = 8
-local BLIZZARD_ELEMENT_SPACING = 0
-local BLIZZARD_LINE_SPACING = 1
 
 local BLIZZARD_AURA_CVARS = {
 	"raidFramesDisplayBuffs",
@@ -62,6 +60,22 @@ local ORIENTATION_TO_LAYOUT = {
 }
 
 local inCombat = InCombatLockdown()
+
+local FILTER_SUFFIX_OVERRIDES = { RAID = "RAID", RAID_IN_COMBAT = "RAID_IN_COMBAT" }
+
+local function ResolveFilterString(prefix, filterOption)
+	local suffix = FILTER_SUFFIX_OVERRIDES[filterOption] or (inCombat and "RAID_IN_COMBAT" or "RAID")
+	return prefix.."|"..suffix
+end
+
+--? Options are in screen axes; the container lays out in flow axes, which swap with the orientation.
+local function ResolveSpacing(orientation, spacingX, spacingY)
+	local layout = ORIENTATION_TO_LAYOUT[orientation] or ORIENTATION_TO_LAYOUT.LeftThenUp
+	if layout.lineAxis == "VERTICAL" then
+		return spacingY, spacingX
+	end
+	return spacingX, spacingY
+end
 
 local function getEnumValue(enumTable, ...)
 	if not enumTable then return nil end
@@ -409,12 +423,12 @@ local function AuraContainerRefreshFrame(frame)
 	local maxDebuffs = math.max(0, tonumber(options.MaxDebuffs) or 0)
 	local buffSize = scaleToSize(DEFAULT_BUFF_SIZE, options.BuffsScale)
 	local debuffSize = scaleToSize(DEFAULT_DEBUFF_SIZE, options.DebuffsScale)
-	local buffsElemSpacing = options.BuffsElemSpacing or BLIZZARD_ELEMENT_SPACING
-	local debuffsElemSpacing = options.DebuffsElemSpacing or BLIZZARD_ELEMENT_SPACING
-	local buffsLineSpacing = options.BuffsLineSpacing or BLIZZARD_LINE_SPACING
-	local debuffsLineSpacing = options.DebuffsLineSpacing or BLIZZARD_LINE_SPACING
-	local buffMouseEnabled = options.BuffsMouseEnabled ~= false
-	local debuffMouseEnabled = options.DebuffsMouseEnabled ~= false
+	local buffsSpacingX = tonumber(options.BuffsSpacingX) or 0
+	local buffsSpacingY = tonumber(options.BuffsSpacingY) or 1
+	local debuffsSpacingX = tonumber(options.DebuffsSpacingX) or 0
+	local debuffsSpacingY = tonumber(options.DebuffsSpacingY) or 1
+	local buffMouseEnabled = options.BuffsHideTooltip ~= true
+	local debuffMouseEnabled = options.DebuffsHideTooltip ~= true
 
 	local hasPowerBar = frame.powerBar and frame.powerBar:IsShown()
 	local powerBarOffsetY = hasPowerBar and BLIZZARD_POWERBAR_OFFSET_Y or 0
@@ -429,10 +443,11 @@ local function AuraContainerRefreshFrame(frame)
 			pcall(buffContainer.SetUnit, buffContainer, unit)
 			pcall(buffContainer.SetAuraGroupMaxFrameCount, buffContainer, "kbd_buffs", maxBuffs)
 
+			local buffsElemSpacing, buffsLineSpacing = ResolveSpacing(options.BuffsOrientation, buffsSpacingX, buffsSpacingY)
 			if addGroupIfNeeded(state, buffContainer, "kbd_buffs", "HELPFUL|RAID_IN_COMBAT", maxBuffs, buffSize, buffMouseEnabled, true) then
 				applyGroupLayout(buffContainer, "kbd_buffs", options.BuffsOrientation, options.BuffsPerLine, buffSize, buffsElemSpacing, buffsLineSpacing)
 			end
-			local filterString = inCombat and "HELPFUL|RAID_IN_COMBAT" or "HELPFUL|RAID"
+			local filterString = ResolveFilterString("HELPFUL", options.BuffsFilter)
 			buffContainer:SetAuraGroupFilterString("kbd_buffs", filterString)
 			setContainerAnchor(
 				buffContainer,
@@ -458,10 +473,11 @@ local function AuraContainerRefreshFrame(frame)
 			pcall(debuffContainer.SetUnit, debuffContainer, unit)
 			pcall(debuffContainer.SetAuraGroupMaxFrameCount, debuffContainer, "kbd_debuffs", maxDebuffs)
 
+			local debuffsElemSpacing, debuffsLineSpacing = ResolveSpacing(options.DebuffsOrientation, debuffsSpacingX, debuffsSpacingY)
 			if addGroupIfNeeded(state, debuffContainer, "kbd_debuffs", "HARMFUL|RAID_IN_COMBAT", maxDebuffs, debuffSize, debuffMouseEnabled, false) then
 				applyGroupLayout(debuffContainer, "kbd_debuffs", options.DebuffsOrientation, options.DebuffsPerLine, debuffSize, debuffsElemSpacing, debuffsLineSpacing)
 			end
-			local filterString = InCombatLockdown() and "HARMFUL|RAID_IN_COMBAT" or "HARMFUL|RAID"
+			local filterString = ResolveFilterString("HARMFUL", options.DebuffsFilter)
 			debuffContainer:SetAuraGroupFilterString("kbd_debuffs", filterString)
 			setContainerAnchor(
 				debuffContainer,

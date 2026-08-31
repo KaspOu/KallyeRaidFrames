@@ -1,3 +1,9 @@
+v12.1.003
+- Buffs & Debuffs: New options (Midnight):
+  > Spacing between buffs & debuffs
+  > Hide tooltip when hovering a buff or debuff icon
+  > Filter choice for buffs & debuffs
+
 v12.1.001
 - Midnight 12.1.0 - New Auras display
 

@@ -11,11 +11,10 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
-- Barre d'infos: couleurs corrigées
-- Buffs & Débuffs: correctifs
-- Nouvelles options (Midnight) :
-  > Raid: Afficher à la fois les groupes et les cadres de raid
-  > Transparence à portée (en combat)
+- Nouvelles options (Midnight):
+  > Espacement entre les buffs & débuffs
+  > Masquer le tooltip lors du survol d'une icône de buff ou débuff
+  > Choix du filtre pour les buffs & débuffs
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -132,6 +131,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Changer la Limite provoque une "..l.RDL
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Le repositionnement peut \195\170tre affect\195\169 quelques secondes \195\160 la mort d'un boss"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Masquer les auras Blizzard"
 l.OPTION_BUFFS_RESET = "Annuler tout repositionnement"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Auto — suit le combat (défaut)";
+l.OPTION_FILTER_RAID = "Toujours la liste hors combat";
+l.OPTION_FILTER_RAID_IN_COMBAT = "Toujours la liste en combat";
+l.OPTION_BUFFS_SPACING_X = "Espacement horizontal";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "Écart horizontal, en pixels, entre les icônes de buffs\n"..l.CY.."Défaut : 0";
+l.OPTION_BUFFS_SPACING_Y = "Espacement vertical";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "Écart vertical, en pixels, entre les icônes de buffs\n"..l.CY.."Défaut : 1";
+l.OPTION_BUFFSFILTER = "Filtre des buffs";
+l.OPTION_BUFFSFILTER_TOOLTIP = "Quelle liste de buffs Blizzard fournit\n"..l.CY.."Auto bascule à l'entrée et à la sortie du combat";
+l.OPTION_BUFFS_HIDETOOLTIP = "Masquer les infobulles des buffs"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "Aucune infobulle au survol d'une icône de buff\n"..l.RDL.."Désactive aussi le clic droit pour annuler un buff";
+l.OPTION_DEBUFFS_SPACING_X = "Espacement horizontal";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "Écart horizontal, en pixels, entre les icônes de débuffs\n"..l.CY.."Défaut : 0";
+l.OPTION_DEBUFFS_SPACING_Y = "Espacement vertical";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "Écart vertical, en pixels, entre les icônes de débuffs\n"..l.CY.."Défaut : 1";
+l.OPTION_DEBUFFSFILTER = "Filtre des débuffs";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "Quelle liste de débuffs Blizzard fournit\n"..l.CY.."Auto bascule à l'entrée et à la sortie du combat";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "Masquer les infobulles des débuffs"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "Aucune infobulle au survol d'une icône de débuff\n"..l.RDL.."Désactive aussi le clic droit pour annuler un débuff";
 -- KBD END
 
 -- KNC START

@@ -122,6 +122,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." 제한을 변경하면 "..l.RDL.."세�
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." 보스 사망 시 몇 초 동안 재배치에 영향을 받을 수 있습니다."
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " 블리자드 오라 숨기기"
 l.OPTION_BUFFS_RESET = "모든 재배치 취소"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."자동 — 전투 상태에 따름 (기본값)";
+l.OPTION_FILTER_RAID = "항상 비전투 목록";
+l.OPTION_FILTER_RAID_IN_COMBAT = "항상 전투 목록";
+l.OPTION_BUFFS_SPACING_X = "가로 간격";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "버프 아이콘 사이의 가로 간격 (픽셀)\n"..l.CY.."기본값: 0";
+l.OPTION_BUFFS_SPACING_Y = "세로 간격";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "버프 아이콘 사이의 세로 간격 (픽셀)\n"..l.CY.."기본값: 1";
+l.OPTION_BUFFSFILTER = "버프 필터";
+l.OPTION_BUFFSFILTER_TOOLTIP = "블리자드가 제공하는 버프 목록 선택\n"..l.CY.."자동은 전투 진입/이탈 시 전환됩니다";
+l.OPTION_BUFFS_HIDETOOLTIP = "버프 툴팁 숨기기"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "버프 아이콘에 마우스를 올려도 툴팁이 표시되지 않습니다\n"..l.RDL.."우클릭으로 버프를 취소하는 기능도 비활성화됩니다";
+l.OPTION_DEBUFFS_SPACING_X = "가로 간격";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "디버프 아이콘 사이의 가로 간격 (픽셀)\n"..l.CY.."기본값: 0";
+l.OPTION_DEBUFFS_SPACING_Y = "세로 간격";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "디버프 아이콘 사이의 세로 간격 (픽셀)\n"..l.CY.."기본값: 1";
+l.OPTION_DEBUFFSFILTER = "디버프 필터";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "블리자드가 제공하는 디버프 목록 선택\n"..l.CY.."자동은 전투 진입/이탈 시 전환됩니다";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "디버프 툴팁 숨기기"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "디버프 아이콘에 마우스를 올려도 툴팁이 표시되지 않습니다\n"..l.RDL.."우클릭으로 디버프를 취소하는 기능도 비활성화됩니다";
 -- KBD END
 
 -- KNC START

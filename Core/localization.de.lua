@@ -123,6 +123,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Das \195\164ndern des Limits verursacht
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Die Neupositionierung kann f\195\188r einige Sekunden nach dem Tod eines Bosses beeintr\195\164chtigt sein"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Blizzard-Auren ausblenden"
 l.OPTION_BUFFS_RESET = "Alle Neupositionierungen r\195\188ckg\195\164ngig machen"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Auto — folgt dem Kampf (Standard)";
+l.OPTION_FILTER_RAID = "Immer die Liste au\195\159erhalb des Kampfes";
+l.OPTION_FILTER_RAID_IN_COMBAT = "Immer die Kampfliste";
+l.OPTION_BUFFS_SPACING_X = "Horizontaler Abstand";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "Horizontaler Abstand in Pixeln zwischen Buff-Symbolen\n"..l.CY.."Standard: 0";
+l.OPTION_BUFFS_SPACING_Y = "Vertikaler Abstand";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "Vertikaler Abstand in Pixeln zwischen Buff-Symbolen\n"..l.CY.."Standard: 1";
+l.OPTION_BUFFSFILTER = "Buff-Filter";
+l.OPTION_BUFFSFILTER_TOOLTIP = "Welche Buff-Liste Blizzard liefert\n"..l.CY.."Auto wechselt beim Betreten und Verlassen des Kampfes";
+l.OPTION_BUFFS_HIDETOOLTIP = "Buff-Tooltips ausblenden"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "Kein Tooltip beim \195\156berfahren eines Buff-Symbols\n"..l.RDL.."Deaktiviert auch den Rechtsklick zum Abbrechen eines Buffs";
+l.OPTION_DEBUFFS_SPACING_X = "Horizontaler Abstand";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "Horizontaler Abstand in Pixeln zwischen Debuff-Symbolen\n"..l.CY.."Standard: 0";
+l.OPTION_DEBUFFS_SPACING_Y = "Vertikaler Abstand";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "Vertikaler Abstand in Pixeln zwischen Debuff-Symbolen\n"..l.CY.."Standard: 1";
+l.OPTION_DEBUFFSFILTER = "Debuff-Filter";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "Welche Debuff-Liste Blizzard liefert\n"..l.CY.."Auto wechselt beim Betreten und Verlassen des Kampfes";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "Debuff-Tooltips ausblenden"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "Kein Tooltip beim \195\156berfahren eines Debuff-Symbols\n"..l.RDL.."Deaktiviert auch den Rechtsklick zum Abbrechen eines Debuffs";
 -- KBD END
 
 -- KNC START

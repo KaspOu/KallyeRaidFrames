@@ -120,6 +120,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Изменение максимума �
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Перепозиционирование может быть затронуто в течение нескольких секунд после убийства босса"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Скрыть ауры Blizzard"
 l.OPTION_BUFFS_RESET = "Отменить все изменения положения"; -- ChatGPT
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Авто — следует за боем (по умолчанию)";
+l.OPTION_FILTER_RAID = "Всегда список вне боя";
+l.OPTION_FILTER_RAID_IN_COMBAT = "Всегда боевой список";
+l.OPTION_BUFFS_SPACING_X = "Горизонтальный отступ";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "Горизонтальный зазор в пикселях между значками усилений\n"..l.CY.."По умолчанию: 0";
+l.OPTION_BUFFS_SPACING_Y = "Вертикальный отступ";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "Вертикальный зазор в пикселях между значками усилений\n"..l.CY.."По умолчанию: 1";
+l.OPTION_BUFFSFILTER = "Фильтр усилений";
+l.OPTION_BUFFSFILTER_TOOLTIP = "Какой список усилений предоставляет Blizzard\n"..l.CY.."Авто переключается при входе в бой и выходе из него";
+l.OPTION_BUFFS_HIDETOOLTIP = "Скрыть подсказки усилений"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "Подсказка не появляется при наведении на значок усиления\n"..l.RDL.."Также отключает отмену усиления правой кнопкой мыши";
+l.OPTION_DEBUFFS_SPACING_X = "Горизонтальный отступ";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "Горизонтальный зазор в пикселях между значками ослаблений\n"..l.CY.."По умолчанию: 0";
+l.OPTION_DEBUFFS_SPACING_Y = "Вертикальный отступ";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "Вертикальный зазор в пикселях между значками ослаблений\n"..l.CY.."По умолчанию: 1";
+l.OPTION_DEBUFFSFILTER = "Фильтр ослаблений";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "Какой список ослаблений предоставляет Blizzard\n"..l.CY.."Авто переключается при входе в бой и выходе из него";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "Скрыть подсказки ослаблений"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "Подсказка не появляется при наведении на значок ослабления\n"..l.RDL.."Также отключает отмену ослабления правой кнопкой мыши";
 -- KBD END
 
 -- KNC START

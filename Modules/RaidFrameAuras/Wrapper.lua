@@ -83,8 +83,8 @@ local function syncKRFOptionsToRaidFrameAuras(options)
     db.buffGrowth = ORIENTATION_TO_GROWTH[options.BuffsOrientation] or "LEFT_UP"
     db.buffOffsetX = -3 + (tonumber(options.BuffsPosX) or 0)
     db.buffOffsetY = 2 + (tonumber(options.BuffsPosY) or 0)
-    db.buffPaddingX = 2
-    db.buffPaddingY = 2
+    db.buffPaddingX = tonumber(options.BuffsSpacingX) or 0
+    db.buffPaddingY = tonumber(options.BuffsSpacingY) or 1
     db.buffSize = scaleToSize(DEFAULT_BUFF_SIZE, options.BuffsScale, DEFAULT_BUFFS_SCALE)
     db.buffShowDuration = false
 
@@ -94,8 +94,8 @@ local function syncKRFOptionsToRaidFrameAuras(options)
     db.debuffGrowth = ORIENTATION_TO_GROWTH[options.DebuffsOrientation] or "RIGHT_UP"
     db.debuffOffsetX = 3 + (tonumber(options.DebuffsPosX) or 0)
     db.debuffOffsetY = 2 + (tonumber(options.DebuffsPosY) or 0)
-    db.debuffPaddingX = 2
-    db.debuffPaddingY = 2
+    db.debuffPaddingX = tonumber(options.DebuffsSpacingX) or 0
+    db.debuffPaddingY = tonumber(options.DebuffsSpacingY) or 1
     db.debuffSize = scaleToSize(DEFAULT_DEBUFF_SIZE, options.DebuffsScale, DEFAULT_DEBUFFS_SCALE)
     db.debuffShowDuration = false
     db.debuffShowDurationCrowdControlOnly = true

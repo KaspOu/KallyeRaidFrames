@@ -45,6 +45,17 @@ local function ManageUnitDebuffsOptions()
     flickerWarningText:Hide()
     ns.OptionsEnable(resetButton, false, .1)
 
+    -- Spacing exists in modes B (RaidFrameAuras) and C (AuraContainer); filter and
+    -- hide-tooltip only in mode C. Mode A (classic) supports none of them.
+    local hasSpacing = ns.HAS_AURACONTAINER == true or ns.LoadRaidFramesAuras ~= nil
+    local hasAuraContainer = ns.HAS_AURACONTAINER == true
+    for _, controlName in ipairs({ "BuffsSpacingX", "BuffsSpacingY", "DebuffsSpacingX", "DebuffsSpacingY" }) do
+        ns.OptionsEnable(ns.FindControl(controlName), isEnabled and hasSpacing, .2)
+    end
+    for _, controlName in ipairs({ "BuffsFilter", "BuffsHideTooltip", "DebuffsFilter", "DebuffsHideTooltip" }) do
+        ns.OptionsEnable(ns.FindControl(controlName), isEnabled and hasAuraContainer, .2)
+    end
+
     if not isEnabled then
         return
     end

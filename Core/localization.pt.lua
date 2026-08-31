@@ -124,6 +124,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Alterar o Limite causa um "..l.RDL.."er
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." O reposicionamento pode ser afetado por alguns segundos ap\195\180s a morte de um chefe"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Ocultar auras da Blizzard"
 l.OPTION_BUFFS_RESET = "Cancelar todo o reposicionamento"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Auto — acompanha o combate (padrão)";
+l.OPTION_FILTER_RAID = "Sempre a lista fora de combate";
+l.OPTION_FILTER_RAID_IN_COMBAT = "Sempre a lista em combate";
+l.OPTION_BUFFS_SPACING_X = "Espaçamento horizontal";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "Espaço horizontal, em pixels, entre os ícones de bônus\n"..l.CY.."Padrão: 0";
+l.OPTION_BUFFS_SPACING_Y = "Espaçamento vertical";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "Espaço vertical, em pixels, entre os ícones de bônus\n"..l.CY.."Padrão: 1";
+l.OPTION_BUFFSFILTER = "Filtro de bônus";
+l.OPTION_BUFFSFILTER_TOOLTIP = "Qual lista de bônus a Blizzard fornece\n"..l.CY.."Auto alterna ao entrar e sair de combate";
+l.OPTION_BUFFS_HIDETOOLTIP = "Ocultar dicas dos bônus"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "Sem dica ao passar o cursor sobre um ícone de bônus\n"..l.RDL.."Também desativa o clique direito para cancelar um bônus";
+l.OPTION_DEBUFFS_SPACING_X = "Espaçamento horizontal";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "Espaço horizontal, em pixels, entre os ícones de penalidades\n"..l.CY.."Padrão: 0";
+l.OPTION_DEBUFFS_SPACING_Y = "Espaçamento vertical";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "Espaço vertical, em pixels, entre os ícones de penalidades\n"..l.CY.."Padrão: 1";
+l.OPTION_DEBUFFSFILTER = "Filtro de penalidades";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "Qual lista de penalidades a Blizzard fornece\n"..l.CY.."Auto alterna ao entrar e sair de combate";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "Ocultar dicas das penalidades"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "Sem dica ao passar o cursor sobre um ícone de penalidade\n"..l.RDL.."Também desativa o clique direito para cancelar uma penalidade";
 -- KBD END
 
 -- KNC START

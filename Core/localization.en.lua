@@ -10,11 +10,10 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
-- Nameplate colors fixed
-- Buffs & Debuffs: many fixes
 - New options (Midnight):
-  > Raid: Show both party and raid frames
-  > Alpha in range (combat)
+  > Spacing between buffs & debuffs
+  > Hide tooltip when hovering a buff or debuff icon
+  > Filter choice for buffs & debuffs
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;
@@ -133,6 +132,25 @@ l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Repositioning may be affected for a fe
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = "Hide Blizzard Auras"
 l.OPTION_BUFFS_RESET = "Cancel any repositioning"
 l.OPTION_HOTFIX = l.ALERT..l.RD.." HOTFIX: Repositioning disabled"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Auto — follows combat (default)";
+l.OPTION_FILTER_RAID = "Always out-of-combat list";
+l.OPTION_FILTER_RAID_IN_COMBAT = "Always in-combat list";
+l.OPTION_BUFFS_SPACING_X = "Horizontal spacing";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "Horizontal gap, in pixels, between buff icons\n"..l.CY.."Default: 0";
+l.OPTION_BUFFS_SPACING_Y = "Vertical spacing";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "Vertical gap, in pixels, between buff icons\n"..l.CY.."Default: 1";
+l.OPTION_BUFFSFILTER = "Buffs filter";
+l.OPTION_BUFFSFILTER_TOOLTIP = "Which buff list Blizzard provides\n"..l.CY.."Auto switches when you enter or leave combat";
+l.OPTION_BUFFS_HIDETOOLTIP = "Hide buff tooltips"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "No tooltip when hovering a buff icon\n"..l.RDL.."Also disables right-click to cancel a buff";
+l.OPTION_DEBUFFS_SPACING_X = "Horizontal spacing";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "Horizontal gap, in pixels, between debuff icons\n"..l.CY.."Default: 0";
+l.OPTION_DEBUFFS_SPACING_Y = "Vertical spacing";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "Vertical gap, in pixels, between debuff icons\n"..l.CY.."Default: 1";
+l.OPTION_DEBUFFSFILTER = "Debuffs filter";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "Which debuff list Blizzard provides\n"..l.CY.."Auto switches when you enter or leave combat";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "Hide debuff tooltips"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "No tooltip when hovering a debuff icon\n"..l.RDL.."Also disables right-click to cancel a debuff";
 -- KBD END
 
 -- KNC START

@@ -122,6 +122,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Cambiar el L\195\173mite provoca un "..
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." El reposicionamiento puede verse afectado unos segundos al morir un jefe"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Ocultar auras de Blizzard"
 l.OPTION_BUFFS_RESET = "Cancelar todo reposicionamiento"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Auto — sigue el combate (predeterminado)";
+l.OPTION_FILTER_RAID = "Siempre la lista fuera de combate";
+l.OPTION_FILTER_RAID_IN_COMBAT = "Siempre la lista en combate";
+l.OPTION_BUFFS_SPACING_X = "Espaciado horizontal";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "Separaci\195\179n horizontal, en p\195\173xeles, entre iconos de beneficios\n"..l.CY.."Predeterminado: 0";
+l.OPTION_BUFFS_SPACING_Y = "Espaciado vertical";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "Separaci\195\179n vertical, en p\195\173xeles, entre iconos de beneficios\n"..l.CY.."Predeterminado: 1";
+l.OPTION_BUFFSFILTER = "Filtro de beneficios";
+l.OPTION_BUFFSFILTER_TOOLTIP = "Qu\195\169 lista de beneficios entrega Blizzard\n"..l.CY.."Auto cambia al entrar y salir de combate";
+l.OPTION_BUFFS_HIDETOOLTIP = "Ocultar descripciones de beneficios"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "Sin descripci\195\179n al pasar el cursor sobre un icono de beneficio\n"..l.RDL.."Tambi\195\169n desactiva el clic derecho para cancelar un beneficio";
+l.OPTION_DEBUFFS_SPACING_X = "Espaciado horizontal";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "Separaci\195\179n horizontal, en p\195\173xeles, entre iconos de perjuicios\n"..l.CY.."Predeterminado: 0";
+l.OPTION_DEBUFFS_SPACING_Y = "Espaciado vertical";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "Separaci\195\179n vertical, en p\195\173xeles, entre iconos de perjuicios\n"..l.CY.."Predeterminado: 1";
+l.OPTION_DEBUFFSFILTER = "Filtro de perjuicios";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "Qu\195\169 lista de perjuicios entrega Blizzard\n"..l.CY.."Auto cambia al entrar y salir de combate";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "Ocultar descripciones de perjuicios"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "Sin descripci\195\179n al pasar el cursor sobre un icono de perjuicio\n"..l.RDL.."Tambi\195\169n desactiva el clic derecho para cancelar un perjuicio";
 -- KBD END
 
 -- KNC START
