@@ -44,12 +44,20 @@ local defaultOptions = {
 	BuffsOrientation = "LeftThenUp",
 	BuffsPosX = 0,
 	BuffsPosY = 0,
+	BuffsSpacingX = 0,
+	BuffsSpacingY = 1,
+	BuffsFilter = "auto",
+	BuffsHideTooltip = false,
 	DebuffsScale = 1.25,
 	MaxDebuffs = ns.DEFAULT_MAXDEBUFFS,
 	DebuffsPerLine = ns.DEFAULT_MAXDEBUFFS,
 	DebuffsOrientation = "RightThenUp",
 	DebuffsPosX = 0,
 	DebuffsPosY = 0,
+	DebuffsSpacingX = 0,
+	DebuffsSpacingY = 1,
+	DebuffsFilter = "auto",
+	DebuffsHideTooltip = false,
 	HideBlizzardAuras = true,
 	UseTaintMethod = false,
 
@@ -252,12 +260,14 @@ local function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].BuffsOrientation)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsPosX)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsPosY)
+		..tostring(_G[ns.OPTIONS_NAME].BuffsHideTooltip)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].MaxDebuffs)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPerLine)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsOrientation)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPosX)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsPosY)
+		..tostring(_G[ns.OPTIONS_NAME].DebuffsHideTooltip)
 		..tostring(_G[ns.OPTIONS_NAME].HideBlizzardAuras)
 		..tostring(_G[ns.OPTIONS_NAME].UseTaintMethod)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveRaidIcons)

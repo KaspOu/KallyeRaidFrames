@@ -122,6 +122,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Cambiare il Limite provoca un "..l.RDL.
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Il riposizionamento pu\195\170 essere influenzato per alcuni secondi alla morte di un boss"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Nascondere le aure Blizzard"
 l.OPTION_BUFFS_RESET = "Annulla tutto il riposizionamento"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Auto — segue il combattimento (predefinito)";
+l.OPTION_FILTER_RAID = "Sempre l'elenco fuori combattimento";
+l.OPTION_FILTER_RAID_IN_COMBAT = "Sempre l'elenco in combattimento";
+l.OPTION_BUFFS_SPACING_X = "Spaziatura orizzontale";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "Distanza orizzontale, in pixel, tra le icone dei benefici\n"..l.CY.."Predefinito: 0";
+l.OPTION_BUFFS_SPACING_Y = "Spaziatura verticale";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "Distanza verticale, in pixel, tra le icone dei benefici\n"..l.CY.."Predefinito: 1";
+l.OPTION_BUFFSFILTER = "Filtro dei benefici";
+l.OPTION_BUFFSFILTER_TOOLTIP = "Quale elenco di benefici fornisce Blizzard\n"..l.CY.."Auto cambia quando entri ed esci dal combattimento";
+l.OPTION_BUFFS_HIDETOOLTIP = "Nascondi i suggerimenti dei benefici"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "Nessun suggerimento passando sopra un'icona di beneficio\n"..l.RDL.."Disattiva anche il clic destro per annullare un beneficio";
+l.OPTION_DEBUFFS_SPACING_X = "Spaziatura orizzontale";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "Distanza orizzontale, in pixel, tra le icone dei malefici\n"..l.CY.."Predefinito: 0";
+l.OPTION_DEBUFFS_SPACING_Y = "Spaziatura verticale";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "Distanza verticale, in pixel, tra le icone dei malefici\n"..l.CY.."Predefinito: 1";
+l.OPTION_DEBUFFSFILTER = "Filtro dei malefici";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "Quale elenco di malefici fornisce Blizzard\n"..l.CY.."Auto cambia quando entri ed esci dal combattimento";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "Nascondi i suggerimenti dei malefici"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "Nessun suggerimento passando sopra un'icona di maleficio\n"..l.RDL.."Disattiva anche il clic destro per annullare un maleficio";
 -- KBD END
 
 -- KNC START

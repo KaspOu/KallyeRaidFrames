@@ -122,6 +122,25 @@ l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." 更改上限会导致每会话产生一
 l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." 在首领死亡时，重新定位可能会受到几秒钟的影响"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " 隐藏暴雪光环"
 l.OPTION_BUFFS_RESET = "取消所有重新定位"
+l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."自动 — 跟随战斗状态（默认）";
+l.OPTION_FILTER_RAID = "始终使用非战斗列表";
+l.OPTION_FILTER_RAID_IN_COMBAT = "始终使用战斗列表";
+l.OPTION_BUFFS_SPACING_X = "水平间距";
+l.OPTION_BUFFS_SPACING_X_TOOLTIP = "增益图标之间的水平间距（像素）\n"..l.CY.."默认：0";
+l.OPTION_BUFFS_SPACING_Y = "垂直间距";
+l.OPTION_BUFFS_SPACING_Y_TOOLTIP = "增益图标之间的垂直间距（像素）\n"..l.CY.."默认：1";
+l.OPTION_BUFFSFILTER = "增益过滤";
+l.OPTION_BUFFSFILTER_TOOLTIP = "选择暴雪提供的增益列表\n"..l.CY.."自动会在进入和脱离战斗时切换";
+l.OPTION_BUFFS_HIDETOOLTIP = "隐藏增益提示"..required;
+l.OPTION_BUFFS_HIDETOOLTIP_TOOLTIP = "鼠标悬停增益图标时不显示提示\n"..l.RDL.."同时禁用右键取消增益";
+l.OPTION_DEBUFFS_SPACING_X = "水平间距";
+l.OPTION_DEBUFFS_SPACING_X_TOOLTIP = "减益图标之间的水平间距（像素）\n"..l.CY.."默认：0";
+l.OPTION_DEBUFFS_SPACING_Y = "垂直间距";
+l.OPTION_DEBUFFS_SPACING_Y_TOOLTIP = "减益图标之间的垂直间距（像素）\n"..l.CY.."默认：1";
+l.OPTION_DEBUFFSFILTER = "减益过滤";
+l.OPTION_DEBUFFSFILTER_TOOLTIP = "选择暴雪提供的减益列表\n"..l.CY.."自动会在进入和脱离战斗时切换";
+l.OPTION_DEBUFFS_HIDETOOLTIP = "隐藏减益提示"..required;
+l.OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP = "鼠标悬停减益图标时不显示提示\n"..l.RDL.."同时禁用右键取消减益";
 -- KBD END
 
 -- KNC START

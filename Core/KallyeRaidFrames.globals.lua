@@ -22,6 +22,7 @@ ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
 ns.HAS_colorNameBySelection = ns.IS_RETAIL; --? colorNameBySelection, Since BfA (7)
 ns.IsDebugFramesTimerActive = false;
 ns.HAS_SECRETS = issecretvalue and true or false;
+ns.HAS_AURACONTAINER = AuraContainerSortDirection and true or false;
 ns.DEFAULT_MAXBUFFS = ns.IS_RETAIL and 9 or 3;
 ns.DEFAULT_MAXDEBUFFS = 3;
 ns.DEFAULT_RAIDICON_SIZE = 12;
