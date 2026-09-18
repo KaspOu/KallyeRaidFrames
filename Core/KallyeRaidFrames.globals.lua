@@ -18,8 +18,9 @@ BINDING_NAME_KRaidFrames =  ns.ADDON_NAME.." options";
 -- HANDLE CONFLICT -- ns.CONFLICT_WITH, ns.CONFLICT = "Addon Name", true;
 
 ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
+ns.IS_FOREVER = ns.IS_RETAIL and select(4, GetBuildInfo()) < 20000
 
-ns.HAS_colorNameBySelection = ns.IS_RETAIL; --? colorNameBySelection, Since BfA (7)
+ns.HAS_colorNameBySelection = ns.IS_RETAIL and not ns.IS_FOREVER; --? colorNameBySelection, Since BfA (7)
 ns.IsDebugFramesTimerActive = false;
 ns.HAS_SECRETS = issecretvalue and true or false;
 ns.HAS_AURACONTAINER = AuraContainerSortDirection and true or false;

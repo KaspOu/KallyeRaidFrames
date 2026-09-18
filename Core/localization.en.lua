@@ -88,7 +88,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE
-  .. ( issecretvalue and "\n"..l.WH.."Blizzard buffs/debuffs will be replaced by RaidFrameAuras" or "")
+  .. ( ns.LoadRaidFramesAuras and "\n"..l.WH.."Blizzard buffs/debuffs will be replaced by RaidFrameAuras" or "")
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Debuffs / Buffs"
 l.OPTION_ORIENTATION_LeftThenUp = "Left, then Up"

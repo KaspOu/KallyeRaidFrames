@@ -77,7 +77,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE .. "\n"
-  ..l.WH.."Баффы и дебаффы Blizzard будут заменены RaidFrameAuras"
+  .. ( ns.LoadRaidFramesAuras and "\n"..l.WH.."Баффы и дебаффы Blizzard будут заменены RaidFrameAuras" or "")
 -- KBD START
 l.OPTION_BUFFS_HEADER = "Дебаффы / Баффы";
 l.OPTION_ORIENTATION_LeftThenUp = "Влево, затем вверх"; -- ChatGPT

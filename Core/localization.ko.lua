@@ -79,7 +79,7 @@ l.OPTION_ALPHADISPELOVERLAY_TOOLTIP = l.OPTION_NOTINCOMBAT_TOOLTIP
 -- KF END
 
 l.OPTION_ACTIVATE_MODULE_DEBUFFS = l.OPTION_ACTIVATE_MODULE .. "\n"
-  ..l.WH.."블리자드 버프/디버프가 RaidFrameAuras로 대체됩니다"
+  .. ( ns.LoadRaidFramesAuras and "\n"..l.WH.."블리자드 버프/디버프가 RaidFrameAuras로 대체됩니다" or "")
 -- KBD START
 l.OPTION_BUFFS_HEADER = "디버프 / 버프"
 l.OPTION_ORIENTATION_LeftThenUp = "왼쪽에서 위로"

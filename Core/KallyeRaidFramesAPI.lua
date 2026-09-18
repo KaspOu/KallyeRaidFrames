@@ -136,25 +136,33 @@ function ns.Hook_UpdateInRange(frame)
 	end
 end
 
-local curveRegular, curveRevert
+local _curveRegular, _curveRevert
 -- Since Midnight (12)
-if C_CurveUtil then
-	local function initCurve(revert)
-		local BGColorOK=revert and _G[ns.OPTIONS_NAME].RevertColorOK or _G[ns.OPTIONS_NAME].BGColorOK;
-		local BGColorWarn=revert and _G[ns.OPTIONS_NAME].RevertColorWarn or _G[ns.OPTIONS_NAME].BGColorWarn;
-		local BGColorLow=revert and _G[ns.OPTIONS_NAME].RevertColorLow or _G[ns.OPTIONS_NAME].BGColorLow;
-		local pLimitLow = _G[ns.OPTIONS_NAME].LimitLow / 100;
-		local pLimitWarn = _G[ns.OPTIONS_NAME].LimitWarn / 100;
-		local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
-		local curve = C_CurveUtil.CreateColorCurve();
-		curve:SetType(Enum.LuaCurveType.Linear);
-		curve:AddPoint(pLimitLow, CreateColor(BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1));
-		curve:AddPoint(pLimitWarn, CreateColor(BGColorWarn.r, BGColorWarn.g, BGColorWarn.b, BGColorWarn.a or 1));
-		curve:AddPoint(pLimitOk, CreateColor(BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1));
-		return curve
+local function initCurve(revert)
+	local BGColorOK=revert and _G[ns.OPTIONS_NAME].RevertColorOK or _G[ns.OPTIONS_NAME].BGColorOK;
+	local BGColorWarn=revert and _G[ns.OPTIONS_NAME].RevertColorWarn or _G[ns.OPTIONS_NAME].BGColorWarn;
+	local BGColorLow=revert and _G[ns.OPTIONS_NAME].RevertColorLow or _G[ns.OPTIONS_NAME].BGColorLow;
+	local pLimitLow = _G[ns.OPTIONS_NAME].LimitLow / 100;
+	local pLimitWarn = _G[ns.OPTIONS_NAME].LimitWarn / 100;
+	local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
+	local curve = C_CurveUtil.CreateColorCurve();
+	curve:SetType(Enum.LuaCurveType.Linear);
+	curve:AddPoint(pLimitLow, CreateColor(BGColorLow.r, BGColorLow.g, BGColorLow.b, BGColorLow.a or 1));
+	curve:AddPoint(pLimitWarn, CreateColor(BGColorWarn.r, BGColorWarn.g, BGColorWarn.b, BGColorWarn.a or 1));
+	curve:AddPoint(pLimitOk, CreateColor(BGColorOK.r, BGColorOK.g, BGColorOK.b, BGColorOK.a or 1));
+	return curve
+end
+local function curveRegular()
+	if (not _curveRegular and C_CurveUtil) then
+		_curveRegular = initCurve(false)
 	end
-	curveRegular = initCurve(false)
-	curveRevert = initCurve(true)
+	return _curveRegular
+end
+local function curveRevert()
+	if (not _curveRevert and C_CurveUtil) then
+		_curveRevert = initCurve(true)
+	end
+	return _curveRevert
 end
 
 local function GetHPSeverity(unit, percent, revert, isTest)
@@ -165,10 +173,10 @@ local function GetHPSeverity(unit, percent, revert, isTest)
 	local pLimitWarn = _G[ns.OPTIONS_NAME].LimitWarn / 100;
 	local pLimitOk = _G[ns.OPTIONS_NAME].LimitOk / 100;
 
-	if curveRegular and not isTest then
-		local color = UnitHealthPercent(unit, false, revert and curveRevert or curveRegular);
+	if curveRegular() and not isTest then
+		local color = UnitHealthPercent(unit, false, revert and curveRevert() or curveRegular());
 		-- if isTest then -- BUG?
-		-- 	color = revert and curveRevert:Evaluate(percent) or curveRegular:Evaluate(percent)
+		-- 	color = revert and curveRevert():Evaluate(percent) or curveRegular():Evaluate(percent)
 		-- end
 		return color:GetRGBA()
 	end

@@ -1,4 +1,4 @@
-## Interface: 120100, 120105, 50504, 38002, 20506, 11509
+## Interface: 120100, 120105, 16001, 50504, 38002, 20506, 11509
 ## Title: |cff00ff00Kallye|r RaidFrames
 ## Title-frFR: |cff00ff00Kallye|r RaidFrames
 ## Notes: Highlight Raid Frames on low health, Always show raid. Buffs / debuffs size, max limit...
@@ -27,6 +27,7 @@
 ## X-WoWI-ID: 26755
 ## X-Wago-ID: bGoMQr60
 
+Modules\RaidFrameAuras\RaidFrameAuras.xml [AllowLoadGameType classic]
 Core\KallyeRaidFrames.globals.lua
 Core\localization.en.lua
 Core\localization.fr.lua [AllowLoadTextLocale frFR]
@@ -39,7 +40,6 @@ Core\localization.ru.lua [AllowLoadTextLocale ruRU]
 Core\localization.zh.lua [AllowLoadTextLocale zhCN, zhTW]
 Libs\LibEditModeOverride-1.0\LibStub\LibStub.lua
 Libs\LibEditModeOverride-1.0\LibEditModeOverride.lua
-Modules\RaidFrameAuras\RaidFrameAuras.xml [AllowLoadGameType standard classic]
 Shared\WidgetsKRF.xml
 Core\KallyeRaidFramesAPI.lua
 Modules\modules.xml
