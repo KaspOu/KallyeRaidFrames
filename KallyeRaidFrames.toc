@@ -23,6 +23,7 @@
 ## X-Localizations: enUS, frFR, ruRU, deDE, esES, esMX, itIT, koKR, ptBR, zhCN, zhTW
 ## X-License: All Rights Reserved
 ## X-Website: https://github.com/KaspOu/KallyeRaidFrames/
+## X-GameType: [Game]
 ## X-Curse-Project-ID: 410566
 ## X-WoWI-ID: 26755
 ## X-Wago-ID: bGoMQr60

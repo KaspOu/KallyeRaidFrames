@@ -18,7 +18,7 @@ BINDING_NAME_KRaidFrames =  ns.ADDON_NAME.." options";
 -- HANDLE CONFLICT -- ns.CONFLICT_WITH, ns.CONFLICT = "Addon Name", true;
 
 ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
-ns.IS_FOREVER = ns.IS_RETAIL and select(4, GetBuildInfo()) < 20000
+ns.IS_FOREVER = C_AddOns.GetAddOnMetadata(addonName, "X-GameType") == "Camelot"
 
 ns.HAS_colorNameBySelection = ns.IS_RETAIL and not ns.IS_FOREVER; --? colorNameBySelection, Since BfA (7)
 ns.IsDebugFramesTimerActive = false;
@@ -102,7 +102,7 @@ KRF_TITLE = ns.TITLE; -- global variable, for conflict detection
 
 KRFUI = {
 	l = l,
-	scrollBarX = ns.IS_RETAIL and 6 or -2,
+	scrollBarX = (ns.IS_RETAIL or ns.IS_FOREVER) and 6 or -2,
 };
 
 --@do-not-package@
