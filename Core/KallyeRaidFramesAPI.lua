@@ -468,6 +468,7 @@ function ns.Hook_UpdateHealth(frame, health, isTest)
 		else
 			UpdateHealth_Reverted(frame, health, isTest)
 		end
+		ns.Hook_UpdateName(frame, true);
 	end
 end
 
