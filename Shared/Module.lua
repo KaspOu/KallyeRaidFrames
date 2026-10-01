@@ -10,6 +10,7 @@ ns.MODULES = {};
 local function noop() end;
 ns.Module = {};
 ns.Module.__index = ns.Module;
+-- Live reference to the saved options table (set by Init): always up to date
 ns.Module.cacheOptions = {};
 
 -- Constructeur pour les modules
@@ -18,7 +19,7 @@ function ns.Module:new(onInit, name, onEnterWorld)
 		onInit = onInit or noop,
 		onEnterWorld = onEnterWorld or nil,
 		name = name or "Unnamed",
-		onSaveOptions = noop,
+		onOptionsChanged = noop,
 		getInfo = noop,
 		isLoaded = false
 	}, ns.Module);
@@ -28,8 +29,8 @@ function ns.Module:new(onInit, name, onEnterWorld)
 end
 
 --#region Setters for callbacks
-function ns.Module:SetOnSaveOptions(onSaveOptions)
-	self.onSaveOptions = onSaveOptions or noop;
+function ns.Module:SetOnOptionsChanged(onOptionsChanged)
+	self.onOptionsChanged = onOptionsChanged or noop;
 	return self;
 end
 
@@ -67,13 +68,16 @@ function ns.Module:Init(options, ...)
 	return self;
 end
 
-function ns.Module:OnSaveOptions(options, ...)
+--- Called (batched, once per frame) after one or more options were modified.
+--- @param options table Live options table
+--- @param changed table? Set of modified option names ({ [name] = true })
+function ns.Module:OnOptionsChanged(options, changed, ...)
     if not self.isLoaded then
         ns.AddMsgWarn(l.INIT_FAILED)
         return
     end
     ns.Module.cacheOptions = options or ns.Module.cacheOptions;
-    self.onSaveOptions(self, ns.Module.cacheOptions, ...)
+    self.onOptionsChanged(self, ns.Module.cacheOptions, changed, ...)
 end
 
 -- Only if Standalone

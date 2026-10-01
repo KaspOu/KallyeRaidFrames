@@ -6,6 +6,7 @@ local _, ns = ...
 local l = ns.I18N;
 local isInit = false;
 local isLoaded = false;
+local RequiredReloadOptionsString; -- defined below
 
 
 local defaultOptions = {
@@ -145,6 +146,32 @@ local function SLASH_CLEAR_command()
 	SELECTED_CHAT_FRAME:Clear()
 end
 
+--- Hooks the range/alpha handling once, only when needed (options are read live by the hook)
+local function EnsureInRangeHooks()
+	local options = _G[ns.OPTIONS_NAME];
+	if ns._InRangeHooked or (options.AlphaNotInRange == ns.DEFAULT_ALPHA_OUTOFRANGE and options.AlphaNotInCombat == 100) then
+		return;
+	end
+	ns._InRangeHooked = true;
+	-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
+	hooksecurefunc("CompactUnitFrame_UpdateInRange", ns.Hook_UpdateInRange);
+	hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateInRange);
+end
+
+--- Core options applied in real time (called batched, see ns.NotifyOptionsChanged)
+function ns.OnCoreOptionsChanged(options, changed)
+	-- Secure limits (low <= warn <= ok)
+	if options.LimitWarn < options.LimitLow then
+		ns.SetOptionValue("LimitWarn", options.LimitLow);
+	end
+	if options.LimitOk < options.LimitWarn then
+		ns.SetOptionValue("LimitOk", options.LimitWarn);
+	end
+	EnsureInRangeHooks();
+	-- Apply as soon as possible on the displayed frames
+	ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
+end
+
 -- KRF_OnEvent
 local function OnEvent(self, event, ...)
 	local arg1 = select(1, ...);
@@ -154,6 +181,7 @@ local function OnEvent(self, event, ...)
 		if l.UpdateLocales then l.UpdateLocales() end
 		ns.SetDefaultOptions(defaultOptions);
 		ns.RefreshOptions(defaultOptions);
+		ns.BindOptionControls(defaultOptions, RequiredReloadOptionsString);
 
 		if C_AddOns.GetAddOnInfo("RaidFrameAuras") == nil then
 			self:UnregisterEvent("ADDON_LOADED");
@@ -171,11 +199,7 @@ local function OnEvent(self, event, ...)
 			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth);
 		end
 
-		if _G[ns.OPTIONS_NAME].AlphaNotInRange ~= ns.DEFAULT_ALPHA_OUTOFRANGE or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100 then
-			-- DefaultCompactUnitFrameOptions.fadeOutOfRange = false; -- side effects :/
-			hooksecurefunc("CompactUnitFrame_UpdateInRange", ns.Hook_UpdateInRange);
-			hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateInRange);
-		end
+		EnsureInRangeHooks();
 
 		-- Load Modules
 		foreach(ns.MODULES,
@@ -247,7 +271,7 @@ do
 end
 
 
-local function RequiredReloadOptionsString()
+function RequiredReloadOptionsString()
 	return tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
 		..tostring(_G[ns.OPTIONS_NAME].SoloRaidFrameGroupInRaid)
 		..tostring(_G[ns.OPTIONS_NAME].RevertBar)
@@ -306,8 +330,7 @@ end
 function KRFUI.SetUseRaidStylePartyFrames(checked)
 	if (EditModeManagerFrame.UseRaidStylePartyFrames) then
 		--? EditModeManagerFrame.UseRaidStylePartyFrames, since DragonFlight (10)
-		--* > Save options before applying EditMode (hides options), and reload options after
-		ns.containerFrame.okay()
+		--* > Reload options after EditMode (hides options)
 		ns.SetUseRaidStylePartyFrames(checked)
 		C_Timer.After(1, SlashCmdList["KRF"])
 	else
@@ -325,20 +348,6 @@ end
 local refreshOptions = function()
 	ns.RefreshOptions(defaultOptions, true);
 end
-local saveOptions = function()
-	ns.SaveOptions(defaultOptions, RequiredReloadOptionsString);
-	-- Specific stuff
-
-    -- Secure limits (low <= warn <= ok)
-    if _G[ns.OPTIONS_NAME].LimitWarn < _G[ns.OPTIONS_NAME].LimitLow then
-        _G[ns.OPTIONS_NAME].LimitWarn = _G[ns.OPTIONS_NAME].LimitLow
-    end
-    if _G[ns.OPTIONS_NAME].LimitOk < _G[ns.OPTIONS_NAME].LimitWarn then
-        _G[ns.OPTIONS_NAME].LimitOk = _G[ns.OPTIONS_NAME].LimitWarn
-    end
-    -- Reset party health as soon as possible
-    ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
-end
 function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	if ns.CONFLICT then
 		return;
@@ -347,7 +356,7 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	ns.scrollFrame = scrollFrame;
 	ns.optionsFrame = optionsFrame;
 	self.name = ns.TITLE;
-	self.okay = saveOptions;
+	self.okay = ns.FlushOptionsChanges; -- options are already saved in real time
 	self.refresh = refreshOptions;
 	-- self.cancel = K_SHARED_UI.RefreshOptions; -- disabled
 	ns.InterfaceOptions_AddCategory(self);

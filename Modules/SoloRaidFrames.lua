@@ -147,7 +147,7 @@ local function getInfo(self)
     end
 end
 
-local function onSaveOptions(self, options)
+local function applySoloRaid(options)
     if (options.SoloRaidFrame) then
         if (EditModeManagerFrame.UseRaidStylePartyFrames and not EditModeManagerFrame:UseRaidStylePartyFrames()) then
 			--? Edit Mode - Since DragonFlight (10)
@@ -166,6 +166,28 @@ local function onSaveOptions(self, options)
         end
         -- ? Classic > SRF works in every case (doesn't need to set useCompactPartyFrames cvar)
     end
+end
+
+local pendingFrame
+--- Applies now, or right after combat (CVar / EditMode can't be changed in combat)
+local function onOptionsChanged(self, options, changed)
+    if changed and not changed.SoloRaidFrame then
+        return
+    end
+    if not InCombatLockdown() then
+        applySoloRaid(options)
+        return
+    end
+    if pendingFrame then
+        return
+    end
+    pendingFrame = CreateFrame("Frame")
+    pendingFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+    pendingFrame:SetScript("OnEvent", function(frame)
+        frame:UnregisterAllEvents()
+        pendingFrame = nil
+        applySoloRaid(_G[ns.OPTIONS_NAME])
+    end)
 end
 local function onInit(self, options)
     if (options.SoloRaidFrame or options.SoloRaidFrameGroupInRaid) then
@@ -188,11 +210,11 @@ local function onInit(self, options)
             CompactRaidFrameContainer_OnEvent = SoloRaid_CompactRaidFrameContainer_OnEvent;
         end
 		-- Delay to let EditMode to be loaded
-		C_Timer.After(0, function() onSaveOptions(self, options) end)
+		C_Timer.After(0, function() onOptionsChanged(self, options) end)
     end
 
 end
 
 local module = ns.Module:new(onInit, "Soloraid");
-module:SetOnSaveOptions(onSaveOptions);
+module:SetOnOptionsChanged(onOptionsChanged);
 module:SetGetInfo(getInfo);

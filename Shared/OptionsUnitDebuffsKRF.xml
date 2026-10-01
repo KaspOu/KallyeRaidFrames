@@ -23,11 +23,6 @@
 						<Offset x="60" y="-8"/>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						K_SHARED_UI.RefreshOptions()
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 			<!-- Buffs -->
 			<Slider parentKey="DebuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
@@ -55,11 +50,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="DebuffsPerLine" inherits="KRFUI_SliderWidget" minValue="1" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -71,11 +61,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxDebuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="DebuffsPosX" inherits="KRFUI_SliderWidget" minValue="-50" maxValue="50" valueStep="2" stepsPerPage="10" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -88,11 +73,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-30" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="DebuffsPosY" inherits="KRFUI_SliderWidget" minValue="-30" maxValue="30" valueStep="2" stepsPerPage="5" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -105,11 +85,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsPosX" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Frame parentKey="DebuffsOrientation" name="$parent_DebuffsOrientation" inherits="KRFUI_DropdownWidget">
 				<Size x="200" y="20" />
@@ -131,11 +106,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsPosY" relativePoint="BOTTOMLEFT"><Offset x="0" y="-26" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 			<Slider parentKey="DebuffsSpacingX" inherits="KRFUI_SliderWidget" minValue="0" maxValue="20" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -148,11 +118,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsOrientation" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="DebuffsSpacingY" inherits="KRFUI_SliderWidget" minValue="0" maxValue="20" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -165,11 +130,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsSpacingX" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Frame parentKey="DebuffsFilter" name="$parent_DebuffsFilter" inherits="KRFUI_DropdownWidget">
 				<Size x="200" y="20" />
@@ -189,11 +149,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsSpacingY" relativePoint="BOTTOMLEFT"><Offset x="0" y="-26" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 			<CheckButton parentKey="DebuffsHideTooltip" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
@@ -203,11 +158,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						K_SHARED_UI.RefreshOptions()
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 			<!-- Debuffs -->
 			<Slider parentKey="BuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
@@ -236,11 +186,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsScale" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="BuffsPerLine" inherits="KRFUI_SliderWidget" minValue="1" maxValue="9" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -252,11 +197,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxBuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="BuffsPosX" inherits="KRFUI_SliderWidget" minValue="-50" maxValue="50" valueStep="2" stepsPerPage="10" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -269,11 +209,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsPerLine" relativePoint="BOTTOMLEFT"><Offset x="0" y="-30" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="BuffsPosY" inherits="KRFUI_SliderWidget" minValue="-30" maxValue="30" valueStep="2" stepsPerPage="5" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -286,11 +221,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsPosX" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Frame parentKey="BuffsOrientation" name="$parent_BuffsOrientation" inherits="KRFUI_DropdownWidget">
 				<Size x="200" y="20" />
@@ -312,11 +242,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsPosY" relativePoint="BOTTOMLEFT"><Offset x="-10" y="-26" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 			<Slider parentKey="BuffsSpacingX" inherits="KRFUI_SliderWidget" minValue="0" maxValue="20" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -329,11 +254,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsOrientation" relativePoint="BOTTOMLEFT"><Offset x="10" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="BuffsSpacingY" inherits="KRFUI_SliderWidget" minValue="0" maxValue="20" valueStep="1" stepsPerPage="1" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
@@ -346,11 +266,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsSpacingX" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Frame parentKey="BuffsFilter" name="$parent_BuffsFilter" inherits="KRFUI_DropdownWidget">
 				<Size x="200" y="20" />
@@ -370,11 +285,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsSpacingY" relativePoint="BOTTOMLEFT"><Offset x="-10" y="-26" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 			<CheckButton parentKey="BuffsHideTooltip" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
@@ -384,11 +294,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						K_SHARED_UI.RefreshOptions()
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 			<!-- Taint checkbox (Retail) or Warning-->
 				<CheckButton parentKey="UseTaintMethod" inherits="KRFUI_CheckboxWidget">

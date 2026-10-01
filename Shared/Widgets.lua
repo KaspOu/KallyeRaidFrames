@@ -169,10 +169,12 @@ local function ColorWidget_ColorPickedCallback()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
 	local newA = ColorPickerFrame.hasOpacity and ColorPickerFrame:GetColorAlpha() or nil;
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA })
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
 end
 local function ColorWidget_ColorCancelledCallback()
 	local newR, newG, newB, newA = ColorPickerFrame:GetPreviousValues();
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
 end
 
 --[[
@@ -194,10 +196,12 @@ local function ColorWidget_ColorPickedCallback_Classic()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
 	local newA = ColorPickerFrame.hasOpacity and (1 - OpacitySliderFrame:GetValue()) or nil;
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
 end
 local function ColorWidget_ColorCancelledCallback_Classic()
 	local newR, newG, newB, newA = unpack(ColorPickerFrame._previousValues);
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
 end
 
 local function ColorWidget_SetColor(self, RGBA)
@@ -352,6 +356,7 @@ function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 	if not self._isLoaded then
 		return
 	end
+	K_SHARED_UI.NotifyControlChanged(self)
 	local onEventScript = self:GetScript("OnEvent")
 	if onEventScript then
 		onEventScript(self, "change")
@@ -376,6 +381,7 @@ Items attributes: text1, value1, color1, ...
 * Warning: name has to be set if you want to enable/disable widget
 ]]
 local function DropDownWidget_OnSelect(dropdown, value, text)
+	K_SHARED_UI.NotifyControlChanged(dropdown)
 	local onEventScript = dropdown:GetScript("OnEvent")
 	if onEventScript then
 		onEventScript(dropdown, "select")
