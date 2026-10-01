@@ -18,7 +18,7 @@ BINDING_NAME_KRaidFrames =  ns.ADDON_NAME.." options";
 -- HANDLE CONFLICT -- ns.CONFLICT_WITH, ns.CONFLICT = "Addon Name", true;
 
 ns.IS_RETAIL = (WOW_PROJECT_ID == (WOW_PROJECT_MAINLINE or 1));
-ns.IS_FOREVER = C_AddOns.GetAddOnMetadata(addonName, "X-GameType") == "Camelot"
+ns.IS_FOREVER = (WOW_PROJECT_ID == WOW_PROJECT_CAMELOT)
 
 ns.HAS_colorNameBySelection = ns.IS_RETAIL and not ns.IS_FOREVER; --? colorNameBySelection, Since BfA (7)
 ns.IsDebugFramesTimerActive = false;

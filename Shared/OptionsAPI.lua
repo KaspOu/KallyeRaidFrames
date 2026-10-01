@@ -83,12 +83,14 @@ local function valuesAreEqual(a, b)
     end
     return a == b;
 end
---#endregion
 
+--#endregion
 --#region Live options
-local optionByControl = {};
-local pendingChanges = {};
-local isFlushScheduled = false;
+-- called by K_SHARED_UI (can be called by another addon)
+ns._optionByControl = {};
+ns._pendingChanges = {};
+ns._isFlushScheduled = false;
+
 local reloadStateFunc = nil;
 local reloadBaseline = nil;
 local isReloadWarned = false;
@@ -103,6 +105,36 @@ local function checkReloadRequired()
         ns.AddMsgWarn(format("%s: %s", ns.TITLE, l.OPTION_RELOAD_REQUIRED or ""), true);
     end
     isReloadWarned = isDifferent;
+end
+
+function ns.ApplyFuncToRaidFrames(func, ...)
+	for member = 1, 80 do -- Pets included
+		local frame = _G["CompactRaidFrame"..member];
+		if frame and frame:IsVisible() then
+			func(frame, ...);
+		end
+	end
+	for member = 1, 5 do
+		local frame = _G["CompactPartyFrameMember"..member];
+		if frame and frame:IsVisible() then
+			func(frame, ...);
+		end
+		frame = _G["CompactPartyFramePet"..member];
+		if frame and frame:IsVisible() then
+			func(frame, ...);
+		end
+	end
+	for raid = 1, 8 do
+		if _G["CompactRaidGroup"..raid] ~= nil and _G["CompactRaidGroup"..raid]:IsVisible() then
+			for member = 1, 5 do
+				local frame = _G["CompactRaidGroup"..raid.."Member"..member];
+				if frame == nil or not frame:IsVisible() then
+					break;
+				end
+				func(frame, ...);
+			end
+		end
+	end
 end
 
 --- Dispatches changed options: reload warning, core, modules, then UI state
@@ -123,41 +155,42 @@ end
 
 --- Applies all pending changes now (batched once per frame otherwise)
 function ns.FlushOptionsChanges()
-    isFlushScheduled = false;
-    if next(pendingChanges) == nil then
+    ns._isFlushScheduled = false;
+    if next(ns._pendingChanges) == nil then
         return;
     end
-    local changed = pendingChanges;
-    pendingChanges = {};
+    local changed = ns._pendingChanges;
+    ns._pendingChanges = {};
     ns.NotifyOptionsChanged(changed);
 end
 
-local function scheduleFlush()
-    if isFlushScheduled then
+local function scheduleFlush(_NS)
+    if _NS._isFlushScheduled then
         return;
     end
-    isFlushScheduled = true;
-    C_Timer.After(0, ns.FlushOptionsChanges);
+    _NS._isFlushScheduled = true;
+    C_Timer.After(0, _NS.FlushOptionsChanges);
 end
 
 --- Called by widgets when the user modified a control: saves the option right away and applies it
+--- @param _NS table The namespace of the addon ! method is shared between addons !
 --- @param control table The modified control
-function K_SHARED_UI.NotifyControlChanged(control)
-    local optionName = optionByControl[control];
-    if ns._loadingControls or optionName == nil then
-        if not ns._loadingControls then
+function K_SHARED_UI.NotifyControlChanged(_NS, control)
+    local optionName = _NS._optionByControl[control];
+    if _NS._loadingControls or optionName == nil then
+        if not _NS._loadingControls then
             K_SHARED_UI.RefreshOptions();
         end
         return;
     end
-    local options = _G[ns.OPTIONS_NAME];
-    local value = ns.ReadControlValue(control, options[optionName]);
+    local options = _G[_NS.OPTIONS_NAME];
+    local value = _NS.ReadControlValue(control, options[optionName]);
     if value == nil or valuesAreEqual(value, options[optionName]) then
         return;
     end
     options[optionName] = value;
-    pendingChanges[optionName] = true;
-    scheduleFlush();
+    _NS._pendingChanges[optionName] = true;
+    scheduleFlush(_NS);
 end
 
 --- Sets an option from code: saved value + its control, without notification
@@ -183,9 +216,9 @@ function ns.BindOptionControls(defaultOptions, ComputedReloadOptions)
             if control == nil then
                 return;
             end
-            optionByControl[control] = optionName;
+            ns._optionByControl[control] = optionName;
             if control.type == "checkbox" then
-                control:HookScript("OnClick", K_SHARED_UI.NotifyControlChanged);
+                control:HookScript("OnClick", function (ctrl) K_SHARED_UI.NotifyControlChanged(ns, ctrl) end);
             end
         end
     );
@@ -201,10 +234,9 @@ end
 
 --- Refreshes the UI state (visibility / enabled) of the options, from the live options
 function K_SHARED_UI.RefreshOptions()
-    local options = _G[ns.OPTIONS_NAME];
     foreach(K_SHARED_UI.optionsRefreshFuncs,
         function (_, func)
-            func(options)
+            func()
         end
     );
 end

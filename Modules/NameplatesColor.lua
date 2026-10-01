@@ -84,17 +84,14 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
 end
 
 local function applyBarTexture(frame, texture, default)
-    if (texture ~= "" and frame._lastTexture == texture) then
+    if (texture ~= "") then
+        frame._overriddenTexture = texture
+    end
+    if (texture == "" and frame._overriddenTexture ~= nil) then
+        frame:SetStatusBarTexture(default)
+        frame._overriddenTexture = nil
         return
     end
-    if (texture == "") then
-        if (frame._lastTexture ~= nil) then
-            frame._lastTexture = nil
-            frame:SetStatusBarTexture(default)
-        end
-        return
-    end
-    frame._lastTexture = texture
     frame:SetStatusBarTexture(texture)
 end
 
@@ -143,11 +140,6 @@ local function Hook_CUF_UpdateName(frame)
     end
 
     local cacheOptions = ns.Module.cacheOptions
-    if not UnitIsFriend(frame.displayedUnit, "player") then
-        applyBarTexture(frame.healthBar, cacheOptions.EnemiesNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
-    else
-        applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
-    end
 
     local c = getUnitColor(frame.displayedUnit)
 
@@ -172,6 +164,17 @@ local function Hook_CUF_UpdateName(frame)
     end
 end
 
+local function Hook_CUF_UpdateTexture(frame)
+    if frame:IsForbidden() or FrameIsCompact(frame) or not UnitExists(frame.displayedUnit) or _G[ns.OPTIONS_NAME].ActiveNameplatesColor == false then
+        return
+    end
+    local cacheOptions = ns.Module.cacheOptions
+    if not UnitIsFriend(frame.displayedUnit, "player") then
+        applyBarTexture(frame.healthBar, cacheOptions.EnemiesNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
+    else
+        applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
+    end
+end
 --- Re-applies only the health bar color/texture.
 --- Hooked to CompactUnitFrame_UpdateHealthColor because Blizzard recolors the
 --- bar (red for hostile / threat-based) on health/threat/selection changes,
@@ -182,6 +185,7 @@ local function Hook_CUF_UpdateHealthColor(frame)
     end
 
     local cacheOptions = ns.Module.cacheOptions
+
     local c = getUnitColor(frame.displayedUnit)
 
     if not UnitIsFriend(frame.displayedUnit, "player") then
@@ -249,6 +253,7 @@ local function onOptionsChanged(self, options, changed)
         ns._NameplatesHooked = true;
         hooksecurefunc("CompactUnitFrame_UpdateName", Hook_CUF_UpdateName);
         hooksecurefunc("CompactUnitFrame_UpdateHealthColor", Hook_CUF_UpdateHealthColor);
+        hooksecurefunc("CompactUnitFrameUtil_UpdateFillBar", Hook_CUF_UpdateTexture)
 
         ns._PlayerLevel = UnitLevel("player");
         local f = CreateFrame("Frame", nil, UIParent);

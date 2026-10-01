@@ -356,7 +356,7 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	ns.scrollFrame = scrollFrame;
 	ns.optionsFrame = optionsFrame;
 	self.name = ns.TITLE;
-	self.okay = ns.FlushOptionsChanges; -- options are already saved in real time
+	self.okay = ns.FlushOptionsChanges -- options are already saved in real time
 	self.refresh = refreshOptions;
 	-- self.cancel = K_SHARED_UI.RefreshOptions; -- disabled
 	ns.InterfaceOptions_AddCategory(self);

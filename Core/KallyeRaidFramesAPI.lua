@@ -484,7 +484,11 @@ function ns.Hook_UpdateRoleIcon(frame)
 			return;
 		end
 
-		local offset = icon:GetWidth() / 4
+		local iconWidth = icon:GetWidth()
+		if ns.IsSecretValue(iconWidth) then
+			iconWidth = 16
+		end
+		local offset = iconWidth / 4
 
 		if _G[ns.OPTIONS_NAME].MoveRoleIcons then
 			icon:ClearAllPoints();
@@ -565,36 +569,6 @@ function ns.UpdateNameRaidColor(frame)
             end
         end
     end
-end
-
-function ns.ApplyFuncToRaidFrames(func, ...)
-	for member = 1, 80 do -- Pets included
-		local frame = _G["CompactRaidFrame"..member];
-		if frame and frame:IsVisible() then
-			func(frame, ...);
-		end
-	end
-	for member = 1, 5 do
-		local frame = _G["CompactPartyFrameMember"..member];
-		if frame and frame:IsVisible() then
-			func(frame, ...);
-		end
-		frame = _G["CompactPartyFramePet"..member];
-		if frame and frame:IsVisible() then
-			func(frame, ...);
-		end
-	end
-	for raid = 1, 8 do
-		if _G["CompactRaidGroup"..raid] ~= nil and _G["CompactRaidGroup"..raid]:IsVisible() then
-			for member = 1, 5 do
-				local frame = _G["CompactRaidGroup"..raid.."Member"..member];
-				if frame == nil or not frame:IsVisible() then
-					break;
-				end
-				func(frame, ...);
-			end
-		end
-	end
 end
 
 function ns.RaidFrames_ResetHealth(frame, testMode)

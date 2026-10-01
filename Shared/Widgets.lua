@@ -39,6 +39,11 @@ local function showTooltip(frame, title, text, anchor)
 	GameTooltip:AppendText("");
 end
 
+local function AssignNameSpace_OnLoad(self)
+	self._OPTIONS_NAME = ns.OPTIONS_NAME
+	self._ns = ns
+end
+
 -- #region Checkbox Widget
 --[[
 ! Checkbox Widget
@@ -53,6 +58,7 @@ function K_SHARED_UI.CheckboxWidget_OnClick(self)
 end
 function K_SHARED_UI.CheckboxWidget_OnLoad(self)
 	self.type = "checkbox";
+	AssignNameSpace_OnLoad(self)
 
 	local text = self:GetAttribute("text");
 	text = l(text) or _G[text] or text;
@@ -169,12 +175,12 @@ local function ColorWidget_ColorPickedCallback()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
 	local newA = ColorPickerFrame.hasOpacity and ColorPickerFrame:GetColorAlpha() or nil;
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA })
-	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self._ns, ColorPickerFrame.Self)
 end
 local function ColorWidget_ColorCancelledCallback()
 	local newR, newG, newB, newA = ColorPickerFrame:GetPreviousValues();
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
-	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self._ns, ColorPickerFrame.Self)
 end
 
 --[[
@@ -196,12 +202,12 @@ local function ColorWidget_ColorPickedCallback_Classic()
 	local newR, newG, newB = ColorPickerFrame:GetColorRGB();
 	local newA = ColorPickerFrame.hasOpacity and (1 - OpacitySliderFrame:GetValue()) or nil;
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
-	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self._ns, ColorPickerFrame.Self)
 end
 local function ColorWidget_ColorCancelledCallback_Classic()
 	local newR, newG, newB, newA = unpack(ColorPickerFrame._previousValues);
 	ColorPickerFrame.Self:SetColor({ r = newR , g = newG, b = newB, a = newA });
-	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self)
+	K_SHARED_UI.NotifyControlChanged(ColorPickerFrame.Self._ns, ColorPickerFrame.Self)
 end
 
 local function ColorWidget_SetColor(self, RGBA)
@@ -214,6 +220,7 @@ end
 
 function K_SHARED_UI.ColorWidget_OnLoad (self)
 	self.type = "color";
+	AssignNameSpace_OnLoad(self)
 
 	local text = self:GetAttribute("text");
 	text = l(text) or _G[text] or text;
@@ -309,6 +316,7 @@ end
 function K_SHARED_UI.SliderWidget_OnLoad (self)
 	self._isLoaded = false
 	self.type = CONTROLTYPE_SLIDER;
+	AssignNameSpace_OnLoad(self)
 	--? Since Shadowlands (9)
 	if (BackdropTemplateMixin) then
 		BackdropTemplateMixin.OnBackdropLoaded(self);
@@ -356,7 +364,7 @@ function K_SHARED_UI.SliderWidget_OnValueChanged(self, value)
 	if not self._isLoaded then
 		return
 	end
-	K_SHARED_UI.NotifyControlChanged(self)
+	K_SHARED_UI.NotifyControlChanged(self._ns, self)
 	local onEventScript = self:GetScript("OnEvent")
 	if onEventScript then
 		onEventScript(self, "change")
@@ -381,7 +389,7 @@ Items attributes: text1, value1, color1, ...
 * Warning: name has to be set if you want to enable/disable widget
 ]]
 local function DropDownWidget_OnSelect(dropdown, value, text)
-	K_SHARED_UI.NotifyControlChanged(dropdown)
+	K_SHARED_UI.NotifyControlChanged(dropdown._ns, dropdown)
 	local onEventScript = dropdown:GetScript("OnEvent")
 	if onEventScript then
 		onEventScript(dropdown, "select")
@@ -471,6 +479,7 @@ local function DropDownWidget_Enable(self)
 end
 function K_SHARED_UI.DropDownWidget_OnLoad(self)
 	self.type = "dropdown";
+	AssignNameSpace_OnLoad(self)
 	self.Disable = DropDownWidget_Disable;
 	self.Enable = DropDownWidget_Enable;
 	self.SetValue = DropDownWidget_SetValue;
