@@ -15,17 +15,17 @@ end
 
 --- SHARED API options management (default, bind, live changes)
 --- ! Useable only after ADDON_LOADED
-function ns.SetDefaultOptions(DefaultOptions, reset)
-	if reset or _G[ns.OPTIONS_NAME] == nil then
-		_G[ns.OPTIONS_NAME] = CopyTable(DefaultOptions)
+function ns.SetDefaultOptions(NS_OPTIONS_NAME, DefaultOptions, reset)
+	if reset or _G[NS_OPTIONS_NAME] == nil then
+		_G[NS_OPTIONS_NAME] = CopyTable(DefaultOptions)
 	else
         if ns.RemoveOldOptions then
-            ns.RemoveOldOptions(_G[ns.OPTIONS_NAME])
+            ns.RemoveOldOptions(_G[NS_OPTIONS_NAME])
         end
 		foreach(DefaultOptions,
 			function (optionName, defaultValue)
-				if _G[ns.OPTIONS_NAME][optionName] == nil then
-					_G[ns.OPTIONS_NAME][optionName] = defaultValue;
+				if _G[NS_OPTIONS_NAME][optionName] == nil then
+					_G[NS_OPTIONS_NAME][optionName] = defaultValue;
 				end
 			end
 		);
@@ -85,9 +85,11 @@ local function valuesAreEqual(a, b)
 end
 --#endregion
 
+K_SHARED_UI.optionByControl = K_SHARED_UI.optionByControl or {}
+K_SHARED_UI.pendingChanges = K_SHARED_UI.pendingChanges or {}
 --#region Live options
-local optionByControl = {};
-local pendingChanges = {};
+local optionByControl = K_SHARED_UI.optionByControl;
+local pendingChanges = K_SHARED_UI.pendingChanges;
 local isFlushScheduled = false;
 local reloadStateFunc = nil;
 local reloadBaseline = nil;
@@ -107,8 +109,8 @@ end
 
 --- Dispatches changed options: reload warning, core, modules, then UI state
 --- @param changed table Set of modified option names ({ [name] = true })
-function ns.NotifyOptionsChanged(changed)
-    local options = _G[ns.OPTIONS_NAME];
+function ns.NotifyOptionsChanged(NS_OPTIONS_NAME, changed)
+    local options = _G[NS_OPTIONS_NAME];
     checkReloadRequired();
     if ns.OnCoreOptionsChanged then
         ns.OnCoreOptionsChanged(options, changed);
@@ -122,47 +124,50 @@ function ns.NotifyOptionsChanged(changed)
 end
 
 --- Applies all pending changes now (batched once per frame otherwise)
-function ns.FlushOptionsChanges()
+function ns.FlushOptionsChanges(NS_OPTIONS_NAME)
     isFlushScheduled = false;
-    if next(pendingChanges) == nil then
+    if pendingChanges[NS_OPTIONS_NAME] == nil or next(pendingChanges[NS_OPTIONS_NAME]) == nil then
         return;
     end
-    local changed = pendingChanges;
-    pendingChanges = {};
-    ns.NotifyOptionsChanged(changed);
+    local changed = pendingChanges[NS_OPTIONS_NAME];
+    pendingChanges[NS_OPTIONS_NAME] = {};
+    ns.NotifyOptionsChanged(NS_OPTIONS_NAME, changed);
 end
 
-local function scheduleFlush()
+local function scheduleFlush(NS_OPTIONS_NAME)
     if isFlushScheduled then
         return;
     end
     isFlushScheduled = true;
-    C_Timer.After(0, ns.FlushOptionsChanges);
+    C_Timer.After(0, function() ns.FlushOptionsChanges(NS_OPTIONS_NAME) end);
 end
 
 --- Called by widgets when the user modified a control: saves the option right away and applies it
 --- @param control table The modified control
-function K_SHARED_UI.NotifyControlChanged(control)
-    local optionName = optionByControl[control];
+function K_SHARED_UI.NotifyControlChanged(NS_OPTIONS_NAME, control)
+    local optionName = optionByControl[NS_OPTIONS_NAME][control];
     if ns._loadingControls or optionName == nil then
         if not ns._loadingControls then
             K_SHARED_UI.RefreshOptions();
         end
         return;
     end
-    local options = _G[ns.OPTIONS_NAME];
+    local options = _G[NS_OPTIONS_NAME];
     local value = ns.ReadControlValue(control, options[optionName]);
     if value == nil or valuesAreEqual(value, options[optionName]) then
         return;
     end
     options[optionName] = value;
-    pendingChanges[optionName] = true;
-    scheduleFlush();
+    if pendingChanges[NS_OPTIONS_NAME] == nil then
+        pendingChanges[NS_OPTIONS_NAME] = {}
+    end
+    pendingChanges[NS_OPTIONS_NAME][optionName] = true;
+    scheduleFlush(NS_OPTIONS_NAME);
 end
 
 --- Sets an option from code: saved value + its control, without notification
-function ns.SetOptionValue(optionName, value)
-    _G[ns.OPTIONS_NAME][optionName] = value;
+function ns.SetOptionValue(NS_OPTIONS_NAME, optionName, value)
+    _G[NS_OPTIONS_NAME][optionName] = value;
     local control = ns.FindControl(optionName);
     if control then
         local wasLoading = ns._loadingControls;
@@ -176,16 +181,19 @@ end
 --- ! Useable only after ADDON_LOADED, once
 --- @param defaultOptions table Table containing the default options
 --- @param ComputedReloadOptions function? Function that returns the options (requiring reload) state as a string
-function ns.BindOptionControls(defaultOptions, ComputedReloadOptions)
+function ns.BindOptionControls(NS_OPTIONS_NAME, defaultOptions, ComputedReloadOptions)
     foreach(defaultOptions,
         function (optionName, defaultValue)
             local control = ns.FindControl(optionName);
             if control == nil then
                 return;
             end
-            optionByControl[control] = optionName;
+            if (optionByControl[NS_OPTIONS_NAME] == nil) then
+                optionByControl[NS_OPTIONS_NAME] = {}
+            end
+            optionByControl[NS_OPTIONS_NAME][control] = optionName;
             if control.type == "checkbox" then
-                control:HookScript("OnClick", K_SHARED_UI.NotifyControlChanged);
+                control:HookScript("OnClick", function (ctrl) K_SHARED_UI.NotifyControlChanged(NS_OPTIONS_NAME, ctrl) end);
             end
         end
     );
@@ -201,10 +209,9 @@ end
 
 --- Refreshes the UI state (visibility / enabled) of the options, from the live options
 function K_SHARED_UI.RefreshOptions()
-    local options = _G[ns.OPTIONS_NAME];
     foreach(K_SHARED_UI.optionsRefreshFuncs,
         function (_, func)
-            func(options)
+            func()
         end
     );
 end
@@ -214,7 +221,7 @@ end
 --- @param defaultOptions table Table containing the default options
 --- @param showOptionsFrame boolean? Optional Whether to show the options frame
 --- @param limitToOptionsNames table? Optional table containing the names of options to limit to
-function ns.RefreshOptions(defaultOptions, showOptionsFrame, limitToOptionsNames)
+function ns.RefreshOptions(NS_OPTIONS_NAME, defaultOptions, showOptionsFrame, limitToOptionsNames)
     ns.optionsFrame:SetShown(showOptionsFrame);
     ns._loadingControls = true;
     -- Auto detect options controls and load them
@@ -225,7 +232,7 @@ function ns.RefreshOptions(defaultOptions, showOptionsFrame, limitToOptionsNames
             end
             local control = ns.FindControl(optionName);
             if (control ~= nil) then
-                local value = _G[ns.OPTIONS_NAME][optionName];
+                local value = _G[NS_OPTIONS_NAME][optionName];
                 if value == nil then
                     value = defaultValue;
                     ns.AddMsgErr(format("Option not found ("..l.YLD.."%s|r), loading default value...", optionName));
@@ -296,15 +303,15 @@ end
 --- @param optionNamesToReset table A list of option names to reset.
 --- @param defaultOptions table  A table containing the default options.
 --- @param optionsToForce table? An optional table containing options to force override
-function ns.ResetOptions(optionNamesToReset, defaultOptions, optionsToForce)
+function ns.ResetOptions(NS_OPTIONS_NAME, optionNamesToReset, defaultOptions, optionsToForce)
 	local changed = {}
 	for _, optionName in ipairs(optionNamesToReset) do
-		_G[ns.OPTIONS_NAME][optionName] = CopyTable({ defaultOptions[optionName] })[1]
+		_G[NS_OPTIONS_NAME][optionName] = CopyTable({ defaultOptions[optionName] })[1]
 	end
 	if optionsToForce then
         foreach(optionsToForce,
             function (optionName, overrideValue)
-				_G[ns.OPTIONS_NAME][optionName] = overrideValue
+				_G[NS_OPTIONS_NAME][optionName] = overrideValue
 			    table.insert(optionNamesToReset, optionName) -- in case of we forgot
 			end
 		)
@@ -312,6 +319,6 @@ function ns.ResetOptions(optionNamesToReset, defaultOptions, optionsToForce)
 	for _, optionName in ipairs(optionNamesToReset) do
 		changed[optionName] = true
 	end
-	ns.RefreshOptions(defaultOptions, true, optionNamesToReset)
-	ns.NotifyOptionsChanged(changed)
+	ns.RefreshOptions(NS_OPTIONS_NAME, defaultOptions, true, optionNamesToReset)
+	ns.NotifyOptionsChanged(NS_OPTIONS_NAME, changed)
 end

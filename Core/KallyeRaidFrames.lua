@@ -162,10 +162,10 @@ end
 function ns.OnCoreOptionsChanged(options, changed)
 	-- Secure limits (low <= warn <= ok)
 	if options.LimitWarn < options.LimitLow then
-		ns.SetOptionValue("LimitWarn", options.LimitLow);
+		ns.SetOptionValue(ns.OPTIONS_NAME, "LimitWarn", options.LimitLow);
 	end
 	if options.LimitOk < options.LimitWarn then
-		ns.SetOptionValue("LimitOk", options.LimitWarn);
+		ns.SetOptionValue(ns.OPTIONS_NAME, "LimitOk", options.LimitWarn);
 	end
 	EnsureInRangeHooks();
 	-- Apply as soon as possible on the displayed frames
@@ -179,9 +179,9 @@ local function OnEvent(self, event, ...)
 		isLoaded = true;
 
 		if l.UpdateLocales then l.UpdateLocales() end
-		ns.SetDefaultOptions(defaultOptions);
-		ns.RefreshOptions(defaultOptions);
-		ns.BindOptionControls(defaultOptions, RequiredReloadOptionsString);
+		ns.SetDefaultOptions(ns.OPTIONS_NAME, defaultOptions);
+		ns.RefreshOptions(ns.OPTIONS_NAME, defaultOptions);
+		ns.BindOptionControls(ns.OPTIONS_NAME, defaultOptions, RequiredReloadOptionsString);
 
 		if C_AddOns.GetAddOnInfo("RaidFrameAuras") == nil then
 			self:UnregisterEvent("ADDON_LOADED");
@@ -307,7 +307,7 @@ StaticPopupDialogs[ns.ADDON_NAME.."_CONFIRM_RESET"] = {
 	-- button3 = CURRENT_SETTINGS,
 	button2 = CANCEL,
 	OnAccept = function()
-		ns.SetDefaultOptions(defaultOptions, true);
+		ns.SetDefaultOptions(ns.OPTIONS_NAME, defaultOptions, true);
 		ReloadUI();
 	end,
 	-- OnAlt  = function()	end,
@@ -323,7 +323,7 @@ function KRFUI.ConfirmReset()
 end
 
 function KRFUI.ResetOptions(optionNamesToReset, optionsToForce)
-	ns.ResetOptions(optionNamesToReset, defaultOptions, optionsToForce)
+	ns.ResetOptions(ns.OPTIONS_NAME, optionNamesToReset, defaultOptions, optionsToForce)
 end
 
 
@@ -346,7 +346,7 @@ function KRFUI.ShowEditMode(window)
 end
 
 local refreshOptions = function()
-	ns.RefreshOptions(defaultOptions, true);
+	ns.RefreshOptions(ns.OPTIONS_NAME, defaultOptions, true);
 end
 function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	if ns.CONFLICT then
@@ -356,7 +356,7 @@ function KRFUI.OptionsContainer_OnLoad(self, scrollFrame, optionsFrame)
 	ns.scrollFrame = scrollFrame;
 	ns.optionsFrame = optionsFrame;
 	self.name = ns.TITLE;
-	self.okay = ns.FlushOptionsChanges; -- options are already saved in real time
+	self.okay = function() ns.FlushOptionsChanges(ns.OPTIONS_NAME) end -- options are already saved in real time
 	self.refresh = refreshOptions;
 	-- self.cancel = K_SHARED_UI.RefreshOptions; -- disabled
 	ns.InterfaceOptions_AddCategory(self);
