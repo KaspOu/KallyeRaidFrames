@@ -224,8 +224,28 @@ local function isEnabled(options)
         )
 end
 
-local function onSaveOptions(self, options)
-    if not ns._NameplatesHooked and isEnabled(options) then
+--- Re-applies the options on the nameplates already displayed
+local function refreshDisplayedNameplates(isActive)
+    if not (C_NamePlate and C_NamePlate.GetNamePlates) then
+        return
+    end
+    for _, nameplate in ipairs(C_NamePlate.GetNamePlates()) do
+        local frame = nameplate.UnitFrame
+        if frame and not frame:IsForbidden() and frame.healthBar and frame.name then
+            if not isActive and frame.healthBar._lastTexture ~= nil then
+                frame.healthBar._lastTexture = nil
+                frame.healthBar:SetStatusBarTexture(DEFAULT_NAMEPLATES_TEXTURE)
+            end
+            frame.name._previousPrefix = nil
+            pcall(CompactUnitFrame_UpdateName, frame)
+            pcall(CompactUnitFrame_UpdateHealthColor, frame)
+        end
+    end
+end
+
+local function onOptionsChanged(self, options, changed)
+    local isActive = isEnabled(options)
+    if not ns._NameplatesHooked and isActive then
         ns._NameplatesHooked = true;
         hooksecurefunc("CompactUnitFrame_UpdateName", Hook_CUF_UpdateName);
         hooksecurefunc("CompactUnitFrame_UpdateHealthColor", Hook_CUF_UpdateHealthColor);
@@ -235,13 +255,16 @@ local function onSaveOptions(self, options)
         f:RegisterEvent("PLAYER_LEVEL_UP");
         f:SetScript("OnEvent", OnEvent);
     end
+    if changed and ns._NameplatesHooked then
+        refreshDisplayedNameplates(isActive)
+    end
 end
 
 local function onInit(self, options)
-    onSaveOptions(self, options);
+    onOptionsChanged(self, options);
 end
 local module = ns.Module:new(onInit, "NameplatesColor");
-module:SetOnSaveOptions(onSaveOptions);
+module:SetOnOptionsChanged(onOptionsChanged);
 module:SetGetInfo(getInfo);
 
 --@do-not-package@

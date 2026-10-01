@@ -24,11 +24,6 @@
 						<Offset x="55" y="-8"/>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						K_SHARED_UI.RefreshOptions()
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
 
@@ -53,11 +48,6 @@
 					<Anchor point="TOP" relativeKey="$parent.LabelRaidIcons" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent"><Offset x="0" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 			<Slider parentKey="RaidsIcons_Size" inherits="KRFUI_SliderWidget" minValue="6" maxValue="20" valueStep="1" stepsPerPage="2" obeyStepOnDrag="false">
 				<Size x="200" y="15" />
@@ -70,11 +60,6 @@
 						<Offset x="270" y="0"/>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="RaidsIcons_PosX" inherits="KRFUI_SliderWidget" minValue="-20" maxValue="20" valueStep="2" stepsPerPage="4" obeyStepOnDrag="false">
 				<Size x="200" y="15" />
@@ -86,11 +71,6 @@
 					<Anchor point="TOP" relativeKey="$parent.RaidsIcons_Anchor" relativePoint="BOTTOM"><Offset x="0" y="-20"/></Anchor>
 					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 			<Slider parentKey="RaidsIcons_PosY" inherits="KRFUI_SliderWidget" minValue="-20" maxValue="20" valueStep="2" stepsPerPage="4" obeyStepOnDrag="false">
 				<Size x="200" y="15" />
@@ -102,11 +82,6 @@
 					<Anchor point="TOP" relativeKey="$parent.RaidsIcons_PosX" relativePoint="BOTTOM"><Offset x="0" y="-20"/></Anchor>
 					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Slider>
 		</Frames>
 	</Frame>
