@@ -1,5 +1,6 @@
 local _, ns = ...
 local l = ns.I18N;
+K_Global_Vars = K_Global_Vars or {}
 
 -- * avoid conflict override
 if ns.CONFLICT then return; end
@@ -77,8 +78,9 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
             prefix = icon..prefix;
         end
     end
+    local unitname = K_Global_Vars.GetUnitNameSafe or UnitName -- apply code from HideRaidRealmNames if exists
     if prefix ~= "" or prefix ~= name._previousPrefix then
-        name:SetText(string.format("%s%s", prefix, UnitName(unit)))
+        name:SetText(string.format("%s%s", prefix, unitname(unit)))
         name._previousPrefix = prefix
     end
 end
@@ -249,6 +251,7 @@ end
 
 local function onOptionsChanged(self, options, changed)
     local isActive = isEnabled(options)
+    K_Global_Vars.NameplatesColor_Enabled = isActive
     if not ns._NameplatesHooked and isActive then
         ns._NameplatesHooked = true;
         hooksecurefunc("CompactUnitFrame_UpdateName", Hook_CUF_UpdateName);

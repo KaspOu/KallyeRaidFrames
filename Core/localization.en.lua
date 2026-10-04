@@ -10,10 +10,9 @@ l.CONFLICT_MESSAGE = "Disabled: Conflict with %s";
 
 -- Whats new info
 l.WHATSNEW = [[ What's new:
-- New options (Midnight):
-  > Spacing between buffs & debuffs
-  > Hide tooltip when hovering a buff or debuff icon
-  > Filter choice for buffs & debuffs
+- Settings are now applied in real time.
+- Nameplates: textures fixed
+- Nameplates: names fixed
 ]]
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;

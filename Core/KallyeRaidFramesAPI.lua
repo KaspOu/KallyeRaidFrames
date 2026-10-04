@@ -1,5 +1,6 @@
 local _, ns = ...
 local l = ns.I18N;
+K_Global_Vars = K_Global_Vars or {}
 
 local DEFAULT_RAIDHEALTHBAR_TEXTURE = 423819
 
@@ -504,7 +505,7 @@ function ns.Hook_UpdateRoleIcon(frame)
 	end
 end
 
-local GetUnitNameSafe = function(unit, showServerName)
+function K_Global_Vars.GetUnitNameSafe(unit, showServerName)
 	local name, server = UnitName(unit);
 	if ( type(server) ~= "nil") then
 		if ( showServerName ) then
@@ -537,9 +538,9 @@ function ns.Hook_UpdateName(frame, calledOutsideHook)
 	local dead = (_G[ns.OPTIONS_NAME].IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or ""
 
 	if _G[ns.OPTIONS_NAME].HideRealm then
-		name:SetText(string.format("%s%s", dead, GetUnitNameSafe(frame.displayedUnit, false)))
+		name:SetText(string.format("%s%s", dead, K_Global_Vars.GetUnitNameSafe(frame.displayedUnit, false)))
 	elseif _G[ns.OPTIONS_NAME].IconOnDeath then
-		name:SetText(string.format("%s%s", dead, GetUnitNameSafe(frame.displayedUnit, true)))
+		name:SetText(string.format("%s%s", dead, K_Global_Vars.GetUnitNameSafe(frame.displayedUnit, true)))
 	end
 end
 
