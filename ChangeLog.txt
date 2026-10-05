@@ -1,3 +1,9 @@
+v12.1.004
+- Settings are now applied in real time.
+- (Shared code refactored)
+- Nameplates: textures fixed
+- Nameplates: names fixed
+
 v12.1.003
 - Buffs & Debuffs: New options (Midnight):
   > Spacing between buffs & debuffs

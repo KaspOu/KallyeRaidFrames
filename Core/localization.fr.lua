@@ -11,10 +11,9 @@ l.CONFLICT_MESSAGE = "D\195\169sactiv\195\169 : Conflit avec %s";
 
 -- Whats new info
 l.WHATSNEW = [[ Nouveautés :
-- Nouvelles options (Midnight):
-  > Espacement entre les buffs & débuffs
-  > Masquer le tooltip lors du survol d'une icône de buff ou débuff
-  > Choix du filtre pour les buffs & débuffs
+- Les paramètres sont maintenant appliqués en temps réel.
+- Barres d'info : texture corrigée
+- Barres d'info : noms corrigés
 ]];
 
 l.WHATSNEW = l.YL..l.VERS_TITLE.." -"..l.YLL..l.WHATSNEW;

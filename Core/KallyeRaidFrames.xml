@@ -74,11 +74,6 @@
 									<Anchor point="TOP" relativeKey="$parent.LabelRaid" relativePoint="BOTTOM"/>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnClick>
-										K_SHARED_UI.RefreshOptions()
-									</OnClick>
-								</Scripts>
 							</CheckButton>
 							<CheckButton parentKey="RevertBar" inherits="KRFUI_CheckboxWidget">
 								<Attributes>
@@ -89,11 +84,6 @@
 									<Anchor point="TOP" relativeKey="$parent.UpdateHealthColor" relativePoint="BOTTOM"/>
 									<Anchor point="LEFT" relativeTo="$parent"><Offset x="40" y="0"/></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnClick>
-										K_SHARED_UI.RefreshOptions()
-									</OnClick>
-								</Scripts>
 							</CheckButton>
 							<Button parentKey="BGColorLow" inherits="KRFUI_ColorWidget">
 								<Attributes>
@@ -385,11 +375,6 @@
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.AlphaNotInCombat" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnClick>
-										K_SHARED_UI.RefreshOptions()
-									</OnClick>
-								</Scripts>
 							</CheckButton>
 							<Button parentKey="Debug" inherits="UIPanelButtonTemplate">
 								<Size x="200" y="20" />
@@ -445,11 +430,6 @@
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeKey="$parent.EditMode" relativePoint="BOTTOMLEFT"><Offset x="-20" y="0" /></Anchor>
 								</Anchors>
-								<Scripts>
-									<OnClick>
-										K_SHARED_UI.RefreshOptions()
-									</OnClick>
-								</Scripts>
 							</CheckButton>
 
 							<Frame parentKey="Options1" inherits="KRFOptionsUnitDebuffs">
@@ -553,11 +533,6 @@
 										<Offset x="0" y="-20"/>
 									</Anchor>
 								</Anchors>
-								<Scripts>
-									<OnClick>
-										K_SHARED_UI.RefreshOptions()
-									</OnClick>
-								</Scripts>
 							</CheckButton>
 							<CheckButton parentKey="AddonCompartmentFilter" inherits="KRFUI_CheckboxWidget">
 								<Attributes>

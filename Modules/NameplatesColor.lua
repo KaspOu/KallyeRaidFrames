@@ -1,5 +1,6 @@
 local _, ns = ...
 local l = ns.I18N;
+K_Global_Vars = K_Global_Vars or {}
 
 -- * avoid conflict override
 if ns.CONFLICT then return; end
@@ -77,24 +78,22 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
             prefix = icon..prefix;
         end
     end
+    local unitname = K_Global_Vars.GetUnitNameSafe or UnitName -- apply code from HideRaidRealmNames if exists
     if prefix ~= "" or prefix ~= name._previousPrefix then
-        name:SetText(string.format("%s%s", prefix, UnitName(unit)))
+        name:SetText(string.format("%s%s", prefix, unitname(unit)))
         name._previousPrefix = prefix
     end
 end
 
 local function applyBarTexture(frame, texture, default)
-    if (texture ~= "" and frame._lastTexture == texture) then
+    if (texture ~= "") then
+        frame._overriddenTexture = texture
+    end
+    if (texture == "" and frame._overriddenTexture ~= nil) then
+        frame:SetStatusBarTexture(default)
+        frame._overriddenTexture = nil
         return
     end
-    if (texture == "") then
-        if (frame._lastTexture ~= nil) then
-            frame._lastTexture = nil
-            frame:SetStatusBarTexture(default)
-        end
-        return
-    end
-    frame._lastTexture = texture
     frame:SetStatusBarTexture(texture)
 end
 
@@ -143,11 +142,6 @@ local function Hook_CUF_UpdateName(frame)
     end
 
     local cacheOptions = ns.Module.cacheOptions
-    if not UnitIsFriend(frame.displayedUnit, "player") then
-        applyBarTexture(frame.healthBar, cacheOptions.EnemiesNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
-    else
-        applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
-    end
 
     local c = getUnitColor(frame.displayedUnit)
 
@@ -172,6 +166,17 @@ local function Hook_CUF_UpdateName(frame)
     end
 end
 
+local function Hook_CUF_UpdateTexture(frame)
+    if frame:IsForbidden() or FrameIsCompact(frame) or not UnitExists(frame.displayedUnit) or _G[ns.OPTIONS_NAME].ActiveNameplatesColor == false then
+        return
+    end
+    local cacheOptions = ns.Module.cacheOptions
+    if not UnitIsFriend(frame.displayedUnit, "player") then
+        applyBarTexture(frame.healthBar, cacheOptions.EnemiesNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
+    else
+        applyBarTexture(frame.healthBar, cacheOptions.FriendsNameplates_Bar_Texture, DEFAULT_NAMEPLATES_TEXTURE)
+    end
+end
 --- Re-applies only the health bar color/texture.
 --- Hooked to CompactUnitFrame_UpdateHealthColor because Blizzard recolors the
 --- bar (red for hostile / threat-based) on health/threat/selection changes,
@@ -182,6 +187,7 @@ local function Hook_CUF_UpdateHealthColor(frame)
     end
 
     local cacheOptions = ns.Module.cacheOptions
+
     local c = getUnitColor(frame.displayedUnit)
 
     if not UnitIsFriend(frame.displayedUnit, "player") then
@@ -224,24 +230,49 @@ local function isEnabled(options)
         )
 end
 
-local function onSaveOptions(self, options)
-    if not ns._NameplatesHooked and isEnabled(options) then
+--- Re-applies the options on the nameplates already displayed
+local function refreshDisplayedNameplates(isActive)
+    if not (C_NamePlate and C_NamePlate.GetNamePlates) then
+        return
+    end
+    for _, nameplate in ipairs(C_NamePlate.GetNamePlates()) do
+        local frame = nameplate.UnitFrame
+        if frame and not frame:IsForbidden() and frame.healthBar and frame.name then
+            if not isActive and frame.healthBar._lastTexture ~= nil then
+                frame.healthBar._lastTexture = nil
+                frame.healthBar:SetStatusBarTexture(DEFAULT_NAMEPLATES_TEXTURE)
+            end
+            frame.name._previousPrefix = nil
+            pcall(CompactUnitFrame_UpdateName, frame)
+            pcall(CompactUnitFrame_UpdateHealthColor, frame)
+        end
+    end
+end
+
+local function onOptionsChanged(self, options, changed)
+    local isActive = isEnabled(options)
+    K_Global_Vars.NameplatesColor_Enabled = isActive
+    if not ns._NameplatesHooked and isActive then
         ns._NameplatesHooked = true;
         hooksecurefunc("CompactUnitFrame_UpdateName", Hook_CUF_UpdateName);
         hooksecurefunc("CompactUnitFrame_UpdateHealthColor", Hook_CUF_UpdateHealthColor);
+        hooksecurefunc("CompactUnitFrameUtil_UpdateFillBar", Hook_CUF_UpdateTexture)
 
         ns._PlayerLevel = UnitLevel("player");
         local f = CreateFrame("Frame", nil, UIParent);
         f:RegisterEvent("PLAYER_LEVEL_UP");
         f:SetScript("OnEvent", OnEvent);
     end
+    if changed and ns._NameplatesHooked then
+        refreshDisplayedNameplates(isActive)
+    end
 end
 
 local function onInit(self, options)
-    onSaveOptions(self, options);
+    onOptionsChanged(self, options);
 end
 local module = ns.Module:new(onInit, "NameplatesColor");
-module:SetOnSaveOptions(onSaveOptions);
+module:SetOnOptionsChanged(onOptionsChanged);
 module:SetGetInfo(getInfo);
 
 --@do-not-package@

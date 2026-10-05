@@ -24,11 +24,6 @@
 						<Offset x="55" y="-8"/>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						K_SHARED_UI.RefreshOptions()
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
 			<!-- Friends Names -->
@@ -50,11 +45,6 @@
 					<Anchor point="TOP" relativeKey="$parent.LabelNameplatesColor" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent"><Offset x="0" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 				<Button parentKey="FriendsNameplates_Txt_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
@@ -85,11 +75,6 @@
 					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_Txt_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Txt_UseColor"><Offset x="0" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 				<Button parentKey="FriendsNameplates_Bar_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
@@ -192,11 +177,6 @@
 					<Anchor point="TOP" relativeKey="$parent.FriendsNameplates_PvpIcon" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent"><Offset x="0" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 				<Button parentKey="FriendsNameplates_Txt_Level_Color_Under" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Size x="20" y="30" />
@@ -240,11 +220,6 @@
 					<Anchor point="TOP" relativeKey="$parent.LabelNameplatesColor" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.FriendsNameplates_Bar_UseColor" relativePoint="RIGHT"><Offset x="50" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 				<Button parentKey="EnemiesNameplates_Txt_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
@@ -275,11 +250,6 @@
 					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_Txt_UseColor" relativePoint="BOTTOM"><Offset y="-20"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_Txt_UseColor"><Offset x="0" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 				<Button parentKey="EnemiesNameplates_Bar_Color" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>
@@ -380,11 +350,6 @@
 					<Anchor point="TOP" relativeKey="$parent.EnemiesNameplates_PvpIcon" relativePoint="BOTTOM"><Offset y="-25"/></Anchor>
 					<Anchor point="LEFT" relativeKey="$parent.EnemiesNameplates_PvpIcon"><Offset x="0" /></Anchor>
 				</Anchors>
-				<Scripts>
-					<OnEvent>
-						K_SHARED_UI.RefreshOptions()
-					</OnEvent>
-				</Scripts>
 			</Frame>
 				<Button parentKey="EnemiesNameplates_Txt_Level_Color_Under" Framelevel="2" inherits="KRFUI_ColorWidget">
 					<Attributes>

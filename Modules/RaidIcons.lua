@@ -63,8 +63,8 @@ local function GetUnitFrame(type, group, member)
 		return _G["CompactRaidGroup"..group.."Member"..member]
 	end
 end
-local function SetRaidIcons(dontResetPositions, overrideOptions)
-	local options = overrideOptions or _G[ns.OPTIONS_NAME];
+local function SetRaidIcons(dontResetPositions)
+	local options = _G[ns.OPTIONS_NAME];
 	foreach (raidIcons,
 		function (_, raidIcon)
 			raidIcon.visible = false
@@ -156,39 +156,44 @@ local function OnEvent(self, event, ...)
 		-- If Raid frames moved: replaceraidIcons()
 	end
 end
-local function onSaveOptions(self, options)
-	if isEnabled(options) then
-		if not ns._RaidIconsHooked then
-			ns._RaidIconsHooked = true
-			local f = CreateFrame("Frame", nil, UIParent);
-			InitRaidIconsTextures(f, options.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
-			f:RegisterEvent("RAID_TARGET_UPDATE");
-			f:RegisterEvent("GROUP_ROSTER_UPDATE");
-			f:RegisterEvent("PLAYER_LOGIN");
-			f:SetScript("OnEvent", OnEvent);
-
-			-- Direct preview options
-			K_SHARED_UI.AddRefreshOptions(
-				function(previewOptions)
-					if (previewOptions) then
-						ResizeRaidIconsTextures(previewOptions.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
-						SetRaidIcons(false, previewOptions);
-					end
-				end
-			)
-		else
-			ResizeRaidIconsTextures(options.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
-			SetRaidIcons()
+local function HideRaidIcons()
+	foreach (raidIcons,
+		function (_, raidIcon)
+			raidIcon.visible = false
+			raidIcon.frame = nil
+			raidIcon._previous = nil
+			raidIcon.texture:Hide()
 		end
+	)
+end
+
+local function onOptionsChanged(self, options)
+	if not isEnabled(options) then
+		if ns._RaidIconsHooked then
+			HideRaidIcons()
+		end
+		return
+	end
+	if not ns._RaidIconsHooked then
+		ns._RaidIconsHooked = true
+		local f = CreateFrame("Frame", nil, UIParent);
+		InitRaidIconsTextures(f, options.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
+		f:RegisterEvent("RAID_TARGET_UPDATE");
+		f:RegisterEvent("GROUP_ROSTER_UPDATE");
+		f:RegisterEvent("PLAYER_LOGIN");
+		f:SetScript("OnEvent", OnEvent);
+	else
+		ResizeRaidIconsTextures(options.RaidsIcons_Size or DEFAULT_RAIDICON_SIZE)
+		SetRaidIcons()
 	end
 end
 
 local function onInit(self, options)
-    onSaveOptions(self, options);
+    onOptionsChanged(self, options);
 end
 local module = ns.Module:new(onInit, "RaidIcons");
 
-module:SetOnSaveOptions(onSaveOptions);
+module:SetOnOptionsChanged(onOptionsChanged);
 module:SetGetInfo(getInfo);
 
 --@do-not-package@

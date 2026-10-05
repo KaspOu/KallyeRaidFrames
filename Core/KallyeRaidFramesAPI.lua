@@ -1,5 +1,6 @@
 local _, ns = ...
 local l = ns.I18N;
+K_Global_Vars = K_Global_Vars or {}
 
 local DEFAULT_RAIDHEALTHBAR_TEXTURE = 423819
 
@@ -484,7 +485,11 @@ function ns.Hook_UpdateRoleIcon(frame)
 			return;
 		end
 
-		local offset = icon:GetWidth() / 4
+		local iconWidth = icon:GetWidth()
+		if ns.IsSecretValue(iconWidth) then
+			iconWidth = 16
+		end
+		local offset = iconWidth / 4
 
 		if _G[ns.OPTIONS_NAME].MoveRoleIcons then
 			icon:ClearAllPoints();
@@ -500,7 +505,7 @@ function ns.Hook_UpdateRoleIcon(frame)
 	end
 end
 
-local GetUnitNameSafe = function(unit, showServerName)
+function K_Global_Vars.GetUnitNameSafe(unit, showServerName)
 	local name, server = UnitName(unit);
 	if ( type(server) ~= "nil") then
 		if ( showServerName ) then
@@ -533,9 +538,9 @@ function ns.Hook_UpdateName(frame, calledOutsideHook)
 	local dead = (_G[ns.OPTIONS_NAME].IconOnDeath and KRF_UnitIsDeadOrGhost(frame)) and l.RT8 or ""
 
 	if _G[ns.OPTIONS_NAME].HideRealm then
-		name:SetText(string.format("%s%s", dead, GetUnitNameSafe(frame.displayedUnit, false)))
+		name:SetText(string.format("%s%s", dead, K_Global_Vars.GetUnitNameSafe(frame.displayedUnit, false)))
 	elseif _G[ns.OPTIONS_NAME].IconOnDeath then
-		name:SetText(string.format("%s%s", dead, GetUnitNameSafe(frame.displayedUnit, true)))
+		name:SetText(string.format("%s%s", dead, K_Global_Vars.GetUnitNameSafe(frame.displayedUnit, true)))
 	end
 end
 
@@ -565,36 +570,6 @@ function ns.UpdateNameRaidColor(frame)
             end
         end
     end
-end
-
-function ns.ApplyFuncToRaidFrames(func, ...)
-	for member = 1, 80 do -- Pets included
-		local frame = _G["CompactRaidFrame"..member];
-		if frame and frame:IsVisible() then
-			func(frame, ...);
-		end
-	end
-	for member = 1, 5 do
-		local frame = _G["CompactPartyFrameMember"..member];
-		if frame and frame:IsVisible() then
-			func(frame, ...);
-		end
-		frame = _G["CompactPartyFramePet"..member];
-		if frame and frame:IsVisible() then
-			func(frame, ...);
-		end
-	end
-	for raid = 1, 8 do
-		if _G["CompactRaidGroup"..raid] ~= nil and _G["CompactRaidGroup"..raid]:IsVisible() then
-			for member = 1, 5 do
-				local frame = _G["CompactRaidGroup"..raid.."Member"..member];
-				if frame == nil or not frame:IsVisible() then
-					break;
-				end
-				func(frame, ...);
-			end
-		end
-	end
 end
 
 function ns.RaidFrames_ResetHealth(frame, testMode)

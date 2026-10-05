@@ -1026,7 +1026,7 @@ function ns.isFlickerWarningShowed(options)
 	local debuffsHook = determineAppropriateHook("", options.DebuffsPerLine, options.MaxDebuffs, DEFAULT_MAXDEBUFFS, options.DebuffsOrientation ~= "RightThenUp", options.DebuffsPosX, options.DebuffsPosY)
 	return buffsHook..debuffsHook ~= ""
 end
-local function onSaveOptions(self, options)
+local function onOptionsChanged(self, options, changed)
 	if IsAuraContainer_Supported() then
 		ApplyAuraContainer(options)
 		return
@@ -1070,14 +1070,23 @@ local function onSaveOptions(self, options)
 			end
 		end)
     end
+	if changed and ns._UnitDebuffsHooked then
+		-- Hooks read the live options: re-apply on the displayed frames (deferred by ManageUnitFrames in combat)
+		ns.ApplyFuncToRaidFrames(function(frame)
+			if frame.buffFrames and frame.debuffFrames then
+				ns.Hook_ManageBuffs(frame)
+				ns.Hook_ManageDebuffs(frame)
+			end
+		end)
+	end
 end
 
 local function onInit(self, options)
-    onSaveOptions(self, options);
+    onOptionsChanged(self, options);
 end
 local module = ns.Module:new(onInit, "UnitDebuffs");
 
-module:SetOnSaveOptions(onSaveOptions);
+module:SetOnOptionsChanged(onOptionsChanged);
 module:SetGetInfo(getInfo);
 
 --@do-not-package@
