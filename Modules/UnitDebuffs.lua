@@ -444,10 +444,10 @@ local function AuraContainerRefreshFrame(frame)
 			pcall(buffContainer.SetAuraGroupMaxFrameCount, buffContainer, "kbd_buffs", maxBuffs)
 
 			local buffsElemSpacing, buffsLineSpacing = ResolveSpacing(options.BuffsOrientation, buffsSpacingX, buffsSpacingY)
-			if addGroupIfNeeded(state, buffContainer, "kbd_buffs", "HELPFUL|RAID_IN_COMBAT", maxBuffs, buffSize, buffMouseEnabled, true) then
+			local filterString = ResolveFilterString("HELPFUL", options.BuffsFilter)
+			if addGroupIfNeeded(state, buffContainer, "kbd_buffs", filterString, maxBuffs, buffSize, buffMouseEnabled, true) then
 				applyGroupLayout(buffContainer, "kbd_buffs", options.BuffsOrientation, options.BuffsPerLine, buffSize, buffsElemSpacing, buffsLineSpacing)
 			end
-			local filterString = ResolveFilterString("HELPFUL", options.BuffsFilter)
 			buffContainer:SetAuraGroupFilterString("kbd_buffs", filterString)
 			setContainerAnchor(
 				buffContainer,
@@ -474,10 +474,10 @@ local function AuraContainerRefreshFrame(frame)
 			pcall(debuffContainer.SetAuraGroupMaxFrameCount, debuffContainer, "kbd_debuffs", maxDebuffs)
 
 			local debuffsElemSpacing, debuffsLineSpacing = ResolveSpacing(options.DebuffsOrientation, debuffsSpacingX, debuffsSpacingY)
-			if addGroupIfNeeded(state, debuffContainer, "kbd_debuffs", "HARMFUL|RAID_IN_COMBAT", maxDebuffs, debuffSize, debuffMouseEnabled, false) then
+			local filterString = ResolveFilterString("HARMFUL", options.DebuffsFilter)
+			if addGroupIfNeeded(state, debuffContainer, "kbd_debuffs", filterString, maxDebuffs, debuffSize, debuffMouseEnabled, false) then
 				applyGroupLayout(debuffContainer, "kbd_debuffs", options.DebuffsOrientation, options.DebuffsPerLine, debuffSize, debuffsElemSpacing, debuffsLineSpacing)
 			end
-			local filterString = ResolveFilterString("HARMFUL", options.DebuffsFilter)
 			debuffContainer:SetAuraGroupFilterString("kbd_debuffs", filterString)
 			setContainerAnchor(
 				debuffContainer,

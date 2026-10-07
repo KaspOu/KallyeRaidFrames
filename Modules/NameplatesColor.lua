@@ -14,10 +14,6 @@ ns.IsSecretValue = issecretvalue or function(_) return false end
 
 local DEFAULT_NAMEPLATES_TEXTURE = 137014
 
-local function getClassColors()
-	return CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS;
-end
-
 local function FrameIsCompact(frame)
 	local getName = frame:GetName()
 	return getName ~=nil and strsub(getName, 0, 7) == "Compact"
@@ -118,8 +114,8 @@ local function getUnitColor(unit)
         isPlayer = (guid and strsub(guid, 1, 6) == "Player") or false
     end
     if isPlayer then
-        local _, class = UnitClass(unit)
-        return class and getClassColors()[class] or nil
+        local _, class =  UnitClass(unit)
+        return (class) and C_ClassColor.GetClassColor(class) or nil
     end
     local r, g, b, a = UnitSelectionColor(unit)
     return { r = r, g = g, b = b, a = a }
