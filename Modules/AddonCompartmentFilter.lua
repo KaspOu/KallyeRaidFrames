@@ -11,7 +11,7 @@ local function onInit(self, options)
             text = ns.TITLE,
             icon = ns.ICON,
             notCheckable = true,
-            func = _G[ns.SLASHCMD],
+            func = SlashCmdList[ns.SLASHCMD],
         })
     end
 end

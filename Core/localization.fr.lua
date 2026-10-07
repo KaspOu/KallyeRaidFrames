@@ -159,13 +159,13 @@ l.OPTION_NAMEPLATES_USECOLOR_CUSTOM = "Votre choix de couleur : ";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD = l.DEFAULT.."Pas d'ic\195\180ne";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Ic\195\180ne de faction |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t";
 l.OPTION_NAMEPLATES_COLOR_UNDER = "Couleur si inf\195\169rieur";
-l.OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP = "S\195\169lectionnez la couleur du niveau s'il est inf\195\169rieur au votre";
+l.OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP = "S\195\169lectionnez la couleur du niveau s'il est inf\195\169rieur au v\195\180tre";
 l.OPTION_NAMEPLATES_COLOR_OVER = "Couleur si sup\195\169rieur";
-l.OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP = "S\195\169lectionnez la couleur du niveau s'il est sup\195\169rieur au votre";
+l.OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP = "S\195\169lectionnez la couleur du niveau s'il est sup\195\169rieur au v\195\180tre";
 l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER = l.DEFAULT.."Jamais";
 l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER_TOOLTIP = "Ne montre jamais le niveau sur les barres d'info.";
-l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT = "Si diff\195\169rent du votre";
-l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED = "Si diff\195\169rent du votre, color\195\169";
+l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT = "Si diff\195\169rent du v\195\180tre";
+l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT_COLORED = "Si diff\195\169rent du v\195\180tre, color\195\169";
 l.OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS = "Toujours";
 l.OPTION_NAMEPLATES_SHOWLEVEL_ALWAYS_COLORED = "Toujours, color\195\169";
 
@@ -219,7 +219,7 @@ l.OPTION_SHOWMSGNORMAL = l.GYL.."Afficher les messages";
 l.OPTION_SHOWMSGWARNING = l.GYL.."Afficher les alertes";
 l.OPTION_SHOWMSGERR = l.GYL.."Afficher les erreurs";
 l.OPTION_COMPARTMENT_FILTER = "Afficher dans le Compartment Filter";
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Dans la iste des addons en haut à droite";
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Dans la liste des addons en haut à droite";
 l.OPTION_WHATSNEW = "Nouveaut\195\169s";
 
 --? Edit Mode - Since DragonFlight (10)
