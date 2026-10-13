@@ -62,7 +62,7 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxDebuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
 			</Slider>
-			<Slider parentKey="DebuffsPosX" inherits="KRFUI_SliderWidget" minValue="-50" maxValue="50" valueStep="2" stepsPerPage="10" obeyStepOnDrag="true">
+			<Slider parentKey="DebuffsPosX" inherits="KRFUI_SliderWidget" minValue="-100" maxValue="100" valueStep="2" stepsPerPage="10" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
 				<Attributes>
 					<Attribute name="text" value="OPTION_DEBUFFS_RELATIVE_X" />
@@ -198,7 +198,7 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MaxBuffs" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
 				</Anchors>
 			</Slider>
-			<Slider parentKey="BuffsPosX" inherits="KRFUI_SliderWidget" minValue="-50" maxValue="50" valueStep="2" stepsPerPage="10" obeyStepOnDrag="true">
+			<Slider parentKey="BuffsPosX" inherits="KRFUI_SliderWidget" minValue="-100" maxValue="100" valueStep="2" stepsPerPage="10" obeyStepOnDrag="true">
 				<Size x="200" y="15" />
 				<Attributes>
 					<Attribute name="text" value="OPTION_BUFFS_RELATIVE_X" />

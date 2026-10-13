@@ -117,7 +117,26 @@
         "RAID_USE_CLASS_COLORS",
         "INTERFACE_LABEL",
         "tContains",
-        "SetRaidTargetIconTexture"
+        "SetRaidTargetIconTexture",
+        "WOW_PROJECT_CAMELOT",
+        "issecretvalue",
+        "CompactRaidFrame1",
+        "C_CurveUtil",
+        "UnitHealthPercent",
+        "UnitHealthMissing",
+        "LE_REALM_RELATION_VIRTUAL",
+        "CompactUnitFrame_UpdateHealthColor",
+        "AnchorUtil",
+        "AuraContainerSortDirection",
+        "CompactUnitFrame_GetOptionShowBigDefensive",
+        "CompactUnitFrame_UpdateAll",
+        "AuraContainerSortMethod",
+        "UnitIsMinion",
+        "MEMBERS_PER_RAID_GROUP",
+        "DAMAGE_TEXT_FONT",
+        "UNIT_NAME_FONT",
+        "MAX_RAID_MEMBERS",
+        "STANDARD_TEXT_FONT"
     ],
     "cSpell.words": [
         "prepatch"

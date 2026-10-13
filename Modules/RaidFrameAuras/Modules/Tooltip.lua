@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global, undefined-field
 local addonName, ns = ...
 local l = ns.I18N;
 
