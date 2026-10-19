@@ -51,15 +51,16 @@ end
 --- Reads the value currently held by a control
 --- @param control table The option control (checkbox, color, dropdown, slider)
 --- @param previousValue any Current option value (used to detect checkbox options)
---- @return any value nil if the control type is not supported
+--- @return any value, nil if the control type is not supported
 function ns.ReadControlValue(control, previousValue)
     if control.type == "color" then
         return control:GetColor();
-    elseif control.type == "dropdown" or control.type == CONTROLTYPE_SLIDER then
+    elseif control.type == "dropdown" or control.type == CONTROLTYPE_SLIDER or control.type == "spellList" then
         return control:GetValue();
     elseif type(previousValue) == "boolean" and control.GetChecked then
         return control:GetChecked();
     end
+    return nil
 end
 
 --- Writes a value into a control (does NOT notify: see ns._loadingControls)
@@ -67,7 +68,7 @@ end
 function ns.WriteControlValue(control, value)
     if control.type == "color" then
         control:SetColor(value);
-    elseif control.type == "dropdown" or control.type == CONTROLTYPE_SLIDER then
+    elseif control.type == "dropdown" or control.type == CONTROLTYPE_SLIDER or control.type == "spellList" then
         control:SetValue(value);
     elseif type(value) == "boolean" then
         control:SetChecked(value);
@@ -79,7 +80,20 @@ end
 
 local function valuesAreEqual(a, b)
     if type(a) == "table" and type(b) == "table" then
-        return a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a;
+        if a.r then
+            return a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a;
+        end
+        for k, v in pairs(a) do
+            if b[k] ~= v then
+                return false
+            end
+        end
+        for k, v in pairs(b) do
+            if a[k] ~= v then
+                return false
+            end
+        end
+        return true
     end
     return a == b;
 end
@@ -185,6 +199,8 @@ function K_SHARED_UI.NotifyControlChanged(_NS, control)
     end
     local options = _G[_NS.OPTIONS_NAME];
     local value = _NS.ReadControlValue(control, options[optionName]);
+    
+    -- print(_NS.ADDON_NAME, optionName, 'avant', options[optionName], 'après', value, valuesAreEqual(value, options[optionName]) )-- DEBUG
     if value == nil or valuesAreEqual(value, options[optionName]) then
         return;
     end
@@ -264,7 +280,7 @@ function ns.RefreshOptions(defaultOptions, showOptionsFrame, limitToOptionsNames
                 end;
 
                 if not ns.WriteControlValue(control, value) then
-                    ns.AddMsgDebug(format("Type non prevu pour %s - %s, type de valeur: %s", optionName, control.type or "unknown", type(value)));
+                    ns.AddMsgDebug(format("Unexpected widget type for %s: %s, value type: %s", l.WH..optionName.."|r", l.WH..(control.type or "unknown").."|r", type(value)));
                 end
             end
         end

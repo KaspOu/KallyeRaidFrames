@@ -136,7 +136,17 @@
         "DAMAGE_TEXT_FONT",
         "UNIT_NAME_FONT",
         "MAX_RAID_MEMBERS",
-        "STANDARD_TEXT_FONT"
+        "STANDARD_TEXT_FONT",
+        "FauxScrollFrame_GetOffset",
+        "FauxScrollFrame_Update",
+        "ICON_FILTER_SPELL",
+        "FauxScrollFrame_OnVerticalScroll",
+        "SPELLS",
+        "ADD",
+        "NONE",
+        "GLYPH_SLOT_REMOVE_TOOLTIP",
+        "UNKNOWN",
+        "CLEAR_ALL"
     ],
     "cSpell.words": [
         "prepatch"
@@ -176,5 +186,8 @@
     },
     "Lua.workspace.library": [
         "c:\\Users\\Utilisateur\\.cursor\\extensions\\ketho.wow-api-0.20.7\\Annotations\\Core"
+    ],
+    "Lua.diagnostics.disable": [
+        "duplicate-set-field"
     ]
 }

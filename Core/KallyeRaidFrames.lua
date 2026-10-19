@@ -48,6 +48,7 @@ local defaultOptions = {
 	BuffsSpacingX = 0,
 	BuffsSpacingY = 1,
 	BuffsFilter = "auto",
+	BuffsIgnored = {}, -- { id: N, name: '' }
 	BuffsHideTooltip = false,
 	DebuffsScale = 1.25,
 	MaxDebuffs = ns.DEFAULT_MAXDEBUFFS,
@@ -170,6 +171,7 @@ function ns.OnCoreOptionsChanged(options, changed)
 	EnsureInRangeHooks();
 	-- Apply as soon as possible on the displayed frames
 	ns.ApplyFuncToRaidFrames(ns.RaidFrames_ResetHealth, false);
+	ns.ApplyFuncToRaidFrames(ns.Hook_UpdateInRange, false);
 end
 
 -- KRF_OnEvent
@@ -188,15 +190,15 @@ local function OnEvent(self, event, ...)
 		end
 
 		-- ! Hooks
-		hooksecurefunc("CompactUnitFrame_UpdateName", ns.Hook_UpdateName);
-		hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", ns.Hook_UpdateRoleIcon);
-		hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateHealth);
+		hooksecurefunc("CompactUnitFrame_UpdateName", ns.Hook_UpdateName --[[@as fun(frame)]]);
+		hooksecurefunc("CompactUnitFrame_UpdateRoleIcon", ns.Hook_UpdateRoleIcon --[[@as fun(frame)]]);
+		hooksecurefunc("CompactUnitFrame_UpdateHealthColor", ns.Hook_UpdateHealth --[[@as fun(frame)]]);
 		if (CompactUnitFrame_UpdateHealPrediction) then
 			--? Since DragonFlight (10)
-			hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", ns.Hook_UpdateHealth);
+			hooksecurefunc("CompactUnitFrame_UpdateHealPrediction", ns.Hook_UpdateHealth --[[@as fun(frame)]]);
 		else
 			--? Classic
-			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth);
+			hooksecurefunc("CompactUnitFrame_UpdateHealth", ns.Hook_UpdateHealth --[[@as fun(frame)]]);
 		end
 
 		EnsureInRangeHooks();
@@ -278,9 +280,7 @@ function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].UpdateHealthColor)
 		..tostring(_G[ns.OPTIONS_NAME].FriendsClassColor)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveUnitDebuffs)
-		..tostring(_G[ns.OPTIONS_NAME].BuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].BuffsHideTooltip)
-		..tostring(_G[ns.OPTIONS_NAME].DebuffsScale)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsHideTooltip)
 		..tostring(_G[ns.OPTIONS_NAME].HideBlizzardAuras)
 		..tostring(_G[ns.OPTIONS_NAME].UseTaintMethod)

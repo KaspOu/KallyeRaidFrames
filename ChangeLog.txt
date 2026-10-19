@@ -1,3 +1,7 @@
+v12.1.502
+- Buffs & Debuffs: New option (Midnight / Forever):
+ > Ignored buffs — hide specific buffs from your display
+
 v12.1.501
 - Midnight 12.1.5
 - Settings are now applied in real time.

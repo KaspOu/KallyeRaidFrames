@@ -24,7 +24,7 @@
 					</Anchor>
 				</Anchors>
 			</CheckButton>
-			<!-- Buffs -->
+			<!-- Debuffs -->
 			<Slider parentKey="DebuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
 				<Size x="200" y="15" />
 				<Attributes>
@@ -156,10 +156,10 @@
 					<Attribute name="tooltip" value="OPTION_DEBUFFS_HIDETOOLTIP_TOOLTIP" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="0" y="-25" /></Anchor>
 				</Anchors>
 			</CheckButton>
-			<!-- Debuffs -->
+			<!-- Buffs -->
 			<Slider parentKey="BuffsScale" inherits="KRFUI_SliderWidget" minValue="0.1" maxValue="3" valueStep=".05" stepsPerPage="5" obeyStepOnDrag="false">
 				<Size x="200" y="15" />
 				<Attributes>
@@ -286,13 +286,24 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsSpacingY" relativePoint="BOTTOMLEFT"><Offset x="-10" y="-26" /></Anchor>
 				</Anchors>
 			</Frame>
+			<Button parentKey="BuffsIgnored" inherits="KRFUI_SpellListWidget">
+				<Size x="150" y="24" />
+				<Attributes>
+					<Attribute name="text" value="OPTION_BUFFS_IGNORED" />
+					<Attribute name="title" value="OPTION_BUFFS_IGNORED_TITLE" />
+					<Attribute name="placeholder" value="OPTION_BUFFS_IGNORED_PLACEHOLDER" />
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="20" y="5" /></Anchor>
+				</Anchors>
+			</Button>
 			<CheckButton parentKey="BuffsHideTooltip" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_BUFFS_HIDETOOLTIP" />
 					<Attribute name="tooltip" value="OPTION_BUFFS_HIDETOOLTIP_TOOLTIP" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="0" y="-20" /></Anchor>
+					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="0" y="-25" /></Anchor>
 				</Anchors>
 			</CheckButton>
 			<!-- Taint checkbox (Retail) or Warning-->

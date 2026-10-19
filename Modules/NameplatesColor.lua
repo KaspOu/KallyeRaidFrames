@@ -226,13 +226,24 @@ local function isEnabled(options)
         )
 end
 
+---@class NameplateHealthBar : StatusBar
+---@field _lastTexture string?
+
+---@class NameplateName : FontString
+---@field _previousPrefix string?
+
+---@class NameplateUnitFrame : Button
+---@field healthBar NameplateHealthBar?
+---@field name NameplateName?
+
 --- Re-applies the options on the nameplates already displayed
 local function refreshDisplayedNameplates(isActive)
     if not (C_NamePlate and C_NamePlate.GetNamePlates) then
         return
     end
     for _, nameplate in ipairs(C_NamePlate.GetNamePlates()) do
-        local frame = nameplate.UnitFrame
+        ---@type NameplateUnitFrame
+        local frame = nameplate.UnitFrame --[[@as NameplateUnitFrame]]
         if frame and not frame:IsForbidden() and frame.healthBar and frame.name then
             if not isActive and frame.healthBar._lastTexture ~= nil then
                 frame.healthBar._lastTexture = nil

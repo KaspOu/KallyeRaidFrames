@@ -19,7 +19,7 @@ local function l(localeName)
 end
 
 --- Function to display a tooltip
---- @param frame frame The frame to which the tooltip is attached
+--- @param frame Frame The frame to which the tooltip is attached
 --- @param title string The title of the tooltip
 --- @param text string The text of the tooltip (optional)
 --- @param anchor string The anchor of the tooltip (optional)
@@ -31,8 +31,8 @@ local function showTooltip(frame, title, text, anchor)
 
 	GameTooltip:SetOwner(frame, anchor or "ANCHOR_RIGHT");
 	if (title ~= "") then
-		GameTooltip:SetText(l("WH")..title);
-		GameTooltip:AddLine(text, 1, 0.82, 0, 1);
+		GameTooltip:SetText(l("WH")..title); ---@diagnostic disable-line: missing-parameter
+		GameTooltip:AddLine(text, 1, 0.82, 0, true);
 	else
 		GameTooltip:SetText(text, 1, 0.82, 0, 1);
 	end
@@ -501,3 +501,21 @@ function K_SHARED_UI.DropDownWidget_OnLeave(self)
 end
 -- #endregion DropDown Widget
 
+-- #region Spell List Widget Stub
+--[[
+! TO BE OVERRIDDEN
+]]
+if not K_SHARED_UI.SpellListWidget_OnLoad then
+	function K_SHARED_UI.SpellListWidget_OnLoad(self)
+		self.type = "spellListStub";
+		AssignNameSpace_OnLoad(self)
+		ns.AddMsgErr("Spell List Widget not initialized, Widgets_SpellList.lua missing?", true);
+	end
+
+	function K_SHARED_UI.SpellListWidget_OnEnter(self)
+	end
+
+	function K_SHARED_UI.SpellListWidget_OnLeave(self)
+	end
+end
+-- #endregion

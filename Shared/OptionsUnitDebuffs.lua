@@ -6,7 +6,7 @@ if ns.CONFLICT then return; end
 local DEFAULT_MAXBUFFS = ns.DEFAULT_MAXBUFFS or 3
 local DEFAULT_MAXDEBUFFS = DEFAULT_MAXBUFFS
 
-local function updatePerLineLabel(slider, iconsPerLine, maxIcons, l)
+local function updatePerLineLabel(slider, iconsPerLine, maxIcons)
     local l = ns.I18N;
 
     local shouldShowDefault = iconsPerLine >= maxIcons
@@ -52,7 +52,7 @@ local function ManageUnitDebuffsOptions()
     for _, controlName in ipairs({ "BuffsSpacingX", "BuffsSpacingY", "DebuffsSpacingX", "DebuffsSpacingY" }) do
         ns.OptionsEnable(ns.FindControl(controlName), isEnabled and hasSpacing, .2)
     end
-    for _, controlName in ipairs({ "BuffsFilter", "BuffsHideTooltip", "DebuffsFilter", "DebuffsHideTooltip" }) do
+    for _, controlName in ipairs({ "BuffsFilter", "BuffsHideTooltip", "BuffsIgnored", "DebuffsFilter", "DebuffsHideTooltip" }) do
         ns.OptionsEnable(ns.FindControl(controlName), isEnabled and hasAuraContainer, .2)
     end
 

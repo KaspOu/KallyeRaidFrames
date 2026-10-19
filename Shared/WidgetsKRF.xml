@@ -91,6 +91,14 @@
 			<OnLeave>K_SHARED_UI.DropDownWidget_OnLeave(self)</OnLeave>
 		</Scripts>
 	</Frame>
+	<Button name="KRFUI_SpellListWidget" inherits="UIPanelButtonTemplate" virtual="true">
+		<Size x="150" y="24"/>
+		<Scripts>
+			<OnLoad>K_SHARED_UI.SpellListWidget_OnLoad(self)</OnLoad>
+			<OnEnter>K_SHARED_UI.SpellListWidget_OnEnter(self)</OnEnter>
+			<OnLeave>K_SHARED_UI.SpellListWidget_OnLeave(self)</OnLeave>
+		</Scripts>
+	</Button>
 <!--@do-not-package@-->
 <!--
 https://support.curseforge.com/en/support/solutions/articles/9000197281-automatic-packaging

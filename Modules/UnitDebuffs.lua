@@ -290,12 +290,14 @@ local function addGroupIfNeeded(state, container, groupKey, filterString, maxCou
 	if hasGroup then
 		return true
 	end
+    container.auraButtons = container.auraButtons or {}
 
 	local options = {
 		maxFrameCount = math.max(0, math.min(MAX_TRACKED_AURAS, tonumber(maxCount) or 0)),
 		sortMethod = AuraContainerSortMethod.Default,
 		sortDirection = AuraContainerSortDirection.Normal,
 		initializeFrame = function(auraButton)
+            table.insert(container.auraButtons, auraButton)
 			auraButton:SetSize(iconSize, iconSize)
 
 			local texture = auraButton:CreateTexture()
@@ -385,6 +387,7 @@ local function applyGroupLayout(container, groupKey, orientation, wrapElements, 
 	end
 
 	container:SetAuraGroupLayout(groupKey, layoutOptions)
+	container:UpdateAllAuras()
 	return true
 	-- local ok = pcall(container.SetAuraGroupLayout, container, groupKey, layoutOptions)
 	-- return ok == true
@@ -396,6 +399,20 @@ local function setContainerAnchor(container, frame, orientation, posX, posY)
 	local anchorPoint = layout.anchorPoint or "BOTTOMRIGHT"
 	container:ClearAllPoints()
 	container:SetPoint(anchorPoint, frame, anchorPoint, tonumber(posX) or 0, tonumber(posY) or 0)
+end
+
+local function ResizeAuraButtons(container, iconSize)
+    if not container or not container.auraButtons then
+        return
+    end
+
+    iconSize = math.max(1, tonumber(iconSize) or 1)
+
+    for _, auraButton in ipairs(container.auraButtons) do
+        if auraButton and auraButton.SetSize and auraButton:CanBeAccessedInContext() then
+            auraButton:SetSize(iconSize, iconSize)
+        end
+    end
 end
 
 local function AuraContainerRefreshFrame(frame)
@@ -429,6 +446,7 @@ local function AuraContainerRefreshFrame(frame)
 	local debuffsSpacingY = tonumber(options.DebuffsSpacingY) or 1
 	local buffMouseEnabled = options.BuffsHideTooltip ~= true
 	local debuffMouseEnabled = options.DebuffsHideTooltip ~= true
+	local buffsIgnored = options.BuffsIgnored or {}
 
 	local hasPowerBar = frame.powerBar and frame.powerBar:IsShown()
 	local powerBarOffsetY = hasPowerBar and BLIZZARD_POWERBAR_OFFSET_Y or 0
@@ -449,6 +467,9 @@ local function AuraContainerRefreshFrame(frame)
 				applyGroupLayout(buffContainer, "kbd_buffs", options.BuffsOrientation, options.BuffsPerLine, buffSize, buffsElemSpacing, buffsLineSpacing)
 			end
 			buffContainer:SetAuraGroupFilterString("kbd_buffs", filterString)
+			buffContainer:SetAuraGroupCandidateFilters("kbd_buffs", {
+            	excludeSpellIDs = buffsIgnored,
+          	})
 			setContainerAnchor(
 				buffContainer,
 				frame,
@@ -456,6 +477,7 @@ local function AuraContainerRefreshFrame(frame)
 				BLIZZARD_BUFF_BASE_OFFSET_X + (tonumber(options.BuffsPosX) or 0),
 				BLIZZARD_BUFF_BASE_OFFSET_Y + (tonumber(options.BuffsPosY) or 0) + powerBarOffsetY
 			)
+			ResizeAuraButtons(buffContainer, buffSize)
 			buffContainer:Show()
 		end
 	else
@@ -486,6 +508,7 @@ local function AuraContainerRefreshFrame(frame)
 				BLIZZARD_DEBUFF_BASE_OFFSET_X + (tonumber(options.DebuffsPosX) or 0),
 				BLIZZARD_DEBUFF_BASE_OFFSET_Y + (tonumber(options.DebuffsPosY) or 0) + powerBarOffsetY
 			)
+			ResizeAuraButtons(debuffContainer, debuffSize)
 			if type(debuffContainer.Show) == "function" then
 				debuffContainer:Show()
 			end
@@ -1031,7 +1054,6 @@ local function onOptionsChanged(self, options, changed)
 		ApplyAuraContainer(options)
 		return
 	end
-
 	if ns.LoadRaidFramesAuras then
 		if isEnabled(options) then
 			if not ns._UnitDebuffsHooked then

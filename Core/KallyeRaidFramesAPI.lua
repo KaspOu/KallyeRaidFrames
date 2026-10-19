@@ -15,11 +15,11 @@ function ns.InterfaceOptions_AddCategory(frame, addOn, position)
 
     if frame.parent then -- for subcategories
         local category = Settings.GetCategory(frame.parent);
-        local subcategory, layout = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
+        local subcategory, layout = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name);
         subcategory.ID = frame.name;
         return subcategory, category;
     else
-        local category, layout = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
+        local category, layout = Settings.RegisterCanvasLayoutCategory(frame, frame.name);
         -- category.ID = frame.name;
         Settings.RegisterAddOnCategory(category);
 		ns.CATEGORY_ID = category:GetID()
@@ -84,24 +84,25 @@ local function lighten(r, g, b, percent, alpha)
 	return mergeRGBA(r, g, b, alpha or 1, 1, 1, 1, alpha or 1, percent)
 end
 
+ns.IsSecretValue = issecretvalue or function(_) return false end
+
 local function KRF_GetClassColor(unit)
 	local unitClass = select(2,UnitClass(unit))
-	local classColors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-	if not unitClass or not classColors[unitClass] then
+	local classColor = C_ClassColor.GetClassColor(unitClass)
+	if not classColor then
 		if unit:find("pet") then
 			local ownerUnit = unit:gsub("pet", "")
 			if ownerUnit == "" then ownerUnit = "player" end
-			unitClass = select(2,UnitClass(ownerUnit))
+			unitClass = select(2, UnitClass(ownerUnit))
 			if unitClass then
-				return classColors[unitClass]
+				return C_ClassColor.GetClassColor(unitClass)
 			end
 		end
-		return classColors["HUNTER"]
+		return C_ClassColor.GetClassColor("HUNTER")
 	end
-	return classColors[unitClass]
+	return classColor
 end
 
-ns.IsSecretValue = issecretvalue or function(_) return false end
 --[[
 ! Managing Alpha depending on range
 - Alpha not in range
@@ -116,6 +117,10 @@ function ns.Hook_UpdateInRange(frame)
 		local isInRange = UnitInRange(frame.displayedUnit)
 		if C_Spell.IsSpellInRange(1229376, frame.displayedUnit) then
 		-- if UnitIsUnit(frame.displayedUnit, "player") then
+			isInRange = true
+		end
+		local isUnitPlayer = UnitIsUnit(frame.displayedUnit, "player")
+		if not ns.IsSecretValue(isUnitPlayer) and isUnitPlayer then
 			isInRange = true
 		end
 		-- Since Midnight (12)
