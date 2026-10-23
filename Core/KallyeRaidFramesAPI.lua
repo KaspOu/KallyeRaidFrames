@@ -37,6 +37,10 @@ function ns.RemoveOldOptions(options)
 		options.DebuffsOrientation = options.DebuffsVertical and "UpThenRight" or options.DebuffsOrientation
 		options.DebuffsVertical = nil
 	end
+	if options.BuffsIgnored then
+		options.BuffsExcluded = options.BuffsIgnored
+		options.BuffsIgnored = nil
+	end
 end
 
 local startsWith = {

@@ -446,7 +446,7 @@ local function AuraContainerRefreshFrame(frame)
 	local debuffsSpacingY = tonumber(options.DebuffsSpacingY) or 1
 	local buffMouseEnabled = options.BuffsHideTooltip ~= true
 	local debuffMouseEnabled = options.DebuffsHideTooltip ~= true
-	local buffsIgnored = options.BuffsIgnored or {}
+	local buffsExcluded = options.BuffsExcluded or {}
 
 	local hasPowerBar = frame.powerBar and frame.powerBar:IsShown()
 	local powerBarOffsetY = hasPowerBar and BLIZZARD_POWERBAR_OFFSET_Y or 0
@@ -468,7 +468,7 @@ local function AuraContainerRefreshFrame(frame)
 			end
 			buffContainer:SetAuraGroupFilterString("kbd_buffs", filterString)
 			buffContainer:SetAuraGroupCandidateFilters("kbd_buffs", {
-            	excludeSpellIDs = buffsIgnored,
+            	excludeSpellIDs = buffsExcluded,
           	})
 			setContainerAnchor(
 				buffContainer,

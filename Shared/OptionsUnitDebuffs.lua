@@ -52,7 +52,7 @@ local function ManageUnitDebuffsOptions()
     for _, controlName in ipairs({ "BuffsSpacingX", "BuffsSpacingY", "DebuffsSpacingX", "DebuffsSpacingY" }) do
         ns.OptionsEnable(ns.FindControl(controlName), isEnabled and hasSpacing, .2)
     end
-    for _, controlName in ipairs({ "BuffsFilter", "BuffsHideTooltip", "BuffsIgnored", "DebuffsFilter", "DebuffsHideTooltip" }) do
+    for _, controlName in ipairs({ "BuffsFilter", "BuffsHideTooltip", "BuffsExcluded", "DebuffsFilter", "DebuffsHideTooltip" }) do
         ns.OptionsEnable(ns.FindControl(controlName), isEnabled and hasAuraContainer, .2)
     end
 

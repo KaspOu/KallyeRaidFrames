@@ -286,12 +286,12 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsSpacingY" relativePoint="BOTTOMLEFT"><Offset x="-10" y="-26" /></Anchor>
 				</Anchors>
 			</Frame>
-			<Button parentKey="BuffsIgnored" inherits="KRFUI_SpellListWidget">
+			<Button parentKey="BuffsExcluded" inherits="KRFUI_SpellListWidget">
 				<Size x="150" y="24" />
 				<Attributes>
-					<Attribute name="text" value="OPTION_BUFFS_IGNORED" />
-					<Attribute name="title" value="OPTION_BUFFS_IGNORED_TITLE" />
-					<Attribute name="placeholder" value="OPTION_BUFFS_IGNORED_PLACEHOLDER" />
+					<Attribute name="text" value="OPTION_BUFFS_EXCLUDED" />
+					<Attribute name="title" value="OPTION_BUFFS_EXCLUDED_TITLE" />
+					<Attribute name="placeholder" value="OPTION_BUFFS_EXCLUDED_PLACEHOLDER" />
 				</Attributes>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="20" y="5" /></Anchor>

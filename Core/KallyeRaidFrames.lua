@@ -48,7 +48,7 @@ local defaultOptions = {
 	BuffsSpacingX = 0,
 	BuffsSpacingY = 1,
 	BuffsFilter = "auto",
-	BuffsIgnored = {}, -- { id: N, name: '' }
+	BuffsExcluded = {}, -- { [id]: true }
 	BuffsHideTooltip = false,
 	DebuffsScale = 1.25,
 	MaxDebuffs = ns.DEFAULT_MAXDEBUFFS,
@@ -431,7 +431,7 @@ local function ManageOptionsVisibility()
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlphaText  , not RevertBarOption and raidFramesDisplayClassColor, HealthOption);
 	ns.OptionsSetShownAndEnable(ns.optionsFrame.HealthAlpha  , not RevertBarOption and raidFramesDisplayClassColor, HealthOption);
 
-	ns.OptionsEnable(ns.optionsFrame.AddonCompartmentFilter,	not not AddonCompartmentFrame, .1);
+	ns.OptionsEnable(ns.optionsFrame.AddonCompartmentFilter,	not not AddonCompartmentFrame, 0);
 end
 
 K_SHARED_UI.AddRefreshOptions(ManageOptionsVisibility)

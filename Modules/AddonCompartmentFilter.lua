@@ -1,4 +1,4 @@
-local _, ns = ...
+local addonName, ns = ...
 local l = ns.I18N;
 
 -- * avoid conflict override
@@ -9,7 +9,7 @@ local function onInit(self, options)
         -- AddonCompartmentFrame, Since DF (10)
         AddonCompartmentFrame:RegisterAddon({
             text = ns.TITLE,
-            icon = ns.ICON,
+            icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
             notCheckable = true,
             func = SlashCmdList[ns.SLASHCMD],
         })
