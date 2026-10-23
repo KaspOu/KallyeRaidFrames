@@ -14,7 +14,7 @@ l.SUBTITLE      = "Assistenza cornici raid";
 l.DESC          = "Migliora le cornici del raid.\n\n"
 .." - Evidenzia lo sfondo dei giocatori con poca vita\n\n"
 .." - Le barre invertite useranno la tua scelta di colori\n\n"
-.." - Trasparenza delle unit\195\160 fuori portata\n\n"
+.." - Trasparenza delle unità fuori portata\n\n"
 .." - Raid sempre visibile\n\n"
 .."\n"
 .."Migliora i buff / debuff (dimensione, max visualizzati, ...)\n\n"
@@ -31,22 +31,22 @@ l.INIT_FAILED = format("%s non caricato correttamente!", l.VERS_TITLE);
 local required = l.YL.."*";
 l.OPTION_RAID_HEADER = "Gruppo / Raid";
 l.OPTION_HIGHLIGHTLOWHP = "Evidenziare la poca vita (colori dinamici)"..required;
-l.OPTION_REVERTBAR = "Barre di "..l.YL.."vita invertite|r (meno vita si ha, pi\195\185 la barra cresce!) ";
+l.OPTION_REVERTBAR = "Barre di "..l.YL.."vita invertite|r (meno vita si ha, più la barra cresce!) ";
 l.OPTION_HEALTH_LOW = "Quasi morto!";
-l.OPTION_HEALTH_LOW_TOOLTIP = "Il colore sar\195\160 applicato "..l.YLL.."SOTTO|r questo limite\n\n"
+l.OPTION_HEALTH_LOW_TOOLTIP = "Il colore sarà applicato "..l.YLL.."SOTTO|r questo limite\n\n"
     .."ex : Rosso sotto il 25%";
 l.OPTION_HEALTH_WARN = "Attenzione";
-l.OPTION_HEALTH_WARN_TOOLTIP = "Il colore sar\195\160 applicato "..l.YLL.."A|r questa limite\n\n"
+l.OPTION_HEALTH_WARN_TOOLTIP = "Il colore sarà applicato "..l.YLL.."A|r questa limite\n\n"
     .."ex : Giallo al 50%";
 l.OPTION_HEALTH_OK = "Buona salute";
-l.OPTION_HEALTH_OK_TOOLTIP = "Il colore sar\195\160 applicato "..l.YLL.."SOPRA|r questa limite\n\n"
+l.OPTION_HEALTH_OK_TOOLTIP = "Il colore sarà applicato "..l.YLL.."SOPRA|r questa limite\n\n"
     .."ex : Verde dopo il 75%";
 l.OPTION_HEALTH_ALPHA = l.WH.."Trasparenza"..required;
 l.OPTION_HEALTH_ALPHA_TOOLTIP = "Trasparenza della barra della vita (con il colore della classe)\n"..l.CY.."Per impostazione predefinita in Wow: 100%"
 l.OPTION_MOVEROLEICONS = "Icona del ruolo in alto a sinistra";
 l.OPTION_HIDEDAMAGEICONS = "Nascondi l'icona del ruolo 'danni'";
 l.OPTION_HIDEREALM = "Nascondi il reame dei giocatori";
-l.OPTION_HIDEREALM_TOOLTIP = "I nomi dei reami saranno nascosti, cos\195\174 "..l.YLL.."Illidan - Varimathras|r diventer\195\160 "..l.YLL.."Illidan (*)|r";
+l.OPTION_HIDEREALM_TOOLTIP = "I nomi dei reami saranno nascosti, cosî "..l.YLL.."Illidan - Varimathras|r diventerà "..l.YLL.."Illidan (*)|r";
 l.OPTION_ICONONDEATH = "Aggiungi "..l.RT8.." ai nomi dei morti";
 l.OPTION_FRIENDSCLASSCOLOR = "Nomi colorati per classe";
 l.OPTION_FRIENDSCLASSCOLOR_TOOLTIP = "Nomi dei giocatori colorati per classe (cornici gruppo/raid)";
@@ -54,15 +54,15 @@ l.OPTION_BLIZZARDFRIENDSCLASSCOLOR = format("Blizzard: %s", RAID_USE_CLASS_COLOR
 l.OPTION_BLIZZARDFRIENDSCLASSCOLOR_TOOLTIP = format("%s : %s", INTERFACE_LABEL, OPTION_TOOLTIP_RAID_USE_CLASS_COLORS)
 l.OPTION_BAR_TEXTURE = "Texture"
 l.OPTION_BAR_TEXTURE_TOOLTIP = "Texture della barra della vita"
-l.OPTION_SOLORAID = l.CY.."Mostra le cornici del raid in modalit\195\160 solo "..required;
-l.OPTION_SOLORAID_TOOLTIP = "Cornici gruppo/raid sempre visibili,\nattiver\195\160 "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
+l.OPTION_SOLORAID = l.CY.."Mostra le cornici del raid in modalità solo "..required;
+l.OPTION_SOLORAID_TOOLTIP = "Cornici gruppo/raid sempre visibili,\nattiverà "..l.YLL..USE_RAID_STYLE_PARTY_FRAMES;
 
 l.OPTION_EDITMODE_PARTY = format("Blizzard: %s", USE_RAID_STYLE_PARTY_FRAMES)
 l.OPTION_EDITMODE_PARTY_TOOLTIP = "";
 l.OPTION_DEBUG_ON = "! Testa le cornici del raid !";
 l.OPTION_DEBUG_ON_MESSAGE = "Test delle cornici del raid attivato, clicca di nuovo per fermare!";
 l.OPTION_DEBUG_OFF = "! FERMA IL TEST !";
-l.OPTION_DEBUG_OFF_MESSAGE = "Test fermato, puoi riprendere l'attivit\195\160 normale";
+l.OPTION_DEBUG_OFF_MESSAGE = "Test fermato, puoi riprendere l'attività normale";
 
 l.OPTION_ACTIVATE_MODULE = "Attiva / Disattiva il modulo"
 l.OPTION_HIDEDISABLED = l.GYL.."Nascondi i moduli disattivati"
@@ -117,9 +117,9 @@ l.OPTION_DEBUFFS_RELATIVE_X_TOOLTIP = "Regola la posizione orizzontale relativa 
 l.OPTION_DEBUFFS_RELATIVE_Y = "Posizione verticale";
 l.OPTION_DEBUFFS_RELATIVE_Y_TOOLTIP = "Regola la posizione verticale relativa dei debuff";
 l.OPTION_USETAINTMETHOD = l.CY.."Visualizzazione classica del Limite di buff / debuff"..required.." "..l.ALERT
-l.OPTION_USETAINTMETHOD_TOOLTIP = "Deselezionato, usa la visualizzazione sperimentale\nSelezionato, usa la visualizzazione stabile, ma con un "..l.RDL.."errore per sessione|r, non cos\195\174 grave..."
-l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Cambiare il Limite provoca un "..l.RDL.."errore per sessione|r, non cos\195\174 grave..."
-l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Il riposizionamento pu\195\170 essere influenzato per alcuni secondi alla morte di un boss"
+l.OPTION_USETAINTMETHOD_TOOLTIP = "Deselezionato, usa la visualizzazione sperimentale\nSelezionato, usa la visualizzazione stabile, ma con un "..l.RDL.."errore per sessione|r, non cosî grave..."
+l.OPTION_BUFFS_TAINTWARNING = l.ALERT.." Cambiare il Limite provoca un "..l.RDL.."errore per sessione|r, non cosî grave..."
+l.OPTION_BUFFS_FLICKERWARNING = l.INFO.." Il riposizionamento puê essere influenzato per alcuni secondi alla morte di un boss"
 l.OPTION_BUFFS_HIDEBLIZZARDAURAS = " Nascondere le aure Blizzard"
 l.OPTION_BUFFS_RESET = "Annulla tutto il riposizionamento"
 l.OPTION_FILTER_AUTO_DEFAULT = l.DEFAULT.."Auto — segue il combattimento (predefinito)";
@@ -154,9 +154,9 @@ l.OPTION_NAMEPLATES_USECOLOR_CUSTOM = "La tua scelta di colore: ";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_BLIZZARD = l.DEFAULT.."Nessuna icona";
 l.OPTION_NAMEPLATES_SHOWPVPICONS_FACTION = "Icona della fazione |TInterface/PVPFrame/PVP-Currency-Alliance:16|t - |TInterface/PVPFrame/PVP-Currency-Horde:16|t";
 l.OPTION_NAMEPLATES_COLOR_UNDER = "Colore se inferiore";
-l.OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP = "Seleziona il colore del livello se \195\168 inferiore al tuo";
+l.OPTION_NAMEPLATES_COLOR_UNDER_TOOLTIP = "Seleziona il colore del livello se è inferiore al tuo";
 l.OPTION_NAMEPLATES_COLOR_OVER = "Colore se superiore";
-l.OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP = "Seleziona il colore del livello se \195\168 superiore al tuo";
+l.OPTION_NAMEPLATES_COLOR_OVER_TOOLTIP = "Seleziona il colore del livello se è superiore al tuo";
 l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER = l.DEFAULT.."Mai";
 l.OPTION_NAMEPLATES_SHOWLEVEL_NEVER_TOOLTIP = "Non mostra mai il livello sulle barre informative.";
 l.OPTION_NAMEPLATES_SHOWLEVEL_DIFFERENT = "Se diverso dal tuo";
@@ -215,7 +215,7 @@ l.OPTION_SHOWMSGWARNING = l.GYL.."Mostra gli avvisi";
 l.OPTION_SHOWMSGERR = l.GYL.."Mostra gli errori";
 l.OPTION_COMPARTMENT_FILTER = "Mostra nel Compartment Filter"..required;
 l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Nella lista degli addon in alto a destra";
-l.OPTION_WHATSNEW = "Novit\195\160";
+l.OPTION_WHATSNEW = "Novità";
 
 --? Edit Mode - Since DragonFlight (10)
 if (EditModeManagerFrame.UseRaidStylePartyFrames) then
