@@ -47,6 +47,6 @@ https://www.curseforge.com/members/kaspou/projects
 
 Kallye Raid Frames is **All Rights Reserved** (see [License.txt](License.txt)).
 
-The **buffs/debuffs** feature on retail uses code from **Raid Frame Auras** ([CurseForge](https://www.curseforge.com/wow/addons/raid-party-frame-auras)) by **Anahkas**, included under the [Apache License 2.0](Modules/RaidFrameAuras/LICENSE) in `Modules/RaidFrameAuras/`.
+The **buffs/debuffs** layout engine used on classic-era clients is **Raid Frame Auras** ([CurseForge](https://www.curseforge.com/wow/addons/raid-party-frame-auras)) by **Anahkas**, included as-is under the [Apache License 2.0](Modules/RaidFrameAuras/LICENSE) in `Modules/RaidFrameAuras/`. It is no longer maintained: it will be removed once Blizzard's `AuraContainer` API is available on every supported client (retail already uses it).
 
 [LibEditModeOverride-1.0](Libs/LibEditModeOverride-1.0/LICENSE) is under the MIT License.
