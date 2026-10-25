@@ -1,6 +1,6 @@
 ## Interface: 120105, 16001, 50504, 38001, 20506, 11509
 ## Title: LibEditModeOverride
-## Version: 13
+## Version: 65020f3
 ## Author: plusmouse
 ## OptionalDeps: LibStub
 
