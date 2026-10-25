@@ -3,9 +3,6 @@ local _, ns = ...
 -- ! avoid conflict override
 if ns.CONFLICT then return; end
 
-local DEFAULT_MAXBUFFS = ns.DEFAULT_MAXBUFFS or 3
-local DEFAULT_MAXDEBUFFS = DEFAULT_MAXBUFFS
-
 local function updatePerLineLabel(slider, iconsPerLine, maxIcons)
     local l = ns.I18N;
 
@@ -23,9 +20,6 @@ local function ManageUnitDebuffsOptions()
     local isEnabled = ns.IsModuleEnabled(activeCheckbox, headingLabel, _G[ns.OPTIONS_NAME].ActiveUnitDebuffs, hideDisabledModules and hideDisabledModules:GetChecked())
         and (not ns.CONFLICT_RFA)
 
-    local useTaintMethodCheckbox = ns.FindControl("UseTaintMethod")
-    local taintWarningText = ns.FindControl("TaintWarning")
-    local flickerWarningText = ns.FindControl("FlickerWarning")
     local resetButton = ns.FindControl("Reset")
     local maxBuffsSlide = ns.FindControl("MaxBuffs")
     local buffsPerLineSlide = ns.FindControl("BuffsPerLine")
@@ -39,10 +33,6 @@ local function ManageUnitDebuffsOptions()
     local debuffsPosYSlide = ns.FindControl("DebuffsPosY")
 
     ns.OptionsSiblingsEnable(_G[ns.OPTIONS_NAME], activeCheckbox, isEnabled, .2)
-    ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == nil, false, .1)
-    ns.OptionsSetShownAndEnable(taintWarningText, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD ~= false, false, .1)
-    -- ns.OptionsEnable(flickerWarningText, false, .1)
-    flickerWarningText:Hide()
     ns.OptionsEnable(resetButton, false, .1)
 
     -- Spacing exists in modes B (RaidFrameAuras) and C (AuraContainer); filter and
@@ -71,11 +61,7 @@ local function ManageUnitDebuffsOptions()
         DebuffsPosX = debuffsPosXSlide:GetValue(),
         DebuffsPosY = debuffsPosYSlide:GetValue()
     }
-    ns.OptionsSetShownAndEnable(useTaintMethodCheckbox, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == nil, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
-    ns.OptionsSetShownAndEnable(taintWarningText, ns.FORCE_USE_MAXBUFFS_TAINT_METHOD == true, currentOptions.MaxBuffs ~= DEFAULT_MAXBUFFS or currentOptions.MaxDebuffs ~= DEFAULT_MAXDEBUFFS, .1)
-    -- ns.OptionsEnable(flickerWarningText, ns.isFlickerWarningShowed(currentOptions), .1)
-    flickerWarningText:Hide()
-    ns.OptionsEnable(resetButton, ns.isFlickerWarningShowed and ns.isFlickerWarningShowed(currentOptions) or false, .1)
+    ns.OptionsEnable(resetButton, ns.HasCustomAuraLayout and ns.HasCustomAuraLayout(currentOptions) or false, .1)
 
     updatePerLineLabel(buffsPerLineSlide, currentOptions.BuffsPerLine, currentOptions.MaxBuffs)
     updatePerLineLabel(debuffsPerLineSlide, currentOptions.DebuffsPerLine, currentOptions.MaxDebuffs)

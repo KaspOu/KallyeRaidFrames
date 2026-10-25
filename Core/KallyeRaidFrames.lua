@@ -61,7 +61,6 @@ local defaultOptions = {
 	DebuffsFilter = "auto",
 	DebuffsHideTooltip = false,
 	HideBlizzardAuras = true,
-	UseTaintMethod = false,
 
 	ActiveNameplatesColor = true,
 	FriendsNameplates_Txt_UseColor = "1",
@@ -283,7 +282,6 @@ function RequiredReloadOptionsString()
 		..tostring(_G[ns.OPTIONS_NAME].BuffsHideTooltip)
 		..tostring(_G[ns.OPTIONS_NAME].DebuffsHideTooltip)
 		..tostring(_G[ns.OPTIONS_NAME].HideBlizzardAuras)
-		..tostring(_G[ns.OPTIONS_NAME].UseTaintMethod)
 		..tostring(_G[ns.OPTIONS_NAME].ActiveRaidIcons)
 		..tostring(_G[ns.OPTIONS_NAME].AlphaNotInRange ~= ns.DEFAULT_ALPHA_OUTOFRANGE or _G[ns.OPTIONS_NAME].AlphaNotInCombat ~= 100);
 end

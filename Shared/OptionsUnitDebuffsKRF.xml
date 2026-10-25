@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Include file="OptionsUnitDebuffs.lua" />
 	<Frame name="KRFOptionsUnitDebuffs" virtual="true">
-		<Size x="550" y="540" />
+		<Size x="550" y="500" />
 		<Frames>
 			<CheckButton parentKey="LabelMaxBuffs" inherits="KRFUI_HeadingWidget">
 				<Anchors>
@@ -306,47 +306,18 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.BuffsFilter" relativePoint="BOTTOMLEFT"><Offset x="0" y="-25" /></Anchor>
 				</Anchors>
 			</CheckButton>
-			<!-- Taint checkbox (Retail) or Warning-->
-				<CheckButton parentKey="UseTaintMethod" inherits="KRFUI_CheckboxWidget">
-					<Attributes>
-						<Attribute name="text" value="OPTION_USETAINTMETHOD" />
-						<Attribute name="tooltip" value="OPTION_USETAINTMETHOD_TOOLTIP" />
-					</Attributes>
-					<Anchors>
-						<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsHideTooltip" relativePoint="BOTTOMLEFT"><Offset x="0" y="-12" /></Anchor>
-					</Anchors>
-				</CheckButton>
-				<CheckButton parentKey="TaintWarning" inherits="KRFUI_TextWidget">
-					<Attributes>
-						<Attribute name="text" value="OPTION_BUFFS_TAINTWARNING" />
-					</Attributes>
-					<Anchors>
-						<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsHideTooltip" relativePoint="BOTTOMLEFT"><Offset x="0" y="-4" /></Anchor>
-					</Anchors>
-				</CheckButton>
-			<!-- -->
-			<CheckButton parentKey="FlickerWarning" inherits="KRFUI_TextWidget">
-				<Attributes>
-					<Attribute name="text" value="OPTION_BUFFS_FLICKERWARNING" />
-				</Attributes>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsHideTooltip" relativePoint="BOTTOMLEFT"><Offset x="0" y="-29" /></Anchor>
-				</Anchors>
-			</CheckButton>
-
 			<CheckButton parentKey="HideBlizzardAuras" inherits="KRFUI_CheckboxWidget">
 				<Attributes>
 					<Attribute name="text" value="OPTION_BUFFS_HIDEBLIZZARDAURAS" />
 				</Attributes>
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.FlickerWarning"><Offset x="0" y="-35"/></Anchor>
-					<Anchor point="LEFT" relativeTo="$parent"><Offset x="20" y="0"/></Anchor>
+					<Anchor point="TOPLEFT" relativeKey="$parent.DebuffsHideTooltip" relativePoint="BOTTOMLEFT"><Offset x="0" y="-10" /></Anchor>
 				</Anchors>
 			</CheckButton>
 			<Button parentKey="Reset" inherits="UIPanelButtonTemplate">
-				<Size x="200" y="20" />
+				<Size x="250" y="20" />
 				<Anchors>
-					<Anchor point="TOP" relativeKey="$parent.FlickerWarning"><Offset x="0" y="-35"/></Anchor>
+					<Anchor point="TOP" relativeKey="$parent.HideBlizzardAuras"><Offset x="0" y="0"/></Anchor>
 					<Anchor point="RIGHT" relativeTo="$parent"><Offset x="0" y="0"/></Anchor>
 				</Anchors>
 				<Scripts>

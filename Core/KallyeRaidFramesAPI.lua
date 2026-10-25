@@ -41,6 +41,10 @@ function ns.RemoveOldOptions(options)
 		options.BuffsExcluded = options.BuffsIgnored
 		options.BuffsIgnored = nil
 	end
+	-- Since Midnight (12)
+	if options.UseTaintMethod ~= nil then
+		options.UseTaintMethod = nil
+	end
 end
 
 local startsWith = {

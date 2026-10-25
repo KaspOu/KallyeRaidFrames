@@ -36,11 +36,6 @@ All features are optional.
 **/krf test** - toggle test mode
 
 
-**Known errors**  
-- Classic / Mists: One error by session while changing Max (De)buffs setting, expected. Explicit warning added  
-- Just after a boss kill, buffs & debuffs positions may flicker (back to Blizzard defaults until out of combat).  
-
-
 ## Example
 ![]( https://media.forgecdn.net/attachments/315/778/wowscrnshot_100520_184645.jpg )
 
