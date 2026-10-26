@@ -94,6 +94,7 @@ local defaultOptions = {
 	ShowMsgError = false,
 	HideDisabledModules = true,
 	AddonCompartmentFilter = true,
+	ForceEnglish = false,
 
 	DebugMode = false,
 };
@@ -273,7 +274,8 @@ end
 
 
 function RequiredReloadOptionsString()
-	return tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
+	return tostring(_G[ns.OPTIONS_NAME].ForceEnglish)
+		..tostring(_G[ns.OPTIONS_NAME].SoloRaidFrame)
 		..tostring(_G[ns.OPTIONS_NAME].SoloRaidFrameGroupInRaid)
 		..tostring(_G[ns.OPTIONS_NAME].RevertBar)
 		..tostring(_G[ns.OPTIONS_NAME].UpdateHealthColor)
