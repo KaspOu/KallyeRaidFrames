@@ -5,6 +5,8 @@
 local _, ns = ...
 local l = ns.I18N;
 
+if _G[ns.OPTIONS_NAME] and _G[ns.OPTIONS_NAME].ForceEnglish then return end
+
 l.VERS_TITLE    = format("%s %s", ns.TITLE, ns.VERSION);
 
 l.CONFLICT_MESSAGE = "Désactivé : Conflit avec %s";

@@ -55,7 +55,7 @@
 				</Anchors>
 				<ScrollChild>
 					<Frame name="KRFUI_OptionsFrame">
-						<Size x="550" y="830" />
+						<Size x="550" y="850" />
 						<Frames>
 							<CheckButton parentKey="LabelRaid" inherits="KRFUI_HeadingWidget">
 								<Anchors>
@@ -544,6 +544,24 @@
 										<Offset x="340" y="0"/>
 									</Anchor>
 								</Anchors>
+							</CheckButton>
+							<CheckButton parentKey="ForceEnglish" inherits="KRFUI_CheckboxWidget">
+								<Attributes>
+									<Attribute name="text" value="Force English" />
+									<Attribute name="tooltip" value="OPTION_RELOAD_REQUIRED" />
+								</Attributes>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.AddonCompartmentFilter" relativePoint="TOPLEFT">
+										<Offset x="0" y="-20"/>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnShow>
+										if (GetLocale() == "enUS" or GetLocale() == "enGB") then
+											self:Hide();
+										end
+									</OnShow>
+								</Scripts>
 							</CheckButton>
 						</Frames>
 					</Frame>
