@@ -210,8 +210,8 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": Opzioni che richiedono un ricaricament
 l.OPTION_SHOWMSGNORMAL = l.GYL.."Mostra i messaggi";
 l.OPTION_SHOWMSGWARNING = l.GYL.."Mostra gli avvisi";
 l.OPTION_SHOWMSGERR = l.GYL.."Mostra gli errori";
-l.OPTION_COMPARTMENT_FILTER = "Mostra nel Compartment Filter"..required;
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Nella lista degli addon in alto a destra";
+l.OPTION_COMPARTMENT_FILTER = "Compartimento degli addon"..required;
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Mostra nel compartimento degli addon (in alto a destra)";
 l.OPTION_WHATSNEW = "Novità";
 
 --? Edit Mode - Since DragonFlight (10)

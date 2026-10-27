@@ -219,8 +219,8 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": Options nécessitant un rechargement";
 l.OPTION_SHOWMSGNORMAL = l.GYL.."Afficher les messages";
 l.OPTION_SHOWMSGWARNING = l.GYL.."Afficher les alertes";
 l.OPTION_SHOWMSGERR = l.GYL.."Afficher les erreurs";
-l.OPTION_COMPARTMENT_FILTER = "Afficher dans le Compartment Filter"..required;
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Dans la liste des addons en haut à droite";
+l.OPTION_COMPARTMENT_FILTER = "Compartiment des Add-ons"..required;
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Afficher dans le compartiment des Add-ons (en haut à droite)";
 l.OPTION_WHATSNEW = "Nouveautés";
 
 --? Edit Mode - Since DragonFlight (10)
