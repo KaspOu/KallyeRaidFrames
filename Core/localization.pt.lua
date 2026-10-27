@@ -212,8 +212,8 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": Opçöes que exigem um recarregamento"
 l.OPTION_SHOWMSGNORMAL = l.GYL.."Exibir mensagens";
 l.OPTION_SHOWMSGWARNING = l.GYL.."Exibir alertas";
 l.OPTION_SHOWMSGERR = l.GYL.."Exibir erros";
-l.OPTION_COMPARTMENT_FILTER = "Exibir no Filtro de Compartimento"..required;
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Na lista de addons no canto superior direito";
+l.OPTION_COMPARTMENT_FILTER = "Compartimento de addons"..required;
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Exibir no compartimento de addons (canto superior direito)";
 l.OPTION_WHATSNEW = "Novidades";
 
 --? Edit Mode - Since DragonFlight (10)

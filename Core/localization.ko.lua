@@ -210,8 +210,8 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": 다시 로드해야 하는 설정";
 l.OPTION_SHOWMSGNORMAL = l.GYL.."메시지 표시";
 l.OPTION_SHOWMSGWARNING = l.GYL.."경고 표시";
 l.OPTION_SHOWMSGERR = l.GYL.."오류 표시";
-l.OPTION_COMPARTMENT_FILTER = "칸 필터에 표시"..required;
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "오른쪽 상단 애드온 목록에";
+l.OPTION_COMPARTMENT_FILTER = "애드온 보관함"..required;
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "애드온 보관함에 표시 (오른쪽 상단)";
 l.OPTION_WHATSNEW = "새로운 기능";
 
 --? Edit Mode - Since DragonFlight (10)

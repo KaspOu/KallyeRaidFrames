@@ -210,8 +210,8 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": 需要重新加载的选项";
 l.OPTION_SHOWMSGNORMAL = l.GYL.."显示消息";
 l.OPTION_SHOWMSGWARNING = l.GYL.."显示警告";
 l.OPTION_SHOWMSGERR = l.GYL.."显示错误";
-l.OPTION_COMPARTMENT_FILTER = "在隔间过滤器中显示"..required;
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "在右上角的插件列表中";
+l.OPTION_COMPARTMENT_FILTER = "插件收纳区"..required;
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "显示在插件收纳区（右上角）";
 l.OPTION_WHATSNEW = "新功能";
 
 --? Edit Mode - Since DragonFlight (10)

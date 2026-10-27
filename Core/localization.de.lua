@@ -211,8 +211,8 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": Optionen, die einen Neuladen erfordern
 l.OPTION_SHOWMSGNORMAL = l.GYL.."Nachrichten anzeigen";
 l.OPTION_SHOWMSGWARNING = l.GYL.."Warnungen anzeigen";
 l.OPTION_SHOWMSGERR = l.GYL.."Fehler anzeigen";
-l.OPTION_COMPARTMENT_FILTER = "Im Fachfilter anzeigen"..required;
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "In der Addon-Liste oben rechts";
+l.OPTION_COMPARTMENT_FILTER = "Addon-Fach"..required;
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Im Addon-Fach anzeigen (oben rechts)";
 l.OPTION_WHATSNEW = "Neuigkeiten";
 
 --? Edit Mode - Since DragonFlight (10)

@@ -218,8 +218,8 @@ l.OPTIONS_ASTERIX = l.YL.."*|r"..l.WH..": Options requiring reloading";
 l.OPTION_SHOWMSGNORMAL = l.GYL.."Display messages";
 l.OPTION_SHOWMSGWARNING = l.GYL.."Display warnings";
 l.OPTION_SHOWMSGERR = l.GYL.."Display errors";
-l.OPTION_COMPARTMENT_FILTER = "Display in the Compartment Filter"..required;
-l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "In addons list on top right";
+l.OPTION_COMPARTMENT_FILTER = "Addon Compartment"..required;
+l.OPTION_COMPARTMENT_FILTER_TOOLTIP = "Display in Addon Compartment (on top right)";
 l.OPTION_WHATSNEW = "What's new";
 
 --? Edit Mode - Since DragonFlight (10)
