@@ -24,7 +24,7 @@ Deep dives:
 | Slash commands | `/krf`, `/kallye`, `/kallyeraidframes`, plus `/clear` (chat clear) and a key binding in `Bindings.xml` |
 | Runtime | WoW Lua 5.1, secure frames, `hooksecurefunc`, XML templates |
 | Interface IDs | `120100, 120105, 120107, 16001, 50504, 38002, 20506, 11509` (retail 12.1.x + classic-era clients) |
-| Localization | 9 locale files + English fallback, embedded in `Core/localization.*.lua` |
+| Localization | 9 locale files (`en` + `fr, de, es, it, ko, pt, ru, zh`), English fallback, embedded in `Core/localization.*.lua` |
 | License | Addon: **All Rights Reserved**. `Modules/RaidFrameAuras/` is vendored **Apache-2.0** (© Anahkas). `Libs/LibEditModeOverride-1.0` is **MIT** |
 | Git | branches `main` (release) and `develop`; history uses gitmoji-style commits; tags look like `12.1.502` |
 | Packaging | BigWigs-style packager: `.pkgmeta` (+ `externals` for `LibEditModeOverride`), `ChangeLog.txt`, `License.txt` |
@@ -33,7 +33,8 @@ Deep dives:
 
 - `rtk git status`, `rtk git log`, `rtk git diff` — always useful before/after an edit (see *Tooling*
   below; drop to plain `git` only when you need byte-exact output).
-- `python tools/validate_lua.py` — the syntax gate; run it after **every** Lua edit.
+- `python3 tools/validate_lua.py` — the syntax gate (WSL2; `python`/`py` on Windows); run it after
+  **every** Lua edit.
 - `rtk read` / `rtk find` / `rtk err` for reading and searching; PowerShell (`Select-String`,
   `Get-Content`) where rtk has no equivalent.
 - **Do not** invent `npm test`, `pytest`, `luacheck`, `make`, etc. They do not exist here — no Lua
@@ -52,8 +53,8 @@ Two helpers are available and are expected to be used. There is still **no** Lua
 
 | Tool | What is installed | Use it for |
 | --- | --- | --- |
-| `rtk` | `rtk 1.0.1`, WinGet package `rtk-ai.rtk` (config written on first use to `%APPDATA%\rtk\config.toml`) | a token-filtering proxy in front of normal commands: **always prefer `rtk <cmd>`** |
-| `python` | Python 3.14 at `%LOCALAPPDATA%\Programs\Python\Python314\python.exe`, on the user PATH (`python`, `py`) | temporary scripts and `tools/validate_lua.py` |
+| `rtk` | Windows: `rtk.exe` 1.1.0, WinGet package `rtk-ai.rtk` (config written on first use to `%APPDATA%\rtk\config.toml`). WSL2: Linux build `tools/bin/rtk` 1.1.0 in the workspace root (`../tools/bin/rtk` from here) | a token-filtering proxy in front of normal commands: **always prefer `rtk <cmd>`** |
+| `python` | Windows: Python 3.14 at `%LOCALAPPDATA%\Programs\Python\Python314\python.exe`, on the user PATH (`python`, `py`). WSL2: `python3` 3.12.3 at `/usr/bin/python3` | temporary scripts and `tools/validate_lua.py` |
 
 If a terminal was opened *before* the install its `PATH` is stale; refresh it in that session:
 
@@ -82,10 +83,14 @@ drop to the plain command only when rtk cannot do it or when byte-exact output m
 | anything else | `rtk run <cmd…>` or `rtk run -c "<shell string>"` | the raw command |
 | savings report | `rtk gain` | — |
 
-Verified failures on this Windows box — the filter proxies a Unix binary that is not installed, so do
+In WSL2 the Linux build is at `../tools/bin/rtk` (workspace root); below, `rtk <cmd>` means running it
+through that path (or bare `rtk` once `tools/bin` is on your `PATH`).
+
+Verified failures on the Windows box — the filter proxies a Unix binary that is not installed, so do
 not waste a call: `rtk ls`, `rtk tree`, `rtk wc`, `rtk grep`, `rtk rg`. Use `Get-ChildItem`,
-`Select-String` or `rtk find` instead. Toolchain filters (`rtk npm`, `rtk dotnet`, `rtk cargo`,
-`rtk docker`, …) are irrelevant for this repository.
+`Select-String` or `rtk find` instead. On WSL2 the list differs: `rtk ls`, `rtk wc` and `rtk grep`
+work, while `rtk tree` and `rtk rg` still fail (`tree` and `rg` are not installed). Toolchain
+filters (`rtk npm`, `rtk dotnet`, `rtk cargo`, `rtk docker`, …) are irrelevant for this repository.
 
 Two cautions:
 
@@ -96,18 +101,20 @@ Two cautions:
 
 #### `python` — temporary scripts and the syntax gate
 
-- Python 3.14 is on the user PATH (`python`, `py`). **Standard library only**: no `pip install`, no
-  virtualenv — this repository must stay dependency-free and reproducible.
+- Windows: Python 3.14 on the user PATH (`python`, `py`); WSL2: `python3` 3.12.3 at
+  `/usr/bin/python3`. **Standard library only**: no `pip install`, no virtualenv — this repository
+  must stay dependency-free and reproducible.
 - Throw-away helpers: write them to `tools/_tmp_<topic>.py`, use them, then **delete** them before you
   finish (they must not end up in a commit or in a diff you report). Anything worth keeping goes into
   `tools/` with a module docstring, a `--selftest`, and a mention in this file.
 - Pass explicit encodings (`open(path, "rb")`, or `encoding="utf-8"`): sources are UTF-8 without BOM
-  while the console is cp1252. Print ASCII only, or the output gets mangled.
+  while the Windows console is cp1252 (WSL2 is UTF-8). Print ASCII only, or the output gets mangled.
 
 ### Lua syntax gate: `python tools/validate_lua.py`
 
-The repository's only automatic check. Run it **after every edit** of a `.lua` file, before you report
-back:
+The repository's only automatic check (invoke as `python3 tools/validate_lua.py` in WSL2). The same
+script also exists at the workspace root (`../tools/validate_lua.py`) for the whole K Ecosystem. Run
+it **after every edit** of a `.lua` file, before you report back:
 
 ```powershell
 python tools/validate_lua.py                              # whole repo (.git/.release/.sfdx/docs skipped)
@@ -147,10 +154,29 @@ State clearly in your final answer that in-game verification is required.
 
 ---
 
-## 2. The five-addon family — the single biggest hazard
+## 2. The addon family — the single biggest hazard
+
+This repository is the main development repository of the **KallyeRaidFrames group** (see the
+top-level `../AGENTS.md` §1): KallyeRaidFrames, KBigDebuffs, KHideRaidRealm, KNameplateColor,
+KRaidFade, KRaidIcons and KSoloRaidFrames. The independent K addons (KSmartDebuff, KPetBattle-Teams,
+KCursorCooldown) share none of the mechanisms below — never assume a relationship with them without
+checking their own files.
+
+Two distinct mechanisms propagate files out of this repository (top-level `../AGENTS.md` §3) — never
+confuse them:
+
+1. **CopyTo** — synchronizes matching files from this repository into the six sibling repositories:
+   `../KBigDebuffs`, `../KHideRaidRealm`, `../KNameplateColor`, `../KRaidFade`, `../KRaidIcons`,
+   `../KSoloRaidFrames`. Important exclusions: PNG files, `.xcopylibs.bat`, Git metadata,
+   localization files, documentation and license files, package-specific files — the exact CopyTo
+   configuration is the source of truth for the complete exclusion list. CopyTo copies matching
+   files only; it does **not** generate transformed Shared XML.
+2. **`.copy_shared.sh`** (invoked through `.copy_shared.bat` under WSL) — the ecosystem's "Shared
+   synchronization script": it transforms `Shared/` XML and extracts/inserts localization blocks
+   for the four addons below.
 
 `Shared/` and `Core/localization.*.lua` in this repository are the **source of truth** for four
-sibling addons:
+sibling addons (the transformed copies):
 
 | Addon | Code | What it shares from KRF |
 | --- | --- | --- |
@@ -160,12 +186,16 @@ sibling addons:
 | KRaidFade | `KF` | `Shared/WidgetsKRF.xml`, `-- KF START/END` blocks |
 | KRaidIcons | `KRI` | `Shared/OptionsRaidIconsKRF.xml`, `Shared/WidgetsKRF.xml`, `-- KRI START/END` blocks |
 
-Propagation is done by the author, manually, with `.copy_shared.sh` (invoked through
-`.copy_shared.bat` under WSL). It `cp`s the shared XML files into `../KBigDebuffs`, `../KNameplateColor`,
-`../KRaidFade`, `../KRaidIcons` and rewrites the prefix with `sed 's/KRF/KBD/g'` (etc.), then replaces
-the marked localization blocks with `sed -n` / `sed -i` range extraction.
+Shared XML and locale-block propagation is done by the author, manually, with `.copy_shared.sh`. It
+`cp`s the shared XML files into `../KBigDebuffs`, `../KNameplateColor`, `../KRaidFade`,
+`../KRaidIcons` and rewrites the prefix with `sed 's/KRF/KBD/g'` (etc.), then replaces the marked
+localization blocks with `sed -n` / `sed -i` range extraction.
 
-The direction is **strictly one-way**: KRF is the reference implementation and the other four are
+KHideRaidRealm and KRaidFade additionally **reuse code from the KRF Core** (top-level `../AGENTS.md`
+§3.3). Beyond the table above nothing more is needed for them — KHideRaidRealm gets no transformed
+Shared XML and no locale blocks at all — so do not invent extra mechanisms for those two.
+
+The direction is **strictly one-way**: KRF is the reference implementation and the siblings are
 generated downstream copies. Shared code is edited **here**, never in a sibling, and there is no
 back-sync. If a sibling is wrong, KRF is wrong too (or the copy is stale) — fix it in KRF first, then
 propagate. Never patch a sibling repository and never port a change back into KRF: the next
@@ -205,7 +235,7 @@ Consequences you must respect:
 | Change health highlighting, names, role icons, range alpha | `Core/KallyeRaidFramesAPI.lua` |
 | Change "always show raid frames" / edit-mode glue | `Modules/SoloRaidFrames.lua`, `KRFUI.SetUseRaidStylePartyFrames` in `Core/KallyeRaidFrames.lua` |
 | Change the options window shell, scrolling, reset dialog | `Core/KallyeRaidFrames.lua` (`KRFUI.OptionsContainer_OnLoad`, `StaticPopupDialogs`), `Core/KallyeRaidFrames.xml` |
-| Add a reusable widget | `Shared/WidgetsKRF.xml` (template) + `Shared/Widgets.lua` (handler) — **propagates to all 5 addons** |
+| Add a reusable widget | `Shared/WidgetsKRF.xml` (template) + `Shared/Widgets.lua` (handler) — **propagates to the 4 siblings via `.copy_shared.sh`** |
 | Change slash commands / chat output | `Core/KallyeRaidFrames.lua` (`SLASH_KRF_command`), `Core/KallyeRaidFrames.globals.lua` (`ns.AddMsg*`) |
 | Change buff/debuff rendering internals | `Modules/UnitDebuffs.lua` (the `AuraContainer` path for retail 12+). Do **not** touch `Modules/RaidFrameAuras/*`: vendored, frozen, to be deleted (TD-02) |
 | Change packaging/release | `KallyeRaidFrames.toc`, `.pkgmeta`, `ChangeLog.txt`, `License.txt`, `.release*.bat` |
@@ -301,6 +331,11 @@ Never call `ns.Module:new` at a point where `ns.Module` may still be `nil`, and 
 - Releases are built locally by `.release.bat` / `.release.live.bat` / `.release.xcopylibs.bat`.
   `.pkgmeta` pulls `LibEditModeOverride-1.0` from GitHub as an external; `--@do-not-package@ …
   --@end-do-not-package@` blocks are stripped from the package.
+- Release packaging is **independent from source synchronization** (CopyTo / `.copy_shared.*`). The
+  BigWigs-style `packager/` directory sits alongside the addon repositories (`../packager/`:
+  `release.sh`, `release.live.sh`, `setup-packager.sh`, `action.yml`, `README.md`, `.gitattributes`,
+  `.gitignore`); `.release.bat` calls `../packager/release.sh`. Do not modify release behavior
+  unless a concrete problem is identified.
 - Do not create tags, commit, push or run release scripts unless asked.
 
 ---
