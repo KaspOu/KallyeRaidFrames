@@ -519,7 +519,7 @@ function K_Global_Vars.GetUnitNameSafe(unit, showServerName)
 	local name, server = UnitName(unit);
 	if ( type(server) ~= "nil") then
 		if ( showServerName ) then
-			return string.format("%s-%s", name, server);
+			return GetUnitName(unit, true)
 		end
 		local relationship = UnitRealmRelationship(unit);
 		if (relationship ~= LE_REALM_RELATION_VIRTUAL) then

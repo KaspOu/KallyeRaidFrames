@@ -74,9 +74,11 @@ local function applyIconAndText(unit, name, pvpIconOption, showLevelOption, unde
             prefix = icon..prefix;
         end
     end
-    local unitname = K_Global_Vars.GetUnitNameSafe or UnitName -- apply code from HideRaidRealmNames if exists
+    -- Full "Name-Realm" only when HideRaidRealmNames doesn't exists, or HideRealm is explicitly false
+    local unitname = K_Global_Vars.GetUnitNameSafe or GetUnitName
+    local showServerName = (_G[ns.OPTIONS_NAME].HideRealm == false)
     if prefix ~= "" or prefix ~= name._previousPrefix then
-        name:SetText(string.format("%s%s", prefix, unitname(unit)))
+        name:SetText(string.format("%s%s", prefix, unitname(unit, showServerName)))
         name._previousPrefix = prefix
     end
 end
